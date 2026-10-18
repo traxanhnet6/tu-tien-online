@@ -1944,7 +1944,12 @@ var Engine = (function () {
     var drawX = n.x + (wiping ? Math.sin(_tickT * 3 + ph) * 7 : 0);
     /* bóng đổ lệch ngược hướng nghiêng */
     var shOff = -(lean * 90);
-    _drawCreature(n, drawX, n.y - bob, 46, 46, n.def.img, '#6b4a2f',
+    /* NPC to gấp 1.5x (46→69) + phóng to thêm khi người chơi đến gần — cảm giác 3D */
+    var _npcBase = 69;
+    var _nd = Math.hypot(player.x - n.x, player.y - n.y);
+    var _nprox = 1 + 0.12 * Math.max(0, 1 - _nd / 220);
+    var _nsz = _npcBase * _nprox;
+    _drawCreature(n, drawX, n.y - bob, _nsz, _nsz, n.def.img, '#6b4a2f',
       { lean: lean + swayRot, flip: (n.face || 1) < 0, shadowOffX: shOff,
         scaleY: breathe * squash });
 
@@ -1984,6 +1989,166 @@ var Engine = (function () {
       _ctx.font = 'bold 16px sans-serif';
       _ctx.textAlign = 'center';
       _ctx.fillText('!', drawX, n.y - 30 - bob + hop);
+    }
+  }
+
+/* ===== THỰC VẬT ĐỘNG (cỏ đung đưa, hoa, lá rơi) — Bui 2026-10-18 =====
+   * Layer vẽ sau nền map, trước entities. Chỉ map ngoài trời.
+   * Cỏ/hoa vẽ procedural bằng canvas (không cần ảnh), đung đưa theo gió (sin).
+   * Lá rơi là particle tái chế, giới hạn theo GFX_LEVELS. */
+  var _veg = [];            /* {x,y,type,phase,scale,hue} */
+  var _vegMapId = -1;
+  var _vegLeaves = [];      /* {x,y,vx,vy,rot,vr,life,maxLife,color,size} */
+  /* Map ngoài trời có thảm thực vật (map 5 Mỏ Linh Thạch là hang → không) */
+  var VEG_OUTDOOR = { 1: 1, 2: 1, 3: 1, 4: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1 };
+
+  function _vegGen() {
+    _veg = []; _vegLeaves = [];
+    var mid = _mapDef ? _mapDef.id : 0;
+    _vegMapId = mid;
+    if (!VEG_OUTDOOR[mid]) return;
+    var lvl = GFX_LEVELS[_gfxLevel] || GFX_LEVELS.cao;
+    var dens = lvl.particle; /* 0 / 0.5 / 1 */
+    if (dens <= 0) return;
+    var W = 1600, H = 1200; /* world mặc định */
+    try {
+      if (_mapDef && _mapDef.w) W = _mapDef.w;
+      if (_mapDef && _mapDef.h) H = _mapDef.h;
+    } catch (e) {}
+    var count = Math.round((W * H / 32000) * dens);
+    if (count > 140) count = 140;
+    for (var i = 0; i < count; i++) {
+      var r = Math.random();
+      _veg.push({
+        x: 40 + Math.random() * (W - 80),
+        y: 40 + Math.random() * (H - 80),
+        type: r < 0.78 ? 'grass' : (r < 0.92 ? 'flower' : 'bush'),
+        phase: Math.random() * 6.283,
+        scale: 0.7 + Math.random() * 0.7,
+        hue: Math.random()
+      });
+    }
+    /* khởi tạo lá rơi */
+    var leafN = Math.round(14 * dens);
+    for (var j = 0; j < leafN; j++) _vegSpawnLeaf(true);
+  }
+
+  function _vegSpawnLeaf(anywhere) {
+    var lvl = GFX_LEVELS[_gfxLevel] || GFX_LEVELS.cao;
+    if (lvl.particle <= 0) return;
+    var cam = _camera();
+    var W = 1600, H = 1200;
+    try {
+      if (_mapDef && _mapDef.w) W = _mapDef.w;
+      if (_mapDef && _mapDef.h) H = _mapDef.h;
+    } catch (e) {}
+    var cols = ['#7cb342', '#aed581', '#c0ca33', '#9ccc65', '#d4a017'];
+    _vegLeaves.push({
+      x: anywhere ? Math.random() * W : cam.x + Math.random() * _viewW,
+      y: anywhere ? Math.random() * H : cam.y - 20,
+      vx: 18 + Math.random() * 26,
+      vy: 22 + Math.random() * 30,
+      rot: Math.random() * 6.283,
+      vr: (Math.random() - 0.5) * 4,
+      life: 0,
+      maxLife: 7 + Math.random() * 5,
+      color: cols[Math.floor(Math.random() * cols.length)],
+      size: 3 + Math.random() * 3
+    });
+  }
+
+  function _vegDrawGrass(x, y, sway, s, hue) {
+    var g = 95 + Math.floor(hue * 45);
+    _ctx.strokeStyle = 'rgb(46,' + g + ',58)';
+    _ctx.lineWidth = Math.max(1, 2 * s);
+    _ctx.lineCap = 'round';
+    for (var b = -2; b <= 2; b++) {
+      var bx = b * 3.2 * s;
+      var h = (11 + Math.abs(b * 2.4) + hue * 7) * s;
+      var tipX = bx + sway * (0.35 + Math.abs(b) * 0.22);
+      _ctx.beginPath();
+      _ctx.moveTo(bx, 0);
+      _ctx.quadraticCurveTo(bx + sway * 0.5, -h * 0.62, tipX, -h);
+      _ctx.stroke();
+    }
+  }
+
+  function _vegDrawFlower(x, y, sway, s, hue) {
+    _vegDrawGrass(x, y, sway, s * 0.7, hue);
+    var petals = ['#ef5350', '#ec407a', '#ab47bc', '#ffa726', '#ffee58'];
+    var c = petals[Math.floor(hue * petals.length) % petals.length];
+    var fx = x + sway, fy = y - 14 * s;
+    _ctx.fillStyle = c;
+    for (var p = 0; p < 5; p++) {
+      var a = p / 5 * 6.283 + sway * 0.05;
+      _ctx.beginPath();
+      _ctx.arc(fx + Math.cos(a) * 3.4 * s, fy + Math.sin(a) * 3.4 * s, 2.4 * s, 0, 6.283);
+      _ctx.fill();
+    }
+    _ctx.fillStyle = '#ffeb3b';
+    _ctx.beginPath(); _ctx.arc(fx, fy, 2 * s, 0, 6.283); _ctx.fill();
+  }
+
+  function _vegDrawBush(x, y, sway, s, hue) {
+    /* bụi cây nhỏ: 3 tán tròn đung đưa nhẹ */
+    var g = 80 + Math.floor(hue * 40);
+    for (var k = 0; k < 3; k++) {
+      var ox = (k - 1) * 9 * s + sway * (0.4 + k * 0.15);
+      var oy = -8 * s - (k % 2) * 6 * s;
+      var r = (8 - Math.abs(k - 1) * 2) * s;
+      _ctx.fillStyle = 'rgb(52,' + (g + k * 8) + ',62)';
+      _ctx.beginPath(); _ctx.arc(x + ox, y + oy, r, 0, 6.283); _ctx.fill();
+      _ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      _ctx.beginPath(); _ctx.arc(x + ox - r * 0.3, y + oy - r * 0.3, r * 0.45, 0, 6.283); _ctx.fill();
+    }
+  }
+
+  function _vegDraw() {
+    var mid = _mapDef ? _mapDef.id : 0;
+    if (_vegMapId !== mid) _vegGen();
+    if (!_veg.length && !_vegLeaves.length) return;
+    var cam = _camera();
+    var t = _tickT;
+    var x0 = cam.x - 40, x1 = cam.x + _viewW + 40;
+    var y0 = cam.y - 40, y1 = cam.y + _viewH + 40;
+    _ctx.save();
+    for (var i = 0; i < _veg.length; i++) {
+      var v = _veg[i];
+      if (v.x < x0 || v.x > x1 || v.y < y0 || v.y > y1) continue;
+      var sway = Math.sin(t * 1.9 + v.phase) * 3.2 * v.scale
+              + Math.sin(t * 3.7 + v.phase * 2.3) * 1.1 * v.scale;
+      if (v.type === 'grass') _vegDrawGrass(v.x, v.y, sway, v.scale, v.hue);
+      else if (v.type === 'flower') _vegDrawFlower(v.x, v.y, sway, v.scale, v.hue);
+      else _vegDrawBush(v.x, v.y, sway, v.scale, v.hue);
+    }
+    _ctx.restore();
+    /* lá rơi: cập nhật + vẽ (trong world space) */
+    var lvl = GFX_LEVELS[_gfxLevel] || GFX_LEVELS.cao;
+    if (lvl.particle > 0) {
+      var dt = 0.016;
+      for (var j = _vegLeaves.length - 1; j >= 0; j--) {
+        var L = _vegLeaves[j];
+        L.life += dt;
+        L.x += (L.vx + Math.sin(t * 2 + L.rot) * 14) * dt;
+        L.y += L.vy * dt;
+        L.rot += L.vr * dt;
+        if (L.life > L.maxLife || L.y > cam.y + _viewH + 30) {
+          _vegLeaves.splice(j, 1);
+          _vegSpawnLeaf(false);
+          continue;
+        }
+        if (L.x < x0 || L.x > x1 || L.y < y0 || L.y > y1) continue;
+        var fade = Math.min(1, (L.maxLife - L.life) / 1.5, L.life / 0.5 + 0.2);
+        _ctx.save();
+        _ctx.translate(L.x, L.y);
+        _ctx.rotate(L.rot);
+        _ctx.globalAlpha = Math.max(0, Math.min(1, fade)) * 0.85;
+        _ctx.fillStyle = L.color;
+        _ctx.beginPath();
+        _ctx.ellipse(0, 0, L.size, L.size * 0.55, 0, 0, 6.283);
+        _ctx.fill();
+        _ctx.restore();
+      }
     }
   }
 
@@ -2066,6 +2231,9 @@ var Engine = (function () {
       _ctx.lineWidth = 8;
       _ctx.beginPath(); _ctx.arc(g.x, g.y, 32, 0, Math.PI * 2); _ctx.stroke();
     }
+
+    /* Lớp thực vật động (cỏ đung đưa, hoa, lá rơi) — sau nền, trước entities */
+    _vegDraw();
 
     // Entities xếp theo y (trên-dưới): quái, NPC, pet, người chơi — pseudo-3D Y-sort
     // (trừ lift cầu: đứng trên cầu thì sort theo mặt cầu)
