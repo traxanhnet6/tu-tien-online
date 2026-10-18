@@ -80,6 +80,15 @@ const MONSTERS = {
       { id: "hat_linh_chi", rate: 0.03, min: 1, max: 1 },
     ],
   },
+  son_tac: {
+    nameKey: "mon_son_tac", hp: 100, atk: 22, def: 8, exp: 15,
+    img: null, fb: "#5a4a3a", loai: "nhan",
+    drops: [
+      { id: "pill_hx", rate: 0.05, min: 1, max: 1 },
+      { id: "taycothao", rate: 0.06, min: 1, max: 1 },
+      { id: "dan_hx_tieu", rate: 0.04, min: 1, max: 1 },
+    ],
+  },
   da_tru_vuong: {
     nameKey: "mon_da_tru_vuong", hp: 600, atk: 45, def: 15, exp: 150,
     img: null, fb: "#6e4a2f", loai: "thu", boss: true, cg: 3,
@@ -316,15 +325,16 @@ const MAPS = [
     loadingBg: "assets/maps/loading_0.webp",
     fb: "#b9d3a0",
     dao: "chinh",
-    monsters: ["da_tru", "son_ke"],
+    monsters: ["da_tru", "son_ke", "son_tac"],
     boss: "da_tru_vuong",
     spawnZones: [
       { x: 280, y: 800, r: 150, monsters: ["da_tru"] },
       { x: 1300, y: 850, r: 150, monsters: ["son_ke"] },
+      { x: 1050, y: 650, r: 150, monsters: ["son_tac"] },
     ],
     bossSpawn: { x: 800, y: 880 },
-    npcs: ["dai_phu", "van_tien_cac", "truong_lao", "tam_tien_bi_tich", "truong_tran", "lao_ren", "thuong_nhan", "tieu_nhi", "su_gia_kiem", "su_gia_phap", "su_gia_the", "tuan_thu_su", "lao_dan_duong", "thu_thap_nhan", "su_gia_duoc", "su_gia_thu", "minh_chu", "thuong_nhan_du_hanh", "su_gia_ma"],
-    quests: ["q_story_01", "q_story_02", "q_story_03", "q_story_04", "q_story_05", "q_story_10"],
+    npcs: ["dai_phu", "van_tien_cac", "truong_lao", "tam_tien_bi_tich", "truong_tran", "lao_ren", "thuong_nhan", "tieu_nhi", "su_gia_kiem", "su_gia_phap", "su_gia_the", "tuan_thu_su", "lao_dan_duong", "thu_thap_nhan", "su_gia_duoc", "su_gia_thu", "minh_chu", "thuong_nhan_du_hanh", "su_gia_ma", "truong_lang", "co_tran_tu", "to_uyen_nhi", "diep_van"],
+    quests: ["q_story_01", "q_story_02", "q_story_03", "q_story_04", "q_story_05", "q_story_10", "q_story_21", "q_story_22", "q_story_23", "q_story_24", "q_story_25", "q_story_26", "q_story_27"],
     gates: [{to: 1, x: 720, y: 80}, {to: 3, x: 80, y: 500}, {to: 4, x: 1500, y: 80}, {to: 5, x: 80, y: 1000}, {to: 6, x: 400, y: 1120}, {to: 7, x: 800, y: 1120}, {to: 8, x: 1200, y: 1120}, {to: 9, x: 1500, y: 1000}, {to: 10, x: 1500, y: 600}, {to: 11, x: 1500, y: 450}, {to: 12, x: 1500, y: 300}],
     stoneDrop: [2, 5],
     unlock: null,
@@ -995,6 +1005,10 @@ const ITEMS = {
     price: 300, sell: 90,
   },
   /* --- Trang bị tier 0 (Phàm phẩm) --- */
+  wpn_go: {
+    kind: "equip", nameKey: "it_wpn_go", slot: "vukhi", tier: 0,
+    atk: 5, price: 50, sell: 15, reqRealm: null,
+  },
   wpn_phan: {
     kind: "equip", nameKey: "it_wpn_phan", slot: "vukhi", tier: 0,
     atk: 10, price: 200, sell: 60, reqRealm: null,
@@ -1500,6 +1514,10 @@ const NPCS = {
   thuong_nhan_mo: { nameKey: "npc_thuong_nhan_mo", mapId: 4, x: 1250, y: 850, kind: "shop", stock: ["dan_hx_trung", "dan_hl_trung", "duong_than_dan", "thanh_tam_qua"], img: "assets/sprs/npc_thuong_nhan.png" },
   tien_ong: { nameKey: "npc_tien_ong", mapId: 12, x: 800, y: 400, kind: "shop", shopTitle: "shop_tien_ong", stock: ["tien_thao", "dan_hx_trung", "dan_hl_trung", "duong_than_dan", "thanh_tam_qua", "trung_linh"], img: "assets/sprs/npc_tam_tien.png", wander: 60 },
   tieu_nhi: { nameKey: "npc_tieu_nhi", mapId: 0, x: 280, y: 120, kind: "inn", img: "assets/sprs/npc_tieu_nhi.png" },
+  truong_lang: { nameKey: "npc_truong_lang", mapId: 0, x: 350, y: 350, kind: "quest", img: "assets/sprs/npc_truong_tran.png" },
+  co_tran_tu: { nameKey: "npc_co_tran_tu", mapId: 0, x: 620, y: 380, kind: "quest", img: "assets/sprs/npc_lao_dan_duong.png" },
+  to_uyen_nhi: { nameKey: "npc_to_uyen_nhi", mapId: 0, x: 560, y: 430, kind: "greet", img: "assets/sprs/npc_tieu_nhi.png" },
+  diep_van: { nameKey: "npc_diep_van", mapId: 0, x: 850, y: 500, kind: "greet", img: "assets/sprs/npc_su_gia.png" },
   truong_lao: { nameKey: "npc_truong_lao", mapId: 0, x: 420, y: 240, kind: "sect", img: "assets/sprs/npc_truong_tran.png" },
   truong_lao_duoc: { nameKey: "npc_truong_lao_duoc", mapId: 8, x: 800, y: 280, kind: "sect", sect: "duoc_vuong_tong", img: "assets/sprs/npc_truong_tran.png" },
   truong_lao_kiem: { nameKey: "npc_truong_lao_kiem", mapId: 5, x: 800, y: 280, kind: "sect", sect: "kiem_tong", img: "assets/sprs/npc_truong_tran.png" },
@@ -1595,6 +1613,52 @@ const QUESTS = [
     npc: "dai_phu", req: "q_story_03", autoAccept: true,
     need: { type: "joinsect" },
     reward: { stones: 500, exp: 800 },
+  },
+  /* ============ CHUỖI MỞ ĐẦU "ĐÊM MÁU LÀNG PHONG DIỆP" (Bui duyệt 2026-10-18) ============
+   * Cốt truyện v3: Lễ Trắc Linh → Dị Tượng Cửu Sắc → Đêm Máu → Máu Trả Máu →
+   *   Rời Làng → Tẩy Cốt Phạt Tủy → Ngã Ba Định Mệnh (rẽ nhánh Chính/Ma đạo).
+   * Mỗi quest autoAccept: trả xong tự nhận quest tiếp theo trong chuỗi. */
+  {
+    id: "q_story_21", nameKey: "q_story_21", descKey: "q_story_21_desc",
+    npc: "truong_lang", autoAccept: true,
+    need: { type: "talk" },
+    reward: { stones: 30, exp: 30 },
+  },
+  {
+    id: "q_story_22", nameKey: "q_story_22", descKey: "q_story_22_desc",
+    npc: "truong_lang", req: "q_story_21", autoAccept: true,
+    need: { type: "talk" },
+    reward: { stones: 50, exp: 60 },
+  },
+  {
+    id: "q_story_23", nameKey: "q_story_23", descKey: "q_story_23_desc",
+    npc: "co_tran_tu", req: "q_story_22", autoAccept: true,
+    need: { type: "talk" },
+    reward: { stones: 50, exp: 80, items: [{ id: "wpn_go", qty: 1 }] },
+  },
+  {
+    id: "q_story_24", nameKey: "q_story_24", descKey: "q_story_24_desc",
+    npc: "co_tran_tu", req: "q_story_23", autoAccept: true,
+    need: { type: "kill", monster: "son_tac", count: 3 },
+    reward: { stones: 100, exp: 150, items: [{ id: "dan_hx_tieu", qty: 2 }] },
+  },
+  {
+    id: "q_story_25", nameKey: "q_story_25", descKey: "q_story_25_desc",
+    npc: "co_tran_tu", req: "q_story_24", autoAccept: true,
+    need: { type: "talk" },
+    reward: { stones: 80, exp: 120 },
+  },
+  {
+    id: "q_story_26", nameKey: "q_story_26", descKey: "q_story_26_desc",
+    npc: "co_tran_tu", req: "q_story_25", autoAccept: true,
+    need: { type: "item", item: "taycothao", count: 5 },
+    reward: { stones: 150, exp: 200, items: [{ id: "pill_taycotdan", qty: 1 }] },
+  },
+  {
+    id: "q_story_27", nameKey: "q_story_27", descKey: "q_story_27_desc",
+    npc: "co_tran_tu", req: "q_story_26", autoAccept: true,
+    need: { type: "joinsect" },
+    reward: { stones: 300, exp: 500 },
   },
   {
     id: "q_pet_intro", nameKey: "q_pet_intro", descKey: "q_pet_intro_desc",

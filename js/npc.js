@@ -72,6 +72,23 @@ var FIRST_MEET = {
     { k: "npc_tam_tien_meet1", v: "assets/voice/npc_tam_tien_meet1.mp3" },
     { k: "npc_tam_tien_meet2", v: "assets/voice/npc_tam_tien_meet2.mp3" },
   ],
+  /* --- NPC cốt truyện mở đầu "Đêm Máu Làng Phong Diệp" --- */
+  truong_lang: [
+    { k: "npc_truong_lang_meet1", v: "assets/voice/npc_truong_lang_meet1.mp3" },
+    { k: "npc_truong_lang_meet2", v: "assets/voice/npc_truong_lang_meet2.mp3" },
+  ],
+  co_tran_tu: [
+    { k: "npc_co_tran_tu_meet1", v: "assets/voice/npc_co_tran_tu_meet1.mp3" },
+    { k: "npc_co_tran_tu_meet2", v: "assets/voice/npc_co_tran_tu_meet2.mp3" },
+  ],
+  to_uyen_nhi: [
+    { k: "npc_to_uyen_nhi_meet1", v: "assets/voice/npc_to_uyen_nhi_meet1.mp3" },
+    { k: "npc_to_uyen_nhi_meet2", v: "assets/voice/npc_to_uyen_nhi_meet2.mp3" },
+  ],
+  diep_van: [
+    { k: "npc_diep_van_meet1", v: "assets/voice/npc_diep_van_meet1.mp3" },
+    { k: "npc_diep_van_meet2", v: "assets/voice/npc_diep_van_meet2.mp3" },
+  ],
   /* --- NPC nội thất 6 tông môn (17) --- */
   thu_cac_truong_lao: [
     { k: "npc_thu_cac_truong_lao_meet1", v: "assets/voice/npc_thu_cac_truong_lao_meet1.mp3" },
