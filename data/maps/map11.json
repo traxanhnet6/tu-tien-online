@@ -3,9 +3,7 @@
  "nameKey": "map_cuu_u_ma_tong",
  "bg": "assets/maps/map_cuu_u_ma_tong.webp",
  "fb": "#3a2a4a",
- "monsters": [
-  "hac_long"
- ],
+ "monsters": [],
  "boss": null,
  "npcs": [
   "truong_lao_ma",

@@ -9,6 +9,36 @@
   "ma_lang"
  ],
  "boss": "huyet_ma_vuong",
+ "spawnZones": [
+  {
+   "x": 300,
+   "y": 750,
+   "r": 160,
+   "monsters": [
+    "ma_binh"
+   ]
+  },
+  {
+   "x": 1250,
+   "y": 400,
+   "r": 160,
+   "monsters": [
+    "oan_linh"
+   ]
+  },
+  {
+   "x": 700,
+   "y": 220,
+   "r": 150,
+   "monsters": [
+    "ma_lang"
+   ]
+  }
+ ],
+ "bossSpawn": {
+  "x": 1300,
+  "y": 950
+ },
  "npcs": [
   "ma_thuong_nhan",
   "co_hon",

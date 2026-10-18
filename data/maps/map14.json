@@ -9,6 +9,36 @@
  },
  "bg": "assets/maps/map_thai_hu_tien_canh.webp",
  "boss": "thien_tuong",
+ "spawnZones": [
+  {
+   "x": 1250,
+   "y": 700,
+   "r": 160,
+   "monsters": [
+    "thien_hac"
+   ]
+  },
+  {
+   "x": 350,
+   "y": 850,
+   "r": 150,
+   "monsters": [
+    "ngoc_tho"
+   ]
+  },
+  {
+   "x": 800,
+   "y": 300,
+   "r": 150,
+   "monsters": [
+    "u_hon_lang"
+   ]
+  }
+ ],
+ "bossSpawn": {
+  "x": 1200,
+  "y": 950
+ },
  "dao": "chinh",
  "expMult": 2,
  "fb": "#cfe8ff",

@@ -8,6 +8,28 @@
   "son_ke"
  ],
  "boss": "da_tru_vuong",
+ "spawnZones": [
+  {
+   "x": 280,
+   "y": 800,
+   "r": 150,
+   "monsters": [
+    "da_tru"
+   ]
+  },
+  {
+   "x": 1300,
+   "y": 850,
+   "r": 150,
+   "monsters": [
+    "son_ke"
+   ]
+  }
+ ],
+ "bossSpawn": {
+  "x": 800,
+  "y": 880
+ },
  "npcs": [
   "dai_phu",
   "van_tien_cac",

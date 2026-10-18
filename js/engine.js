@@ -383,6 +383,26 @@ var Engine = (function () {
     }
     return _randPos(margin);
   }
+  /* Vị trí random TRONG BÃI QUÁI (spawnZones), vẫn tránh đè NPC/cổng map */
+  function _randPosInZone(zn) {
+    var r = zn.r || 150, cx = zn.x, cy = zn.y;
+    for (var t = 0; t < 24; t++) {
+      var a = Math.random() * Math.PI * 2, d = Math.sqrt(Math.random()) * r;
+      var p = { x: cx + Math.cos(a) * d, y: cy + Math.sin(a) * d };
+      p.x = Math.max(120, Math.min(WORLD_W - 120, p.x));
+      p.y = Math.max(120, Math.min(WORLD_H - 120, p.y));
+      var ok = true, i;
+      for (i = 0; i < _npcs.length; i++) {
+        if (Math.hypot(_npcs[i].x - p.x, _npcs[i].y - p.y) < 110) { ok = false; break; }
+      }
+      if (ok) for (i = 0; i < _gates.length; i++) {
+        if (Math.hypot(_gates[i].x - p.x, _gates[i].y - p.y) < 110) { ok = false; break; }
+      }
+      if (ok) return p;
+    }
+    return { x: Math.max(120, Math.min(WORLD_W - 120, cx)),
+             y: Math.max(120, Math.min(WORLD_H - 120, cy)) };
+  }
   function _spawnMon(monId, x, y, isBoss) {
     var def = _monDef(monId);
     var m = {
@@ -412,12 +432,38 @@ var Engine = (function () {
     _bossDef = _mapDef.boss || null;
     _bossRespawnAt = 0;
     var ids = (_mapDef.monsters && _mapDef.monsters.length) ? _mapDef.monsters : ['da_tru'];
-    for (var i = 0; i < MAP_MON_COUNT; i++) {
-      var p = _randPosClear(160, 110);
-      _monsters.push(_spawnMon(ids[i % ids.length], p.x, p.y, false));
+    var zones = _mapDef.spawnZones;
+    if (zones && zones.length) {
+      /* Spawn theo BÃI QUÁI: chia đều quái cho các bãi, mỗi bãi spawn loại quái của bãi */
+      var spawned = 0, zi, k;
+      var perZone = Math.max(1, Math.floor(MAP_MON_COUNT / zones.length));
+      for (zi = 0; zi < zones.length && spawned < MAP_MON_COUNT; zi++) {
+        var zids = (zones[zi].monsters && zones[zi].monsters.length) ? zones[zi].monsters : ids;
+        for (k = 0; k < perZone && spawned < MAP_MON_COUNT; k++, spawned++) {
+          var p = _randPosInZone(zones[zi]);
+          var m = _spawnMon(zids[(spawned + zi) % zids.length], p.x, p.y, false);
+          m.zone = zi;
+          _monsters.push(m);
+        }
+      }
+      while (spawned < MAP_MON_COUNT) { /* chia không đều -> dồn vào bãi đầu */
+        var z0 = zones[0];
+        var z0ids = (z0.monsters && z0.monsters.length) ? z0.monsters : ids;
+        var p0 = _randPosInZone(z0);
+        var m0 = _spawnMon(z0ids[spawned % z0ids.length], p0.x, p0.y, false);
+        m0.zone = 0;
+        _monsters.push(m0);
+        spawned++;
+      }
+    } else { /* map chưa có spawnZones: giữ cách cũ (spawn random khắp map) */
+      for (var i = 0; i < MAP_MON_COUNT; i++) {
+        var p2 = _randPosClear(160, 110);
+        _monsters.push(_spawnMon(ids[i % ids.length], p2.x, p2.y, false));
+      }
     }
     if (_bossDef) {
-      var bp = _randPosClear(200, 150);
+      var bp = _mapDef.bossSpawn ? { x: _mapDef.bossSpawn.x, y: _mapDef.bossSpawn.y }
+                                 : _randPosClear(200, 150);
       _monsters.push(_spawnMon(_bossDef, bp.x, bp.y, true));
     }
   }
@@ -799,12 +845,18 @@ var Engine = (function () {
     _dmgNum(mon.x, mon.y - 26, (rc.crit ? '✦' : '') + '-' + dmg, rc.crit ? '#ff5252' : '#ffd54f');
     _skillFx(mon.x, mon.y);
     mon.hitT = 0.15;
+    /* giật lùi nhẹ theo hướng đòn đánh (boss nặng nên ít bị đẩy) + vệt kiếm quang */
+    var _ka = Math.atan2(mon.y - player.y, mon.x - player.x);
+    var _kb = mon.boss ? 36 : 120;
+    mon.kx = Math.cos(_ka) * _kb; mon.ky = Math.sin(_ka) * _kb;
+    _fxSlash(mon.x, mon.y, _elemFx(), false, 1);
     if (mon.hp <= 0 && !mon.dead) _killMon(mon);
   }
 
   function _killMon(mon) {
     mon.dead = true;
     mon.hp = 0;
+    mon.dieT = 0.6; /* mờ dần 0.6s trước khi biến mất hẳn */
     _burst(mon.x, mon.y, mon.boss ? 14 : 6, '#ffffff');
     if (player.target === mon) player.target = null;
     if (mon.boss && !_dungeon) _bossRespawnAt = Date.now() / 1000 + BOSS_RESPAWN_S;
@@ -887,6 +939,30 @@ var Engine = (function () {
     _fx.push({ kind: 'bolt', x: player.x, y: player.y, tx: tx, ty: ty,
                t: 0.25, maxT: 0.25, color: color || '#cfe8ff', inten: inten || 1 });
   }
+  function _fxBreath(x, y, ang, color, inten) {
+    /* phun độc/lửa hình nón từ mồm quái về hướng ang */
+    var it = inten || 1, col = color || '#a0ff70';
+    _fx.push({ kind: 'breath', x: x, y: y, ang: ang, t: 0.6, maxT: 0.6, color: col, inten: it });
+    var lvl = GFX_LEVELS[_gfxLevel] || GFX_LEVELS.cao;
+    var n = Math.round(16 * it * (lvl.particle == null ? 1 : lvl.particle));
+    for (var i = 0; i < n; i++) {
+      var a = ang + (Math.random() - 0.5) * 0.75;
+      var sp = (130 + Math.random() * 170) * it;
+      _fx.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+                 t: 0.55, maxT: 0.55, color: col, dot: true, sz: 3 + Math.random() * 4 });
+    }
+  }
+  function _fxRain(x, y, color, inten) {
+    /* mưa sét: nhiều tia sét đánh xuống quanh điểm */
+    _fx.push({ kind: 'rain', x: x, y: y, t: 0.7, maxT: 0.7,
+               color: color || '#b388ff', inten: inten || 1 });
+  }
+  function _announce(x, y, txt, color) {
+    /* tên chiêu/buff hiện to giữa màn hình như video tutien2d */
+    _dmgNums.push({ x: x, y: y, txt: txt, color: color || '#ffffff',
+                    t: 1.5, maxT: 1.5, big: true });
+    if (_dmgNums.length > 40) _dmgNums.shift();
+  }
   /* Chọn hiệu ứng theo skill */
   var _SKILL_FX = {
     kiem_xuyen_van: 'bolt', van_kiem_quy_tong: 'slash', kiem_cuong_ho_the: 'circle',
@@ -939,6 +1015,10 @@ var Engine = (function () {
     var ps = _effStats(_getStats());
     var def = cast.def, wm = _weakMult();
     _audio(function (A) { A.sfx('slash'); });
+    try { /* tên chiêu hiện lên như video */
+      var _skn = _t('sk_' + skillId) !== ('sk_' + skillId) ? _t('sk_' + skillId) : (def.name || skillId);
+      _announce(player.x, player.y - 64, _skn, def.fx || '#fff3b0');
+    } catch (e2) {}
 
     if (def.kind === 'buff') {
       _buffs.push({ defMult: def.defMult || 1, until: nowMs + (def.dur || 15) * 1000, fx: def.fx });
@@ -1192,6 +1272,13 @@ var Engine = (function () {
       warnT: 1.2, hitT: 1.2, dmg: Math.round(m.atk * 1.5),
     });
     _audio(function (A) { A.sfx('fail'); });
+    /* tên chiêu boss + phun độc/lửa từ mồm về phía người chơi */
+    try {
+      var _bnm = _t((m.def && m.def.nameKey) || m.monId);
+      _announce(m.x, m.y - 78, _bnm + ' ' + _t('boss_cast'), '#ff8a80');
+    } catch (e3) {}
+    var _ba = Math.atan2(player.y - m.y, player.x - m.x);
+    _fxBreath(m.x, m.y - 12, _ba, '#a0ff70', m.boss ? 1.4 : 1);
   }
   function _updateTelegraphs(dt, ps) {
     for (var i = _bossTele.length - 1; i >= 0; i--) {
@@ -1218,7 +1305,8 @@ var Engine = (function () {
     var t = (player.target && !player.target.dead) ? player.target : null;
     if (!t || !t.boss) return null;
     var nm = t.def && t.def.nameKey ? _t(t.def.nameKey) : 'BOSS';
-    return { name: nm, hp: Math.max(0, Math.round(t.hp)), maxHp: t.maxHp,
+    var cg = t.def && t.def.cg ? 'CG.' + t.def.cg : '';
+    return { name: nm, realm: cg, hp: Math.max(0, Math.round(t.hp)), maxHp: t.maxHp,
              weak: Date.now() < _weakUntil };
   }
   function isWeak() { return Date.now() < _weakUntil; }
@@ -1248,8 +1336,15 @@ var Engine = (function () {
   function _updateMonsters(dt, ps) {
     for (var i = 0; i < _monsters.length; i++) {
       var m = _monsters[i];
-      if (m.dead) continue;
+      if (m.dead && !m.dieT) continue;
+      if (m.dieT > 0) { m.dieT -= dt; continue; } /* đang mờ dần khi chết */
       if (m.hitT > 0) m.hitT -= dt;
+      if (m.kx || m.ky) { /* quán tính giật lùi */
+        m.x += (m.kx || 0) * dt; m.y += (m.ky || 0) * dt;
+        m.kx = (m.kx || 0) * 0.88; m.ky = (m.ky || 0) * 0.88;
+        if (Math.abs(m.kx) < 5) m.kx = 0;
+        if (Math.abs(m.ky) < 5) m.ky = 0;
+      }
       m.atkCd -= dt;
       var d = Math.hypot(player.x - m.x, player.y - m.y);
       var spd = m.boss ? 95 : 70;
@@ -1307,14 +1402,25 @@ var Engine = (function () {
     }
     if (aliveN < MAP_MON_COUNT) {
       var ids = (_mapDef.monsters && _mapDef.monsters.length) ? _mapDef.monsters : ['da_tru'];
-      var p = _randPos(160);
+      var zones = _mapDef.spawnZones, zn = null, zids = ids;
+      if (zones && zones.length) { /* respawn đúng trong bãi quái */
+        zn = zones[Math.floor(Math.random() * zones.length)];
+        zids = (zn.monsters && zn.monsters.length) ? zn.monsters : ids;
+      }
+      var p = zn ? _randPosInZone(zn) : _randPos(160);
       // spawn xa player để không "mọc" ngay trước mặt
       var tries = 0;
-      while (Math.hypot(p.x - player.x, p.y - player.y) < 350 && tries < 6) { p = _randPos(160); tries++; }
-      _monsters.push(_spawnMon(ids[Math.floor(Math.random() * ids.length)], p.x, p.y, false));
+      while (Math.hypot(p.x - player.x, p.y - player.y) < 350 && tries < 6) {
+        p = zn ? _randPosInZone(zn) : _randPos(160);
+        tries++;
+      }
+      var nm = _spawnMon(zids[Math.floor(Math.random() * zids.length)], p.x, p.y, false);
+      if (zn) nm.zone = zones.indexOf(zn);
+      _monsters.push(nm);
     }
     if (!bossAlive && _bossDef && Date.now() / 1000 >= _bossRespawnAt) {
-      _monsters.push(_spawnMon(_bossDef, 1250, 320, true));
+      var bsp = _mapDef.bossSpawn || { x: 1250, y: 320 };
+      _monsters.push(_spawnMon(_bossDef, bsp.x, bsp.y, true));
     }
   }
 
@@ -1575,6 +1681,8 @@ var Engine = (function () {
   function _drawMonster(m) {
     var elite = !!m.elite;
     var size = m.boss ? 64 : (elite ? 57 : 44); /* tinh anh to hơn 30% */
+    _ctx.save();
+    if (m.dieT > 0) _ctx.globalAlpha = Math.max(0, m.dieT / 0.6); /* mờ dần khi chết */
     var label = _t(m.def.nameKey || m.monId);
     if (elite) { /* hào quang vàng nhấp nháy */
       _ctx.save();
@@ -1607,6 +1715,7 @@ var Engine = (function () {
       _ctx.textAlign = 'center';
       _ctx.fillText(_t('bc_elite') + ' ' + label, m.x, m.y - size / 2 - 16);
     }
+    _ctx.restore();
   }
 
   function _playerSpriteOld() {
@@ -1619,12 +1728,34 @@ var Engine = (function () {
    * char_<gioi>_fly.png khi ngự kiếm bay. Có frame riêng cho cả 4 hướng
    * (xuong/len/trai/phai) nên không flip sprite — thân luôn đứng thẳng. */
   var _CHAR_HUONG = { down: 'xuong', up: 'len', left: 'trai', right: 'phai' };
+  var _WPN_ART_KEYS = ['kiem','dao','thuong','cung','phien','tieu','roi','liem','kiemhap','but'];
+  function _weaponArtKey() {
+    /* loại vũ khí đang cầm -> key art atk (mặc định kiếm) */
+    try {
+      var S = _S(), wid = S && S.equip && S.equip.vukhi;
+      if (wid) {
+        var w = String(wid).toLowerCase();
+        for (var i = 0; i < _WPN_ART_KEYS.length; i++)
+          if (w.indexOf(_WPN_ART_KEYS[i]) >= 0) return _WPN_ART_KEYS[i];
+      }
+    } catch (e) {}
+    return 'kiem';
+  }
   function _playerFrame() {
     var S = _S();
     var gioi = (S && S.char && S.char.gender === 'nu') ? 'nu' : 'nam';
     var ang = (typeof player.ang === 'number') ? player.ang : Math.PI / 2;
     var huong = _CHAR_HUONG[_face4(player, ang)] || 'xuong';
     var src = null;
+    /* đang tung chiêu/đánh: dùng frame tấn công theo vũ khí (art char_*_atk_*) */
+    if (player.atkT > 0) {
+      var _wk = _weaponArtKey();
+      var _af = (player.atkT > 0.12) ? 1 : 2;
+      var _asrc = 'assets/sprs/char_' + gioi + '_atk_' + _wk + '_' + _af + '.png';
+      var _ace = _imgCache[_asrc];
+      if (!(_ace && _ace.done && !_ace.ok)) { _img(_asrc); return _asrc; }
+      /* art thiếu -> rớt xuống frame thường */
+    }
     try {
       if (typeof Engine !== 'undefined' && Engine.fly)
         src = 'assets/sprs/char_' + gioi + '_fly.png';
@@ -1912,7 +2043,7 @@ var Engine = (function () {
     // (trừ lift cầu: đứng trên cầu thì sort theo mặt cầu)
     var ents = [];
     for (var mi = 0; mi < _monsters.length; mi++) {
-      if (_monsters[mi].dead) continue;
+      if (_monsters[mi].dead && !_monsters[mi].dieT) continue;
       ents.push({ y: _monsters[mi].y - _bridgeLiftAt(_monsters[mi].x, _monsters[mi].y), k: 'm', o: _monsters[mi] });
     }
     for (var ni = 0; ni < _npcs.length; ni++) ents.push({ y: _npcs[ni].y - _bridgeLiftAt(_npcs[ni].x, _npcs[ni].y), k: 'n', o: _npcs[ni] });
@@ -1993,6 +2124,40 @@ var Engine = (function () {
         }
         _ctx.fillStyle = f.color;
         _ctx.beginPath(); _ctx.arc(f.x, f.y, 6, 0, Math.PI * 2); _ctx.fill();
+      } else if (kind === 'breath') {
+        /* chùm độc/lửa hình nón lan ra */
+        var bpr = 1 - f.t / f.maxT;
+        _ctx.save();
+        _ctx.translate(f.x, f.y); _ctx.rotate(f.ang);
+        var blen = (60 + bpr * 130) * (f.inten || 1);
+        var bgrad = _ctx.createLinearGradient(0, 0, blen, 0);
+        bgrad.addColorStop(0, f.color);
+        bgrad.addColorStop(1, 'rgba(255,255,255,0)');
+        _ctx.fillStyle = bgrad;
+        _ctx.beginPath();
+        _ctx.moveTo(0, -8); _ctx.lineTo(blen, -blen * 0.35);
+        _ctx.lineTo(blen, blen * 0.35); _ctx.lineTo(0, 8);
+        _ctx.closePath(); _ctx.fill();
+        _ctx.restore();
+      } else if (kind === 'rain') {
+        /* mưa sét: 6 tia đánh xuống quanh điểm */
+        var rpr = f.t / f.maxT;
+        _ctx.strokeStyle = f.color; _ctx.lineWidth = 4;
+        _ctx.globalAlpha = alpha * (0.4 + 0.6 * rpr);
+        for (var ri = 0; ri < 6; ri++) {
+          var rx = f.x + ((ri * 53) % 140) - 70;
+          _ctx.beginPath();
+          _ctx.moveTo(rx, f.y - 150);
+          var _yy = f.y - 150, _xx = rx;
+          for (var rj = 0; rj < 5; rj++) {
+            _xx += (Math.random() - 0.5) * 30; _yy += 32;
+            _ctx.lineTo(_xx, _yy);
+          }
+          _ctx.stroke();
+        }
+        _ctx.globalAlpha = alpha;
+        _ctx.fillStyle = 'rgba(179,136,255,0.25)';
+        _ctx.beginPath(); _ctx.arc(f.x, f.y, 90, 0, Math.PI * 2); _ctx.fill();
       } else if (kind === 'bolt') {
         /* đạn kiếm khí bay */
         var ang = Math.atan2(f.ty - f.y, f.tx - f.x);
@@ -2038,10 +2203,12 @@ var Engine = (function () {
 
     // Damage numbers bay lên
     _ctx.textAlign = 'center';
-    _ctx.font = 'bold 13px sans-serif';
     for (var di = 0; di < _dmgNums.length; di++) {
       var dn = _dmgNums[di];
       _ctx.globalAlpha = Math.max(0, Math.min(1, dn.t * 1.5));
+      _ctx.font = dn.big ? 'bold 18px sans-serif' : 'bold 14px sans-serif';
+      _ctx.lineWidth = 3; _ctx.strokeStyle = 'rgba(0,0,0,0.75)';
+      _ctx.strokeText(dn.txt, dn.x, dn.y);
       _ctx.fillStyle = dn.color;
       _ctx.fillText(dn.txt, dn.x, dn.y);
     }
@@ -2088,6 +2255,7 @@ var Engine = (function () {
     }
     setGraphics((S && S.settings && S.settings.graphics) || 'tudong');
     if (S && S.settings && S.settings.graphicsManual) _manualCap = S.settings.graphicsManual;
+    _tapMove = !(S && S.settings && S.settings.tapMove === false); /* áp dụng tap-to-move đã lưu */
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', _applyGfx);
       window.addEventListener('keydown', _onKeyDown);
@@ -2150,6 +2318,9 @@ var Engine = (function () {
     dash: dash,                 // () → bool
     navigateTo: function (x, y) { _moveTarget = { x: x, y: y }; }, // tự tìm đường tới điểm
     getBossInfo: getBossInfo,   // () → {name,hp,maxHp,weak} | null
+    getMonsters: function () { return _monsters; }, // minimap HUD
+    getNPCs: function () { return _npcs; },         // minimap HUD
+    getGates: function () { return _gates; },       // minimap HUD
     isWeak: isWeak,             // () → bool (cửa sổ SƠ HỞ)
     dashCdLeft: function () { return Math.max(0, _dashCd); },
     khu: function () { return _khuOf(player.x, player.y); }, // khu hiện tại (lưới 400x400)

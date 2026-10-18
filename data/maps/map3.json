@@ -8,6 +8,28 @@
   "thi_ma"
  ],
  "boss": "cot_tuong",
+ "spawnZones": [
+  {
+   "x": 800,
+   "y": 280,
+   "r": 170,
+   "monsters": [
+    "u_hon"
+   ]
+  },
+  {
+   "x": 800,
+   "y": 920,
+   "r": 170,
+   "monsters": [
+    "thi_ma"
+   ]
+  }
+ ],
+ "bossSpawn": {
+  "x": 1300,
+  "y": 300
+ },
  "npcs": [],
  "quests": [],
  "gates": [

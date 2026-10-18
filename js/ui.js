@@ -581,6 +581,17 @@ function refreshHUD() {
   skillbarTick();
   updatePotionBadges(); /* số lượng đan dược trên nút uống nhanh */
   updateChatBadge(); /* badge tin nhắn chưa đọc */
+  /* HUD chuẩn tutien2d: số lực chiến + thanh EXP + tên map (minimap) */
+  try {
+    var _pwEl = $("hud-power");
+    if (_pwEl) _pwEl.textContent = "⚔" + inspectPowerOf(s);
+    var _ch = state.char;
+    var _eMax = (typeof expMaxFor === "function") ? expMaxFor(_ch.realm, _ch.tier) : 1;
+    setBar("hud-exp", _ch.exp || 0, _eMax);
+    var _mnEl = $("minimap-name");
+    if (_mnEl) { try { var _mDef = mapDef(curMapId); if (_mDef) _mnEl.textContent = t(_mDef.nameKey); } catch (_e2) {} }
+  } catch (_e3) {}
+  drawMinimap();
   function setBar(id, cur, max) {
     var f = $(id + "-fill"), tx = $(id + "-txt");
     if (f) f.style.width = Math.max(0, Math.min(100, cur / max * 100)) + "%";
@@ -616,6 +627,8 @@ function updateBossBar() {
   bar.classList.remove("hidden");
   $("boss-name").textContent = info.name + (info.realm ? " · " + info.realm : "");
   $("boss-hp-fill").style.width = Math.max(0, info.hp / info.maxHp * 100) + "%";
+  var bt = $("boss-hp-txt");
+  if (bt) bt.textContent = info.hp + " / " + info.maxHp;
   var wk = $("boss-weak");
   if (wk) wk.classList.toggle("hidden", !info.weak);
 }
@@ -1678,6 +1691,9 @@ function renderSettings() {
     shp.map(function (g) {
       return '<button class="mini' + (st.showPlayers === g[0] ? " on" : " paper") + '" data-act="set-showp" data-v="' + g[0] + '">' + esc(g[1]) + "</button>";
     }).join("") + "</div></div>";
+  h += '<div class="row"><div class="item-name">' + esc(t("settings_tapmove")) + '</div><div class="row-btns">' +
+    '<button class="mini' + (st.tapMove === false ? " paper" : "") + '" data-act="set-tapmove">' + esc(st.tapMove === false ? t("settings_off") : t("settings_on")) + "</button></div></div>";
+  h += renderDisplayRows();
   h += '<div class="row"><div class="item-name">' + esc(t("settings_lang")) + '</div><div class="row-btns">' +
     '<button class="mini' + (LANG_CUR === "vi" ? " on" : " paper") + '" data-act="set-lang" data-v="vi">VI</button>' +
     '<button class="mini' + (LANG_CUR === "en" ? " on" : " paper") + '" data-act="set-lang" data-v="en">EN</button></div></div>';
@@ -2174,6 +2190,7 @@ function onPanelClick(e) {
     case "bag-use": doBagUse(+i); break;
     case "bag-equip": doBagEquip(+i); break;
     case "bag-unlock": doBagUnlock(+i); break;
+    case "bag-info": toast(t("bag_slots", { n: state.bag.length })); break;
     case "enhance": doEnhance(el.getAttribute("data-slot")); break;
     case "char-tab": panelArg = { tab: v }; renderPanel(); break;
     /* ----- Căn Cốt / Thần Thức ----- */
@@ -2276,6 +2293,18 @@ function onPanelClick(e) {
       saveGame(state); renderPanel(); break;
     case "set-showp":
       state.settings.showPlayers = v; saveGame(state); renderPanel(); break;
+    case "set-tapmove":
+      state.settings.tapMove = !(state.settings.tapMove !== false);
+      if (hasEngine() && Engine.setTapMove) Engine.setTapMove(state.settings.tapMove);
+      saveGame(state); renderPanel(); break;
+    case "set-fullscreen":
+      state.settings.display = state.settings.display || {};
+      state.settings.display.fullscreen = !state.settings.display.fullscreen;
+      applyDisplaySettings(); saveGame(state); renderPanel(); break;
+    case "set-orient":
+      state.settings.display = state.settings.display || {};
+      state.settings.display.orientation = v || "auto";
+      applyDisplaySettings(); saveGame(state); renderPanel(); break;
     case "set-lang":
       setLang(v); state.lang = v; saveGame(state); applyI18n(); renderPanel(); refreshHUD(); break;
     case "gp-toggle":
@@ -2743,6 +2772,12 @@ function skillbarSkills() {
   } catch (e) {}
   return out.slice(0, 7);
 }
+/* Icon skill bằng ảnh pixel art (assets/skills/<id>.png); fallback emoji nếu ảnh lỗi */
+function skillIconHtml(techId, emoji) {
+  var fb = String(emoji || "✨").replace(/'/g, "&#39;");
+  return '<img class="skill-img" src="assets/skills/' + techId + '.png" alt="" draggable="false"' +
+    ' onerror="this.outerHTML=\'' + fb + '\'"/>';
+}
 function renderSkillbar() {
   var bar = $("skillbar");
   if (!bar || typeof Skills === "undefined") return;
@@ -2761,7 +2796,7 @@ function renderSkillbar() {
     for (var d = 0; d < pw.level; d++) dots += "●";
     h += '<div class="skill-slot" data-skill="' + id + '" data-slot="' + i + '">' +
       '<span class="skill-key">' + (i + 1) + '</span>' +
-      '<span class="skill-icon">' + (def.icon || "✨") + '</span>' +
+      '<span class="skill-icon">' + skillIconHtml(id, def.icon) + '</span>' +
       '<span class="skill-name">' + esc(t(def.nameKey)) + '</span>' +
       '<span class="skill-lvldots">' + dots + '</span>' +
       '<span class="skill-cdnum"></span><span class="skill-cdsweep"></span>' +
@@ -2827,8 +2862,9 @@ function doSkillSlot(i) {
 function charTab() { return (panelArg && panelArg.tab) || "equip"; }
 function renderChar() {
   var h = '<div class="char-top">' +
-    '<div class="char-stones">💎 ' + formatTien(state.stones) + "</div>" +
+    '<div class="char-stones">💎 ' + esc(t("hud_stones")) + " <b>" + formatTien(state.stones) + "</b></div>" +
     '<div class="char-bagslots">' + esc(t("bag_slots", { n: state.bag.length })) + "</div>" +
+    '<button class="ht-plus" data-act="bag-info" title="+">+</button>' +
     '<button class="mini" data-act="open-gift">🎁 ' + esc(t("gift_redeem")) + "</button></div>";
   /* Thọ Nguyên — luôn hiện trên mọi tab (lifespan.js) */
   try {
@@ -3056,14 +3092,16 @@ function renderEquipTab() {
   var s = getStats();
   var c = state.char;
   var h = '<div class="equip-grid">';
-  var left = ["vukhi", "phapbao", "phihanh", "giap"];
-  var right = ["huanh", "phapboi", "yphuc", "hanhngoa", "linhgioi"];
+  /* bố trí y hệt tutien2d: trái Vũ Khí/Giáp/Pháp Bội/Hành Ngoa,
+     phải Phi Hành/Hư Ảnh/Y Phục/Linh Giới, trên đỉnh Pháp Bảo */
+  var left = ["vukhi", "giap", "phapboi", "hanhngoa"];
+  var right = ["phihanh", "huanh", "yphuc", "linhgioi"];
   h += '<div class="equip-col">' + left.map(equipSlot).join("") + "</div>";
   /* nhân vật ở giữa — đổi vũ khí theo trang bị đang đeo, sprite theo giới tính */
   var wpn = state.equip.vukhi ? itemDef(state.equip.vukhi) : null;
   var sprG = "assets/sprs/char_" + (c.gender === "nu" ? "nu" : "nam") + "_xuong_idle.png";
   var sprFb = "assets/sprs/sprs_player_" + (c.sect === "phap" ? "phap" : (c.sect === "the" ? "the" : "kiem")) + ".png";
-  h += '<div class="char-sprite"><img src="' + sprG + '" data-fb="' + sprFb + '" alt="" ' +
+  h += '<div class="char-sprite">' + equipSlot("phapbao") + '<img src="' + sprG + '" data-fb="' + sprFb + '" alt="" ' +
     'onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb=\'\';}else{this.style.display=\'none\'}">' +
     (wpn ? '<div class="char-wpn">' + esc(itemIcon(state.equip.vukhi)) + "</div>" : "") +
     '<div class="char-name">' + esc(c.name) + "</div>" +
@@ -3075,15 +3113,15 @@ function renderEquipTab() {
     '<button class="mini" data-act="friends-open">👥 ' + esc(t("nav_friends")) + "</button></div></div>";
   h += '<div class="equip-col">' + right.map(equipSlot).join("") + "</div>";
   h += "</div>";
-  /* dòng chỉ số */
+  /* hàng chỉ số dạng lưới ô (giống tutien2d): Công/HP/MP/SP/BP/Kháng */
   var spPct = 100 + 5 * passiveLv("than_phap");
-  h += '<div class="stat-lines">' +
-    statLine(t("stat_atk"), s.atk, true) +
-    statLine("HP", s.maxHp, true) +
-    statLine("MP", s.maxMp, true) +
-    statLine(t("stat_sp"), "+" + spPct + "%", spPct > 100) +
-    statLine(t("stat_bp"), "5%", false) +
-    statLine(t("stat_khang"), "+" + s.def, true) +
+  h += '<div class="ht-stat-grid">' +
+    htStat(t("stat_atk"), s.atk) +
+    htStat("HP", "+" + s.maxHp) +
+    htStat("MP", "+" + s.maxMp) +
+    htStat(t("stat_sp"), "+" + spPct + "%") +
+    htStat(t("stat_bp"), "5%") +
+    htStat(t("stat_khang"), "+" + s.def) +
     "</div>";
   /* Thọ Nguyên: thiên phú + lịch sử chuyển thế (lifespan.js) */
   try {
@@ -3125,6 +3163,10 @@ function renderEquipTab() {
   }
   function statLine(k, v, green) {
     return '<div class="stat-line">' + esc(k) + ': <b class="' + (green ? "bonus-xanh" : "") + '">' + esc(String(v)) + "</b></div>";
+  }
+  function htStat(k, v) {
+    return '<div class="ht-stat"><span class="ht-stat-k">' + esc(k) +
+      '</span><span class="ht-stat-v">' + esc(String(v)) + "</span></div>";
   }
   function equipSlot(slot) {
     var id = state.equip[slot];
@@ -3439,7 +3481,7 @@ function renderManual() {
   var realmOk = Skills.manualRealmOk(state, manualId);
   var tierCls = "tier-" + ["pham", "dia", "thien"][mi.tier];
   var h = '<div class="manual-card ' + tierCls + '">' +
-    '<span class="manual-icon">' + esc(itemIcon(manualId)) + " " + esc(def ? def.icon : "") + "</span>" +
+    '<span class="manual-icon">' + esc(itemIcon(manualId)) + " " + (def ? skillIconHtml(techId, def.icon) : "") + "</span>" +
     '<div class="item-name">' + esc(itemName(manualId)) + "</div>" +
     '<div class="item-desc">' + esc(t(isP ? "manual_type_passive" : "manual_type_active")) + " · " +
     esc(t("tier_" + mi.tier)) + (learned ? " · " + esc(t("manual_level", { n: lv })) + "/" + max : "") + "</div>" +
@@ -3890,6 +3932,50 @@ return {
   getStats: getStats,
   inspectPlayer: openInspect
 };
+
+/* Minimap góc trên-phải (chuẩn tutien2d): chấm vàng = mình, đỏ = quái,
+ * tím = boss, xanh lá = NPC, vàng = cổng map. Vẽ thưa 600ms để nhẹ máy. */
+var _mmLastDraw = 0;
+function drawMinimap() {
+  var cv = $("minimap");
+  if (!cv || screen !== "game" || !state || !hasEngine() || !Engine.player) return;
+  var now = Date.now();
+  if (now - _mmLastDraw < 600) return;
+  _mmLastDraw = now;
+  try {
+    var ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
+    var WW = 1600, WH = 1200, sx = W / WW, sy = H / WH;
+    ctx.fillStyle = "#0e150e";
+    ctx.fillRect(0, 0, W, H);
+    var i, m;
+    if (typeof Engine.getGates === "function") {
+      var gates = Engine.getGates() || [];
+      ctx.fillStyle = "#ffd76a";
+      for (i = 0; i < gates.length; i++)
+        ctx.fillRect(gates[i].x * sx - 2, gates[i].y * sy - 2, 4, 4);
+    }
+    if (typeof Engine.getNPCs === "function") {
+      var npcs = Engine.getNPCs() || [];
+      ctx.fillStyle = "#7fe08a";
+      for (i = 0; i < npcs.length; i++) {
+        ctx.beginPath(); ctx.arc(npcs[i].x * sx, npcs[i].y * sy, 2, 0, 6.3); ctx.fill();
+      }
+    }
+    if (typeof Engine.getMonsters === "function") {
+      var mons = Engine.getMonsters() || [];
+      for (i = 0; i < mons.length; i++) {
+        m = mons[i];
+        if (m.dead) continue;
+        ctx.fillStyle = m.boss ? "#c77fe8" : "#f0503c";
+        ctx.beginPath(); ctx.arc(m.x * sx, m.y * sy, m.boss ? 3.5 : 2, 0, 6.3); ctx.fill();
+      }
+    }
+    var p = Engine.player;
+    ctx.fillStyle = "#ffd76a";
+    ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(p.x * sx, p.y * sy, 3.5, 0, 6.3); ctx.fill(); ctx.stroke();
+  } catch (e) {}
+}
 
 })();
 

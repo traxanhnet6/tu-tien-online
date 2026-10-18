@@ -167,7 +167,8 @@
     "min": 1,
     "max": 1
    }
-  ]
+  ],
+  "cg": 3
  },
  "phong_lang": {
   "nameKey": "mon_phong_lang",
@@ -337,7 +338,8 @@
     "min": 1,
     "max": 1
    }
-  ]
+  ],
+  "cg": 5
  },
  "u_hon": {
   "nameKey": "mon_u_hon",
@@ -507,7 +509,8 @@
     "min": 1,
     "max": 1
    }
-  ]
+  ],
+  "cg": 7
  },
  "ma_binh": {
   "nameKey": "mon_ma_binh",
@@ -641,7 +644,8 @@
     "min": 1,
     "max": 1
    }
-  ]
+  ],
+  "cg": 16
  },
  "ngoc_tho": {
   "nameKey": "mon_ngoc_tho",
@@ -745,7 +749,8 @@
     "min": 1,
     "max": 1
    }
-  ]
+  ],
+  "cg": 18
  },
  "thach_giap_trung": {
   "nameKey": "mon_thach_giap_trung",
@@ -849,7 +854,8 @@
     "min": 1,
     "max": 1
    }
-  ]
+  ],
+  "cg": 13
  },
  "hac_long": {
   "nameKey": "mon_hac_long",
@@ -888,6 +894,7 @@
     "min": 1,
     "max": 2
    }
-  ]
+  ],
+  "cg": 15
  }
 }

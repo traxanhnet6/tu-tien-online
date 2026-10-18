@@ -8,6 +8,28 @@
   "thien_hac"
  ],
  "boss": "thien_tuong",
+ "spawnZones": [
+  {
+   "x": 300,
+   "y": 620,
+   "r": 150,
+   "monsters": [
+    "ngoc_tho"
+   ]
+  },
+  {
+   "x": 900,
+   "y": 950,
+   "r": 160,
+   "monsters": [
+    "thien_hac"
+   ]
+  }
+ ],
+ "bossSpawn": {
+  "x": 1200,
+  "y": 250
+ },
  "npcs": [
   "tien_ong"
  ],

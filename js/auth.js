@@ -324,7 +324,7 @@ var Auth = (function () {
     el.className = text ? (isErr ? "err" : "ok") : "";
   }
   function setBusy(b) {
-    ["btn-auth-login", "btn-auth-register", "btn-auth-reset"].forEach(function (id) {
+    ["auth-tab-login", "auth-tab-register", "btn-auth-reset"].forEach(function (id) {
       var el = $(id);
       if (el) el.disabled = !!b;
     });
@@ -334,11 +334,61 @@ var Auth = (function () {
       var el = $(id);
       if (el) el.classList.toggle("hidden", id !== "auth-" + which);
     });
-    ["login", "register"].forEach(function (w) {
-      var tab = $("auth-tab-" + w);
-      if (tab) tab.classList.toggle("sel", w === which || (which === "forgot" && w === "login"));
-    });
+    /* 2 nút hành động kiêm tab: nút của pane đang hiện = vàng, còn lại = tối */
+    var bl = $("auth-tab-login"), br = $("auth-tab-register");
+    var onLogin = (which === "login") || (which === "forgot");
+    if (bl) { bl.classList.toggle("gold", onLogin); bl.classList.toggle("dark", !onLogin); }
+    if (br) { br.classList.toggle("gold", !onLogin); br.classList.toggle("dark", onLogin); }
+    /* pane quên mật khẩu: ẩn 2 nút hành động chính */
+    try {
+      var acts = g().document.querySelector(".auth-actions");
+      if (acts) acts.classList.toggle("hidden", which === "forgot");
+    } catch (e) {}
     msg("");
+  }
+
+  /* Nút hành động kiêm tab: bấm tab chưa hiện → chuyển pane;
+     bấm tab đang hiện → submit luôn (giống tutien2d). */
+  function isLoginPane() {
+    var el = $("auth-login");
+    return el && !el.classList.contains("hidden");
+  }
+  function isRegisterPane() {
+    var el = $("auth-register");
+    return el && !el.classList.contains("hidden");
+  }
+  async function doLogin() {
+    msg("");
+    var login = $("auth-login-id") ? $("auth-login-id").value : "";
+    var pw = $("auth-login-pw") ? $("auth-login-pw").value : "";
+    setBusy(true);
+    try {
+      await signIn(login, pw);
+      msg(tt("auth_ok_login"), false);
+      setTimeout(enterGame, 400);
+    } catch (e) { msg(errMsg(e), true); }
+    setBusy(false);
+  }
+  async function doRegister() {
+    msg("");
+    var un = $("auth-reg-user") ? $("auth-reg-user").value : "";
+    var em = $("auth-reg-email") ? $("auth-reg-email").value : "";
+    var p1 = $("auth-reg-pw") ? $("auth-reg-pw").value : "";
+    var p2 = $("auth-reg-pw2") ? $("auth-reg-pw2").value : "";
+    var terms = $("auth-reg-terms");
+    if (terms && !terms.checked) { msg(tt("auth_err_terms"), true); return; }
+    if (p1 !== p2) { msg(tt("auth_err_pw_mismatch"), true); return; }
+    setBusy(true);
+    try {
+      var r = await signUp(un, em, p1);
+      if (r.needConfirm) {
+        msg(tt("auth_ok_need_confirm"), false);
+      } else {
+        msg(tt("auth_ok_register"), false);
+        setTimeout(enterGame, 600);
+      }
+    } catch (e) { msg(errMsg(e), true); }
+    setBusy(false);
   }
 
   function bindUI() {
@@ -348,44 +398,20 @@ var Auth = (function () {
       var el = $(id);
       if (el) el.onclick = fn;
     };
-    on("auth-tab-login", function () { showPane("login"); });
-    on("auth-tab-register", function () { showPane("register"); });
+    on("auth-tab-login", function () {
+      if (isLoginPane()) doLogin(); else showPane("login");
+    });
+    on("auth-tab-register", function () {
+      if (isRegisterPane()) doRegister(); else showPane("register");
+    });
     on("auth-link-forgot", function () { showPane("forgot"); });
     on("auth-back-login", function () { showPane("login"); });
+    on("auth-terms-quick", function () {
+      msg(tt("auth_terms_quick_msg"), false);
+    });
     on("btn-anon", function () { playAnonymous(); });
     on("btn-logout", function () { signOut(); });
 
-    on("btn-auth-login", async function () {
-      msg("");
-      var login = $("auth-login-id") ? $("auth-login-id").value : "";
-      var pw = $("auth-login-pw") ? $("auth-login-pw").value : "";
-      setBusy(true);
-      try {
-        await signIn(login, pw);
-        msg(tt("auth_ok_login"), false);
-        setTimeout(enterGame, 400);
-      } catch (e) { msg(errMsg(e), true); }
-      setBusy(false);
-    });
-    on("btn-auth-register", async function () {
-      msg("");
-      var un = $("auth-reg-user") ? $("auth-reg-user").value : "";
-      var em = $("auth-reg-email") ? $("auth-reg-email").value : "";
-      var p1 = $("auth-reg-pw") ? $("auth-reg-pw").value : "";
-      var p2 = $("auth-reg-pw2") ? $("auth-reg-pw2").value : "";
-      if (p1 !== p2) { msg(tt("auth_err_pw_mismatch"), true); return; }
-      setBusy(true);
-      try {
-        var r = await signUp(un, em, p1);
-        if (r.needConfirm) {
-          msg(tt("auth_ok_need_confirm"), false);
-        } else {
-          msg(tt("auth_ok_register"), false);
-          setTimeout(enterGame, 600);
-        }
-      } catch (e) { msg(errMsg(e), true); }
-      setBusy(false);
-    });
     on("btn-auth-reset", async function () {
       msg("");
       var em = $("auth-forgot-email") ? $("auth-forgot-email").value : "";
@@ -403,13 +429,10 @@ var Auth = (function () {
         if (e.key !== "Enter") return;
         var authEl = $("screen-auth");
         if (!authEl || authEl.classList.contains("hidden")) return;
-        if (!$("auth-register").classList.contains("hidden")) {
-          var b = $("btn-auth-register"); if (b) b.click();
-        } else if (!$("auth-forgot").classList.contains("hidden")) {
+        if (isRegisterPane()) doRegister();
+        else if ($("auth-forgot") && !$("auth-forgot").classList.contains("hidden")) {
           var b2 = $("btn-auth-reset"); if (b2) b2.click();
-        } else {
-          var b3 = $("btn-auth-login"); if (b3) b3.click();
-        }
+        } else doLogin();
       });
     } catch (e) {}
   }

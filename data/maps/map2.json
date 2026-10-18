@@ -6,10 +6,39 @@
  "monsters": [
   "phong_lang",
   "hu_thi",
-  "u_hon_lang",
-  "u_minh_cu_mang"
+  "u_hon_lang"
  ],
  "boss": "lang_vuong",
+ "spawnZones": [
+  {
+   "x": 300,
+   "y": 380,
+   "r": 160,
+   "monsters": [
+    "phong_lang"
+   ]
+  },
+  {
+   "x": 1250,
+   "y": 680,
+   "r": 160,
+   "monsters": [
+    "hu_thi"
+   ]
+  },
+  {
+   "x": 750,
+   "y": 950,
+   "r": 150,
+   "monsters": [
+    "u_hon_lang"
+   ]
+  }
+ ],
+ "bossSpawn": {
+  "x": 1150,
+  "y": 180
+ },
  "npcs": [
   "tho_san",
   "an_sy"

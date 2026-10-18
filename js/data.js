@@ -76,7 +76,7 @@ const MONSTERS = {
   },
   da_tru_vuong: {
     nameKey: "mon_da_tru_vuong", hp: 600, atk: 45, def: 15, exp: 150,
-    img: null, fb: "#6e4a2f", loai: "thu", boss: true,
+    img: null, fb: "#6e4a2f", loai: "thu", boss: true, cg: 3,
     drops: [
       { id: "taycothao", rate: 0.5, min: 1, max: 2 },
       { id: "yaodan1", rate: 0.2, min: 1, max: 1 },
@@ -116,7 +116,7 @@ const MONSTERS = {
   },
   lang_vuong: {
     nameKey: "mon_lang_vuong", hp: 900, atk: 70, def: 22, exp: 220,
-    img: null, fb: "#4f6b7d", loai: "thu", boss: true,
+    img: null, fb: "#4f6b7d", loai: "thu", boss: true, cg: 5,
     drops: [
       { id: "yaodan1", rate: 0.35, min: 1, max: 1 },
       { id: "taycothao", rate: 0.4, min: 1, max: 2 },
@@ -157,7 +157,7 @@ const MONSTERS = {
   },
   cot_tuong: {
     nameKey: "mon_cot_tuong", hp: 1300, atk: 95, def: 28, exp: 320,
-    img: null, fb: "#3d4a5d", loai: "ma", boss: true,
+    img: null, fb: "#3d4a5d", loai: "ma", boss: true, cg: 7,
     drops: [
       { id: "yaodan1", rate: 0.4, min: 1, max: 2 },
       { id: "taycothao", rate: 0.6, min: 1, max: 2 },
@@ -230,7 +230,7 @@ const MONSTERS = {
   },
   huyet_ma_vuong: {
     nameKey: "mon_huyet_ma_vuong", hp: 3200, atk: 220, def: 70, exp: 900,
-    img: "assets/sprs/mon_huyet_ma_vuong.png", fb: "#6a0f0f", loai: "ma", boss: true,
+    img: "assets/sprs/mon_huyet_ma_vuong.png", fb: "#6a0f0f", loai: "ma", boss: true, cg: 16,
     drops: [
       { id: "yaodan1", rate: 0.5, min: 1, max: 2 },
       { id: "huyet_tinh", rate: 0.4, min: 1, max: 2 },
@@ -264,7 +264,7 @@ const MONSTERS = {
   },
   thien_tuong: {
     nameKey: "mon_thien_tuong", hp: 3000, atk: 210, def: 66, exp: 850,
-    img: "assets/sprs/mon_thien_tuong.png", fb: "#c9a227", loai: "tien", boss: true,
+    img: "assets/sprs/mon_thien_tuong.png", fb: "#c9a227", loai: "tien", boss: true, cg: 18,
     drops: [
       { id: "yaodan1", rate: 0.5, min: 1, max: 2 },
       { id: "tien_thao", rate: 0.4, min: 1, max: 2 },
@@ -276,7 +276,7 @@ const MONSTERS = {
   },
   u_minh_cu_mang: {
     nameKey: "mon_u_minh_cu_mang", hp: 2200, atk: 150, def: 55, exp: 650,
-    img: "assets/sprs/boss_u_minh_cu_mang.png", fb: "#1a5c3a", loai: "ma", boss: true,
+    img: "assets/sprs/boss_u_minh_cu_mang.png", fb: "#1a5c3a", loai: "ma", boss: true, cg: 13,
     drops: [
       { id: "yaodan1", rate: 0.5, min: 1, max: 2 },
       { id: "manual_boss_uminh", rate: 0.08, eliteRate: 0.15, min: 1, max: 1 },
@@ -286,7 +286,7 @@ const MONSTERS = {
   },
   hac_long: {
     nameKey: "mon_hac_long", hp: 2600, atk: 180, def: 60, exp: 750,
-    img: "assets/sprs/pixel_thu_hac_long.webp", fb: "#3a1a5c", loai: "ma", boss: true, bay: true,
+    img: "assets/sprs/pixel_thu_hac_long.webp", fb: "#3a1a5c", loai: "ma", boss: true, cg: 15, bay: true,
     drops: [
       { id: "yaodan1", rate: 0.5, min: 1, max: 2 },
       { id: "manual_boss_haclong", rate: 0.08, eliteRate: 0.15, min: 1, max: 1 },
@@ -312,6 +312,11 @@ const MAPS = [
     dao: "chinh",
     monsters: ["da_tru", "son_ke"],
     boss: "da_tru_vuong",
+    spawnZones: [
+      { x: 280, y: 800, r: 150, monsters: ["da_tru"] },
+      { x: 1300, y: 850, r: 150, monsters: ["son_ke"] },
+    ],
+    bossSpawn: { x: 800, y: 880 },
     npcs: ["dai_phu", "van_tien_cac", "truong_lao", "tam_tien_bi_tich", "truong_tran", "lao_ren", "thuong_nhan", "tieu_nhi", "su_gia_kiem", "su_gia_phap", "su_gia_the", "tuan_thu_su", "lao_dan_duong", "thu_thap_nhan", "su_gia_duoc", "su_gia_thu", "minh_chu", "thuong_nhan_du_hanh", "su_gia_ma"],
     quests: ["q_story_01", "q_story_02", "q_story_03", "q_story_04", "q_story_05", "q_story_10"],
     gates: [{to: 1, x: 720, y: 80}, {to: 3, x: 80, y: 500}, {to: 4, x: 1500, y: 80}, {to: 5, x: 80, y: 1000}, {to: 6, x: 400, y: 1120}, {to: 7, x: 800, y: 1120}, {to: 8, x: 1200, y: 1120}, {to: 9, x: 1500, y: 1000}, {to: 10, x: 1500, y: 600}, {to: 11, x: 1500, y: 450}, {to: 12, x: 1500, y: 300}],
@@ -328,6 +333,12 @@ const MAPS = [
     dao: "chinh",
     monsters: ["phong_lang", "hu_thi", "u_hon_lang"],
     boss: "lang_vuong",
+    spawnZones: [
+      { x: 300, y: 380, r: 160, monsters: ["phong_lang"] },
+      { x: 1250, y: 680, r: 160, monsters: ["hu_thi"] },
+      { x: 750, y: 950, r: 150, monsters: ["u_hon_lang"] },
+    ],
+    bossSpawn: { x: 1150, y: 180 },
     npcs: ["tho_san", "an_sy"],
     quests: [],
     gates: [{to: 0, x: 80, y: 80}, {to: 2, x: 720, y: 540}],
@@ -344,6 +355,11 @@ const MAPS = [
     dao: "chinh",
     monsters: ["u_hon", "thi_ma"],
     boss: "cot_tuong",
+    spawnZones: [
+      { x: 800, y: 280, r: 170, monsters: ["u_hon"] },
+      { x: 800, y: 920, r: 170, monsters: ["thi_ma"] },
+    ],
+    bossSpawn: { x: 1300, y: 300 },
     npcs: [],
     quests: [],
     gates: [{to: 1, x: 80, y: 540}, {to: 11, x: 1500, y: 540}],
@@ -376,6 +392,10 @@ const MAPS = [
     dao: "chinh",
     monsters: ["thach_giap_trung", "tinh_thach_quai"],
     boss: null,
+    spawnZones: [
+      { x: 350, y: 720, r: 150, monsters: ["thach_giap_trung"] },
+      { x: 1250, y: 450, r: 150, monsters: ["tinh_thach_quai"] },
+    ],
     npcs: ["quan_mo", "thuong_nhan_mo"],
     quests: [],
     gates: [{to: 0, x: 80, y: 80}],
@@ -488,6 +508,12 @@ const MAPS = [
     dao: "ma",
     monsters: ["ma_binh", "oan_linh", "ma_lang"],
     boss: "huyet_ma_vuong",
+    spawnZones: [
+      { x: 300, y: 750, r: 160, monsters: ["ma_binh"] },
+      { x: 1250, y: 400, r: 160, monsters: ["oan_linh"] },
+      { x: 700, y: 220, r: 150, monsters: ["ma_lang"] },
+    ],
+    bossSpawn: { x: 1300, y: 950 },
     npcs: ["ma_thuong_nhan", "co_hon", "huyet_ma_tu"],
     quests: ["q_ma_kill10", "q_ma_boss"],
     gates: [{to: 2, x: 80, y: 540}],
@@ -504,6 +530,11 @@ const MAPS = [
     dao: "chinh",
     monsters: ["ngoc_tho", "thien_hac"],
     boss: "thien_tuong",
+    spawnZones: [
+      { x: 300, y: 620, r: 150, monsters: ["ngoc_tho"] },
+      { x: 900, y: 950, r: 160, monsters: ["thien_hac"] },
+    ],
+    bossSpawn: { x: 1200, y: 250 },
     npcs: ["tien_ong"],
     quests: [],
     gates: [{to: 0, x: 80, y: 300}, {to: 13, x: 1500, y: 540}],
@@ -520,6 +551,12 @@ const MAPS = [
     dao: "chinh",
     monsters: ["thien_hac", "ngoc_tho", "u_hon_lang"],
     boss: "thien_tuong",
+    spawnZones: [
+      { x: 1250, y: 700, r: 160, monsters: ["thien_hac"] },
+      { x: 350, y: 850, r: 150, monsters: ["ngoc_tho"] },
+      { x: 800, y: 300, r: 150, monsters: ["u_hon_lang"] },
+    ],
+    bossSpawn: { x: 1200, y: 950 },
     npcs: [],
     quests: [],
     gates: [{to: 12, x: 80, y: 540}],
