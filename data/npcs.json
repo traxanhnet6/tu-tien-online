@@ -5,7 +5,7 @@
     "x": 200,
     "y": 240,
     "kind": "quest",
-    "img": "assets/sprs/npc_dai_phu_v2.png"
+    "img": "assets/sprs/npc_dai_phu_pixel.png"
   },
   "van_tien_cac": {
     "nameKey": "npc_van_tien_cac",
@@ -53,7 +53,7 @@
       "arm_linh",
       "acc_linh"
     ],
-    "img": "assets/sprs/npc_lao_ren_v2.png"
+    "img": "assets/sprs/npc_lao_ren_pixel.png"
   },
   "thuong_nhan": {
     "nameKey": "npc_thuong_nhan",
@@ -88,7 +88,7 @@
     "x": 280,
     "y": 120,
     "kind": "inn",
-    "img": "assets/sprs/npc_tieu_nhi_v2.png"
+    "img": "assets/sprs/npc_tieu_nhi_pixel.png"
   },
   "su_gia_kiem": {
     "nameKey": "npc_su_gia_kiem",
@@ -134,7 +134,7 @@
     "x": 700,
     "y": 100,
     "kind": "dungeon_guide",
-    "img": "assets/sprs/npc_lao_dan_duong_v2.png"
+    "img": "assets/sprs/npc_lao_dan_duong_pixel.png"
   },
   "lao_nong_dan": {
     "nameKey": "npc_truong_lao_linh_dien",
