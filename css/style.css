@@ -1082,3 +1082,4 @@ body.landscape #hud-leftmid{top:40%}
 .mm-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:2px;vertical-align:middle}
 /* Tên map to rõ hơn */
 #minimap-name{font-size:14px !important;padding:2px 12px}
+.yd-icon{image-rendering:pixelated;object-fit:contain}

@@ -74,8 +74,18 @@ var statsCache = null;
 
 /* ---------------- data lookups (chịu được data.js thiếu) ---------------- */
 function itemDef(id) { return (typeof ITEMS !== "undefined" && ITEMS[id]) || null; }
+function yaodanIconHtml(id, size) {
+  var m = /^yaodan([1-5])(?:_(hoa|loi|bang|phong|tho))?$/.exec(id || "");
+  if (!m) return null;
+  var src = "assets/yeudan/yeudan_cap" + m[1] + (m[2] ? "_" + m[2] : "") + ".png";
+  var sz = size || 32;
+  return '<img class="yd-icon" src="' + src + '" alt="" draggable="false" width="' + sz + '" height="' + sz + '"' +
+    ' style="width:' + sz + 'px;height:' + sz + 'px;vertical-align:middle;border-radius:6px;"' +
+    ' onerror="this.outerHTML=\'🟣\'"/>';
+}
 function itemIcon(id) {
   var d = itemDef(id);
+  if (d && d.kind === "yaodan") { var yh = yaodanIconHtml(id); if (yh) return yh; }
   if (d && d.icon) return d.icon;
   if (d && d.kind === "manual") return "📕";
   if (d && d.kind === "pet_egg") return "🥚";
@@ -1017,7 +1027,7 @@ function renderBag() {
         }
       } catch (e) {}
     }
-    return '<div class="row"><div><div class="item-name">' + esc(itemIcon(it.id) + " " + itemName(it.id)) +
+    return '<div class="row"><div><div class="item-name">' + itemIcon(it.id) + " " + esc(itemName(it.id)) +
       ' <span class="item-qty">x' + it.qty + "</span>" + extra + "</div>" +
       '<div class="item-desc">' + esc(itemDesc(it.id)) + "</div></div>" +
       '<div class="row-btns">' + btns + "</div></div>";
@@ -1799,7 +1809,7 @@ function renderShop() {
     h += stock.map(function (id) {
       var d = itemDef(id);
       if (!d) return "";
-      return '<div class="row"><div><div class="item-name">' + esc(itemIcon(id) + " " + itemName(id)) + "</div>" +
+      return '<div class="row"><div><div class="item-name">' + itemIcon(id) + " " + esc(itemName(id)) + "</div>" +
         '<div class="item-desc">' + esc(itemDesc(id)) + '</div><div class="shop-price">' + formatTien(d.price || 0) + " 💎</div></div>" +
         '<div class="row-btns"><button class="mini" data-act="shop-buy" data-id="' + esc(id) + '">' + esc(t("shop_buy")) + "</button></div></div>";
     }).join("");
@@ -1820,7 +1830,7 @@ function renderShop() {
         } catch (e) {}
       }
       if (!(sellPrice > 0)) return "";
-      return '<div class="row"><div><div class="item-name">' + esc(itemIcon(it.id) + " " + itemName(it.id)) +
+      return '<div class="row"><div><div class="item-name">' + itemIcon(it.id) + " " + esc(itemName(it.id)) +
         ' <span class="item-qty">x' + it.qty + "</span></div>" +
         '<div class="shop-price">' + formatTien(sellPrice) + " 💎</div></div>" +
         '<div class="row-btns"><button class="mini paper" data-act="shop-sell" data-i="' + i + '">' + esc(t("shop_sell")) + "</button></div></div>";
@@ -3054,7 +3064,7 @@ function renderRefine() {
     if (!d || d.kind !== "yaodan") return;
     found = true;
     var need = B.refineNeed(state, it.id);
-    h += '<div class="bc-yd"><div class="bc-yd-name">' + esc(itemIcon(it.id) + " " + itemName(it.id)) + " x" + it.qty + "</div>" +
+    h += '<div class="bc-yd"><div class="bc-yd-name">' + itemIcon(it.id) + " " + esc(itemName(it.id)) + " x" + it.qty + "</div>" +
       '<div class="bc-need">' + esc(t("bc_refine_gain", { n: need.lvGain })) + " · " +
       esc(t("bc_refine_failrate", { n: Math.round(need.failRate * 100) })) + " · " +
       bcMat(need.stones + " 💎 (" + formatTien(state.stones || 0) + ")", state.stones || 0, need.stones) + "</div>" +
@@ -3136,7 +3146,7 @@ function renderEquipTab() {
   var sprFb = "assets/sprs/sprs_player_" + (c.sect === "phap" ? "phap" : (c.sect === "the" ? "the" : "kiem")) + ".png";
   h += '<div class="char-sprite">' + equipSlot("phapbao") + '<img src="' + sprG + '" data-fb="' + sprFb + '" alt="" ' +
     'onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb=\'\';}else{this.style.display=\'none\'}">' +
-    (wpn ? '<div class="char-wpn">' + esc(itemIcon(state.equip.vukhi)) + "</div>" : "") +
+    (wpn ? '<div class="char-wpn">' + itemIcon(state.equip.vukhi) + "</div>" : "") +
     '<div class="char-name">' + esc(c.name) + "</div>" +
     '<div class="char-id">' + esc(t("char_id")) + ': <b>' + esc(c.charId || "") + "</b> " +
     '<button class="mini" data-act="copy-id">' + esc(t("char_copy")) + "</button></div>" +
@@ -3206,7 +3216,7 @@ function renderEquipTab() {
     var d = id ? itemDef(id) : null;
     var tierCls = d ? ("tier-" + ["pham", "dia", "thien"][d.tier || 0]) : "";
     return '<button class="equip-slot ' + tierCls + '" data-act="equip-detail" data-slot="' + slot + '">' +
-      '<span class="equip-icon">' + (d ? esc(itemIcon(id)) : "＋") + "</span>" +
+      '<span class="equip-icon">' + (d ? itemIcon(id) : "＋") + "</span>" +
       '<span class="equip-slot-name">' + esc(t("slot_" + slot)) + "</span></button>";
   }
 }
@@ -3223,7 +3233,7 @@ function bagGrid(sub) {
   return items.map(function (it) {
     var d = itemDef(it.id);
     return '<button class="item-cell" data-act="bag-cell" data-id="' + esc(it.id) + '">' +
-      '<span class="item-cell-icon">' + esc(itemIcon(it.id)) + "</span>" +
+      '<span class="item-cell-icon">' + itemIcon(it.id) + "</span>" +
       '<span class="item-cell-qty">x' + it.qty + "</span>" +
       '<span class="item-cell-name">' + esc(itemName(it.id)) + "</span></button>";
   }).join("");
@@ -3371,7 +3381,7 @@ function renderSect() {
         catch (e) { return true; }
       });
       h += list.map(function (m) {
-        return '<div class="row"><div><div class="item-name">' + esc(itemIcon(m.id) + " " + itemName(m.id)) + "</div>" +
+        return '<div class="row"><div><div class="item-name">' + itemIcon(m.id) + " " + esc(itemName(m.id)) + "</div>" +
           '<div class="item-desc">' + esc(itemDesc(m.id)) + "</div></div>" +
           '<div class="row-btns"><button class="mini" data-act="sect-buy" data-id="' + esc(m.id) + '">' +
           esc(t("sect_exchange")) + " (" + m.cost + " " + esc(t("sect_contrib")) + ")</button></div></div>";
@@ -3438,7 +3448,7 @@ function renderGacha() {
       var tierCls = "tier-" + ["pham", "dia", "thien"][p.tier];
       var locked = mi && !Skills.manualRealmOk(state, p.manualId);
       return '<div class="gacha-card flip ' + tierCls + (p.tier === 2 ? " thien" : "") + '">' +
-        '<span class="gacha-card-icon">' + esc(itemIcon(p.manualId)) + "</span>" +
+        '<span class="gacha-card-icon">' + itemIcon(p.manualId) + "</span>" +
         '<span class="manual-name">' + esc(itemName(p.manualId)) + "</span>" +
         '<span class="manual-type">' + esc(t("tier_" + p.tier)) + "</span>" +
         (locked ? '<span class="manual-locked">🔒</span>' : "") +
@@ -3458,7 +3468,7 @@ function renderGacha() {
   if (hist.length) {
     h += '<div class="item-name" style="margin-top:8px">' + esc(t("gacha_history")) + "</div>" +
       hist.map(function (gh) {
-        return '<div class="row"><div class="item-name">' + esc(itemIcon(gh.manualId) + " " + itemName(gh.manualId)) +
+        return '<div class="row"><div class="item-name">' + itemIcon(gh.manualId) + " " + esc(itemName(gh.manualId)) +
           ' <span class="item-desc">' + esc(t("tier_" + gh.tier)) + "</span></div></div>";
       }).join("");
   }
@@ -3494,7 +3504,7 @@ function renderManual() {
   var realmOk = Skills.manualRealmOk(state, manualId);
   var tierCls = "tier-" + ["pham", "dia", "thien"][mi.tier];
   var h = '<div class="manual-card ' + tierCls + '">' +
-    '<span class="manual-icon">' + esc(itemIcon(manualId)) + " " + (def ? skillIconHtml(techId, def.icon) : "") + "</span>" +
+    '<span class="manual-icon">' + itemIcon(manualId) + " " + (def ? skillIconHtml(techId, def.icon) : "") + "</span>" +
     '<div class="item-name">' + esc(itemName(manualId)) + "</div>" +
     '<div class="item-desc">' + esc(t(isP ? "manual_type_passive" : "manual_type_active")) + " · " +
     esc(t("tier_" + mi.tier)) + (learned ? " · " + esc(t("manual_level", { n: lv })) + "/" + max : "") + "</div>" +
@@ -3745,7 +3755,7 @@ function renderFarm() {
   if (seeds.length) {
     h += '<div class="item-name" style="margin-top:8px">' + esc(t("bag_sub_items")) + "</div>" +
       seeds.map(function (sd) {
-        return '<div class="row"><div class="item-name">' + esc(itemIcon(sd.id) + " " + itemName(sd.id)) +
+        return '<div class="row"><div class="item-name">' + itemIcon(sd.id) + " " + esc(itemName(sd.id)) +
           ' <span class="item-qty">x' + sd.qty + "</span></div></div>";
       }).join("");
   }
@@ -3769,7 +3779,7 @@ function renderMarket() {
     var list = Market.searchListings(state, q);
     if (!list.length) h += '<p class="sect-note">' + esc(t("bag_empty")) + "</p>";
     h += list.map(function (l) {
-      return '<div class="row"><div><div class="item-name">' + esc(itemIcon(l.itemId) + " " + itemName(l.itemId)) +
+      return '<div class="row"><div><div class="item-name">' + itemIcon(l.itemId) + " " + esc(itemName(l.itemId)) +
         ' <span class="item-qty">x' + l.qty + "</span></div>" +
         '<div class="item-desc">' + esc(l.seller) + ' · <span class="shop-price">' + formatTien(l.price) + " 💎</span></div></div>" +
         '<div class="row-btns">' + (l.mine
@@ -3784,7 +3794,7 @@ function renderMarket() {
       if (!d || it.locked) return "";
       var sug = 100;
       try { sug = Market.suggestPrice(it.id); } catch (e) {}
-      return '<div class="row"><div><div class="item-name">' + esc(itemIcon(it.id) + " " + itemName(it.id)) +
+      return '<div class="row"><div><div class="item-name">' + itemIcon(it.id) + " " + esc(itemName(it.id)) +
         ' <span class="item-qty">x' + it.qty + "</span></div>" +
         '<div class="item-desc">' + esc(t("market_suggest", { n: formatTien(sug) })) + "</div></div>" +
         '<div class="row-btns"><input class="fld-input" style="width:90px" id="mk-price-' + i + '" value="' + sug + '">' +
@@ -3794,7 +3804,7 @@ function renderMarket() {
     var hist = ((state.market || {}).history) || [];
     if (!hist.length) h += '<p class="sect-note">' + esc(t("bag_empty")) + "</p>";
     h += hist.map(function (hh) {
-      return '<div class="row"><div class="item-name">' + esc(itemIcon(hh.itemId) + " " + itemName(hh.itemId)) +
+      return '<div class="row"><div class="item-name">' + itemIcon(hh.itemId) + " " + esc(itemName(hh.itemId)) +
         ' <span class="item-qty">x' + hh.qty + "</span></div>" +
         '<div class="item-desc">' + formatTien(hh.price) + " 💎" +
         (hh.sold ? " → +" + formatTien(hh.net) : "") + "</div></div>";
@@ -3893,7 +3903,7 @@ function renderInspect(d) {
     h += '<div class="insp-equip">' + slots.map(function (slot) {
       var id = d.equip[slot], def = id ? itemDef(id) : null;
       return '<div class="insp-slot' + (def ? "" : " empty") + '">' +
-        '<span class="ic">' + (def ? esc(itemIcon(id)) : "＋") + "</span>" +
+        '<span class="ic">' + (def ? itemIcon(id) : "＋") + "</span>" +
         '<span class="nm">' + esc(t("slot_" + slot)) + "</span>" +
         (def ? '<span class="it">' + esc(itemName(id)) + "</span>" : "") + "</div>";
     }).join("") + "</div>";
@@ -3905,7 +3915,7 @@ function renderInspect(d) {
   if (d.bag) {
     if (!d.bag.length) h += '<div class="insp-noinfo">Túi trống</div>';
     else h += '<div class="item-grid">' + d.bag.map(function (it) {
-      return '<div class="item-cell"><span class="item-cell-icon">' + esc(itemIcon(it.id)) +
+      return '<div class="item-cell"><span class="item-cell-icon">' + itemIcon(it.id) +
         '</span><span class="item-cell-qty">x' + it.qty + '</span><span class="item-cell-name">' +
         esc(itemName(it.id)) + "</span></div>";
     }).join("") + "</div>";
