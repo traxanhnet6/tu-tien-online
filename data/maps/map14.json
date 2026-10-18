@@ -1,97 +1,83 @@
 {
- "assets": {
+  "id": 13,
+  "nameKey": "map_thong_thien_gioi",
   "bg": "assets/maps/map_thai_hu_tien_canh.webp",
-  "sprites": [
-   "assets/sprs/mon_thien_hac.png",
-   "assets/sprs/mon_ngoc_tho.png",
-   "assets/sprs/mon_thien_tuong.png"
-  ]
- },
- "bg": "assets/maps/map_thai_hu_tien_canh.webp",
- "boss": "thien_tuong",
- "spawnZones": [
-  {
-   "x": 1250,
-   "y": 700,
-   "r": 160,
-   "monsters": [
-    "thien_hac"
-   ]
-  },
-  {
-   "x": 350,
-   "y": 850,
-   "r": 150,
-   "monsters": [
-    "ngoc_tho"
-   ]
-  },
-  {
-   "x": 800,
-   "y": 300,
-   "r": 150,
-   "monsters": [
-    "u_hon_lang"
-   ]
-  },
-  {
-   "x": 800,
-   "y": 1000,
-   "r": 160,
-   "monsters": [
+  "fb": "#cfe8ff",
+  "dao": "chinh",
+  "monsters": [
     "thien_hac",
-    "huyet_buc"
-   ]
+    "ngoc_tho",
+    "u_hon_lang"
+  ],
+  "boss": "thien_tuong",
+  "spawnZones": [
+    {
+      "x": 1250,
+      "y": 700,
+      "r": 160,
+      "monsters": [
+        "thien_hac"
+      ]
+    },
+    {
+      "x": 350,
+      "y": 850,
+      "r": 150,
+      "monsters": [
+        "ngoc_tho"
+      ]
+    },
+    {
+      "x": 800,
+      "y": 300,
+      "r": 150,
+      "monsters": [
+        "u_hon_lang"
+      ]
+    },
+    {
+      "x": 800,
+      "y": 1000,
+      "r": 160,
+      "monsters": [
+        "thien_hac",
+        "huyet_buc"
+      ]
+    },
+    {
+      "x": 1300,
+      "y": 300,
+      "r": 160,
+      "monsters": [
+        "hon_don_thu",
+        "u_minh_cu_mang"
+      ]
+    },
+    {
+      "x": 200,
+      "y": 600,
+      "r": 150,
+      "monsters": [
+        "cuu_kiep_loi_thu",
+        "hac_long"
+      ]
+    }
+  ],
+  "bossSpawn": {
+    "x": 1200,
+    "y": 950
   },
-  {
-   "x": 1300,
-   "y": 300,
-   "r": 160,
-   "monsters": [
-    "hon_don_thu",
-    "u_minh_cu_mang"
-   ]
-  },
-  {
-   "x": 200,
-   "y": 600,
-   "r": 150,
-   "monsters": [
-    "cuu_kiep_loi_thu",
-    "hac_long"
-   ]
+  "npcs": [],
+  "quests": [],
+  "gates": [
+    {
+      "to": 12,
+      "x": 80,
+      "y": 540
+    }
+  ],
+  "expMult": 2,
+  "unlock": {
+    "realm": 4
   }
- ],
- "bossSpawn": {
-  "x": 1200,
-  "y": 950
- },
- "dao": "chinh",
- "expMult": 2,
- "fb": "#cfe8ff",
- "gates": [
-  {
-   "to": 12,
-   "x": 80,
-   "y": 540
-  }
- ],
- "id": 13,
- "monsters": [
-  "thien_hac",
-  "ngoc_tho",
-  "u_hon_lang"
- ],
- "nameKey": "map_thong_thien_gioi",
- "npcs": [],
- "quests": [],
- "stoneDrop": [
-  30,
-  60
- ],
- "unlock": {
-  "realm": 4
- },
- "ground": "assets/map/tile_ground_celestial.png",
- "loadingBg": "assets/maps/loading_12.webp"
 }

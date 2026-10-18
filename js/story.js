@@ -53,7 +53,7 @@ var Story = (function () {
       ],
     },
     {
-      img: "assets/story/panel1_le_hoi.png",
+      img: "assets/story/panel3_dem_mau.png",
       fx: "fire",
       kenburns: "panleft",
       voice: "assets/story/intro_p3.mp3",
@@ -65,7 +65,7 @@ var Story = (function () {
       ],
     },
     {
-      img: "assets/story/panel_lang_dem.png",
+      img: "assets/story/panel4_tan_hoang.png",
       fx: "jadeglow",
       kenburns: "panright",
       voice: "assets/story/intro_p4.mp3",

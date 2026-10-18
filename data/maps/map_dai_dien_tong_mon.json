@@ -1,0 +1,26 @@
+{
+  "id": 14,
+  "nameKey": "map_dai_dien_tong_mon",
+  "bg": "assets/maps/map_dai_dien_tong_mon.webp",
+  "fb": "#d4c49a",
+  "dao": "chinh",
+  "monsters": [],
+  "boss": null,
+  "spawnZones": [],
+  "bossSpawn": null,
+  "npcs": [
+    "tiep_dan_su",
+    "truong_lao_truyen_cong"
+  ],
+  "quests": [
+    "q_story_c01"
+  ],
+  "gates": [
+    {
+      "to": 0,
+      "x": 800,
+      "y": 1150
+    }
+  ],
+  "expMult": 1
+}

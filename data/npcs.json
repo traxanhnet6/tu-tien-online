@@ -702,5 +702,21 @@
     "y": 300,
     "kind": "sect",
     "img": "assets/sprs/npc_huyet_te_tu.png"
+  },
+  "tiep_dan_su": {
+    "nameKey": "npc_tiep_dan_su",
+    "mapId": 14,
+    "x": 800,
+    "y": 1050,
+    "kind": "quest",
+    "img": "assets/sprs/npc_tiep_dan_su.png"
+  },
+  "truong_lao_truyen_cong": {
+    "nameKey": "npc_truong_lao_truyen_cong",
+    "mapId": 14,
+    "x": 800,
+    "y": 350,
+    "kind": "quest",
+    "img": "assets/sprs/npc_truong_lao_truyen_cong.png"
   }
 }

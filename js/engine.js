@@ -2546,6 +2546,9 @@ var Engine = (function () {
     navigateTo: function (x, y) { _moveTarget = { x: x, y: y }; }, // tự tìm đường tới điểm
     getBossInfo: getBossInfo,   // () → {name,hp,maxHp,weak} | null
     getMonsters: function () { return _monsters; }, // minimap HUD
+    spawnEventMonster: function (monId, x, y) { /* Su kien cot truyen: spawn quai truc tiep (NV3 Dem Mau — Bui 2026-10-18) */
+      try { var m = _spawnMon(monId, x, y, false); _monsters.push(m); return true; } catch (e) { return false; }
+    },
     getNPCs: function () { return _npcs; },         // minimap HUD
     getGates: function () { return _gates; },       // minimap HUD
     isWeak: isWeak,             // () → bool (cửa sổ SƠ HỞ)

@@ -471,7 +471,7 @@ function _allianceTalk(npcId, def, state) {
 function _greetTalk(npcId, def) {
   return {
     name: def.nameKey,
-    lines: ["npc_" + npcId + "_greet"],
+    lines: [def.talkKey || ("npc_" + npcId + "_greet")],
     options: [{ label: "npc_bye", act: "bye" }],
   };
 }
@@ -481,6 +481,10 @@ function _questReady(q, s) {
   var need = q.need;
   if (need.type === "kill") return (s.count || 0) >= need.count;
   if (need.type === "talk") return true;
+  if (need.type === "talk_npcs") {
+    var talked = (s && s.talked) || {};
+    return (need.npcs || []).every(function (id) { return !!talked[id]; });
+  }
   return false; /* item: kiểm tra túi ở quest.js lúc trả */
 }
 

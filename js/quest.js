@@ -132,6 +132,12 @@ var Quest = {
       /* Boss bí cảnh: phải vượt qua trận khiêu chiến (Quest.passTrial) */
       if (!s.trialPass) return { ok: false, reason: "trial_not_pass" };
     }
+    else if (need.type === "talk_npcs") {
+      /* Nói chuyện với danh sách NPC chỉ định (NV1 Lễ Trắc Linh — Bui 2026-10-18) */
+      var _talked = s.talked || {};
+      var _all = (need.npcs || []).every(function (id) { return !!_talked[id]; });
+      if (!_all) return { ok: false, reason: "need_not_met" };
+    }
     /* type 'talk': luôn đủ điều kiện */
 
     var rw = q.reward || {};
@@ -162,7 +168,15 @@ var Quest = {
         }
       });
     } catch (e) {}
-    return { ok: true, reward: rw, autoAccepted: autoAccepted };
+    var _fx = q.fx || null, _event = q.event || null, _party = q.party || null, _sb = q.storyboard || null;
+    if (id === "q_story_25" && _party) {
+      /* NV5 Rời Làng: Tô Uyển Nhi + Diệp Vân nhập đội (Bui 2026-10-18) */
+      try {
+        state.party = state.party || [];
+        _party.forEach(function (pid) { if (state.party.indexOf(pid) < 0) state.party.push(pid); });
+      } catch (e) {}
+    }
+    return { ok: true, reward: rw, autoAccepted: autoAccepted, fx: _fx, event: _event, party: _party, storyboard: _sb };
   },
 
   /* Gọi mỗi khi giết 1 con quái: tăng count cho quest kill đang active */
@@ -178,6 +192,27 @@ var Quest = {
         s.count = (s.count || 0) + 1;
         changed.push(q.id);
       }
+    });
+    return changed;
+  },
+
+  /* Gọi mỗi khi nói chuyện với 1 NPC: cập nhật quest talk_npcs đang active.
+   * Trả về mảng {questId, done, total} cho UI hiển thị tiến trình. */
+  onNpcTalk: function (state, npcId) {
+    var changed = [];
+    var qs = state.quests || {};
+    _QUESTS().forEach(function (q) {
+      var need = q.need || {};
+      if (need.type !== "talk_npcs") return;
+      var s = qs[q.id];
+      if (!s || s.status !== "active") return;
+      if ((need.npcs || []).indexOf(npcId) < 0) return;
+      s.talked = s.talked || {};
+      if (s.talked[npcId]) return;
+      s.talked[npcId] = true;
+      var total = (need.npcs || []).length;
+      var done = (need.npcs || []).filter(function (id) { return !!s.talked[id]; }).length;
+      changed.push({ questId: q.id, done: done, total: total });
     });
     return changed;
   },
