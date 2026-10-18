@@ -2231,6 +2231,24 @@ var Engine = (function () {
       _ctx.lineWidth = 8;
       _ctx.beginPath(); _ctx.arc(g.x, g.y, 32, 0, Math.PI * 2); _ctx.stroke();
     }
+    /* Bui 2026-10-18: tên map đích trên cổng — rõ ràng */
+    try {
+      for (var _gli = 0; _gli < _gates.length; _gli++) {
+        var _gg = _gates[_gli];
+        var _gmd = _mapDefOf(_gg.to);
+        if (!_gmd) continue;
+        var _gname = _t(_gmd.nameKey || ('map_' + _gg.to));
+        _ctx.font = 'bold 13px sans-serif';
+        _ctx.textAlign = 'center';
+        var _gw = _ctx.measureText(_gname).width + 16;
+        _ctx.fillStyle = 'rgba(20,14,8,0.82)';
+        _ctx.fillRect(_gg.x - _gw / 2, _gg.y - 58, _gw, 22);
+        _ctx.strokeStyle = '#ffd76a'; _ctx.lineWidth = 1;
+        _ctx.strokeRect(_gg.x - _gw / 2, _gg.y - 58, _gw, 22);
+        _ctx.fillStyle = '#ffe9a8';
+        _ctx.fillText('➤ ' + _gname, _gg.x, _gg.y - 42);
+      }
+    } catch (_ge) {}
 
     /* Lớp thực vật động (cỏ đung đưa, hoa, lá rơi) — sau nền, trước entities */
     _vegDraw();

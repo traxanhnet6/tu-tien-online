@@ -660,6 +660,12 @@ function healPlayer(hpAmt, mpAmt) {
 /* ---------------- panels ---------------- */
 function openPanel(name, arg) {
   panel = name; panelArg = arg || null;
+  /* sáng nút nav đang mở */
+  try {
+    var _nbs = document.querySelectorAll("#bottomnav button");
+    for (var _ni = 0; _ni < _nbs.length; _ni++)
+      _nbs[_ni].classList.toggle("active", _nbs[_ni].getAttribute("data-panel") === name);
+  } catch (e) {}
   var titleKey = "panel_" + name;
   $("panels").innerHTML =
     '<div class="panel-overlay" id="p-overlay"><div class="panel">' +
@@ -689,6 +695,11 @@ function closePanel() {
   sectTrial = null;
   btBattle = null; btStep = "needs";
   panel = null; panelArg = null;
+  /* tắt sáng nút nav */
+  try {
+    var _nbs2 = document.querySelectorAll("#bottomnav button.active");
+    for (var _nj = 0; _nj < _nbs2.length; _nj++) _nbs2[_nj].classList.remove("active");
+  } catch (e2) {}
   if (typeof Engine !== "undefined") Engine.talkNpcId = null; /* tắt 💬 */
   var p = $("panels");
   if (p) p.innerHTML = "";
