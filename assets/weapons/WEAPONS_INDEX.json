@@ -1,0 +1,170 @@
+{
+ "weapons": {
+  "kiem": {
+   "pham": "kiem_pham.png",
+   "luong": "kiem_luong.png",
+   "uu": "kiem_uu.png",
+   "hiem": "kiem_hiem.png",
+   "suthi": "kiem_suthi.png",
+   "truyenthuyet": "kiem_truyenthuyet.png",
+   "tien": "kiem_tien.png"
+  },
+  "dao": {
+   "pham": "dao_pham.png",
+   "luong": "dao_luong.png",
+   "uu": "dao_uu.png",
+   "hiem": "dao_hiem.png",
+   "suthi": "dao_suthi.png",
+   "truyenthuyet": "dao_truyenthuyet.png",
+   "tien": "dao_tien.png"
+  },
+  "thuong": {
+   "pham": "thuong_pham.png",
+   "luong": "thuong_luong.png",
+   "uu": "thuong_uu.png",
+   "hiem": "thuong_hiem.png",
+   "suthi": "thuong_suthi.png",
+   "truyenthuyet": "thuong_truyenthuyet.png",
+   "tien": "thuong_tien.png"
+  },
+  "cung": {
+   "pham": "cung_pham.png",
+   "luong": "cung_luong.png",
+   "uu": "cung_uu.png",
+   "hiem": "cung_hiem.png",
+   "suthi": "cung_suthi.png",
+   "truyenthuyet": "cung_truyenthuyet.png",
+   "tien": "cung_tien.png"
+  },
+  "phien": {
+   "pham": "phien_pham.png",
+   "luong": "phien_luong.png",
+   "uu": "phien_uu.png",
+   "hiem": "phien_hiem.png",
+   "suthi": "phien_suthi.png",
+   "truyenthuyet": "phien_truyenthuyet.png",
+   "tien": "phien_tien.png"
+  },
+  "tieu": {
+   "pham": "tieu_pham.png",
+   "luong": "tieu_luong.png",
+   "uu": "tieu_uu.png",
+   "hiem": "tieu_hiem.png",
+   "suthi": "tieu_suthi.png",
+   "truyenthuyet": "tieu_truyenthuyet.png",
+   "tien": "tieu_tien.png"
+  },
+  "roi": {
+   "pham": "roi_pham.png",
+   "luong": "roi_luong.png",
+   "uu": "roi_uu.png",
+   "hiem": "roi_hiem.png",
+   "suthi": "roi_suthi.png",
+   "truyenthuyet": "roi_truyenthuyet.png",
+   "tien": "roi_tien.png"
+  },
+  "liem": {
+   "pham": "liem_pham.png",
+   "luong": "liem_luong.png",
+   "uu": "liem_uu.png",
+   "hiem": "liem_hiem.png",
+   "suthi": "liem_suthi.png",
+   "truyenthuyet": "liem_truyenthuyet.png",
+   "tien": "liem_tien.png"
+  },
+  "kiem_hap": {
+   "pham": "kiem_hap_pham.png",
+   "luong": "kiem_hap_luong.png",
+   "uu": "kiem_hap_uu.png",
+   "hiem": "kiem_hap_hiem.png",
+   "suthi": "kiem_hap_suthi.png",
+   "truyenthuyet": "kiem_hap_truyenthuyet.png",
+   "tien": "kiem_hap_tien.png"
+  },
+  "but": {
+   "pham": "but_pham.png",
+   "luong": "but_luong.png",
+   "uu": "but_uu.png",
+   "hiem": "but_hiem.png",
+   "suthi": "but_suthi.png",
+   "truyenthuyet": "but_truyenthuyet.png",
+   "tien": "but_tien.png"
+  }
+ },
+ "upgrade_bursts": {
+  "uu": "tiengiai_uu.png",
+  "hiem": "tiengiai_hiem.png",
+  "suthi": "tiengiai_suthi.png",
+  "truyenthuyet": "tiengiai_truyenthuyet.png",
+  "tien": "tiengiai_tien.png"
+ },
+ "realm_auras": {
+  "luyen_khi": "aura_luyen_khi.png",
+  "truc_co": "aura_truc_co.png",
+  "kim_dan": "aura_kim_dan.png",
+  "nguyen_anh": "aura_nguyen_anh.png",
+  "hoa_than": "aura_hoa_than.png",
+  "luyen_hu": "aura_luyen_hu.png",
+  "hop_the": "aura_hop_the.png",
+  "dai_thua": "aura_dai_thua.png",
+  "do_kiep": "aura_do_kiep.png"
+ },
+ "realm_trails": {
+  "luyen_khi": "trail_luyen_khi.png",
+  "truc_co": "trail_truc_co.png",
+  "kim_dan": "trail_kim_dan.png",
+  "nguyen_anh": "trail_nguyen_anh.png",
+  "hoa_than": "trail_hoa_than.png",
+  "luyen_hu": "trail_luyen_hu.png",
+  "hop_the": "trail_hop_the.png",
+  "dai_thua": "trail_dai_thua.png",
+  "do_kiep": "trail_do_kiep.png"
+ },
+ "demonic_weapons": {
+  "tang_thien_quan": {
+   "pham": "tang_thien_quan_pham.png",
+   "luong": "tang_thien_quan_luong.png",
+   "uu": "tang_thien_quan_uu.png",
+   "hiem": "tang_thien_quan_hiem.png",
+   "suthi": "tang_thien_quan_suthi.png",
+   "truyenthuyet": "tang_thien_quan_truyenthuyet.png",
+   "tien": "tang_thien_quan_tien.png"
+  },
+  "van_hon_phien": {
+   "pham": "van_hon_phien_pham.png",
+   "luong": "van_hon_phien_luong.png",
+   "uu": "van_hon_phien_uu.png",
+   "hiem": "van_hon_phien_hiem.png",
+   "suthi": "van_hon_phien_suthi.png",
+   "truyenthuyet": "van_hon_phien_truyenthuyet.png",
+   "tien": "van_hon_phien_tien.png"
+  }
+ },
+ "phap_bao": {
+  "phapbao_thap": {
+   "ha": "phapbao_thap_ha.png",
+   "trung": "phapbao_thap_trung.png",
+   "thuong": "phapbao_thap_thuong.png"
+  },
+  "phapbao_guong": {
+   "ha": "phapbao_guong_ha.png",
+   "trung": "phapbao_guong_trung.png",
+   "thuong": "phapbao_guong_thuong.png"
+  },
+  "phapbao_chuong": {
+   "ha": "phapbao_chuong_ha.png",
+   "trung": "phapbao_chuong_trung.png",
+   "thuong": "phapbao_chuong_thuong.png"
+  },
+  "phapbao_an": {
+   "ha": "phapbao_an_ha.png",
+   "trung": "phapbao_an_trung.png",
+   "thuong": "phapbao_an_thuong.png"
+  },
+  "phapbao_phuong": {
+   "ha": "phapbao_phuong_ha.png",
+   "trung": "phapbao_phuong_trung.png",
+   "thuong": "phapbao_phuong_thuong.png"
+  }
+ }
+}
