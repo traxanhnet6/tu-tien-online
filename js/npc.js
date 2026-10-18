@@ -27,6 +27,68 @@ function _quests() {
   throw new Error("missing dep: QUESTS");
 }
 
+/* ============================================================
+ * LỜI CHÀO LẦN ĐẦU GẶP (first-meet dialogue)
+ * Mỗi NPC chính có đoạn chào hỏi riêng khi người chơi nói chuyện
+ * lần đầu — giới thiệu bản thân + gợi ý nhiệm vụ, tạo cảm giác
+ * thế giới sống động.
+ * - k: key lang (vi/en trong js/lang.js)
+ * - v: file lồng tiếng tương ứng (CHƯA tạo audio — đặt chỗ trước
+ *      theo chuẩn assets/voice/, xem assets/voice/README.md)
+ * Flag: state.flags["met_" + npcId] — đã gặp thì lần sau hiện thoại
+ * thường, không lặp lại chào hỏi.
+ * ============================================================ */
+var FIRST_MEET = {
+  dai_phu: [
+    { k: "npc_dai_phu_meet1", v: "assets/voice/npc_dai_phu_meet1.mp3" },
+    { k: "npc_dai_phu_meet2", v: "assets/voice/npc_dai_phu_meet2.mp3" },
+    { k: "npc_dai_phu_meet3", v: "assets/voice/npc_dai_phu_meet3.mp3" },
+  ],
+  lao_dan_duong: [
+    { k: "npc_lao_dan_duong_meet1", v: "assets/voice/npc_lao_dan_duong_meet1.mp3" },
+    { k: "npc_lao_dan_duong_meet2", v: "assets/voice/npc_lao_dan_duong_meet2.mp3" },
+  ],
+  tieu_nhi: [
+    { k: "npc_tieu_nhi_meet1", v: "assets/voice/npc_tieu_nhi_meet1.mp3" },
+    { k: "npc_tieu_nhi_meet2", v: "assets/voice/npc_tieu_nhi_meet2.mp3" },
+  ],
+  lao_ren: [
+    { k: "npc_lao_ren_meet1", v: "assets/voice/npc_lao_ren_meet1.mp3" },
+    { k: "npc_lao_ren_meet2", v: "assets/voice/npc_lao_ren_meet2.mp3" },
+  ],
+  thuong_nhan: [
+    { k: "npc_thuong_nhan_meet1", v: "assets/voice/npc_thuong_nhan_meet1.mp3" },
+    { k: "npc_thuong_nhan_meet2", v: "assets/voice/npc_thuong_nhan_meet2.mp3" },
+  ],
+  truong_tran: [
+    { k: "npc_truong_tran_meet1", v: "assets/voice/npc_truong_tran_meet1.mp3" },
+    { k: "npc_truong_tran_meet2", v: "assets/voice/npc_truong_tran_meet2.mp3" },
+  ],
+  tuan_thu_su: [
+    { k: "npc_tuan_thu_su_meet1", v: "assets/voice/npc_tuan_thu_su_meet1.mp3" },
+    { k: "npc_tuan_thu_su_meet2", v: "assets/voice/npc_tuan_thu_su_meet2.mp3" },
+  ],
+  tam_tien_bi_tich: [
+    { k: "npc_tam_tien_meet1", v: "assets/voice/npc_tam_tien_meet1.mp3" },
+    { k: "npc_tam_tien_meet2", v: "assets/voice/npc_tam_tien_meet2.mp3" },
+  ],
+};
+
+/* Trả về mảng {k,v} lời chào lần đầu, đồng thời đánh dấu đã gặp.
+ * Trả null nếu NPC không có lời chào riêng hoặc đã gặp rồi. */
+function _firstMeet(npcId, state) {
+  var fm = FIRST_MEET[npcId];
+  if (!fm || !fm.length) return null;
+  try {
+    if (!state) return fm;
+    state.flags = state.flags || {};
+    var key = "met_" + npcId;
+    if (state.flags[key]) return null;
+    state.flags[key] = true;
+    return fm;
+  } catch (e) { return fm; }
+}
+
 var NPC = {
   /* Tất cả NPC trên một map */
   forMap: function (mapId) {
@@ -43,8 +105,23 @@ var NPC = {
     return out;
   },
 
-  /* Hội thoại với NPC. lines thay đổi theo tiến trình quest của Đại Phu. */
+  /* Hội thoại với NPC (wrapper): thêm lời chào lần đầu gặp lên trước
+   * thoại thường. Lần sau nói chuyện chỉ hiện thoại thường. */
   talk: function (npcId, state) {
+    var res = NPC._talkBase(npcId, state);
+    try {
+      var fm = _firstMeet(npcId, state);
+      if (fm && fm.length) {
+        res.lines = fm.map(function (e) { return e.k; }).concat(res.lines || []);
+        res.firstMeet = true;
+        res.voiceFiles = fm.map(function (e) { return e.v; });
+      }
+    } catch (e) {}
+    return res;
+  },
+
+  /* Hội thoại gốc với NPC. lines thay đổi theo tiến trình quest của Đại Phu. */
+  _talkBase: function (npcId, state) {
     var def = _npcs()[npcId];
     if (!def) return { name: npcId, lines: ["npc_unknown"], options: [{ label: "npc_bye", act: "bye" }] };
 
