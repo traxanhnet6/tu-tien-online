@@ -1,0 +1,1833 @@
+{
+  "rarity": [
+    {
+      "ten": "Phàm",
+      "mau": "#e0e0e0",
+      "en": "Common"
+    },
+    {
+      "ten": "Lương",
+      "mau": "#4caf50",
+      "en": "Fine"
+    },
+    {
+      "ten": "Ưu",
+      "mau": "#2196f3",
+      "en": "Superior"
+    },
+    {
+      "ten": "Hiếm",
+      "mau": "#9c27b0",
+      "en": "Rare"
+    },
+    {
+      "ten": "Sử Thi",
+      "mau": "#ff9800",
+      "en": "Epic"
+    },
+    {
+      "ten": "Truyền Thuyết",
+      "mau": "#f44336",
+      "en": "Legendary"
+    },
+    {
+      "ten": "Tiên Phẩm",
+      "mau": "#ffd700",
+      "en": "Immortal"
+    }
+  ],
+  "doKho": [
+    {
+      "ten": "Dễ",
+      "en": "Easy"
+    },
+    {
+      "ten": "Trung bình",
+      "en": "Medium"
+    },
+    {
+      "ten": "Khó",
+      "en": "Hard"
+    },
+    {
+      "ten": "Cực khó",
+      "en": "Extreme"
+    },
+    {
+      "ten": "Không thể",
+      "en": "Unobtainable"
+    }
+  ],
+  "ydElemStat": {
+    "hoa": "crit",
+    "loi": "atk",
+    "bang": "def",
+    "phong": "hp",
+    "tho": "armor"
+  },
+  "yaodan": {
+    "yaodan1": {
+      "ten": "it_yaodan1",
+      "cap": 1,
+      "he": null,
+      "luyenHoaCong": 50,
+      "bonusHe": null,
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 500,
+      "giaBan": 150
+    },
+    "yaodan2": {
+      "ten": "it_yaodan2",
+      "cap": 2,
+      "he": null,
+      "luyenHoaCong": 120,
+      "bonusHe": null,
+      "doHiem": 3,
+      "doKho": 1,
+      "giaMua": 1500,
+      "giaBan": 500
+    },
+    "yaodan3": {
+      "ten": "it_yaodan3",
+      "cap": 3,
+      "he": null,
+      "luyenHoaCong": 250,
+      "bonusHe": null,
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 3000,
+      "giaBan": 1000
+    },
+    "yaodan4": {
+      "ten": "it_yaodan4",
+      "cap": 4,
+      "he": null,
+      "luyenHoaCong": 500,
+      "bonusHe": null,
+      "doHiem": 5,
+      "doKho": 2,
+      "giaMua": 6000,
+      "giaBan": 2000
+    },
+    "yaodan5": {
+      "ten": "it_yaodan5",
+      "cap": 5,
+      "he": null,
+      "luyenHoaCong": 1000,
+      "bonusHe": null,
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 12000,
+      "giaBan": 4000
+    },
+    "yaodan1_hoa": {
+      "ten": "it_yaodan1_hoa",
+      "cap": 1,
+      "he": "hoa",
+      "luyenHoaCong": 50,
+      "bonusHe": {
+        "chiSo": "crit",
+        "giaTri": 2
+      },
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 750,
+      "giaBan": 250
+    },
+    "yaodan1_loi": {
+      "ten": "it_yaodan1_loi",
+      "cap": 1,
+      "he": "loi",
+      "luyenHoaCong": 50,
+      "bonusHe": {
+        "chiSo": "atk",
+        "giaTri": 15
+      },
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 750,
+      "giaBan": 250
+    },
+    "yaodan1_bang": {
+      "ten": "it_yaodan1_bang",
+      "cap": 1,
+      "he": "bang",
+      "luyenHoaCong": 50,
+      "bonusHe": {
+        "chiSo": "def",
+        "giaTri": 15
+      },
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 750,
+      "giaBan": 250
+    },
+    "yaodan1_phong": {
+      "ten": "it_yaodan1_phong",
+      "cap": 1,
+      "he": "phong",
+      "luyenHoaCong": 50,
+      "bonusHe": {
+        "chiSo": "hp",
+        "giaTri": 150
+      },
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 750,
+      "giaBan": 250
+    },
+    "yaodan1_tho": {
+      "ten": "it_yaodan1_tho",
+      "cap": 1,
+      "he": "tho",
+      "luyenHoaCong": 50,
+      "bonusHe": {
+        "chiSo": "armor",
+        "giaTri": 15
+      },
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 750,
+      "giaBan": 250
+    },
+    "yaodan2_hoa": {
+      "ten": "it_yaodan2_hoa",
+      "cap": 2,
+      "he": "hoa",
+      "luyenHoaCong": 120,
+      "bonusHe": {
+        "chiSo": "crit",
+        "giaTri": 4
+      },
+      "doHiem": 3,
+      "doKho": 1,
+      "giaMua": 2250,
+      "giaBan": 750
+    },
+    "yaodan2_loi": {
+      "ten": "it_yaodan2_loi",
+      "cap": 2,
+      "he": "loi",
+      "luyenHoaCong": 120,
+      "bonusHe": {
+        "chiSo": "atk",
+        "giaTri": 35
+      },
+      "doHiem": 3,
+      "doKho": 1,
+      "giaMua": 2250,
+      "giaBan": 750
+    },
+    "yaodan2_bang": {
+      "ten": "it_yaodan2_bang",
+      "cap": 2,
+      "he": "bang",
+      "luyenHoaCong": 120,
+      "bonusHe": {
+        "chiSo": "def",
+        "giaTri": 35
+      },
+      "doHiem": 3,
+      "doKho": 1,
+      "giaMua": 2250,
+      "giaBan": 750
+    },
+    "yaodan2_phong": {
+      "ten": "it_yaodan2_phong",
+      "cap": 2,
+      "he": "phong",
+      "luyenHoaCong": 120,
+      "bonusHe": {
+        "chiSo": "hp",
+        "giaTri": 400
+      },
+      "doHiem": 3,
+      "doKho": 1,
+      "giaMua": 2250,
+      "giaBan": 750
+    },
+    "yaodan2_tho": {
+      "ten": "it_yaodan2_tho",
+      "cap": 2,
+      "he": "tho",
+      "luyenHoaCong": 120,
+      "bonusHe": {
+        "chiSo": "armor",
+        "giaTri": 35
+      },
+      "doHiem": 3,
+      "doKho": 1,
+      "giaMua": 2250,
+      "giaBan": 750
+    },
+    "yaodan3_hoa": {
+      "ten": "it_yaodan3_hoa",
+      "cap": 3,
+      "he": "hoa",
+      "luyenHoaCong": 250,
+      "bonusHe": {
+        "chiSo": "crit",
+        "giaTri": 6
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 4500,
+      "giaBan": 1500
+    },
+    "yaodan3_loi": {
+      "ten": "it_yaodan3_loi",
+      "cap": 3,
+      "he": "loi",
+      "luyenHoaCong": 250,
+      "bonusHe": {
+        "chiSo": "atk",
+        "giaTri": 75
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 4500,
+      "giaBan": 1500
+    },
+    "yaodan3_bang": {
+      "ten": "it_yaodan3_bang",
+      "cap": 3,
+      "he": "bang",
+      "luyenHoaCong": 250,
+      "bonusHe": {
+        "chiSo": "def",
+        "giaTri": 75
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 4500,
+      "giaBan": 1500
+    },
+    "yaodan3_phong": {
+      "ten": "it_yaodan3_phong",
+      "cap": 3,
+      "he": "phong",
+      "luyenHoaCong": 250,
+      "bonusHe": {
+        "chiSo": "hp",
+        "giaTri": 900
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 4500,
+      "giaBan": 1500
+    },
+    "yaodan3_tho": {
+      "ten": "it_yaodan3_tho",
+      "cap": 3,
+      "he": "tho",
+      "luyenHoaCong": 250,
+      "bonusHe": {
+        "chiSo": "armor",
+        "giaTri": 75
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 4500,
+      "giaBan": 1500
+    },
+    "yaodan4_hoa": {
+      "ten": "it_yaodan4_hoa",
+      "cap": 4,
+      "he": "hoa",
+      "luyenHoaCong": 500,
+      "bonusHe": {
+        "chiSo": "crit",
+        "giaTri": 8
+      },
+      "doHiem": 5,
+      "doKho": 2,
+      "giaMua": 9000,
+      "giaBan": 3000
+    },
+    "yaodan4_loi": {
+      "ten": "it_yaodan4_loi",
+      "cap": 4,
+      "he": "loi",
+      "luyenHoaCong": 500,
+      "bonusHe": {
+        "chiSo": "atk",
+        "giaTri": 150
+      },
+      "doHiem": 5,
+      "doKho": 2,
+      "giaMua": 9000,
+      "giaBan": 3000
+    },
+    "yaodan4_bang": {
+      "ten": "it_yaodan4_bang",
+      "cap": 4,
+      "he": "bang",
+      "luyenHoaCong": 500,
+      "bonusHe": {
+        "chiSo": "def",
+        "giaTri": 150
+      },
+      "doHiem": 5,
+      "doKho": 2,
+      "giaMua": 9000,
+      "giaBan": 3000
+    },
+    "yaodan4_phong": {
+      "ten": "it_yaodan4_phong",
+      "cap": 4,
+      "he": "phong",
+      "luyenHoaCong": 500,
+      "bonusHe": {
+        "chiSo": "hp",
+        "giaTri": 2000
+      },
+      "doHiem": 5,
+      "doKho": 2,
+      "giaMua": 9000,
+      "giaBan": 3000
+    },
+    "yaodan4_tho": {
+      "ten": "it_yaodan4_tho",
+      "cap": 4,
+      "he": "tho",
+      "luyenHoaCong": 500,
+      "bonusHe": {
+        "chiSo": "armor",
+        "giaTri": 150
+      },
+      "doHiem": 5,
+      "doKho": 2,
+      "giaMua": 9000,
+      "giaBan": 3000
+    },
+    "yaodan5_hoa": {
+      "ten": "it_yaodan5_hoa",
+      "cap": 5,
+      "he": "hoa",
+      "luyenHoaCong": 1000,
+      "bonusHe": {
+        "chiSo": "crit",
+        "giaTri": 12
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 18000,
+      "giaBan": 6000
+    },
+    "yaodan5_loi": {
+      "ten": "it_yaodan5_loi",
+      "cap": 5,
+      "he": "loi",
+      "luyenHoaCong": 1000,
+      "bonusHe": {
+        "chiSo": "atk",
+        "giaTri": 300
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 18000,
+      "giaBan": 6000
+    },
+    "yaodan5_bang": {
+      "ten": "it_yaodan5_bang",
+      "cap": 5,
+      "he": "bang",
+      "luyenHoaCong": 1000,
+      "bonusHe": {
+        "chiSo": "def",
+        "giaTri": 300
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 18000,
+      "giaBan": 6000
+    },
+    "yaodan5_phong": {
+      "ten": "it_yaodan5_phong",
+      "cap": 5,
+      "he": "phong",
+      "luyenHoaCong": 1000,
+      "bonusHe": {
+        "chiSo": "hp",
+        "giaTri": 4500
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 18000,
+      "giaBan": 6000
+    },
+    "yaodan5_tho": {
+      "ten": "it_yaodan5_tho",
+      "cap": 5,
+      "he": "tho",
+      "luyenHoaCong": 1000,
+      "bonusHe": {
+        "chiSo": "armor",
+        "giaTri": 300
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 18000,
+      "giaBan": 6000
+    }
+  },
+  "linhDuoc": {
+    "thao_linh_chi": {
+      "ten": "it_thao_linh_chi",
+      "cap": 1,
+      "noiHai": "Thảo Dược Cốc",
+      "congDung": [
+        "dan_tu_khi",
+        "dan_hoi_khi_tan"
+      ],
+      "doHiem": 1,
+      "doKho": 0,
+      "giaMua": 80,
+      "giaBan": 40
+    },
+    "that_diep_chi": {
+      "ten": "it_that_diep_chi",
+      "cap": 3,
+      "noiHai": "U Minh Cốc",
+      "congDung": [
+        "dan_cuu_chuyen",
+        "dan_duong_anh",
+        "dan_ho_mach",
+        "dan_tu_than",
+        "dan_co_ban"
+      ],
+      "doHiem": 3,
+      "doKho": 1,
+      "giaMua": 600,
+      "giaBan": 300
+    },
+    "truc_co_thao": {
+      "ten": "it_truc_co_thao",
+      "cap": 2,
+      "noiHai": "Rừng Trúc",
+      "congDung": [
+        "pill_truccodan",
+        "dan_boi_nguyen"
+      ],
+      "doHiem": 2,
+      "doKho": 0,
+      "giaMua": 250,
+      "giaBan": 125
+    },
+    "dia_linh_qua": {
+      "ten": "it_dia_linh_qua",
+      "cap": 2,
+      "noiHai": "Hắc Phong Lâm",
+      "congDung": [
+        "dan_boi_nguyen",
+        "dan_ngung_dan",
+        "dan_cuu_chuyen"
+      ],
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 600,
+      "giaBan": 300
+    },
+    "taycothao": {
+      "ten": "it_taycothao",
+      "cap": 1,
+      "noiHai": "Thảo Dược Cốc",
+      "congDung": [
+        "pill_taycotdan",
+        "pill_taycotdan_trung",
+        "dan_tu_khi"
+      ],
+      "doHiem": 1,
+      "doKho": 0,
+      "giaMua": 150,
+      "giaBan": 45
+    },
+    "huyet_tinh": {
+      "ten": "it_huyet_tinh",
+      "cap": 4,
+      "noiHai": "Huyết Ma Vực",
+      "congDung": [
+        "dan_hu_linh",
+        "dan_co_ban",
+        "dan_hop_the",
+        "dan_tien_linh"
+      ],
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 300,
+      "giaBan": 90
+    },
+    "tien_thao": {
+      "ten": "it_tien_thao",
+      "cap": 4,
+      "noiHai": "Thái Hư Tiên Cảnh",
+      "congDung": [
+        "dan_ho_mach",
+        "dan_than_du",
+        "dan_tu_than",
+        "dan_hu_linh",
+        "dan_quy_nhat"
+      ],
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 350,
+      "giaBan": 100
+    },
+    "cuu_diep_linh_chi": {
+      "ten": "it_cuu_diep_linh_chi",
+      "cap": 5,
+      "noiHai": "Huyết Hải",
+      "congDung": [
+        "dan_hop_the",
+        "dan_quy_nhat",
+        "dan_dai_thua",
+        "dan_tien_linh",
+        "dan_do_kiep",
+        "dan_cuu_kiep"
+      ],
+      "doHiem": 5,
+      "doKho": 3,
+      "giaMua": 5000,
+      "giaBan": 2500
+    }
+  },
+  "danDuoc": {
+    "pill_hx": {
+      "ten": "it_pill_hx",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": 0.3,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 50,
+      "giaBan": 15
+    },
+    "pill_hl": {
+      "ten": "it_pill_hl",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": 0.5,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 80,
+      "giaBan": 24
+    },
+    "dan_hx_tieu": {
+      "ten": "it_dan_hx_tieu",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": 0.3,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 60,
+      "giaBan": 18
+    },
+    "dan_hx_trung": {
+      "ten": "it_dan_hx_trung",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": 0.6,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 180,
+      "giaBan": 54
+    },
+    "dan_hx_dai": {
+      "ten": "it_dan_hx_dai",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": 1,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 450,
+      "giaBan": 135
+    },
+    "linh_chi_ngan_nam": {
+      "ten": "it_linh_chi",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": 0.8,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 600,
+      "giaBan": 180
+    },
+    "thit_yeu_thu": {
+      "ten": "it_thit_yeu_thu",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": 0.4,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 120,
+      "giaBan": 36
+    },
+    "dan_hl_tieu": {
+      "ten": "it_dan_hl_tieu",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": 0.3,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 60,
+      "giaBan": 18
+    },
+    "dan_hl_trung": {
+      "ten": "it_dan_hl_trung",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": 0.6,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 180,
+      "giaBan": 54
+    },
+    "dan_hl_dai": {
+      "ten": "it_dan_hl_dai",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": 1,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 450,
+      "giaBan": 135
+    },
+    "dan_tho_tieu": {
+      "ten": "it_dan_tho_tieu",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": 10
+      },
+      "giaMua": 500,
+      "giaBan": 150
+    },
+    "dan_dien_tho": {
+      "ten": "it_dan_dien_tho",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": 50
+      },
+      "giaMua": 2000,
+      "giaBan": 600
+    },
+    "dan_truong_sinh": {
+      "ten": "it_dan_truong_sinh",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": 200
+      },
+      "giaMua": 8000,
+      "giaBan": 2400
+    },
+    "linh_tra": {
+      "ten": "it_linh_tra",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": 0.5,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 150,
+      "giaBan": 45
+    },
+    "linh_tuu": {
+      "ten": "it_linh_tuu",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": 0.7,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 300,
+      "giaBan": 90
+    },
+    "duong_than_dan": {
+      "ten": "it_duong_than_dan",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": 50,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 200,
+      "giaBan": 60
+    },
+    "thanh_tam_qua": {
+      "ten": "it_thanh_tam_qua",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": 100,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 400,
+      "giaBan": 120
+    },
+    "kim_cang_dan": {
+      "ten": "it_kim_cang_dan",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 500,
+      "giaBan": 150
+    },
+    "ho_the_phu": {
+      "ten": "it_ho_the_phu",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 250,
+      "giaBan": 75
+    },
+    "pill_truccodan": {
+      "ten": "it_pill_truccodan",
+      "canhGioiYeuCau": 2,
+      "congThuc": [
+        [
+          "truc_co_thao",
+          5
+        ],
+        [
+          "dia_linh_qua",
+          3
+        ],
+        [
+          "yaodan1",
+          1
+        ]
+      ],
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": 0.15,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 3,
+      "doKho": 2,
+      "giaMua": 2000,
+      "giaBan": 600
+    },
+    "pill_kimdan": {
+      "ten": "it_pill_kimdan",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 8000,
+      "giaBan": 2400
+    },
+    "pill_nguyenanh": {
+      "ten": "it_pill_nguyenanh",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 20000,
+      "giaBan": 6000
+    },
+    "pill_hoathan": {
+      "ten": "it_pill_hoathan",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 50000,
+      "giaBan": 15000
+    },
+    "pill_luyenhu": {
+      "ten": "it_pill_luyenhu",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 120000,
+      "giaBan": 36000
+    },
+    "pill_hopdao": {
+      "ten": "it_pill_hopdao",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 300000,
+      "giaBan": 90000
+    },
+    "pill_dokiep": {
+      "ten": "it_pill_dokiep",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 800000,
+      "giaBan": 240000
+    },
+    "pill_taycotdan": {
+      "ten": "it_pill_taycotdan",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": 1,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 1500,
+      "giaBan": 450
+    },
+    "pill_taycotdan_trung": {
+      "ten": "it_pill_taycotdan_trung",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": 2,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 3,
+      "doKho": 1,
+      "giaMua": 4000,
+      "giaBan": 1200
+    },
+    "pill_taycotdan_thuong": {
+      "ten": "it_pill_taycotdan_thuong",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": 3,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 10000,
+      "giaBan": 3000
+    },
+    "pill_taycotdan_thien": {
+      "ten": "it_pill_taycotdan_thien",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": 5,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 5,
+      "doKho": 3,
+      "giaMua": 25000,
+      "giaBan": 7500
+    },
+    "pill_khaimachdan": {
+      "ten": "it_pill_khaimachdan",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": 1,
+        "thoNguyen": null
+      },
+      "doHiem": 3,
+      "doKho": 2,
+      "giaMua": 3000,
+      "giaBan": 900
+    },
+    "pill_khaimachdan_trung": {
+      "ten": "it_pill_khaimachdan_trung",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": 1,
+        "thoNguyen": null
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 8000,
+      "giaBan": 2400
+    },
+    "pill_khaimachdan_thuong": {
+      "ten": "it_pill_khaimachdan_thuong",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": 2,
+        "thoNguyen": null
+      },
+      "doHiem": 5,
+      "doKho": 3,
+      "giaMua": 20000,
+      "giaBan": 6000
+    },
+    "duong_linh_dan": {
+      "ten": "it_duong_linh_dan",
+      "canhGioiYeuCau": null,
+      "congThuc": null,
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "giaMua": 5000,
+      "giaBan": 1500
+    },
+    "dan_tu_khi": {
+      "ten": "it_dan_tu_khi",
+      "canhGioiYeuCau": 1,
+      "congThuc": [
+        [
+          "taycothao",
+          3
+        ],
+        [
+          "thao_linh_chi",
+          2
+        ]
+      ],
+      "hoiChieuGiay": 300,
+      "tacDung": {
+        "tuVi": 500,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 1,
+      "doKho": 0,
+      "giaMua": 300,
+      "giaBan": 90
+    },
+    "dan_hoi_khi_tan": {
+      "ten": "it_dan_hoi_khi_tan",
+      "canhGioiYeuCau": 1,
+      "congThuc": [
+        [
+          "thao_linh_chi",
+          2
+        ]
+      ],
+      "hoiChieuGiay": 60,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": 0.5,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 0,
+      "doKho": 0,
+      "giaMua": 150,
+      "giaBan": 45
+    },
+    "dan_boi_nguyen": {
+      "ten": "it_dan_boi_nguyen",
+      "canhGioiYeuCau": 2,
+      "congThuc": [
+        [
+          "truc_co_thao",
+          5
+        ],
+        [
+          "dia_linh_qua",
+          3
+        ]
+      ],
+      "hoiChieuGiay": 600,
+      "tacDung": {
+        "tuVi": 2000,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 2,
+      "doKho": 1,
+      "giaMua": 1500,
+      "giaBan": 450
+    },
+    "dan_ngung_dan": {
+      "ten": "it_dan_ngung_dan",
+      "canhGioiYeuCau": 3,
+      "congThuc": [
+        [
+          "dia_linh_qua",
+          5
+        ],
+        [
+          "yaodan2",
+          1
+        ]
+      ],
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": 0.15,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 3,
+      "doKho": 2,
+      "giaMua": 5000,
+      "giaBan": 1500
+    },
+    "dan_cuu_chuyen": {
+      "ten": "it_dan_cuu_chuyen",
+      "canhGioiYeuCau": 3,
+      "congThuc": [
+        [
+          "that_diep_chi",
+          3
+        ],
+        [
+          "dia_linh_qua",
+          2
+        ]
+      ],
+      "hoiChieuGiay": 900,
+      "tacDung": {
+        "tuVi": 8000,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 3,
+      "doKho": 2,
+      "giaMua": 4000,
+      "giaBan": 1200
+    },
+    "dan_duong_anh": {
+      "ten": "it_dan_duong_anh",
+      "canhGioiYeuCau": 4,
+      "congThuc": [
+        [
+          "that_diep_chi",
+          5
+        ],
+        [
+          "yaodan3",
+          1
+        ]
+      ],
+      "hoiChieuGiay": 1200,
+      "tacDung": {
+        "tuVi": 20000,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 12000,
+      "giaBan": 3600
+    },
+    "dan_ho_mach": {
+      "ten": "it_dan_ho_mach",
+      "canhGioiYeuCau": 4,
+      "congThuc": [
+        [
+          "that_diep_chi",
+          3
+        ],
+        [
+          "tien_thao",
+          2
+        ]
+      ],
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": 0.2,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 4,
+      "doKho": 2,
+      "giaMua": 10000,
+      "giaBan": 3000
+    },
+    "dan_than_du": {
+      "ten": "it_dan_than_du",
+      "canhGioiYeuCau": 5,
+      "congThuc": [
+        [
+          "tien_thao",
+          5
+        ],
+        [
+          "yaodan4",
+          1
+        ]
+      ],
+      "hoiChieuGiay": 1800,
+      "tacDung": {
+        "tuVi": 50000,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 5,
+      "doKho": 3,
+      "giaMua": 30000,
+      "giaBan": 9000
+    },
+    "dan_tu_than": {
+      "ten": "it_dan_tu_than",
+      "canhGioiYeuCau": 5,
+      "congThuc": [
+        [
+          "tien_thao",
+          3
+        ],
+        [
+          "that_diep_chi",
+          3
+        ]
+      ],
+      "hoiChieuGiay": 1800,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": 100,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 5,
+      "doKho": 3,
+      "giaMua": 25000,
+      "giaBan": 7500
+    },
+    "dan_hu_linh": {
+      "ten": "it_dan_hu_linh",
+      "canhGioiYeuCau": 6,
+      "congThuc": [
+        [
+          "tien_thao",
+          5
+        ],
+        [
+          "huyet_tinh",
+          2
+        ],
+        [
+          "yaodan4",
+          1
+        ]
+      ],
+      "hoiChieuGiay": 3600,
+      "tacDung": {
+        "tuVi": 120000,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 5,
+      "doKho": 3,
+      "giaMua": 80000,
+      "giaBan": 24000
+    },
+    "dan_co_ban": {
+      "ten": "it_dan_co_ban",
+      "canhGioiYeuCau": 6,
+      "congThuc": [
+        [
+          "huyet_tinh",
+          3
+        ],
+        [
+          "that_diep_chi",
+          5
+        ]
+      ],
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": 1,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 5,
+      "doKho": 3,
+      "giaMua": 60000,
+      "giaBan": 18000
+    },
+    "dan_hop_the": {
+      "ten": "it_dan_hop_the",
+      "canhGioiYeuCau": 6,
+      "congThuc": [
+        [
+          "cuu_diep_linh_chi",
+          1
+        ],
+        [
+          "huyet_tinh",
+          3
+        ],
+        [
+          "yaodan5",
+          1
+        ]
+      ],
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": 0.2,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 150000,
+      "giaBan": 45000
+    },
+    "dan_quy_nhat": {
+      "ten": "it_dan_quy_nhat",
+      "canhGioiYeuCau": 6,
+      "congThuc": [
+        [
+          "cuu_diep_linh_chi",
+          1
+        ],
+        [
+          "tien_thao",
+          5
+        ]
+      ],
+      "hoiChieuGiay": 3600,
+      "tacDung": {
+        "tuVi": 300000,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 120000,
+      "giaBan": 36000
+    },
+    "dan_dai_thua": {
+      "ten": "it_dan_dai_thua",
+      "canhGioiYeuCau": 6,
+      "congThuc": [
+        [
+          "cuu_diep_linh_chi",
+          2
+        ],
+        [
+          "yaodan5",
+          1
+        ]
+      ],
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": 0.25,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 300000,
+      "giaBan": 90000
+    },
+    "dan_tien_linh": {
+      "ten": "it_dan_tien_linh",
+      "canhGioiYeuCau": 6,
+      "congThuc": [
+        [
+          "cuu_diep_linh_chi",
+          2
+        ],
+        [
+          "huyet_tinh",
+          3
+        ]
+      ],
+      "hoiChieuGiay": 7200,
+      "tacDung": {
+        "tuVi": 800000,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 6,
+      "doKho": 3,
+      "giaMua": 250000,
+      "giaBan": 75000
+    },
+    "dan_do_kiep": {
+      "ten": "it_dan_do_kiep",
+      "canhGioiYeuCau": 7,
+      "congThuc": [
+        [
+          "cuu_diep_linh_chi",
+          3
+        ],
+        [
+          "yaodan5",
+          2
+        ]
+      ],
+      "hoiChieuGiay": null,
+      "tacDung": {
+        "tuVi": null,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": 0.3,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 6,
+      "doKho": 4,
+      "giaMua": 500000,
+      "giaBan": 150000
+    },
+    "dan_cuu_kiep": {
+      "ten": "it_dan_cuu_kiep",
+      "canhGioiYeuCau": 7,
+      "congThuc": [
+        [
+          "cuu_diep_linh_chi",
+          5
+        ]
+      ],
+      "hoiChieuGiay": 7200,
+      "tacDung": {
+        "tuVi": 2000000,
+        "hoiHp": null,
+        "hoiMp": null,
+        "hoiThanThuc": null,
+        "dotPhaBonus": null,
+        "giamLoiKiep": null,
+        "coBan": null,
+        "tayCot": null,
+        "khaiMach": null,
+        "thoNguyen": null
+      },
+      "doHiem": 6,
+      "doKho": 4,
+      "giaMua": 800000,
+      "giaBan": 240000
+    }
+  }
+}

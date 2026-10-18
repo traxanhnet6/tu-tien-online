@@ -282,6 +282,120 @@ var Khilinh = (function () {
     });
   }
 
+  /* ---------- LUYỆN HÓA TRANG BỊ ---------- */
+  var REFINE_MAX = 15;
+  /* Hệ số chỉ số theo cấp luyện hóa: +8%/cấp */
+  function refineStatMult(lv) { return 1 + 0.08 * (lv || 0); }
+  /* Tỉ lệ thành công: +1..+9 = 100%, +10 trở lên giảm dần */
+  function refineChance(lv) {
+    if (lv < 9) return 1;
+    var chances = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4]; /* lên +10..+15 */
+    return chances[lv - 9] || 0.4;
+  }
+  function refineLvOf(state, itemId) {
+    return ((state && state.refine) || {})[itemId] || 0;
+  }
+  /* Nguyên liệu luyện hóa theo cấp hiện tại → lên cấp tiếp theo */
+  function refineCost(lv) {
+    var next = lv + 1;
+    var cost = { stones: 100 * next, da_cuong_hoa: 0, yaodan: 0 };
+    if (next >= 6) cost.da_cuong_hoa = Math.ceil(next / 3);
+    if (next >= 11) cost.yaodan = next - 10;
+    return cost;
+  }
+  function canRefineItem(def) {
+    /* Hiếm (tier>=1) trở lên mới luyện hóa được */
+    return !!def && (def.tier || 0) >= 1;
+  }
+  /* Thử luyện hóa: thất bại không mất đồ, chỉ mất nguyên liệu */
+  function doRefine(state, itemId, itemDefFn, bagFns) {
+    var d = itemDefFn ? itemDefFn(itemId) : null;
+    if (!d) return { ok: false, reason: "khong_co_do" };
+    if (!canRefineItem(d)) return { ok: false, reason: "pham_thap" };
+    var lv = refineLvOf(state, itemId);
+    if (lv >= REFINE_MAX) return { ok: false, reason: "max_cap" };
+    var cost = refineCost(lv);
+    if ((state.stones || 0) < cost.stones) return { ok: false, reason: "thieu_linh_thach" };
+    var fns = bagFns || {};
+    if (cost.da_cuong_hoa > 0) {
+      if (!fns.countItem || fns.countItem(state, "da_cuong_hoa") < cost.da_cuong_hoa)
+        return { ok: false, reason: "thieu_da_cuong_hoa" };
+    }
+    if (cost.yaodan > 0) {
+      /* yêu đan bất kỳ cấp nào cũng được, ưu tiên cấp thấp */
+      var yd = findYaodan(state, fns, cost.yaodan);
+      if (!yd) return { ok: false, reason: "thieu_yeu_dan" };
+    }
+    /* trừ nguyên liệu */
+    state.stones -= cost.stones;
+    if (cost.da_cuong_hoa > 0 && fns.removeItem) fns.removeItem(state, "da_cuong_hoa", cost.da_cuong_hoa);
+    if (cost.yaodan > 0 && fns.removeItem) {
+      var yd2 = findYaodan(state, fns, cost.yaodan);
+      if (yd2) fns.removeItem(state, yd2.id, cost.yaodan);
+    }
+    /* roll thành công */
+    if (Math.random() > refineChance(lv))
+      return { ok: false, reason: "that_bai", lost: true };
+    if (!state.refine) state.refine = {};
+    state.refine[itemId] = lv + 1;
+    return { ok: true, level: lv + 1 };
+  }
+  function findYaodan(state, fns, need) {
+    if (!fns || !fns.countItem) return null;
+    var bag = state.bag || [];
+    var cands = [];
+    bag.forEach(function (it) {
+      /* nhận diện yêu đan theo id bắt đầu bằng yaodan */
+      if (it.id && it.id.indexOf("yaodan") === 0 && (it.qty || 0) >= need)
+        cands.push(it);
+    });
+    return cands[0] || null;
+  }
+  /* ---------- NÂNG PHẨM (tier-up sau luyện hóa max) ---------- */
+  /* Trang bị +15 có thể nâng lên phẩm cảnh giới cao hơn */
+  function tierUpOf(state, itemId) {
+    return ((state && state.equipTierUp) || {})[itemId] || 0;
+  }
+  function effRealmOf(def, state, itemId) {
+    var base = realmOfItem(def);
+    return Math.min(base + tierUpOf(state, itemId), 7);
+  }
+  function canTierUp(state, itemId, itemDefFn) {
+    var d = itemDefFn ? itemDefFn(itemId) : null;
+    if (!d) return { ok: false, reason: "khong_co_do" };
+    if (refineLvOf(state, itemId) < REFINE_MAX)
+      return { ok: false, reason: "chua_max_luyen_hoa" };
+    if (effRealmOf(d, state, itemId) >= 7)
+      return { ok: false, reason: "max_pham" };
+    return { ok: true };
+  }
+  function tierUpCost(state, itemId, itemDefFn) {
+    var d = itemDefFn ? itemDefFn(itemId) : null;
+    var r = effRealmOf(d, state, itemId);
+    return { stones: 5000 * r, da_cuong_hoa: 5 * r, yaodan: r };
+  }
+  function doTierUp(state, itemId, itemDefFn, bagFns) {
+    var chk = canTierUp(state, itemId, itemDefFn);
+    if (!chk.ok) return chk;
+    var cost = tierUpCost(state, itemId, itemDefFn);
+    if ((state.stones || 0) < cost.stones) return { ok: false, reason: "thieu_linh_thach" };
+    var fns = bagFns || {};
+    if (!fns.countItem || fns.countItem(state, "da_cuong_hoa") < cost.da_cuong_hoa)
+      return { ok: false, reason: "thieu_da_cuong_hoa" };
+    var yd = findYaodan(state, fns, cost.yaodan);
+    if (!yd) return { ok: false, reason: "thieu_yeu_dan" };
+    state.stones -= cost.stones;
+    if (fns.removeItem) {
+      fns.removeItem(state, "da_cuong_hoa", cost.da_cuong_hoa);
+      fns.removeItem(state, yd.id, cost.yaodan);
+    }
+    if (!state.equipTierUp) state.equipTierUp = {};
+    state.equipTierUp[itemId] = tierUpOf(state, itemId) + 1;
+    if (!state.refine) state.refine = {};
+    state.refine[itemId] = 0; /* nâng phẩm → luyện hóa về +0 */
+    return { ok: true, newRealm: effRealmOf(itemDefFn(itemId), state, itemId) };
+  }
+
   return {
     EQUIP_REALM_STATS: EQUIP_REALM_STATS,
     SLOT_DIST: SLOT_DIST,
@@ -310,6 +424,18 @@ var Khilinh = (function () {
     spiritStatMult: spiritStatMult,
     spiritPersonalityBonus: spiritPersonalityBonus,
     trackWorn: trackWorn,
+    REFINE_MAX: REFINE_MAX,
+    refineStatMult: refineStatMult,
+    refineChance: refineChance,
+    refineLvOf: refineLvOf,
+    refineCost: refineCost,
+    canRefineItem: canRefineItem,
+    doRefine: doRefine,
+    tierUpOf: tierUpOf,
+    effRealmOf: effRealmOf,
+    canTierUp: canTierUp,
+    tierUpCost: tierUpCost,
+    doTierUp: doTierUp,
   };
 })();
 

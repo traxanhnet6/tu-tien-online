@@ -547,6 +547,14 @@ button{font-family:var(--font-body);cursor:pointer;color:var(--ink)}
   color:var(--gold-lt);text-shadow:0 1px 2px #000}
 .item-cell-name{font-size:9px;color:var(--muted);max-width:100%;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
+/* ---- Viền độ hiếm vật phẩm (Bui duyệt 2026-10-18): 0 Phàm → 6 Tiên Phẩm ---- */
+.item-cell.rarity-0{border-color:#e0e0e0}
+.item-cell.rarity-1{border-color:#4caf50}
+.item-cell.rarity-2{border-color:#2196f3}
+.item-cell.rarity-3{border-color:#9c27b0}
+.item-cell.rarity-4{border-color:#ff9800}
+.item-cell.rarity-5{border-color:#f44336}
+.item-cell.rarity-6{border-color:#ffd700;box-shadow:0 0 8px #ffd700}
 .plot-cell{aspect-ratio:1}
 .plot-icon{font-size:24px}
 

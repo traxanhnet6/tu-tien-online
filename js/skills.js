@@ -427,6 +427,15 @@ function skillPower(state, skillId) {
   if (!d) return null;
   var tier = manualTier(state, skillId);
   var level = manualLevel(state, skillId) || 1;
+  /* Dòng skill trên trang bị: +cấp skill (cộng dồn với cấp đã học) */
+  try {
+    if (typeof Khilinh !== "undefined" && Khilinh.skillLvBonus) {
+      var _eqLv = Khilinh.skillLvBonus(state, skillId, function (id) {
+        return (typeof ITEMS !== "undefined" && ITEMS[id]) || null;
+      });
+      if (_eqLv > 0) level += _eqLv;
+    }
+  } catch (e) {}
   var cfg = tierUpCfg(tier);
   var mult = (d.mult || 0) * gradeMult(tier) * (1 + cfg.per * (level - 1));
   var pierce = 0, splash = 0, msKeys = [];
