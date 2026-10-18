@@ -27,6 +27,34 @@ const Online = (function () {
     wipe: function () {
       try { localStorage.removeItem(KEY); } catch (e) {}
     },
+    /* Chợ Vạn Tiên Các — milestone 2: listing lên Supabase, khớp lệnh thật.
+       Giữ nguyên interface với market.js (list/buy/cancel/search). */
+    marketOnline: {
+      enabled: false, /* milestone 1: false → dùng market.js local */
+      list: function () { return Promise.resolve([]); },
+      publish: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      buy: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      cancel: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+    },
+    /* Bạn bè + nhắn tin — milestone 2: cắm Supabase thật.
+       Schema: supabase-schema.sql (profiles, friends, friend_requests, messages).
+       RLS: mỗi user chỉ đọc/ghi hàng của mình; char_id unique chống trùng ID.
+       Quy tắc Linh Thạch: KHÔNG chuyển Linh Thạch trực tiếp giữa người chơi. */
+    socialOnline: {
+      enabled: false, /* milestone 1: false → dùng Social mock (social.js) */
+      /* Tìm người chơi theo tên/ID (ilike) */
+      searchPlayers: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      sendFriendRequest: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      acceptFriendRequest: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      declineFriendRequest: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      removeFriend: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      listFriends: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      /* Chat 1-1: gửi + realtime (supabase realtime channel) */
+      sendMessage: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      fetchThread: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+      /* Đổi tên online: check trùng qua profiles.name unique + lưu lịch sử */
+      renameOnline: function () { return Promise.resolve({ ok: false, reason: "offline" }); },
+    },
     /* Sau này: bảng xếp hạng, chat thế giới, giftcode server-side */
     leaderboard: function () { return []; },
     /* Donate: milestone 1 chưa có server → log + báo chờ duyệt.

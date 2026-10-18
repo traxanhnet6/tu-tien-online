@@ -50,13 +50,15 @@ var Combat = (function () {
     return { dmg: dmg };
   }
 
-  /* Roll rớt đồ: drops = [{id, rate, min, max}] */
-  function rollDrops(monDef) {
+  /* Roll rớt đồ: drops = [{id, rate, eliteRate, min, max}]
+     eliteRate: tỉ lệ khi quái là tinh anh (vd bí tịch boss 8% → 15%) */
+  function rollDrops(monDef, isElite) {
     var out = [];
     var drops = (monDef && monDef.drops) || [];
     for (var i = 0; i < drops.length; i++) {
       var dr = drops[i];
-      if (Math.random() < (dr.rate || 0)) {
+      var rate = (isElite && dr.eliteRate != null) ? dr.eliteRate : (dr.rate || 0);
+      if (Math.random() < rate) {
         var min = dr.min || 1, max = dr.max || min;
         var qty = min + Math.floor(Math.random() * (max - min + 1));
         out.push({ id: dr.id, qty: qty });
@@ -91,6 +93,22 @@ var Combat = (function () {
     if (A) { try { A.sfxLoaiQuai(monId).aggro(); } catch (e) {} }
   }
 
+  /* Sát thương xuyên giáp: bỏ qua pierce (0..1) phần def */
+  function pierceDamage(atk, def, mult, pierce) {
+    var p = (typeof pierce === 'number' && pierce > 0) ? Math.min(1, pierce) : 0;
+    var d = Math.round((atk - def * 0.6 * (1 - p)) * (mult || 1));
+    return d < 1 ? 1 : d;
+  }
+
+  /* Điểm (px,py) có nằm trong vòng AoE tâm (x,y) bán kính r? */
+  function aoeHits(x, y, r, px, py) {
+    var dx = px - x, dy = py - y;
+    return dx * dx + dy * dy <= r * r;
+  }
+
+  /* Cửa sổ SƠ HỞ: boss lộ điểm yếu → sát thương +25% */
+  function weaknessMult(isWeak) { return isWeak ? 1.25 : 1; }
+
   /* Boss tung skill: âm dậm chân + gầm cảnh báo */
   function bossSkill(monId) {
     var A = _audio();
@@ -106,6 +124,9 @@ var Combat = (function () {
     redeemGift: redeemGift,
     aggro: aggro,
     bossSkill: bossSkill,
+    pierceDamage: pierceDamage,
+    aoeHits: aoeHits,
+    weaknessMult: weaknessMult,
   };
 })();
 
@@ -119,5 +140,8 @@ if (typeof module !== 'undefined' && module.exports) {
     redeemGift: Combat.redeemGift,
     aggro: Combat.aggro,
     bossSkill: Combat.bossSkill,
+    pierceDamage: Combat.pierceDamage,
+    aoeHits: Combat.aoeHits,
+    weaknessMult: Combat.weaknessMult,
   };
 }

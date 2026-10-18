@@ -82,6 +82,24 @@ button{font-family:var(--font);cursor:pointer}
 #hud button{pointer-events:auto}
 #offline-banner{display:inline-block;background:#0009;color:#ffd76a;font-size:12px;
   padding:3px 10px;border:1px solid var(--gold);border-radius:20px;margin-bottom:4px}
+/* Bí Cảnh tranh đoạt: banner đếm ngược + nút vào ngay */
+#secret-banner{display:block;max-width:92vw;margin:0 auto 4px;background:#1a0f2ecc;color:#ffe9a8;
+  font-size:13px;font-weight:bold;text-align:center;padding:7px 12px;border:2px solid #ffd76a;
+  border-radius:12px;pointer-events:auto;box-shadow:0 0 14px #ffd76a66;animation:sr-pulse 1.6s infinite}
+#secret-banner.soon{border-color:#7fb8ff;color:#cfe4ff;box-shadow:0 0 10px #7fb8ff55}
+@keyframes sr-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+#secret-banner button{pointer-events:auto;margin-left:8px;background:#ffd76a;color:#4a2c00;
+  border:none;border-radius:8px;padding:5px 12px;font-weight:bold;font-size:13px}
+#secret-gather{position:absolute;left:50%;transform:translateX(-50%);bottom:118px;z-index:6;
+  background:#2a6a3acc;color:#fff;border:2px solid #7fe08a;border-radius:12px;
+  padding:10px 18px;font-size:14px;font-weight:bold;pointer-events:auto;
+  box-shadow:0 0 12px #7fe08a66}
+#secret-gather:disabled{opacity:.5}
+.sr-row{border:1px solid var(--wood);border-radius:10px;padding:8px;margin:6px 0;background:#fff8}
+.sr-row.open{border-color:#ffd76a;box-shadow:0 0 8px #ffd76a88}
+.sr-head{display:flex;justify-content:space-between;align-items:center}
+.sr-time{font-size:12px;color:#6a5a3a}
+.sr-open-tag{color:#c8860a;font-weight:bold}
 .hud-top{display:flex;justify-content:space-between;gap:8px}
 .hud-char{flex:1;max-width:240px;background:#f3e9d2dd;border:2px solid var(--wood);
   border-radius:10px;padding:6px 8px}
@@ -150,6 +168,15 @@ button{font-family:var(--font);cursor:pointer}
 .stat-cell b{color:var(--red)}
 .exp-bar{position:relative;height:12px;background:#00000044;border-radius:6px;overflow:hidden;margin:4px 0}
 .exp-bar .fill{position:absolute;inset:0;background:linear-gradient(90deg,var(--gold),#ffe08a)}
+/* Thọ Nguyên (lifespan.js) */
+.tn-strip{display:flex;align-items:center;gap:6px;font-size:12px;color:#9fd8ff;margin:6px 0}
+.tn-strip.low{color:#ff6a6a;font-weight:bold}
+.tn-bar{position:relative;flex:1;height:10px;background:#00000044;border-radius:5px;overflow:hidden}
+.tn-bar .fill,.tn-strip .tn-bar .fill{position:absolute;inset:0;background:linear-gradient(90deg,#4aa8ff,#9fe8ff)}
+.tn-bar .fill.low,.tn-strip .tn-bar .fill.low{background:linear-gradient(90deg,#ff4a4a,#ff9a6a)}
+.tn-rb{white-space:nowrap}
+.tn-detail{margin:8px 0;padding:8px;border:1px solid #4a3a6a;border-radius:8px;background:#161226}
+.tn-talent-desc{color:#8f86a8;font-size:11px}
 .sect-note{font-size:13px;color:#5a4632;background:#fffdf5;border:1px solid var(--wood);
   border-radius:8px;padding:8px;margin:8px 0}
 .shop-price{color:var(--red);font-weight:bold}
@@ -176,6 +203,11 @@ button{font-family:var(--font);cursor:pointer}
 #toasts{position:absolute;left:0;right:0;bottom:150px;z-index:40;display:flex;
   flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .toast{background:#2b2118ee;color:var(--paper);border:1px solid var(--gold);
+.toast.gold{background:linear-gradient(135deg,#4a3208ee,#6a4a0aee);color:#ffd76a;border:2px solid #ffd76a;
+  font-weight:bold;font-size:15px;box-shadow:0 0 18px #ffd76a88;
+  animation:toastGold .5s ease-out}
+@keyframes toastGold{0%{opacity:0;transform:scale(.7)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+
   border-radius:20px;padding:8px 18px;font-size:14px;max-width:88%;
   animation:toastIn .25s ease-out}
 @keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
@@ -192,3 +224,381 @@ button{font-family:var(--font);cursor:pointer}
   .tgl{width:48px;height:48px;font-size:11px}
   #joystick{bottom:70px}
 }
+
+/* ============================================================
+ * V2 bổ sung — Kỹ sư UI
+ * Thanh skill, nút tròn, panel nhân vật, boss bar, bí tịch,
+ * gacha, kỳ ngộ, linh thú, hành trang, landscape, loading.
+ * Phong cách: khung gỗ, nền giấy, nút ngọc/gold.
+ * ============================================================ */
+
+/* ---------- 1. Thanh skill (#skillbar) ---------- */
+#skillbar{position:absolute;left:50%;transform:translateX(-50%);
+  bottom:calc(64px + env(safe-area-inset-bottom));z-index:6;
+  display:flex;gap:8px;pointer-events:auto}
+.skill-slot{position:relative;width:56px;height:56px;flex:0 0 56px;
+  background:var(--paper);border:2px solid var(--wood);border-radius:10px;
+  box-shadow:0 2px 0 var(--wood-dark);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;overflow:hidden}
+.skill-slot:active{transform:scale(.94)}
+.skill-icon{font-size:26px;line-height:1}
+.skill-name{font-size:9px;color:#5a4632;white-space:nowrap;max-width:52px;
+  overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.skill-key{position:absolute;top:1px;left:4px;font-size:11px;font-weight:bold;
+  color:var(--wood-dark);z-index:3}
+.skill-cdnum{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-size:20px;font-weight:bold;color:#fff;
+  text-shadow:0 2px 4px #000;z-index:2}
+.skill-cdsweep{position:absolute;inset:0;background:#0008;z-index:1;
+  /* JS set --cd từ 1→0, lớp phủ quét dần theo conic-gradient */
+  background:conic-gradient(#000000aa calc(var(--cd,1)*1turn),transparent 0)}
+.skill-ready-dot{position:absolute;top:4px;right:4px;width:9px;height:9px;
+  border-radius:50%;background:#3fbf4a;box-shadow:0 0 5px #3fbf4a;z-index:3}
+.skill-lvldots{position:absolute;bottom:2px;left:0;right:0;display:flex;
+  justify-content:center;gap:2px;z-index:3}
+.skill-lvldots i{width:4px;height:4px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 2px var(--gold)}
+.skill-slot.locked{opacity:.45;filter:grayscale(1)}
+.skill-slot.locked::after{content:"🔒";position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;font-size:24px}
+
+/* ---------- 2. Cụm nút tròn phải (#round-btns) ---------- */
+#round-btns{position:absolute;right:12px;bottom:calc(86px + env(safe-area-inset-bottom));
+  z-index:6;display:flex;flex-direction:column;gap:12px;align-items:center}
+.rbtn{width:60px;height:60px;border-radius:50%;border:3px solid var(--wood);
+  background:var(--paper);color:var(--ink);font-size:26px;font-weight:bold;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 0 var(--wood-dark),0 4px 10px #0006}
+.rbtn.big{width:76px;height:76px;font-size:34px}
+.rbtn:active{transform:scale(.9)}
+#btn-atk{background:radial-gradient(circle at 35% 30%,#fff6dd,var(--paper) 60%,#d9c491);
+  border-color:var(--wood-dark)}
+#btn-dash{font-size:22px}
+#btn-auto2.on{background:var(--jade);color:#fff;border-color:var(--jade-dark);
+  box-shadow:0 3px 0 var(--jade-dark),0 0 12px var(--jade)}
+
+/* ---------- 3. Panel nhân vật trên-trái (#char-panel) ---------- */
+#char-panel{position:absolute;top:calc(6px + env(safe-area-inset-top));left:8px;
+  z-index:6;min-width:170px;max-width:230px;background:#f3e9d2e6;
+  border:2px solid var(--wood);border-radius:10px;padding:6px 10px;
+  box-shadow:0 3px 8px #0008}
+.char-name{font-size:14px;font-weight:bold;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.char-realm{font-size:11px;color:#6b5a44;font-style:italic}
+.cbar{position:relative;height:4px;background:#00000033;border-radius:2px;
+  margin-top:5px;overflow:hidden}
+.cbar .fill{position:absolute;inset:0;border-radius:2px;transition:width .2s}
+.cbar.hp .fill{background:linear-gradient(#e05a4e,#b03a2e)}
+.cbar.mp .fill{background:linear-gradient(#4e9de0,#2b6cb0)}
+.cbar.focus .fill{background:linear-gradient(#9b5de5,#6a3fb0)}
+.cbar.armor .fill{background:linear-gradient(#b0b6bd,#7a8087)}
+
+/* ---------- 4. Thanh boss (#boss-bar) ---------- */
+#boss-bar{position:absolute;top:calc(6px + env(safe-area-inset-top));left:50%;
+  transform:translateX(-50%);z-index:6;width:min(320px,60vw);
+  background:#f3e9d2e6;border:2px solid var(--red);border-radius:10px;
+  padding:5px 12px;text-align:center;box-shadow:0 3px 8px #0008}
+.boss-name{font-size:13px;font-weight:bold;color:var(--red);letter-spacing:1px}
+.boss-realm{font-size:10px;color:#6b5a44}
+.boss-hpbar{position:relative;height:10px;background:#00000055;border-radius:5px;
+  margin-top:4px;overflow:hidden}
+#boss-hp-fill{position:absolute;inset:0;border-radius:5px;transition:width .25s;
+  background:linear-gradient(#e05a4e,#8a231c)}
+.boss-weak{display:inline-block;margin-top:3px;font-size:12px;font-weight:bold;
+  color:var(--gold);text-shadow:0 1px 2px #000;animation:weakBlink .6s infinite}
+@keyframes weakBlink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ---------- 5. Nút Chạy trên joystick ---------- */
+#btn-run2{position:absolute;left:34px;bottom:212px;z-index:6;
+  width:48px;height:48px;border-radius:50%;border:2px solid var(--wood-dark);
+  background:var(--gold);color:var(--ink);font-size:13px;font-weight:bold;
+  box-shadow:0 3px 6px #0007}
+#btn-run2.on{background:var(--jade);color:#fff}
+body.landscape #joystick{width:90px;height:90px;bottom:80px}
+body.landscape #joystick #joy-knob{width:38px;height:38px;left:26px;top:26px}
+
+/* ---------- 6. Bí tịch (.manual-card) ---------- */
+.manual-card{position:relative;background:var(--paper);border:3px solid #fff;
+  border-radius:10px;padding:10px;margin-bottom:8px;display:flex;gap:10px;
+  align-items:center}
+.manual-card .manual-icon{font-size:30px}
+.manual-card .manual-info{flex:1}
+.manual-card .manual-name{font-weight:bold;font-size:15px}
+.manual-card .manual-desc{font-size:12px;color:#6b5a44}
+.tier-pham{border-color:#cfcfcf;box-shadow:0 2px 6px #0004}
+.tier-dia{border-color:#3fbf4a;box-shadow:0 0 8px #3fbf4a66}
+.tier-thien{border-color:var(--gold);box-shadow:0 0 14px #c9a22788}
+.manual-lv{position:absolute;top:4px;right:8px;font-size:12px;font-weight:bold;
+  color:var(--wood-dark)}
+.manual-locked{opacity:.5;filter:grayscale(.8)}
+.manual-locked::after{content:"ĐÃ KHÓA";position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;font-size:18px;font-weight:bold;
+  letter-spacing:4px;color:var(--ink);background:#f3e9d299;border-radius:8px}
+
+/* ---------- 7. Gacha ---------- */
+.gacha-tabs{display:flex;gap:6px;margin-bottom:10px}
+.gacha-tabs .mini{flex:1;padding:9px 4px;font-size:14px}
+.gacha-tabs .mini.on{background:var(--gold);color:var(--ink)}
+.gacha-banner{border-radius:12px;padding:22px 14px;margin-bottom:10px;
+  text-align:center;border:3px solid var(--wood);
+  box-shadow:0 0 0 2px var(--gold),0 6px 16px #0008}
+.gacha-banner h4{margin:0 0 4px;font-size:20px;letter-spacing:2px;color:#fff;
+  text-shadow:0 2px 4px #000}
+.gacha-banner p{margin:0;font-size:12px;color:#fffd}
+.gacha-banner.tier-pham{background:linear-gradient(135deg,#9aa0a8,#5d646d)}
+.gacha-banner.tier-dia{background:linear-gradient(135deg,#46c96a,#1e7a38)}
+.gacha-banner.tier-thien{background:linear-gradient(135deg,#f5d76e,#a87c1a)}
+.gacha-rates{background:#fffdf5;border:1px solid var(--wood);border-radius:8px;
+  padding:8px 12px;margin-bottom:10px;font-size:13px}
+.gacha-rates .row{display:flex;justify-content:space-between;padding:3px 0}
+.gacha-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0}
+.gacha-card{aspect-ratio:3/4;border-radius:8px;position:relative;
+  transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.gacha-card .card-face{position:absolute;inset:0;backface-visibility:hidden;
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--wood)}
+.gacha-card .card-back{background:linear-gradient(135deg,var(--wood),var(--wood-dark));
+  color:var(--gold);font-size:24px}
+.gacha-card .card-front{background:var(--paper);transform:rotateY(180deg);
+  font-size:28px;flex-direction:column}
+.gacha-card.flip{transform:rotateY(180deg)}
+.gacha-card.thien .card-front{border-color:var(--gold);
+  box-shadow:0 0 16px #c9a227aa}
+.gacha-history{background:#fffdf5;border:1px solid var(--wood);border-radius:8px;
+  padding:8px;margin-top:8px;max-height:140px;overflow-y:auto;font-size:12px}
+.gacha-history .h-row{display:flex;justify-content:space-between;padding:3px 0;
+  border-bottom:1px dashed #c9b78f}
+
+/* ---------- 8. Kỳ ngộ (.encounter-modal) ---------- */
+.encounter-modal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:25;background:var(--paper);border:3px solid var(--wood);border-radius:12px;
+  box-shadow:0 0 0 2px var(--gold),0 10px 30px #000c;
+  width:88%;max-width:400px;padding:18px;text-align:center}
+.encounter-modal h3{margin:0 0 8px;letter-spacing:2px}
+.encounter-modal .enc-desc{font-size:14px;color:#5a4632;margin-bottom:14px;line-height:1.6}
+.encounter-choices{display:flex;flex-direction:column;gap:10px}
+.encounter-choices button{min-height:48px;padding:12px;border:2px solid var(--wood);
+  border-radius:10px;background:var(--jade);color:#fff;font-size:15px;
+  box-shadow:0 3px 0 var(--wood-dark)}
+.encounter-choices button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--wood-dark)}
+
+/* ---------- 9. Linh thú (.pet-panel) ---------- */
+.pet-panel{background:#fffdf5;border:2px solid var(--wood);border-radius:10px;
+  padding:12px;margin-bottom:10px;display:flex;gap:12px;align-items:center}
+.pet-egg{width:64px;height:80px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  border:3px solid var(--wood);flex:0 0 64px;display:flex;align-items:center;
+  justify-content:center;font-size:28px}
+.egg-0{background:linear-gradient(#fff,#d9d9d9)}
+.egg-1{background:linear-gradient(#aee3f5,#3d8fb8)}
+.egg-2{background:linear-gradient(#c9a7f5,#7a3fb8)}
+.egg-3{background:linear-gradient(#ffd9a0,#d97a2e)}
+.egg-4{background:linear-gradient(#ff9d9d,#b03a2e)}
+.pet-sprite-wrap{position:relative;width:72px;height:72px;flex:0 0 72px;
+  display:flex;align-items:center;justify-content:center}
+.pet-aura{position:absolute;inset:2px;border-radius:50%;pointer-events:none;
+  animation:auraPulse 2s infinite}
+.pet-aura.egg-0{border:2px solid #cfcfcf;box-shadow:0 0 10px #cfcfcf88}
+.pet-aura.egg-1{border:2px solid #3d8fb8;box-shadow:0 0 10px #3d8fb888}
+.pet-aura.egg-2{border:2px solid #7a3fb8;box-shadow:0 0 10px #7a3fb888}
+.pet-aura.egg-3{border:2px solid #d97a2e;box-shadow:0 0 10px #d97a2e88}
+.pet-aura.egg-4{border:2px solid #b03a2e;box-shadow:0 0 12px #b03a2eaa}
+@keyframes auraPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.12);opacity:.5}}
+.pet-info{flex:1}
+.pet-name{font-weight:bold;font-size:15px}
+.pet-stat{font-size:13px;color:#5a4632;display:flex;justify-content:space-between;
+  padding:2px 0}
+.pet-stat b{color:var(--ink)}
+
+/* ---------- 10. Panel Hành Trang ---------- */
+.char-tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.char-tabs .mini{flex:1;min-width:56px;padding:8px 4px;font-size:12px}
+.char-tabs .mini.on{background:var(--gold);color:var(--ink)}
+.equip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.equip-slot{aspect-ratio:1;border:2px solid var(--wood);border-radius:10px;
+  background:#fffdf5;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:88px;position:relative}
+.equip-slot .eq-icon{font-size:30px}
+.equip-slot-name{font-size:10px;color:#5a4632;text-align:center;padding:0 4px;
+  white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.equip-slot.tier-common{border-color:#cfcfcf}
+.equip-slot.tier-blue{border-color:#3d8fb8;box-shadow:0 0 6px #3d8fb866}
+.equip-slot.tier-purple{border-color:#7a3fb8;box-shadow:0 0 6px #7a3fb866}
+.equip-slot.tier-orange{border-color:#d97a2e;box-shadow:0 0 8px #d97a2e88}
+.stat-line{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;
+  border-bottom:1px dashed #c9b78f}
+.stat-line:last-child{border-bottom:none}
+.bonus-xanh{color:var(--jade-dark);font-weight:bold}
+.bag-subtabs{display:flex;gap:6px;margin:8px 0}
+.bag-subtabs .mini{flex:1}
+.bag-subtabs .mini.on{background:var(--gold);color:var(--ink)}
+.item-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+.item-grid .equip-slot{min-height:0;aspect-ratio:1}
+.item-grid .eq-icon{font-size:24px}
+.char-sprite{display:flex;justify-content:center;margin:6px 0}
+.char-sprite .sprite{width:96px;height:96px;border-radius:50%;
+  border:3px solid var(--wood);background:radial-gradient(circle at 40% 35%,#fff8dc,var(--cream));
+  display:flex;align-items:center;justify-content:center;font-size:52px;
+  box-shadow:0 0 0 2px var(--gold),0 4px 12px #0006}
+
+/* ---------- 11. Landscape ---------- */
+body.landscape #skillbar{bottom:calc(8px + env(safe-area-inset-bottom))}
+body.landscape .skill-slot{width:44px;height:44px;flex-basis:44px;border-radius:8px}
+body.landscape .skill-icon{font-size:20px}
+body.landscape .skill-name{display:none}
+body.landscape .skill-cdnum{font-size:16px}
+body.landscape #round-btns{right:6px;bottom:calc(8px + env(safe-area-inset-bottom));
+  gap:8px}
+body.landscape .rbtn{width:52px;height:52px;font-size:22px}
+body.landscape .rbtn.big{width:64px;height:64px;font-size:28px}
+body.landscape #char-panel{min-width:120px;max-width:170px;padding:4px 8px}
+body.landscape #char-panel .char-name{font-size:12px}
+body.landscape #char-panel .char-realm{font-size:10px}
+body.landscape .cbar{margin-top:3px}
+body.landscape #boss-bar{width:min(260px,46vw);padding:3px 8px}
+body.landscape #joystick{width:90px;height:90px;left:12px;
+  bottom:calc(60px + env(safe-area-inset-bottom))}
+body.landscape #joystick #joy-knob{width:38px;height:38px;left:26px;top:26px}
+
+/* ---------- 12. Loading ---------- */
+#loading-screen{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:18px;
+  background:radial-gradient(circle at 50% 40%,#2b2118,#171008)}
+#loading-screen .game-title{color:var(--paper);text-shadow:0 2px 0 #000,0 4px 14px #000}
+.load-bar{width:min(320px,80vw);height:16px;border:2px solid var(--gold);
+  border-radius:8px;background:#0008;overflow:hidden}
+.load-fill{height:100%;width:0;border-radius:5px;transition:width .2s;
+  background:linear-gradient(90deg,var(--jade),#6be3df)}
+#loading-screen .load-txt{color:var(--paper);font-size:14px;letter-spacing:2px}
+
+/* ============ MÀN HÌNH LOADING ============ */
+#screen-loading .screen-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.loading-wrap { position:absolute; left:50%; bottom:12%; transform:translateX(-50%); width:min(420px, 80%); z-index:5; }
+.loading-bar { height:14px; border-radius:8px; background:rgba(0,0,0,.55); border:1px solid #c9a227; overflow:hidden; }
+#loading-fill { height:100%; width:0%; border-radius:8px;
+  background:linear-gradient(90deg, #c9a227, #ffe9a8); transition:width .15s; }
+.loading-row { display:flex; justify-content:space-between; margin-top:6px;
+  color:#ffe9a8; font-size:13px; text-shadow:0 1px 3px #000; }
+
+/* ============ BẠN BÈ + NHẮN TIN (social.js) ============ */
+.badge{position:absolute;top:-6px;right:-6px;background:#d23c2e;color:#fff;font-size:11px;
+  min-width:18px;height:18px;line-height:18px;border-radius:9px;text-align:center;padding:0 4px;
+  font-weight:bold;box-shadow:0 1px 3px #0006}
+.badge.inbtn{position:static;display:inline-block;margin-left:4px}
+#btn-chat{position:relative}
+.red{color:#b03a2e;font-weight:bold}
+.fr-search-row{display:flex;gap:8px;margin-bottom:10px}
+.fr-search-row .fld-input{flex:1}
+.fr-row{display:flex;align-items:center;gap:8px;padding:8px;border:2px solid var(--wood);
+  border-radius:10px;background:#fffdf5;margin-bottom:8px}
+.fr-info{flex:1;min-width:0}
+.fr-id{color:#8a6f4d;font-size:12px}
+.fr-sub{font-size:12px;color:#8a6f4d}
+.fr-btns{display:flex;gap:6px;flex-shrink:0}
+.dot-online,.dot-offline{display:inline-block;width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dot-online{background:#2fae4e;box-shadow:0 0 4px #2fae4e}
+.dot-offline{background:#9a9a9a}
+.chat-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;
+  padding-bottom:8px;border-bottom:2px solid var(--wood)}
+.chat-title{flex:1}
+.chat-log{max-height:300px;overflow-y:auto;padding:6px;border:2px solid var(--wood);
+  border-radius:10px;background:#f7efdc;margin-bottom:8px}
+.msg-row{margin-bottom:8px;display:flex;flex-direction:column}
+.msg-row.me{align-items:flex-end}
+.msg-row.them{align-items:flex-start}
+.msg-name{font-size:12px;color:#8a6f4d;margin-bottom:2px}
+.msg-bubble{max-width:80%;padding:8px 12px;border-radius:12px;font-size:14px;
+  border:2px solid var(--wood);word-break:break-word}
+.msg-row.me .msg-bubble{background:#d8efe3;border-color:#2fa3a0}
+.msg-row.them .msg-bubble{background:#fffdf5}
+.chat-input-row{display:flex;gap:8px}
+.chat-input-row .fld-input{flex:1}
+.rename-box .fld-input{width:100%;margin:8px 0}
+.gender-row{display:flex;gap:10px;margin:10px 0}
+.gender-row .btn{flex:1}
+.char-id{font-size:13px;color:#5a4632;margin-top:4px}
+.char-row-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+
+/* ============ MÀN HÌNH CHỜ VÀO MAP (mapload.js) ============ */
+#mapload { position:fixed; inset:0; z-index:200; overflow:hidden;
+  background:#0a0a12; opacity:1; transition:opacity .45s; }
+#mapload.hidden { display:none; }
+#mapload.mapload-out { opacity:0; }
+.mapload-bg { position:absolute; inset:-4%; width:108%; height:108%;
+  object-fit:cover; animation:mapload-zoom 14s ease-out forwards; }
+@keyframes mapload-zoom { from { transform:scale(1); } to { transform:scale(1.12); } }
+.mapload-vignette { position:absolute; inset:0;
+  background:radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,.6) 100%); }
+.mapload-center { position:absolute; top:14%; left:0; right:0; text-align:center;
+  animation:mapload-fadein 1s ease-out; padding:0 16px; }
+@keyframes mapload-fadein { from { opacity:0; transform:translateY(14px); }
+  to { opacity:1; transform:none; } }
+.mapload-name { font-family:'STKaiti','KaiTi','楷体',serif; font-size:44px;
+  color:#ffe9a8; text-shadow:0 2px 12px #000, 0 0 30px rgba(201,162,39,.55);
+  letter-spacing:8px; }
+.mapload-sub { color:#d8c98a; font-size:13px; letter-spacing:3px; margin-top:8px;
+  text-shadow:0 1px 4px #000; }
+.mapload-bottom { position:absolute; left:50%; bottom:9%; transform:translateX(-50%);
+  width:min(420px,82%); }
+.mapload-bar { height:12px; border-radius:7px; background:rgba(0,0,0,.55);
+  border:1px solid #c9a227; overflow:hidden; }
+#mapload-fill { height:100%; width:0%; border-radius:6px;
+  background:linear-gradient(90deg,#2fa3a0,#6be3df); transition:width .2s; }
+.mapload-row { display:flex; justify-content:space-between; align-items:flex-start;
+  margin-top:8px; color:#ffe9a8; font-size:12.5px; text-shadow:0 1px 3px #000; gap:10px; }
+#mapload-tip { font-style:italic; opacity:.92; }
+#mapload-pct { white-space:nowrap; font-weight:bold; }
+
+/* ===== Nhiệm vụ tông môn: lễ thăng cấp + flash sự kiện ===== */
+.sect-ceremony { position:fixed; left:0; right:0; top:0; bottom:0; z-index:9999;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.55); animation:sect-ceremony-in .4s ease-out; pointer-events:none; }
+@keyframes sect-ceremony-in { from { opacity:0; transform:scale(.92); } to { opacity:1; transform:none; } }
+.sect-ceremony-inner { border:3px solid #ffd76a; border-radius:14px; padding:26px 40px;
+  background:linear-gradient(160deg,#1c1410,#2b1f14); text-align:center;
+  box-shadow:0 0 40px rgba(255,215,106,.35); }
+.sect-ceremony-title { font-size:26px; font-weight:bold; color:#ffe9a8; letter-spacing:6px;
+  text-shadow:0 2px 10px #000; }
+.sect-ceremony-event { font-size:18px; margin-top:10px; font-weight:bold;
+  text-shadow:0 0 18px currentColor; }
+.sect-ceremony-rank { font-size:15px; color:#f3e9d2; margin-top:12px; }
+.sect-ceremony-sub { font-size:30px; margin-top:8px; }
+.sect-flash-label { position:fixed; left:0; right:0; top:38%; z-index:9998; text-align:center;
+  font-size:30px; font-weight:bold; letter-spacing:4px; opacity:0; pointer-events:none;
+  text-shadow:0 2px 14px #000, 0 0 30px currentColor; transition:opacity .3s; }
+.sect-flash-label.go { opacity:1; }
+
+/* ===== Căn Cốt + Thần Thức ===== */
+.bc-sec { margin:10px 0; padding:10px; border:1px solid #6b543a; border-radius:10px;
+  background:linear-gradient(160deg,#1c1410,#241a10); }
+.bc-head { font-size:16px; font-weight:bold; color:#ffe9a8; margin-bottom:6px; }
+.bc-lv { font-size:13px; color:#9fd8ff; margin-left:6px; }
+.bc-bar { height:12px; border-radius:6px; background:#0d0a06; border:1px solid #6b543a; overflow:hidden; margin:4px 0; }
+.bc-fill { height:100%; border-radius:6px; transition:width .3s; }
+.bc-ms { color:#ffd76a; font-size:13px; margin:2px 0; }
+.bc-bonus { color:#7fe8a0; font-size:12px; margin:4px 0; }
+.bc-desc { color:#b8a888; font-size:12px; margin:4px 0; }
+.bc-maxed { color:#ffd700; font-weight:bold; margin:6px 0; }
+.bc-method { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:8px 0; padding:6px;
+  border:1px dashed #6b543a; border-radius:8px; }
+.bc-mname { font-size:13px; color:#f3e9d2; flex:1 1 100%; }
+.bc-need { font-size:12px; color:#cfc0a0; flex:1; }
+.bc-ok { color:#7fe8a0; }
+.bc-lack { color:#ff6b6b; font-weight:bold; }
+.bc-yd { margin:8px 0; padding:8px; border:1px solid #6b543a; border-radius:8px; background:#1c1410; }
+.bc-yd-name { font-size:14px; color:#e8d8b0; margin-bottom:4px; }
+.bc-protect { display:block; font-size:13px; color:#9fd8ff; margin:8px 0; cursor:pointer; }
+
+/* ===== Thông Thiên Tháp ===== */
+.tw-event{background:linear-gradient(160deg,#2a1e3f,#1a1430);border:1px solid #8a6fd0;border-radius:10px;padding:10px;margin-bottom:10px;font-size:14px}
+.tw-status{display:flex;justify-content:space-between;font-size:13px;color:#ffd76a;margin-bottom:8px}
+.tw-anim{min-height:64px;max-height:120px;overflow-y:auto;background:#0d0a18;border:1px solid #4a3a6a;border-radius:8px;padding:8px;margin-bottom:10px;font-size:13px}
+.tw-climbing{color:#9fd8ff;font-weight:bold;margin-bottom:4px}
+.tw-trail{display:flex;flex-wrap:wrap;gap:3px}
+.tw-fw{background:#1e3a2a;color:#7fe8a0;border-radius:4px;padding:1px 5px;font-size:11px}
+.tw-fw.b{background:#3a2a10;color:#ffd76a;border:1px solid #ffd76a}
+.tw-fl{background:#3a1a1a;color:#ff8a8a;border-radius:4px;padding:1px 5px;font-size:11px}
+.tw-chests{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
+.tw-chest{background:#241a10;border:1px solid #6b543a;border-radius:8px;padding:6px 8px;font-size:12px}
+.tw-chest.got{opacity:.55;border-color:#3a5a3a}
+.tw-board{margin:4px 0}
+.tw-row{display:flex;justify-content:space-between;padding:5px 8px;border-bottom:1px solid #2a2438;font-size:13px}

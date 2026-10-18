@@ -36,12 +36,32 @@ var Engine = (function () {
   };
   var GFX_ORDER = ['thap', 'trungbinh', 'cao'];
 
-  /* Ảnh có sẵn (đường dẫn tương đối từ v2/) */
-  var SPRITE_PLAYER = '../assets-ai/nhanvat-chinh-topdown.webp';
-  var SPRITE_NPC = { dai_phu: '../assets-ai/npc-dai-phu.webp' };
+  /* Ảnh theo quy ước <nhóm>_<tên>_<loại> (xem data/*.json) */
+  var SPRITE_PLAYER = {
+    kiem: 'assets/sprs/sprs_player_kiem.png',
+    phap: 'assets/sprs/sprs_player_phap.png',
+    the:  'assets/sprs/sprs_player_the.png',
+  };
+  var SPRITE_NPC = {
+    dai_phu: 'assets/sprs/sprs_npc_dai_phu.webp',
+    tam_tien_bi_tich: 'assets/sprs/sprs_npc_dai_phu.webp', /* lão già bí ẩn (tạm dùng chung) */
+    truong_lao: 'assets/sprs/sprs_npc_dai_phu.webp',
+    truong_tran: 'assets/sprs/sprs_npc_dai_phu.webp',
+    lao_nong_dan: 'assets/sprs/sprs_npc_dai_phu.webp', /* Trưởng Lão Linh Điền (tạm) */
+    su_gia_kiem: 'assets/sprs/sprs_player_kiem.png',
+    su_gia_phap: 'assets/sprs/sprs_player_phap.png',
+    su_gia_the: 'assets/sprs/sprs_player_the.png',
+  };
   var SPRITE_MON = {
-    da_tru: '../assets-ai/quai-da-tru.webp',
-    son_ke: '../assets-ai/quai-son-ke.webp',
+    da_tru:       'assets/sprs/sprs_mon_da_tru.png',
+    son_ke:       'assets/sprs/sprs_mon_son_ke.png',
+    da_tru_vuong: 'assets/sprs/sprs_mon_da_tru_vuong.png',
+    phong_lang:   'assets/sprs/sprs_mon_phong_lang.png',
+    /* hu_thi: sprite AI bị chặn — dùng fallback hình khối */
+    lang_vuong:   'assets/sprs/sprs_mon_lang_vuong.png',
+    u_hon:        'assets/sprs/sprs_mon_u_hon.png',
+    thi_ma:       'assets/sprs/sprs_mon_thi_ma.png',
+    cot_tuong:    'assets/sprs/sprs_mon_cot_tuong.png',
   };
   var ELEMENT_FX = { // fallback khi ELEMENTS (data.js) chưa load
     kim: '#e8e8e8', moc: '#66bb6a', thuy: '#42a5f5', hoa: '#ef5350',
@@ -70,16 +90,33 @@ var Engine = (function () {
   var _state = null; // ưu tiên bindState, fallback global `state`
 
   var _mapId = 0, _mapDef = null;
-  var _monsters = [], _npcs = [], _gates = [];
+  var _monsters = [], _npcs = [], _gates = [], _objects = [];
+  /* Lưới tọa độ ngầm kiểu tutien2d: world chia ô KHU_W x KHU_H → đánh số khu 1..N */
+  var KHU_W = 400, KHU_H = 400;
+  function _khuOf(x, y) {
+    var cols = Math.max(1, Math.ceil(WORLD_W / KHU_W));
+    var rows = Math.max(1, Math.ceil(WORLD_H / KHU_H));
+    var c = Math.max(0, Math.min(cols - 1, Math.floor(x / KHU_W)));
+    var r = Math.max(0, Math.min(rows - 1, Math.floor(y / KHU_H)));
+    return r * cols + c + 1;
+  }
   var _uid = 1;
   var _dmgNums = [], _fx = [];
   var _keys = {};
   var _moveTarget = null;
+  var _tapMove = true; /* chạm map để di chuyển — bật/tắt trong Cài đặt */
   var _attackCd = 0;
   var _respawnT = 0, _bossRespawnAt = 0, _bossDef = null;
-  var _dungeon = null;          // {run, def} khi trong bí cảnh ngẫu nhiên
+  var _dungeon = null;
+  var _secret = null; /* realmId bí cảnh tranh đoạt đang ở (null = không) */          // {run, def} khi trong bí cảnh ngẫu nhiên
   var _stageClearFired = false;
   var _imgCache = {};
+
+  /* Chiến đấu nâng cao: buff, telegraph boss, sơ hở, dash */
+  var _buffs = [];            // {defMult, until(ms), fx}
+  var _bossTele = [];         // {x,y,r,warnT,hitT,dmg}
+  var _weakUntil = 0;         // timestamp ms — cửa sổ SƠ HỞ (+25% dmg)
+  var _dashT = 0, _dashCd = 0, _dashDx = 1, _dashDy = 0;
 
   /* Đồ họa */
   var _gfxMode = 'tudong';      // tudong|thap|trungbinh|cao
@@ -177,8 +214,8 @@ var Engine = (function () {
     var im = new Image();
     e = { img: im, ok: false };
     _imgCache[src] = e;
-    im.onload = function () { e.ok = true; };
-    im.onerror = function () { e.ok = false; };
+    im.onload = function () { e.ok = true; e.done = true; };
+    im.onerror = function () { e.ok = false; e.done = true; };
     im.src = src;
     return null;
   }
@@ -198,9 +235,122 @@ var Engine = (function () {
     }
   }
 
+  /* ---------- Pseudo-3D: bóng đổ, scale chiều sâu, nghiêng theo hướng chạy ---------- */
+  function _drawShadow(x, groundY, rx, alpha) {
+    if (rx < 1 || alpha <= 0.01) return;
+    _ctx.fillStyle = 'rgba(0,0,0,' + alpha.toFixed(3) + ')';
+    _ctx.beginPath();
+    _ctx.ellipse(x, groundY, rx, Math.max(2, rx * 0.32), 0, 0, Math.PI * 2);
+    _ctx.fill();
+  }
+  /* Vẽ sinh vật: bóng dưới chân + to/nhỏ theo chiều sâu (y) + nghiêng theo vx.
+   * o: entity để nhớ x frame trước; opts: {lift, shadowY, noShadow, noTilt, noDepth} */
+  /* Quay mặt theo hướng di chuyển — mượt, không giật (chuẩn demo-joystick):
+   * - _angLerp: nội suy góc đường ngắn nhất
+   * - _face4: chọn 1 trong 4 hướng up/down/left/right, có hysteresis chống giật ở ranh giới
+   * - Thân luôn đứng thẳng: chỉ lật ngang (flip), KHÔNG rotate sprite */
+  function _angLerp(a, b, t) {
+    var d = b - a;
+    while (d > Math.PI) d -= Math.PI * 2;
+    while (d < -Math.PI) d += Math.PI * 2;
+    return a + d * t;
+  }
+  function _face4(o, ang) {
+    var dx = Math.cos(ang), dy = Math.sin(ang);
+    var want = (Math.abs(dx) > Math.abs(dy)) ? (dx >= 0 ? 'right' : 'left') : (dy >= 0 ? 'down' : 'up');
+    var cur = o._face || 'down';
+    if (want !== cur) {
+      var centers = { right: 0, down: Math.PI / 2, left: Math.PI, up: -Math.PI / 2 };
+      var d = Math.abs(ang - centers[want]);
+      if (d > Math.PI) d = Math.PI * 2 - d;
+      if (d < 0.65) o._face = want; /* đã vào sâu vùng hướng mới mới đổi — chống giật */
+    }
+    return o._face || 'down';
+  }
+  /* Sprite linh thú theo hướng: pet_<id>_up/_down/_right.png (trái dùng _right lật).
+   * Fallback về ảnh gốc khi đang tải hoặc file thiếu. */
+  function _petDirSrc(base, face) {
+    var b = String(base || '').replace(/\.[a-z0-9]+$/i, '');
+    var suf = face === 'up' ? '_up' : (face === 'down' ? '_down' : '_right');
+    var cand = b + suf + '.png';
+    var ce = _imgCache[cand];
+    if (ce && ce.done) return ce.ok ? cand : base;
+    _img(cand); /* warm cache */
+    return base;
+  }
+  function _drawCreature(o, x, y, w, h, src, fbColor, opts) {
+    opts = opts || {};
+    var lift = opts.lift || 0;
+    /* lean: chỉ dùng khi truyền tường minh (vd: NPC cúi chào).
+       Thân người LUÔN đứng thẳng khi di chuyển — cấm rotate tự động. */
+    var tilt = (opts.lean != null) ? opts.lean : 0;
+    var ds = 1;
+    if (!opts.noDepth) {
+      var cam = _camera();
+      var sy = (y - cam.y) / Math.max(1, _viewH);
+      if (sy < 0) sy = 0; if (sy > 1) sy = 1;
+      ds = 0.94 + 0.12 * sy; /* gần người xem (y lớn) thì to hơn — pseudo-3D */
+    }
+    var dw = w * ds, dh = h * ds * (opts.scaleY || 1); /* scaleY: thở/bow */
+    if (!opts.noShadow) {
+      var hF = Math.min(lift, 70) / 70; /* bay cao → bóng mờ/nhỏ */
+      var gy = (opts.shadowY != null) ? opts.shadowY : y + dh / 2 - 4;
+      /* bóng đổ lệch ngược hướng nghiêng — cảm giác 3D */
+      var shX = x + (opts.shadowOffX || 0);
+      _drawShadow(shX, gy, dw * 0.32 * (1 - hF * 0.4), 0.26 * (1 - hF * 0.65));
+    }
+    var im = _img(src);
+    _ctx.save();
+    _ctx.translate(x, y);
+    if (tilt) _ctx.rotate(tilt);
+    /* Quay mặt như người thật: lật ngang khi hướng di chuyển có cos<0
+       (đi sang trái). Thân luôn đứng thẳng — không rotate sprite. */
+    var flip = !!opts.flip;
+    if (opts.faceAng != null) flip = Math.cos(opts.faceAng) < 0;
+    if (flip) _ctx.scale(-1, 1);
+    if (im) _ctx.drawImage(im, -dw / 2, -dh / 2, dw, dh);
+    else {
+      _ctx.fillStyle = fbColor || '#888';
+      _ctx.fillRect(-dw / 2, -dh / 2, dw, dh);
+    }
+    _ctx.restore();
+  }
+  /* Vật thể trang trí: bóng dưới chân + y-sort theo chân vật */
+  function _drawObject(o) {
+    _drawShadow(o.x, o.y, o.w * 0.30, 0.30);
+    var im = _img(o.sprite);
+    if (im) _ctx.drawImage(im, o.x - o.w / 2, o.y - o.h, o.w, o.h);
+    else {
+      _ctx.fillStyle = '#5a6b4a';
+      _ctx.fillRect(o.x - o.w / 2, o.y - o.h, o.w, o.h);
+    }
+  }
+  /* Sương mù trôi nhiều lớp (parallax phụ) */
+  var _mistT = 0;
+  var _tickT = 0; /* thời gian tích lũy cho animation NPC (idle bob, patrol) */
+  function _drawMist(W, H) {
+    _mistT += 0.016;
+    _ctx.save();
+    for (var i = 0; i < 5; i++) {
+      var mx = ((_mistT * (12 + i * 4) + i * W / 5) % (W + 240)) - 120;
+      var my = H * (0.22 + 0.14 * i) + Math.sin(_mistT * 0.7 + i * 2) * 20;
+      var mr = 90 + i * 22;
+      var g = _ctx.createRadialGradient(mx, my, 8, mx, my, mr);
+      g.addColorStop(0, 'rgba(235,242,248,0.10)');
+      g.addColorStop(1, 'rgba(235,242,248,0)');
+      _ctx.fillStyle = g;
+      _ctx.beginPath(); _ctx.arc(mx, my, mr, 0, Math.PI * 2); _ctx.fill();
+    }
+    _ctx.restore();
+  }
+
   /* ---------- Entity ---------- */
-  var player = { x: 800, y: 600, dir: 1, hp: 100, mp: 50, speed: 150, target: null, teamId: null };
+  var player = { x: 800, y: 600, dir: 1, ang: Math.PI / 2, hp: 100, mp: 50, shield: 0, maxShield: 0, shieldT: 0,
+                 focus: 100, speed: 150, target: null, teamId: null, atkT: 0 };
   var joy = { dx: 0, dy: 0 };
+  /* Linh thú đi theo */
+  var PET_SPRITE = 'assets/sprs/sprs_pet_linh_thu.png';
+  var _pet = { x: 0, y: 0, atkCd: 0, skillCd: 0, ang: Math.PI / 2 };
 
   function _randPos(margin) {
     margin = margin || 120;
@@ -208,6 +358,21 @@ var Engine = (function () {
       x: margin + Math.random() * (WORLD_W - margin * 2),
       y: margin + Math.random() * (WORLD_H - margin * 2),
     };
+  }
+  /* Vị trí random nhưng TRÁNH đè lên NPC và cổng map (quái không spawn đè NPC) */
+  function _randPosClear(margin, clear) {
+    margin = margin || 120; clear = clear || 110;
+    for (var t = 0; t < 24; t++) {
+      var p = _randPos(margin), ok = true, i;
+      for (i = 0; i < _npcs.length; i++) {
+        if (Math.hypot(_npcs[i].x - p.x, _npcs[i].y - p.y) < clear) { ok = false; break; }
+      }
+      if (ok) for (i = 0; i < _gates.length; i++) {
+        if (Math.hypot(_gates[i].x - p.x, _gates[i].y - p.y) < clear) { ok = false; break; }
+      }
+      if (ok) return p;
+    }
+    return _randPos(margin);
   }
   function _spawnMon(monId, x, y, isBoss) {
     var def = _monDef(monId);
@@ -218,6 +383,16 @@ var Engine = (function () {
       atkCd: 0, skillCd: 4 + Math.random() * 4, hitT: 0,
       wanderA: Math.random() * Math.PI * 2, wanderT: 0,
     };
+    /* Quái tinh anh: ~5% lẫn trong quái thường, mạnh 2-3x, rớt yêu đan — xem bodycult.js */
+    try {
+      if (!m.boss && typeof BodyCult !== "undefined" && BodyCult.eliteRoll()) {
+        var em = BodyCult.DEF.elite;
+        m.elite = true;
+        m.hp = m.maxHp = Math.round(def.hp * em.hpMult);
+        m.atk = Math.round(def.atk * em.atkMult);
+        m.def = Math.round(def.def * em.defMult);
+      }
+    } catch (e) {}
     if (typeof Combat !== 'undefined' && Combat.aggro) {
       try { Combat.aggro(monId); } catch (e) {}
     }
@@ -229,10 +404,13 @@ var Engine = (function () {
     _bossRespawnAt = 0;
     var ids = (_mapDef.monsters && _mapDef.monsters.length) ? _mapDef.monsters : ['da_tru'];
     for (var i = 0; i < MAP_MON_COUNT; i++) {
-      var p = _randPos(160);
+      var p = _randPosClear(160, 110);
       _monsters.push(_spawnMon(ids[i % ids.length], p.x, p.y, false));
     }
-    if (_bossDef) _monsters.push(_spawnMon(_bossDef, 1250, 320, true));
+    if (_bossDef) {
+      var bp = _randPosClear(200, 150);
+      _monsters.push(_spawnMon(_bossDef, bp.x, bp.y, true));
+    }
   }
   function _spawnStage(idx) {
     _monsters = [];
@@ -241,10 +419,13 @@ var Engine = (function () {
     if (!st) return;
     var ids = st.monsters || [];
     for (var i = 0; i < ids.length; i++) {
-      var p = _randPos(200);
+      var p = _randPosClear(200, 110);
       _monsters.push(_spawnMon(ids[i], p.x, p.y, false));
     }
-    if (st.boss) _monsters.push(_spawnMon(st.boss, 1250, 320, true));
+    if (st.boss) {
+      var bp2 = _randPosClear(200, 150);
+      _monsters.push(_spawnMon(st.boss, bp2.x, bp2.y, true));
+    }
   }
 
   /* ---------- API chính ---------- */
@@ -252,14 +433,35 @@ var Engine = (function () {
 
   function enterMap(mapId) {
     _dungeon = null;
+    _secret = null;
     _mapId = mapId;
     _mapDef = _mapDefOf(mapId);
     _npcs = (_mapDef.npcs || []).map(function (id) {
       var d = _npcDef(id);
-      return { npcId: id, def: d, x: d.x || 800, y: d.y || 500 };
+      var hx = d.x || 800, hy = d.y || 500;
+      return { npcId: id, def: d, x: hx, y: hy,
+               hx: hx, hy: hy,             /* vị trí gốc (tâm tuần tra) */
+               vx: 0, vy: 0,              /* vận tốc hiện tại */
+               tx: null, ty: null,        /* điểm đến tuần tra */
+               wt: 1 + Math.random() * 2, /* chờ trước khi bước đi */
+               face: 1,                   /* 1: mặt phải, -1: mặt trái */
+               phase: Math.random() * 6.28, /* pha idle riêng */
+               lean: 0 };                 /* độ nghiêng hiện tại (mượt) */
+    }).filter(function (n) {
+      /* NPC khóa theo cảnh giới (vd Tuần Thú Sư chỉ từ Trúc Cơ) */
+      var ur = n.def.unlock && n.def.unlock.realm;
+      if (ur == null) return true;
+      var S = _S();
+      var pr = (S && S.char && S.char.realm) || 0;
+      return pr >= ur;
     });
     _gates = (_mapDef.gates || []).map(function (g) {
       return { to: g.to, x: g.x, y: g.y };
+    });
+    /* Vật thể trang trí theo tọa độ: {x, y, sprite, w, h, solid, sw, sh} */
+    _objects = (_mapDef.objects || []).map(function (o) {
+      return { x: o.x, y: o.y, sprite: o.sprite, w: o.w || 90, h: o.h || 90,
+               solid: o.solid !== false, sw: o.sw || 46, sh: o.sh || 30 };
     });
     if (_gates.length) { // đặt player ở cổng vào
       player.x = Math.min(WORLD_W - 60, _gates[0].x + 70);
@@ -269,8 +471,11 @@ var Engine = (function () {
     }
     var ps = _getStats();
     player.hp = ps.maxHp; player.mp = ps.maxMp;
+    player.shield = 0; player.maxShield = 0;
     player.target = null; _moveTarget = null;
     _dmgNums = []; _fx = [];
+    _buffs = []; _bossTele = []; _weakUntil = 0;
+    _dashT = 0; _dashCd = 0;
     _spawnMapMonsters();
     _audio(function (A) { A.playMusic('map'); });
   }
@@ -281,13 +486,35 @@ var Engine = (function () {
     _mapId = 'dg:' + def.id;
     _mapDef = { id: _mapId, nameKey: def.nameKey, bg: def.mapBg || null, fb: '#20242e',
                 monsters: [], boss: null, npcs: [], gates: [], stoneDrop: [10, 30] };
-    _npcs = []; _gates = [];
+    _npcs = []; _gates = []; _objects = [];
     player.x = WORLD_W / 2; player.y = WORLD_H - 220;
     player.target = null; _moveTarget = null;
     _dmgNums = []; _fx = [];
     _spawnStage(run.stageIdx);
     _audio(function (A) { A.playMusic('boss'); });
   }
+
+  /* Bí cảnh tranh đoạt: vào map đặc biệt 'secret:<realmId>' với quái/boss của bí cảnh.
+     realmDef: {id, nameKey, bg, fb, monsters[], boss, icon} — cổng ra về Thanh Vân Trấn. */
+  function enterSecretRealm(realmDef) {
+    _dungeon = null;
+    _secret = realmDef ? realmDef.id : null;
+    _mapId = 'secret:' + _secret;
+    _mapDef = { id: _mapId, nameKey: realmDef.nameKey, bg: realmDef.bg || null, fb: realmDef.fb || '#20242e',
+                monsters: realmDef.monsters || [], boss: realmDef.boss || null,
+                npcs: [], gates: [{ to: 0, x: 80, y: 600 }], stoneDrop: [10, 30] };
+    _npcs = []; _objects = [];
+    _gates = [{ to: 0, x: 80, y: 600 }];
+    player.x = WORLD_W / 2; player.y = WORLD_H - 220;
+    player.target = null; _moveTarget = null;
+    _dmgNums = []; _fx = [];
+    _buffs = []; _bossTele = []; _weakUntil = 0;
+    _dashT = 0; _dashCd = 0;
+    _spawnMapMonsters();
+    _audio(function (A) { A.playMusic('boss'); });
+  }
+  function secretRealmId() { return _secret; }
+  function leaveSecretRealm() { _secret = null; }
 
   /* ui.js tăng run.stageIdx rồi gọi; hết ải → onDungeonDone */
   function nextStage() {
@@ -400,7 +627,7 @@ var Engine = (function () {
     delete _keys[k];
   }
   function _onCanvasTap(e) {
-    if (!_canvas || !_running) return;
+    if (!_canvas || !_running || !_tapMove) return;
     var r = _canvas.getBoundingClientRect();
     var cam = _camera();
     _moveTarget = {
@@ -415,19 +642,58 @@ var Engine = (function () {
     if (_keys['arrowleft'] || _keys['a']) dx -= 1;
     if (_keys['arrowright'] || _keys['d']) dx += 1;
     dx += joy.dx; dy += joy.dy;
+    /* Tay cầm (GamepadInput): cộng dồn vector analog, không xung đột joystick ảo/phím */
+    if (typeof GamepadInput !== "undefined" && GamepadInput.moveVec) {
+      try {
+        var pv = GamepadInput.moveVec();
+        if (pv) { dx += pv.dx; dy += pv.dy; }
+      } catch (e) {}
+    }
     var l = Math.hypot(dx, dy);
     if (l > 1) { dx /= l; dy /= l; l = 1; }
     return { dx: dx, dy: dy, active: l > 0.05 };
   }
 
   /* ---------- Update ---------- */
+  function _passiveLvl(id) {
+    var S = _S();
+    try {
+      if (typeof Skills !== 'undefined' && Skills.passiveLevel) return Skills.passiveLevel(S || {}, id);
+    } catch (e) {}
+    return (S && S.passives && S.passives[id]) || 0;
+  }
   function _speed() {
-    return player.speed * (Engine.fly ? 1.6 : 1) * (Engine.run ? 1.3 : 1);
+    var sp = player.speed * (Engine.fly ? 2.5 : 1) * (Engine.run ? 1.3 : 1);
+    sp *= 1 + 0.05 * _passiveLvl('than_phap'); // Thân Pháp: +5% tốc chạy/cấp
+    return sp;
+  }
+  /* Va chạm: vòng tròn player (r=14) vs hộp solid của vật thể */
+  function _hitSolid(x, y) {
+    for (var i = 0; i < _objects.length; i++) {
+      var o = _objects[i];
+      if (!o.solid) continue;
+      var hw = o.sw / 2, hh = o.sh / 2;
+      var cx = Math.max(o.x - hw, Math.min(o.x + hw, x));
+      var cy = Math.max(o.y - hh, Math.min(o.y + hh, y));
+      var dx = x - cx, dy = y - cy;
+      if (dx * dx + dy * dy < 14 * 14) return true;
+    }
+    return false;
   }
   function _moveBy(dx, dy, dt) {
     var sp = _speed();
-    player.x = Math.max(16, Math.min(WORLD_W - 16, player.x + dx * sp * dt));
-    player.y = Math.max(16, Math.min(WORLD_H - 16, player.y + dy * sp * dt));
+    var nx = Math.max(16, Math.min(WORLD_W - 16, player.x + dx * sp * dt));
+    var ny = Math.max(16, Math.min(WORLD_H - 16, player.y + dy * sp * dt));
+    /* Trượt dọc vật thể: thử cả 2 trục, rồi từng trục */
+    if (!_hitSolid(nx, ny)) { player.x = nx; player.y = ny; }
+    else if (!_hitSolid(nx, player.y)) { player.x = nx; }
+    else if (!_hitSolid(player.x, ny)) { player.y = ny; }
+    /* else: kẹt góc — đứng yên */
+    /* Quay mặt theo hướng di chuyển: nội suy góc mượt (joystick/phím/tay cầm/tap-to-move đều qua đây) */
+    if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01) {
+      var _ta = Math.atan2(dy, dx);
+      player.ang = _angLerp(player.ang == null ? _ta : player.ang, _ta, Math.min(1, dt * 10));
+    }
     if (Math.abs(dx) > 0.01) player.dir = dx >= 0 ? 1 : -1;
   }
   function _moveToward(tx, ty, dt) {
@@ -438,28 +704,81 @@ var Engine = (function () {
     return false;
   }
   function _nearestMon() {
-    var best = null, bd = Infinity;
+    var S = _S();
+    var mode = (S && S.autoCfg && S.autoCfg.target) || 'nearest';
+    var best = null, bd = Infinity, bw = Infinity;
     for (var i = 0; i < _monsters.length; i++) {
       var m = _monsters[i];
       if (m.dead) continue;
       var d = Math.hypot(m.x - player.x, m.y - player.y);
-      if (d < bd) { bd = d; best = m; }
+      if (mode === 'boss') {
+        var w = (m.boss ? 0 : 1) * 100000 + d;
+        if (w < bw) { bw = w; best = m; }
+      } else if (mode === 'weakest') {
+        var w2 = (m.hp || 0) + d * 0.01;
+        if (w2 < bw) { bw = w2; best = m; }
+      } else {
+        if (d < bd) { bd = d; best = m; }
+      }
     }
-    return best ? { m: best, d: bd } : null;
+    return best ? { m: best, d: Math.hypot(best.x - player.x, best.y - player.y) } : null;
   }
 
+  /* Bạo kích: cơ bản 5% + buff Kiếm Tông 10% + Thần Thức (sát thương x1.5) */
+  function _rollCrit(dmg) {
+    var ch = 0.05;
+    try {
+      if (typeof Sect !== "undefined" && Sect.sectBuff) ch += Sect.sectBuff(_S() || {}).crit || 0;
+      if (typeof BodyCult !== "undefined") {
+        var _S0 = _S() || {};
+        var _eb = BodyCult.elemBonus(_S0);
+        ch += (BodyCult.thanthucBonus(_S0.thanthucLv || 0).critPct + (_eb.critPct || 0)) / 100;
+      }
+    } catch (e) {}
+    if (Math.random() < ch) return { dmg: Math.round(dmg * 1.5), crit: true };
+    return { dmg: dmg, crit: false };
+  }
+  /* Tầm đánh player: cơ bản ATTACK_RANGE + Thần Thức */
+  function _atkRange() {
+    var r = ATTACK_RANGE;
+    try {
+      if (typeof BodyCult !== "undefined") {
+        var _S1 = _S() || {};
+        var _eb1 = BodyCult.elemBonus(_S1);
+        var _rp = BodyCult.thanthucBonus(_S1.thanthucLv || 0).rangePct + (_eb1.rangePct || 0);
+        r = Math.round(r * (1 + _rp / 100));
+      }
+    } catch (e) {}
+    return r;
+  }
+  /* Thần Thức: kháng hiệu ứng — giảm sát thương từ kỹ năng boss & đòn quái tinh anh */
+  function _applyResist(dmg) {
+    try {
+      if (typeof BodyCult !== "undefined") {
+        var _r = BodyCult.thanthucBonus((_S() && _S().thanthucLv) || 0).resistPct || 0;
+        if (_r > 0) dmg = Math.max(1, Math.round(dmg * (1 - _r / 100)));
+      }
+    } catch (e) {}
+    return dmg;
+  }
   function _playerAttack(mon, ps) {
     _attackCd = 0.8;
+    player.atkT = 0.18; // chồm lên khi đánh
     player.dir = mon.x >= player.x ? 1 : -1;
     _audio(function (A) { A.sfx('slash'); });
     var dmg = 1;
+    var wm = _weakMult();
     if (typeof Combat !== 'undefined') {
       try { dmg = Combat.playerStrike(ps, mon).dmg; }
       catch (e) { dmg = Math.max(1, Math.round(ps.atk - mon.def * 0.6)); mon.hp -= dmg; }
     } else {
       dmg = Math.max(1, Math.round(ps.atk - mon.def * 0.6)); mon.hp -= dmg;
     }
-    _dmgNum(mon.x, mon.y - 26, '-' + dmg, '#ffd54f');
+    if (wm > 1) { dmg = Math.round(dmg * wm); mon.hp -= (dmg - Math.round(dmg / wm)); }
+    var rc = _rollCrit(dmg);
+    if (rc.crit) { mon.hp -= (rc.dmg - dmg); dmg = rc.dmg; }
+    _applyLifesteal(dmg);
+    _dmgNum(mon.x, mon.y - 26, (rc.crit ? '✦' : '') + '-' + dmg, rc.crit ? '#ff5252' : '#ffd54f');
     _skillFx(mon.x, mon.y);
     mon.hitT = 0.15;
     if (mon.hp <= 0 && !mon.dead) _killMon(mon);
@@ -473,10 +792,416 @@ var Engine = (function () {
     if (mon.boss && !_dungeon) _bossRespawnAt = Date.now() / 1000 + BOSS_RESPAWN_S;
     if (Engine.onKill) {
       try {
-        Engine.onKill({ uid: mon.uid, monId: mon.monId, def: mon.def, x: mon.x, y: mon.y, boss: mon.boss });
+        Engine.onKill({ uid: mon.uid, monId: mon.monId, def: mon.def, x: mon.x, y: mon.y, boss: mon.boss, elite: !!mon.elite });
       } catch (e) {}
     }
   }
+
+  /* ---------- Buff / Sơ hở / Giáp ---------- */
+  function _effStats(ps) {
+    var now = Date.now();
+    var out = { atk: ps.atk, def: ps.def, maxHp: ps.maxHp, maxMp: ps.maxMp };
+    for (var i = _buffs.length - 1; i >= 0; i--) {
+      if (now > _buffs[i].until) { _buffs.splice(i, 1); continue; }
+      if (_buffs[i].defMult) out.def = Math.round(out.def * _buffs[i].defMult);
+    }
+    /* Aura bài xích khi vào map trái đạo: -30% công/thủ */
+    try {
+      var _st = _S();
+      if (_st && _st.mapAura && _st.mapAura.mapDao) {
+        out.atk = Math.round(out.atk * 0.7);
+        out.def = Math.round(out.def * 0.7);
+      }
+    } catch (e) {}
+    return out;
+  }
+  /* Hút máu khi gây sát thương (buff Cửu U Ma Tông + bị động Huyết Mạch) */
+  function _applyLifesteal(dealt) {
+    if (!dealt || dealt <= 0) return;
+    try {
+      if (typeof Skills === "undefined" || !Skills.lifestealRate) return;
+      var r = Skills.lifestealRate(_S() || {});
+      if (r > 0 && player.hp > 0) {
+        var ps = _effStats(_getStats());
+        player.hp = Math.min(ps.maxHp, player.hp + dealt * r);
+      }
+    } catch (e) {}
+  }
+  function _weakMult() {
+    return Date.now() < _weakUntil ? 1.25 : 1;
+  }
+  /* Sát thương lên player: giáp (shield) hấp thụ trước */
+  function _hurtPlayer(dmg, ps) {
+    dmg = Math.max(1, Math.round(dmg));
+    if (player.shield > 0) {
+      var ab = Math.min(player.shield, dmg);
+      player.shield -= ab; dmg -= ab;
+    }
+    player.hp -= dmg;
+    _dmgNum(player.x, player.y - 26, '-' + dmg, '#ff6b6b');
+    _audio(function (A) { A.sfx('hit'); });
+    if (player.hp <= 0) _playerDie(ps);
+    return dmg;
+  }
+
+  /* ---------- Hiệu ứng chiêu (giới hạn particle theo mức đồ họa) ---------- */
+  function _fxSlash(x, y, color, big, inten) {
+    var it = inten || 1;
+    _fx.push({ kind: 'slash', x: x, y: y, r: 10 * it, max: (big ? 90 : 60) * it,
+               t: 0.3, maxT: 0.3, color: color || '#ffd6e8' });
+  }
+  function _fxFire(x, y, color, inten) {
+    var it = inten || 1;
+    _fx.push({ kind: 'fire', x: x, y: y, r: 12 * it, max: 80 * it,
+               t: 0.5, maxT: 0.5, color: color || '#ff8a3c' });
+    _burst(x, y, 10, color || '#ff8a3c');
+  }
+  function _fxLightning(x, y, inten) {
+    _fx.push({ kind: 'lightning', x: x, y: y, t: 0.4, maxT: 0.4,
+               color: '#b388ff', inten: inten || 1 });
+  }
+  function _fxCircle(x, y, color, inten) {
+    var it = inten || 1;
+    _fx.push({ kind: 'circle', x: x, y: y, r: 20 * it, max: 70 * it,
+               t: 0.8, maxT: 0.8, color: color || '#7fd4ff' });
+  }
+  function _fxBolt(tx, ty, color, inten) {
+    _fx.push({ kind: 'bolt', x: player.x, y: player.y, tx: tx, ty: ty,
+               t: 0.25, maxT: 0.25, color: color || '#cfe8ff', inten: inten || 1 });
+  }
+  /* Chọn hiệu ứng theo skill */
+  var _SKILL_FX = {
+    kiem_xuyen_van: 'bolt', van_kiem_quy_tong: 'slash', kiem_cuong_ho_the: 'circle',
+    ngu_loi_oanh_dinh: 'lightning', hoa_vu_luu_tinh: 'fire', linh_thuan: 'circle',
+    ba_vuong_quyen: 'slash', chan_dia_chuong: 'fire', kim_cuong_bat_hoai: 'circle',
+    kimdan_kiem_y: 'bolt', kimdan_loi_phap: 'lightning', kimdan_the_quyen: 'slash',
+  };
+  function _playSkillFx(skillId, x, y, color, level) {
+    var k = _SKILL_FX[skillId] || 'slash';
+    var inten = 1 + Math.min(9, (level || 1) - 1) * 0.06; /* cấp càng cao hiệu ứng càng đậm */
+    if (k === 'bolt') _fxBolt(x, y, color, inten);
+    else if (k === 'fire') _fxFire(x, y, color, inten);
+    else if (k === 'lightning') _fxLightning(x, y, inten);
+    else if (k === 'circle') _fxCircle(player.x, player.y, color, inten);
+    else _fxSlash(x, y, color, true, inten);
+  }
+
+  function _calcDmg(atk, def, mult, pierce) {
+    if (pierce > 0 && typeof Combat !== 'undefined' && Combat.pierceDamage) {
+      try { return Combat.pierceDamage(atk, def, mult, pierce); } catch (e) {}
+    }
+    if (typeof Combat !== 'undefined' && Combat.calcDamage) {
+      try { return Combat.calcDamage(atk, def, mult); } catch (e) {}
+    }
+    return Math.max(1, Math.round((atk - def * 0.6 * (1 - (pierce || 0))) * mult));
+  }
+  function _damageMon(mon, dmg) {
+    mon.hp -= dmg;
+    _dmgNum(mon.x, mon.y - 26, '-' + dmg, '#ffd54f');
+    mon.hitT = 0.15;
+    if (mon.hp <= 0 && !mon.dead) _killMon(mon);
+  }
+
+  /* Tung bí thuật: ui.js gọi sau khi Skills.canCast ok (engine tự check lại).
+   * Trả {ok, reason?}. */
+  function useSkill(skillId) {
+    var S = _S();
+    if (!S || typeof Skills === 'undefined') return { ok: false, reason: 'chua_hoc' };
+    var nowMs = Date.now();
+    var chk;
+    try { chk = Skills.canCast(S, skillId, nowMs, player.mp); }
+    catch (e) { return { ok: false, reason: 'chua_hoc' }; }
+    if (!chk.ok) return chk;
+    var cast;
+    try { cast = Skills.castSkill(S, skillId, nowMs); }
+    catch (e) { return { ok: false, reason: 'chua_hoc' }; }
+    player.mp = Math.max(0, player.mp - chk.power.mp);
+    if (S.char) S.char.mp = player.mp;
+    player.atkT = 0.25; // chồm lên khi tung chiêu
+    var ps = _effStats(_getStats());
+    var def = cast.def, wm = _weakMult();
+    _audio(function (A) { A.sfx('slash'); });
+
+    if (def.kind === 'buff') {
+      _buffs.push({ defMult: def.defMult || 1, until: nowMs + (def.dur || 15) * 1000, fx: def.fx });
+      if (skillId === 'kim_cuong_bat_hoai') {
+        player.maxShield = Math.round(ps.maxHp * 0.5);
+        player.shield = Math.min(player.maxShield, player.shield + Math.round(ps.maxHp * 0.3));
+      }
+      _playSkillFx(skillId, player.x, player.y, def.fx, chk.power.level);
+      _dmgNum(player.x, player.y - 30, 'buff', def.fx || '#fff3b0');
+      return { ok: true };
+    }
+    var tgt = (player.target && !player.target.dead) ? player.target
+      : (function () { var nm = _nearestMon(); return nm ? nm.m : null; })();
+    if (!tgt) return { ok: false, reason: 'no_target' };
+    player.dir = tgt.x >= player.x ? 1 : -1;
+    if (def.kind === 'aoe') {
+      var hit = 0;
+      for (var i = 0; i < _monsters.length; i++) {
+        var m = _monsters[i];
+        if (m.dead) continue;
+        if (Math.hypot(m.x - tgt.x, m.y - tgt.y) > 170) continue;
+        var _dmg = _calcDmg(ps.atk, m.def, chk.power.mult * wm, chk.power.pierce);
+        _damageMon(m, _dmg);
+        _applyLifesteal(_dmg);
+        hit++;
+      }
+      _playSkillFx(skillId, tgt.x, tgt.y, def.fx, chk.power.level);
+      if (wm > 1) _dmgNum(tgt.x, tgt.y - 44, 'SƠ HỞ!', '#ffeb3b');
+      return { ok: true, hits: hit };
+    }
+    /* dmg đơn thể (+ lan từ mốc Thiên/Địa) */
+    var baseDmg = _calcDmg(ps.atk, tgt.def, chk.power.mult * wm, chk.power.pierce);
+    var rc2 = _rollCrit(baseDmg);
+    _damageMon(tgt, rc2.dmg);
+    _applyLifesteal(rc2.dmg);
+    if (rc2.crit) _dmgNum(tgt.x, tgt.y - 44, '✦ BẠO KÍCH', '#ff5252');
+    if (chk.power.splash > 0) {
+      for (var si = 0; si < _monsters.length; si++) {
+        var sm = _monsters[si];
+        if (sm.dead || sm === tgt) continue;
+        if (Math.hypot(sm.x - tgt.x, sm.y - tgt.y) > 130) continue;
+        _damageMon(sm, Math.max(1, Math.round(baseDmg * chk.power.splash)));
+      }
+      _fx.push({ kind: 'ring', x: tgt.x, y: tgt.y, r: 10, max: 130,
+                 t: 0.35, maxT: 0.35, color: def.fx });
+    }
+    _playSkillFx(skillId, tgt.x, tgt.y, def.fx, chk.power.level);
+    if (wm > 1) _dmgNum(tgt.x, tgt.y - 44, 'SƠ HỞ!', '#ffeb3b');
+    return { ok: true, hits: 1 };
+  }
+
+  /* Đánh thường bằng nút (tìm mục tiêu gần nhất nếu chưa có) */
+  function manualAttack() {
+    var ps = _effStats(_getStats());
+    var tgt = (player.target && !player.target.dead) ? player.target
+      : (function () { var nm = _nearestMon(); return nm ? nm.m : null; })();
+    if (!tgt) return false;
+    player.target = tgt;
+    var d = Math.hypot(tgt.x - player.x, tgt.y - player.y);
+    if (d > _atkRange() * 1.4) return false; // quá xa
+    if (_attackCd > 0) return false;
+    _playerAttack(tgt, ps);
+    return true;
+  }
+
+  /* Lướt: tốn 25 Thần Thức, hồi 3s */
+  function dash() {
+    if (_dashCd > 0) return false;
+    if (player.focus < 25) return false;
+    player.focus -= 25;
+    var iv = _inputVec();
+    var dx = iv.dx, dy = iv.dy;
+    if (!iv.active) {
+      var tgt = (player.target && !player.target.dead) ? player.target : null;
+      if (tgt) {
+        var d = Math.hypot(tgt.x - player.x, tgt.y - player.y) || 1;
+        dx = (tgt.x - player.x) / d; dy = (tgt.y - player.y) / d;
+      } else { dx = player.dir >= 0 ? 1 : -1; dy = 0; }
+    }
+    _dashDx = dx; _dashDy = dy;
+    _dashT = 0.18; _dashCd = 3;
+    _burst(player.x, player.y, 6, '#bfe8ff');
+    _audio(function (A) { A.sfx('slash'); });
+    return true;
+  }
+
+  /* Auto tự tung skill khi hồi chiêu (giống tutien2d) */
+  function _autoSkills(ps) {
+    var S = _S();
+    if (!S || typeof Skills === 'undefined') return;
+    if (S.autoCfg && S.autoCfg.autoSkill === false) return;
+    var tgt = (player.target && !player.target.dead) ? player.target : null;
+    if (!tgt) return;
+    var ids = S.skills || [];
+    for (var i = 0; i < ids.length; i++) {
+      var d = null;
+      try { d = Skills.skillDef(ids[i]); } catch (e) { continue; }
+      if (!d || d.kind === 'buff') continue; // buff: chỉ tung tay
+      var chk = null;
+      try { chk = Skills.canCast(S, ids[i], Date.now(), player.mp); } catch (e) { continue; }
+      if (chk && chk.ok) { useSkill(ids[i]); break; } // mỗi tick 1 chiêu
+    }
+  }
+
+  /* ---------- Linh thú: đi theo, cùng đánh, skill AoE ---------- */
+  function _petActive() {
+    var S = _S();
+    if (!S || !S.pet) return false;
+    try {
+      if (typeof Pet !== 'undefined' && Pet.petActive) return Pet.petActive(S);
+    } catch (e) {}
+    return true;
+  }
+  function _updatePet(dt) {
+    var S = _S();
+    if (!_petActive() || !S.pet) return;
+    /* đi theo chủ — vị trí theo kiểu di chuyển của loài (fly/run/crawl) */
+    var mv = 'run';
+    try { if (typeof Pet !== 'undefined' && Pet.petMovement) mv = Pet.petMovement(S.pet); } catch (e) {}
+    var tx, ty;
+    if (mv === 'fly') { tx = player.x + 46; ty = player.y - 40; }       /* bay lượn trên đầu */
+    else if (mv === 'crawl') { tx = player.x - 70; ty = player.y + 62; } /* bò/trườn hơi sau */
+    else { tx = player.x - 52; ty = player.y + 44; }                     /* chạy ngang vai */
+    var dx = tx - _pet.x, dy = ty - _pet.y;
+    var d = Math.hypot(dx, dy);
+    if (d > 200) { _pet.x = tx; _pet.y = ty; } /* quá xa → dịch chuyển */
+    else if (d > 8) {
+      var sp = _speed() * 1.15; /* theo kịp mọi trạng thái: đi bộ/chạy/ngự kiếm */
+      _pet.x += dx / d * sp * dt;
+      _pet.y += dy / d * sp * dt;
+      /* linh thú quay mặt theo hướng di chuyển (mượt) */
+      var _pa = Math.atan2(dy, dx);
+      _pet.ang = _angLerp(_pet.ang == null ? _pa : _pet.ang, _pa, Math.min(1, dt * 8));
+    }
+    var tgt = (player.target && !player.target.dead) ? player.target : null;
+    _pet.atkCd -= dt; _pet.skillCd -= dt;
+    var pst = null;
+    try {
+      if (typeof Pet !== 'undefined' && Pet.petStats) pst = Pet.petStats(S.pet, S);
+    } catch (e) {}
+    if (!pst) return;
+    if (tgt && Math.hypot(tgt.x - _pet.x, tgt.y - _pet.y) < 260) {
+      if (_pet.atkCd <= 0) {
+        _pet.atkCd = 2;
+        _damageMon(tgt, Math.max(1, Math.round(pst.atk * (0.9 + Math.random() * 0.2))));
+        _burst(tgt.x, tgt.y, 3, '#ffd54f');
+      }
+      if (_pet.skillCd <= 0) {
+        _pet.skillCd = 12;
+        /* skill signature riêng của loài + hiệu ứng đặc trưng */
+        var psp = null;
+        try { if (typeof Pet !== 'undefined' && Pet.petSpeciesOf) psp = Pet.petSpeciesOf(S.pet); } catch (e) {}
+        var skName = (psp && psp.skill) ? (S.lang === 'en' ? psp.skill.en : psp.skill.vi) : 'pet!';
+        var skColor = (psp && psp.skill && psp.skill.effect_mau) || '#ffd54f';
+        for (var i = 0; i < _monsters.length; i++) {
+          var m = _monsters[i];
+          if (m.dead) continue;
+          if (Math.hypot(m.x - _pet.x, m.y - _pet.y) > 150) continue;
+          _damageMon(m, pst.skillDmg);
+        }
+        _fx.push({ kind: 'ring', x: _pet.x, y: _pet.y, r: 10, max: 150,
+                   t: 0.4, maxT: 0.4, color: skColor });
+        _dmgNum(_pet.x, _pet.y - 30, skName, skColor);
+      }
+    }
+  }
+  function _drawPet() {
+    var S = _S();
+    if (!_petActive() || !S.pet) return;
+    var sp = null, mv = 'run', img = PET_SPRITE;
+    try {
+      if (typeof Pet !== 'undefined' && Pet.petSpeciesOf) {
+        sp = Pet.petSpeciesOf(S.pet);
+        if (sp) { mv = sp.movement || 'run'; img = sp.img || img; }
+      }
+    } catch (e) {}
+    var tierColor = '#e8e8e8';
+    try {
+      if (typeof Pet !== 'undefined' && Pet.petTier) tierColor = Pet.petTier(S.pet.tier).color;
+    } catch (e2) {}
+    /* animation theo kiểu di chuyển của loài */
+    var now = Date.now() / 1000;
+    var bx = _pet.x, by = _pet.y, lift = 0, size = 36, noTilt = false;
+    if (mv === 'fly') {
+      lift = 26; /* bay lượn: vỗ cánh nhấp nhô trên không */
+      by = _pet.y - lift + Math.sin(now * 3.2) * 7;
+      size = 40;
+    } else if (mv === 'crawl') {
+      bx = _pet.x + Math.sin(now * 2.1) * 8; /* bò/trườn: uốn mình */
+      by = _pet.y + Math.abs(Math.sin(now * 2.1)) * 3;
+      size = 38; noTilt = true;
+    } else {
+      var pd = Math.abs(_pet.x - (_pet.__px == null ? _pet.x : _pet.__px));
+      if (pd > 0.4) by = _pet.y - Math.abs(Math.sin(now * 9)) * 5; /* chạy: nhấp nhô chân */
+    }
+    /* hào quang theo phẩm */
+    _ctx.globalAlpha = 0.5;
+    _ctx.strokeStyle = tierColor;
+    _ctx.lineWidth = 3;
+    _ctx.beginPath(); _ctx.arc(bx, by, size * 0.62, 0, Math.PI * 2); _ctx.stroke();
+    _ctx.globalAlpha = 1;
+    /* sprite 4 hướng theo góc quay mặt (up/down/left/right, trái lật từ right) */
+    var pface = _face4(_pet, _pet.ang == null ? Math.PI / 2 : _pet.ang);
+    var pimg = _petDirSrc(img, pface);
+    _drawCreature(_pet, bx, by, size, size, pimg, '#c9a227',
+      { lift: lift, shadowY: _pet.y + 14, noTilt: noTilt, faceAng: _pet.ang });
+  }
+  /* Tự uống thuốc theo cài đặt */
+  function _autoPotion(ps) {
+    var S = _S();
+    if (!S || !S.autoCfg || S.autoCfg.autoPotion === false) return;
+    if (!S.bag || !S.bag.length) return;
+    var hpPct = player.hp / ps.maxHp * 100;
+    var mpPct = player.mp / ps.maxMp * 100;
+    var needHp = hpPct < (S.autoCfg.potionAt || 30);
+    var needMp = mpPct < (S.autoCfg.mpPotionAt || 30);
+    if (!needHp && !needMp) return;
+    var best = null, bi = -1, wantHp = needHp && !needMp ? true : needHp;
+    for (var i = 0; i < S.bag.length; i++) {
+      var it = S.bag[i];
+      if (it.locked || !it.qty) continue;
+      var d = (typeof ITEMS !== 'undefined' && ITEMS[it.id]) || null;
+      if (!d || d.kind !== 'pill') continue;
+      if (wantHp && d.healHp && (!best || d.healHp > (best.healHp || 0))) { best = d; bi = i; }
+      else if (!wantHp && d.healMp && (!best || d.healMp > (best.healMp || 0))) { best = d; bi = i; }
+    }
+    if (best && bi >= 0) {
+      S.bag[bi].qty--;
+      if (S.bag[bi].qty <= 0) S.bag.splice(bi, 1);
+      /* Buff Dược Vương Tông: +30% hiệu quả đan dược */
+      var _pm = 1;
+      try {
+        if (typeof Sect !== "undefined" && Sect.sectBuff) _pm = Sect.sectBuff(S).pillMult || 1;
+      } catch (e) {}
+      if (best.healHp) player.hp = Math.min(ps.maxHp, player.hp + ps.maxHp * best.healHp * _pm);
+      if (best.healMp) player.mp = Math.min(ps.maxMp, player.mp + ps.maxMp * best.healMp * _pm);
+      _dmgNum(player.x, player.y - 40, '+', '#7fd4ff');
+    }
+  }
+
+  /* ---------- Boss: vòng đỏ báo AoE + cửa sổ SƠ HỞ ---------- */
+  function _bossSkill(m, ps) {
+    if (typeof Combat !== 'undefined' && Combat.bossSkill) {
+      try { Combat.bossSkill(m.monId); } catch (e) {}
+    }
+    /* Vòng tròn đỏ báo trước: 1.2s sau mới nổ tại vị trí player lúc đó */
+    _bossTele.push({
+      x: player.x, y: player.y, r: 130,
+      warnT: 1.2, hitT: 1.2, dmg: Math.round(m.atk * 1.5),
+    });
+    _audio(function (A) { A.sfx('fail'); });
+  }
+  function _updateTelegraphs(dt, ps) {
+    for (var i = _bossTele.length - 1; i >= 0; i--) {
+      var tp = _bossTele[i];
+      tp.warnT -= dt;
+      if (tp.warnT <= 0) {
+        /* Nổ: đứng trong vòng → ăn đòn */
+        var d = Math.hypot(player.x - tp.x, player.y - tp.y);
+        _fx.push({ kind: 'fire', x: tp.x, y: tp.y, r: 20, max: tp.r,
+                   t: 0.4, maxT: 0.4, color: '#ff3b30' });
+        if (d < tp.r) {
+          var dmg = Math.max(1, Math.round(tp.dmg - ps.def * 0.6));
+          _hurtPlayer(dmg, ps);
+        }
+        _bossTele.splice(i, 1);
+        /* Sau khi boss tung AoE → lộ sơ hở 3s, sát thương +25% */
+        _weakUntil = Date.now() + 3000;
+      }
+    }
+  }
+
+  /* Thông tin boss đang đánh (cho thanh HP boss trên UI) */
+  function getBossInfo() {
+    var t = (player.target && !player.target.dead) ? player.target : null;
+    if (!t || !t.boss) return null;
+    var nm = t.def && t.def.nameKey ? _t(t.def.nameKey) : 'BOSS';
+    return { name: nm, hp: Math.max(0, Math.round(t.hp)), maxHp: t.maxHp,
+             weak: Date.now() < _weakUntil };
+  }
+  function isWeak() { return Date.now() < _weakUntil; }
 
   function _bossSkill(m, ps) {
     if (typeof Combat !== 'undefined' && Combat.bossSkill) {
@@ -485,7 +1210,7 @@ var Engine = (function () {
     _fx.push({ x: m.x, y: m.y, r: 20, max: 150, t: 0.5, maxT: 0.5, color: '#ff3b30' });
     var d = Math.hypot(player.x - m.x, player.y - m.y);
     if (d < 150) {
-      var dmg = Math.max(1, Math.round(m.atk * 1.5 - ps.def * 0.6));
+      var dmg = _applyResist(Math.max(1, Math.round(m.atk * 1.5 - ps.def * 0.6))); /* kháng hiệu ứng */
       player.hp -= dmg;
       _dmgNum(player.x, player.y - 26, '-' + dmg, '#ff6b6b');
       _audio(function (A) { A.sfx('hit'); });
@@ -512,27 +1237,34 @@ var Engine = (function () {
         var a = Math.atan2(player.y - m.y, player.x - m.x);
         m.x += Math.cos(a) * spd * dt;
         m.y += Math.sin(a) * spd * dt;
+        /* quái/boss quay mặt theo hướng di chuyển — boss xoay chậm hơn (nặng nề) */
+        m.ang = _angLerp(m.ang == null ? a : m.ang, a, Math.min(1, dt * (m.boss ? 4 : 6)));
       } else if (d >= MONSTER_AGGRO) { // đi lang thang
         m.wanderT -= dt;
         if (m.wanderT <= 0) { m.wanderA = Math.random() * Math.PI * 2; m.wanderT = 2 + Math.random() * 3; }
         m.x += Math.cos(m.wanderA) * spd * 0.3 * dt;
         m.y += Math.sin(m.wanderA) * spd * 0.3 * dt;
+        m.ang = _angLerp(m.ang == null ? m.wanderA : m.ang, m.wanderA, Math.min(1, dt * 6));
       }
       m.x = Math.max(20, Math.min(WORLD_W - 20, m.x));
       m.y = Math.max(20, Math.min(WORLD_H - 20, m.y));
       if (d <= 52 && m.atkCd <= 0) {
         m.atkCd = m.boss ? 1.6 : 1.3;
-        var dmg = 1;
-        if (typeof Combat !== 'undefined') {
-          try { dmg = Combat.monsterStrike(m, ps).dmg; }
-          catch (e) { dmg = Math.max(1, Math.round(m.atk - ps.def * 0.6)); }
+        /* Đang Ngự Kiếm bay: quái thường đánh đất không chạm tới;
+         * chỉ boss và quái bay (bay:true) đánh được */
+        if (Engine.fly && !m.boss && !(m.def && m.def.bay)) {
+          /* hụt — bay qua đầu quái */
         } else {
-          dmg = Math.max(1, Math.round(m.atk - ps.def * 0.6));
+          var dmg = 1;
+          if (typeof Combat !== 'undefined') {
+            try { dmg = Combat.monsterStrike(m, ps).dmg; }
+            catch (e) { dmg = Math.max(1, Math.round(m.atk - ps.def * 0.6)); }
+          } else {
+            dmg = Math.max(1, Math.round(m.atk - ps.def * 0.6));
+          }
+          if (m.elite) dmg = _applyResist(dmg); /* kháng hiệu ứng Thần Thức */
+          _hurtPlayer(dmg, ps);
         }
-        player.hp -= dmg;
-        _dmgNum(player.x, player.y - 26, '-' + dmg, '#ff6b6b');
-        _audio(function (A) { A.sfx('hit'); });
-        if (player.hp <= 0) _playerDie(ps);
       }
       if (m.boss) {
         m.skillCd -= dt;
@@ -564,11 +1296,112 @@ var Engine = (function () {
     }
   }
 
+  /* ---------- NPC chuyển động 3D ----------
+   * - NPC có def.wander (bán kính px) sẽ đi tuần quanh vị trí gốc:
+   *   tăng tốc/giảm tốc mượt (arrive behavior), không giật cục.
+   * - NPC đứng yên: idle bob nhẹ, quay mặt về phía người chơi khi lại gần.
+   * - Nghiêng người (lean) theo vận tốc x, bóng đổ lệch ngược hướng nghiêng.
+   * - NPC không chặn đường: người chơi đi xuyên được (không có collision).
+   * --------------------------------------------------------------- */
+  function _updateNpcs(dt) {
+    for (var i = 0; i < _npcs.length; i++) {
+      var n = _npcs[i], R = n.def.wander || 0;
+      var pdx = player.x - n.x, pdy = player.y - n.y;
+      var pd = Math.hypot(pdx, pdy);
+      /* chào khi người chơi lại gần (mỗi NPC 10s một lần) */
+      n.greetCd = Math.max(0, (n.greetCd || 0) - dt);
+      if (n.greetT > 0) n.greetT -= dt;
+      if (R) {
+        /* --- đi tuần --- */
+        if (n.tx == null) {
+          if (n.wt > 0) { n.wt -= dt; }
+          else {
+            var a = Math.random() * Math.PI * 2, r = 25 + Math.random() * R;
+            n.tx = Math.max(60, Math.min(WORLD_W - 60, n.hx + Math.cos(a) * r));
+            n.ty = Math.max(60, Math.min(WORLD_H - 60, n.hy + Math.sin(a) * r));
+          }
+          /* đứng chờ: giảm tốc mượt về 0 */
+          n.vx += (0 - n.vx) * Math.min(1, dt * 6);
+          n.vy += (0 - n.vy) * Math.min(1, dt * 6);
+        } else {
+          var dx = n.tx - n.x, dy = n.ty - n.y, d = Math.hypot(dx, dy);
+          if (d < 10) { n.tx = null; n.ty = null; n.wt = 1 + Math.random() * 2.5; }
+          else {
+            /* arrive: muốn đi chậm lại khi gần đích */
+            var want = 58 * Math.min(1, d / 70);
+            var wvx = dx / d * want, wvy = dy / d * want;
+            var k = Math.min(1, dt * 5);
+            n.vx += (wvx - n.vx) * k;
+            n.vy += (wvy - n.vy) * k;
+          }
+        }
+        if (Math.abs(n.vx) > 5) n.face = (n.vx >= 0) ? 1 : -1;
+        else if (pd < 170 && pd > 1) {
+          n.face = (pdx >= 0) ? 1 : -1;
+          if (!n.greetT && n.greetCd <= 0) { n.greetT = 0.9; n.greetCd = 10; }
+        }
+      } else {
+        /* --- đứng yên --- */
+        n.vx += (0 - n.vx) * Math.min(1, dt * 8);
+        n.vy += (0 - n.vy) * Math.min(1, dt * 8);
+        if (pd < 170 && pd > 1) {
+          n.face = (pdx >= 0) ? 1 : -1;
+          if (!n.greetT && n.greetCd <= 0) { n.greetT = 0.9; n.greetCd = 10; }
+        }
+      }
+      n.x = Math.max(40, Math.min(WORLD_W - 40, n.x + n.vx * dt));
+      n.y = Math.max(40, Math.min(WORLD_H - 40, n.y + n.vy * dt));
+      /* lean mượt theo vận tốc x */
+      var targetLean = Math.max(-0.16, Math.min(0.16, n.vx * 0.0022));
+      n.lean += (targetLean - n.lean) * Math.min(1, dt * 6);
+      n.workT = (n.workT || 0) + dt; /* đồng hồ animation nghề nghiệp */
+    }
+  }
+
   function _update(dt) {
-    var ps = _getStats();
+    _tickT += dt;
+    var ps = _effStats(_getStats());
     if (player.hp > ps.maxHp) player.hp = ps.maxHp;
-    if (player.mp < ps.maxMp) player.mp = Math.min(ps.maxMp, player.mp + 3 * dt);
+    /* hồi MP: cơ bản 3/s + Linh Mạch 2% maxMp/5s mỗi cấp (buff Thiên Pháp Tông +20%) */
+    var _sb = null;
+    try {
+      if (typeof Sect !== "undefined" && Sect.sectBuff) _sb = Sect.sectBuff(_S() || {});
+    } catch (e) {}
+    var mpRegen = (3 + ps.maxMp * 0.02 / 5 * _passiveLvl('linh_mach')) * (_sb ? _sb.mpRegenMult : 1);
+    if (player.mp < ps.maxMp) player.mp = Math.min(ps.maxMp, player.mp + mpRegen * dt);
+    /* Hồi Xuân: hồi 1% maxHp/5s mỗi cấp (buff Dược Vương Tông +10%) */
+    var hxLv = _passiveLvl('hoi_xuan');
+    if (hxLv > 0 && player.hp < ps.maxHp)
+      player.hp = Math.min(ps.maxHp, player.hp + ps.maxHp * 0.01 / 5 * hxLv * dt * (_sb ? _sb.hpRegenMult : 1));
+    /* hồi Thần Thức 12/s (lướt tốn 25) */
+    if (player.focus < 100) player.focus = Math.min(100, player.focus + 12 * dt);
+    /* khiên tạm thời từ đan dược hết hạn */
+    if (player.shieldT > 0) {
+      player.shieldT -= dt;
+      if (player.shieldT <= 0) { player.shield = 0; player.maxShield = 0; }
+    }
+    /* Ngự Kiếm (Trúc Cơ): tốn 1 linh lực/giây, hết linh lực tự hạ xuống */
+    if (Engine.fly) {
+      player.mp -= 1 * dt;
+      if (player.mp <= 0) {
+        player.mp = 0;
+        setFly(false);
+        _dmgNum(player.x, player.y - 40, 'Hết linh lực', '#7fd4ff');
+      }
+    }
     _attackCd -= dt;
+    if (player.atkT > 0) player.atkT -= dt;
+    if (_dashCd > 0) _dashCd -= dt;
+
+    /* Lướt */
+    if (_dashT > 0) {
+      _dashT -= dt;
+      var dsp = 900;
+      player.x = Math.max(16, Math.min(WORLD_W - 16, player.x + _dashDx * dsp * dt));
+      player.y = Math.max(16, Math.min(WORLD_H - 16, player.y + _dashDy * dsp * dt));
+      var _da = Math.atan2(_dashDy, _dashDx); /* lướt cũng quay mặt theo hướng */
+      player.ang = _angLerp(player.ang == null ? _da : player.ang, _da, Math.min(1, dt * 14));
+    }
 
     var iv = _inputVec();
     var manual = iv.active || !!_moveTarget;
@@ -581,15 +1414,16 @@ var Engine = (function () {
       player.target = tgt;
       if (tgt) {
         var d = Math.hypot(tgt.x - player.x, tgt.y - player.y);
-        if (!manual && d > ATTACK_RANGE * 0.8) {
+        if (!manual && d > _atkRange() * 0.8 && _dashT <= 0) {
           _moveToward(tgt.x, tgt.y, dt);
-        } else if (_attackCd <= 0 && d <= ATTACK_RANGE) {
+        } else if (_attackCd <= 0 && d <= _atkRange()) {
           _playerAttack(tgt, ps);
         }
+        _autoSkills(ps); // tự tung bí thuật khi hồi chiêu
       }
     } else if (tgt && _attackCd <= 0) {
       var d2 = Math.hypot(tgt.x - player.x, tgt.y - player.y);
-      if (d2 <= ATTACK_RANGE) _playerAttack(tgt, ps);
+      if (d2 <= _atkRange()) _playerAttack(tgt, ps);
     }
 
     if (iv.active) { _moveTarget = null; _moveBy(iv.dx, iv.dy, dt); }
@@ -608,7 +1442,11 @@ var Engine = (function () {
 
     _updateMonsters(dt, ps);
     _updateRespawn(dt);
+    _updateNpcs(dt);
+    _updateTelegraphs(dt, ps);
     _updateFx(dt);
+    _updatePet(dt);
+    _autoPotion(ps);
 
     // Bí cảnh: hết quái/boss của ải → onStageClear
     if (_dungeon && !_stageClearFired) {
@@ -654,7 +1492,12 @@ var Engine = (function () {
     for (i = _fx.length - 1; i >= 0; i--) {
       var f = _fx[i];
       f.t -= dt;
-      if (f.dot) { f.x += (f.vx || 0) * dt; f.y += (f.vy || 0) * dt; }
+      if (f.kind === 'bolt') {
+        var p = 1 - Math.max(0, f.t / f.maxT); // 0→1
+        f.x += (f.tx - f.x) * Math.min(1, dt * 14);
+        f.y += (f.ty - f.y) * Math.min(1, dt * 14);
+        if (p > 0.92) { f.t = 0; }
+      } else if (f.dot) { f.x += (f.vx || 0) * dt; f.y += (f.vy || 0) * dt; }
       else { f.r += (f.max - 8) * dt / Math.max(0.01, f.maxT); }
       if (f.t <= 0) _fx.splice(i, 1);
     }
@@ -690,9 +1533,18 @@ var Engine = (function () {
   }
 
   function _drawMonster(m) {
-    var size = m.boss ? 64 : 44;
+    var elite = !!m.elite;
+    var size = m.boss ? 64 : (elite ? 57 : 44); /* tinh anh to hơn 30% */
     var label = _t(m.def.nameKey || m.monId);
-    _drawSprite(m.x, m.y, size, size, m.def.img, m.def.fb || '#888', label);
+    if (elite) { /* hào quang vàng nhấp nháy */
+      _ctx.save();
+      _ctx.globalAlpha = 0.45 + 0.2 * Math.sin(Date.now() / 300);
+      _ctx.strokeStyle = "#ffd54f"; _ctx.lineWidth = 3;
+      _ctx.beginPath(); _ctx.arc(m.x, m.y, size / 2 + 7, 0, Math.PI * 2); _ctx.stroke();
+      _ctx.restore();
+    }
+    /* quái/boss quay mặt theo hướng di chuyển: lật ngang khi đi sang trái, thân đứng thẳng */
+    _drawCreature(m, m.x, m.y, size, size, m.def.img, m.def.fb || '#888', { faceAng: m.ang });
     if (m.hitT > 0) { // chớp trắng khi trúng đòn
       _ctx.globalAlpha = 0.45;
       _ctx.fillStyle = '#fff';
@@ -706,23 +1558,99 @@ var Engine = (function () {
       _ctx.textAlign = 'center';
       _ctx.fillText(label, m.x, m.y - size / 2 - 16);
     }
+    if (elite) { // tên vàng ★ Tinh Anh
+      _ctx.fillStyle = '#ffd54f';
+      _ctx.font = 'bold 11px sans-serif';
+      _ctx.textAlign = 'center';
+      _ctx.fillText(_t('bc_elite') + ' ' + label, m.x, m.y - size / 2 - 16);
+    }
   }
 
+  function _playerSprite() {
+    var S = _S();
+    var cls = (S && S.char && S.char.sect) || 'kiem';
+    return SPRITE_PLAYER[cls] || SPRITE_PLAYER.kiem;
+  }
+  /* Pháp bảo ngự kiếm theo hệ phái: kiếm (Kiếm) / phất trần (Pháp) / đài sen (Thể) */
+  function _drawMount(x, y, dir) {
+    var S = _S();
+    var cls = (S && S.char && S.char.sect) || 'kiem';
+    _ctx.save();
+    _ctx.translate(x, y);
+    if (cls === 'phap') {
+      /* Phất trần: cán + chùm lông trắng */
+      _ctx.strokeStyle = '#5a3d2b'; _ctx.lineWidth = 4;
+      _ctx.beginPath(); _ctx.moveTo(-22 * dir, -6); _ctx.lineTo(10 * dir, 2); _ctx.stroke();
+      _ctx.strokeStyle = 'rgba(240,240,245,0.9)'; _ctx.lineWidth = 3;
+      for (var i = -2; i <= 2; i++) {
+        _ctx.beginPath(); _ctx.moveTo(10 * dir, 2);
+        _ctx.quadraticCurveTo(24 * dir, 2 + i * 5, 34 * dir, 6 + i * 7); _ctx.stroke();
+      }
+    } else if (cls === 'the') {
+      /* Đài sen: cánh hoa hồng xếp tròn */
+      for (var p = 0; p < 8; p++) {
+        var a = (p / 8) * Math.PI * 2;
+        _ctx.fillStyle = p % 2 ? '#e88ca0' : '#f4b8c6';
+        _ctx.beginPath();
+        _ctx.ellipse(Math.cos(a) * 16, Math.sin(a) * 6, 10, 5, a, 0, Math.PI * 2);
+        _ctx.fill();
+      }
+      _ctx.fillStyle = '#f7d774';
+      _ctx.beginPath(); _ctx.ellipse(0, 0, 8, 4, 0, 0, Math.PI * 2); _ctx.fill();
+    } else {
+      /* Kiếm: lưỡi kiếm dài + chuôi, phong cách thủy mặc */
+      _ctx.strokeStyle = '#9fb6c9'; _ctx.lineWidth = 5; _ctx.lineCap = 'round';
+      _ctx.beginPath(); _ctx.moveTo(-30 * dir, 0); _ctx.lineTo(26 * dir, 0); _ctx.stroke();
+      _ctx.strokeStyle = '#3a4a5d'; _ctx.lineWidth = 2;
+      _ctx.beginPath(); _ctx.moveTo(-30 * dir, 0); _ctx.lineTo(26 * dir, 0); _ctx.stroke();
+      _ctx.fillStyle = '#6b4a2f';
+      _ctx.fillRect(-34 * dir - 3, -6, 6, 12);
+      _ctx.fillStyle = '#c0392b';
+      _ctx.beginPath(); _ctx.arc(-34 * dir, 0, 3, 0, Math.PI * 2); _ctx.fill();
+    }
+    /* vệt sáng dưới pháp bảo */
+    _ctx.globalAlpha = 0.35;
+    _ctx.fillStyle = '#9fe8ff';
+    _ctx.beginPath(); _ctx.ellipse(-26 * dir, 6, 18, 4, 0, 0, Math.PI * 2); _ctx.fill();
+    _ctx.globalAlpha = 0.18;
+    _ctx.beginPath(); _ctx.ellipse(-44 * dir, 8, 14, 3, 0, 0, Math.PI * 2); _ctx.fill();
+    _ctx.restore();
+  }
   function _drawPlayer() {
     var lift = Engine.fly ? -10 : 0;
-    if (Engine.fly) { // bóng đổ khi bay
-      _ctx.fillStyle = 'rgba(0,0,0,0.25)';
-      _ctx.beginPath();
-      _ctx.ellipse(player.x, player.y + 20, 14, 5, 0, 0, Math.PI * 2);
-      _ctx.fill();
+    /* chồm lên khi đánh/tung chiêu */
+    var lunge = 0;
+    if (player.atkT > 0) lunge = Math.sin((player.atkT / 0.25) * Math.PI) * 10 * player.dir;
+    if (Engine.fly) { // pháp bảo ngự kiếm dưới chân
+      _drawMount(player.x + lunge, player.y + lift + 16, player.dir);
     }
-    _drawSprite(player.x, player.y + lift, 44, 44, SPRITE_PLAYER, '#2fa3a0', null);
+    /* vòng giáp (shield) */
+    if (player.shield > 0) {
+      _ctx.globalAlpha = 0.6;
+      _ctx.strokeStyle = '#7fd4ff';
+      _ctx.lineWidth = 3;
+      _ctx.beginPath(); _ctx.arc(player.x + lunge, player.y + lift, 30, 0, Math.PI * 2); _ctx.stroke();
+      _ctx.globalAlpha = 1;
+    }
+    /* vòng buff */
+    var now = Date.now();
+    for (var bi = 0; bi < _buffs.length; bi++) {
+      if (now < _buffs[bi].until && _buffs[bi].fx) {
+        _ctx.globalAlpha = 0.35;
+        _ctx.strokeStyle = _buffs[bi].fx;
+        _ctx.lineWidth = 2;
+        _ctx.beginPath(); _ctx.arc(player.x + lunge, player.y + lift, 26 + bi * 5, 0, Math.PI * 2); _ctx.stroke();
+        _ctx.globalAlpha = 1;
+      }
+    }
+    _drawCreature(player, player.x + lunge, player.y + lift, 44, 44, _playerSprite(), '#2fa3a0',
+      { lift: Engine.fly ? 26 : 0, shadowY: player.y + 18, faceAng: player.ang });
     var ps = _getStats();
     _drawHpBar(player.x, player.y + lift - 32, 40, player.hp / ps.maxHp, false);
   }
 
   function _drawOther(o) {
-    _drawSprite(o.x, o.y, 40, 40, SPRITE_PLAYER, '#7e9bb5', null);
+    _drawCreature(o, o.x, o.y, 40, 40, SPRITE_PLAYER, '#7e9bb5', {});
     if (o.name) {
       _ctx.fillStyle = '#fff';
       _ctx.font = '10px sans-serif';
@@ -731,14 +1659,98 @@ var Engine = (function () {
     }
   }
 
+  /* ---------- NPC sinh động như thật ----------
+   * - idle: thở (scaleY phồng/xẹp), đầu khẽ quay (rotate), nhấp nhô
+   * - lại gần: quay mặt + cúi chào (bow)
+   * - đang thoại (Engine.talkNpcId): bong bóng 💬 + gật gù
+   * - theo nghề: thợ rèn đập búa (tia lửa), tiểu nhị lau bàn (khăn) */
   function _drawNpc(n) {
-    _drawSprite(n.x, n.y, 44, 44, n.def.img, '#6b4a2f', _t(n.def.nameKey || n.npcId));
-    // dấu "!" trên đầu NPC nhiệm vụ
-    if (n.def.kind === 'quest') {
+    var ph = n.phase || 0;
+    var spd = Math.hypot(n.vx || 0, n.vy || 0);
+    var moving = spd > 6;
+    /* thở: phồng/xẹp nhẹ 2.2%/nhịp */
+    var breathe = 1 + 0.022 * Math.sin(_tickT * 2.1 + ph);
+    /* đầu khẽ quay: dao động xoay nhẹ */
+    var swayRot = 0.035 * Math.sin(_tickT * 1.2 + ph * 1.7);
+    /* nhún: đi thì theo bước chân, đứng thì idle */
+    var bob = moving ? Math.abs(Math.sin(_tickT * 9 + ph)) * 3
+                     : Math.sin(_tickT * 2 + ph) * 2;
+    var lean = n.lean || 0, squash = 1;
+    /* cúi chào khi người chơi lại gần */
+    if (n.greetT > 0) {
+      var gp = 1 - n.greetT / 0.9;
+      var bowAmt = Math.sin(gp * Math.PI);
+      lean += 0.3 * bowAmt;
+      squash = 1 - 0.07 * bowAmt;
+    }
+    /* đang nói chuyện: gật gù nhẹ */
+    var talking = Engine.talkNpcId && Engine.talkNpcId === n.npcId;
+    if (talking) lean += 0.06 + 0.04 * Math.sin(_tickT * 7);
+    /* animation nghề nghiệp */
+    var kind = n.def.kind;
+    var hammerAng = null, wiping = false;
+    if (kind === 'forge') {
+      /* thợ rèn: chu kỳ 2.4s — giơ búa → đập → tia lửa */
+      var cyc = (n.workT || 0) % 2.4;
+      if (cyc < 1.5) hammerAng = -0.9 + (cyc / 1.5) * 0.5;       /* giơ dần */
+      else if (cyc < 1.75) {                                     /* ĐẬP */
+        hammerAng = 0.55;
+        lean += 0.16; squash = 0.96;
+        if (!n._struck) {
+          n._struck = true;
+          _burst(n.x + 20, n.y - 8, 7, '#ffcf5a');               /* tia lửa */
+          _burst(n.x + 20, n.y - 8, 3, '#ff9a3d');
+        }
+      } else { hammerAng = -0.9; n._struck = false; }             /* nghỉ */
+    } else if (kind === 'inn') {
+      /* tiểu nhị: lau bàn — đung đưa + khăn tròn */
+      wiping = true;
+      lean += 0.1 + 0.05 * Math.sin(_tickT * 3 + ph);
+    }
+
+    var drawX = n.x + (wiping ? Math.sin(_tickT * 3 + ph) * 7 : 0);
+    /* bóng đổ lệch ngược hướng nghiêng */
+    var shOff = -(lean * 90);
+    _drawCreature(n, drawX, n.y - bob, 46, 46, n.def.img, '#6b4a2f',
+      { lean: lean + swayRot, flip: (n.face || 1) < 0, shadowOffX: shOff,
+        scaleY: breathe * squash });
+
+    /* búa của thợ rèn (vẽ procedural, xoay theo nhịp đập) */
+    if (hammerAng != null) {
+      _ctx.save();
+      _ctx.translate(drawX + 20, n.y - 34 - bob);
+      _ctx.rotate(hammerAng);
+      _ctx.fillStyle = '#7a5230';
+      _ctx.fillRect(-2, 0, 4, 26);            /* cán */
+      _ctx.fillStyle = '#9aa2ad';
+      _ctx.fillRect(-9, -8, 18, 10);          /* đầu búa */
+      _ctx.restore();
+      /* đe: khối nhỏ trước mặt */
+      _ctx.fillStyle = '#5a5f6a';
+      _ctx.fillRect(drawX + 12, n.y + 8, 18, 10);
+    }
+    /* khăn lau của tiểu nhị */
+    if (wiping) {
+      var cx = drawX + Math.sin(_tickT * 3 + ph) * 9;
+      var cy = n.y - 10 + Math.cos(_tickT * 6 + ph) * 3 - bob;
+      _ctx.fillStyle = 'rgba(240,244,248,0.9)';
+      _ctx.beginPath(); _ctx.ellipse(cx, cy, 7, 5, 0.4, 0, Math.PI * 2); _ctx.fill();
+    }
+    /* bong bóng thoại khi đang nói chuyện */
+    if (talking) {
+      var bb = Math.abs(Math.sin(_tickT * 5)) * 4;
+      _ctx.font = '17px sans-serif'; _ctx.textAlign = 'center';
+      _ctx.fillText('💬', drawX + 20, n.y - 54 - bob - bb);
+    }
+    // dấu "!" trên đầu NPC có nhiệm vụ/chức năng mới
+    var k = kind;
+    if (k === 'quest' || k === 'guide' || k === 'sect_emissary' ||
+        k === 'pet' || k === 'dungeon_guide' || k === 'gacha') {
+      var hop = Math.sin(_tickT * 4 + ph) * 2;
       _ctx.fillStyle = '#ffeb3b';
       _ctx.font = 'bold 16px sans-serif';
       _ctx.textAlign = 'center';
-      _ctx.fillText('!', n.x, n.y - 28);
+      _ctx.fillText('!', drawX, n.y - 30 - bob + hop);
     }
   }
 
@@ -747,23 +1759,67 @@ var Engine = (function () {
     var lvl = GFX_LEVELS[_gfxLevel] || GFX_LEVELS.cao;
     var W = _viewW, H = _viewH;
 
-    // Nền map: cover full-canvas; thiếu ảnh → màu + tên
+    var cam = _camera();
+    // Nền map kiểu tutien2d: tile lát lặp lại khóa theo camera + art parallax làm atmosphere
+    var ground = _mapDef ? _mapDef.ground : null;
+    var tile = ground ? _img(ground) : null;
+    if (tile) {
+      var TS = 256; /* kích thước tile world */
+      var sx = Math.floor(cam.x / TS) * TS, sy = Math.floor(cam.y / TS) * TS;
+      var tx, ty;
+      for (ty = sy; ty < cam.y + H; ty += TS) {
+        for (tx = sx; tx < cam.x + W; tx += TS) {
+          _ctx.drawImage(tile, tx - cam.x, ty - cam.y, TS, TS);
+        }
+      }
+      /* đường viền tile mờ như video tutien2d */
+      _ctx.strokeStyle = 'rgba(0,0,0,0.14)';
+      _ctx.lineWidth = 1;
+      _ctx.beginPath();
+      for (tx = sx; tx <= cam.x + W; tx += TS) { _ctx.moveTo(tx - cam.x, 0); _ctx.lineTo(tx - cam.x, H); }
+      for (ty = sy; ty <= cam.y + H; ty += TS) { _ctx.moveTo(0, ty - cam.y); _ctx.lineTo(W, ty - cam.y); }
+      _ctx.stroke();
+      /* art đẹp làm lớp atmosphere parallax mờ phía trên tile */
+      var bgA = _mapDef ? _mapDef.bg : null;
+      var imA = _img(bgA);
+      if (imA) {
+        _ctx.save();
+        _ctx.globalAlpha = 0.20;
+        var s = Math.max(W / imA.width, H / imA.height) * 1.15;
+        var dw = imA.width * s, dh = imA.height * s;
+        var maxOx = Math.max(0, (dw - W) / 2), maxOy = Math.max(0, (dh - H) / 2);
+        var ox = (W - dw) / 2 - Math.max(-maxOx, Math.min(maxOx, cam.x * 0.3));
+        var oy = (H - dh) / 2 - Math.max(-maxOy, Math.min(maxOy, cam.y * 0.3));
+        _ctx.drawImage(imA, ox, oy, dw, dh);
+        _ctx.restore();
+      }
+      _drawMist(W, H);
+      /* nhãn khu hiện tại (lưới tọa độ ngầm) */
+      _ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      _ctx.font = '12px sans-serif';
+      _ctx.textAlign = 'right';
+      _ctx.fillText('Khu ' + _khuOf(player.x, player.y), W - 12, 20);
+    } else {
     _ctx.fillStyle = (_mapDef && _mapDef.fb) || '#222';
     _ctx.fillRect(0, 0, W, H);
     var bg = _mapDef ? _mapDef.bg : null;
     var im = _img(bg);
     if (im) {
-      var s = Math.max(W / im.width, H / im.height);
+      var s = Math.max(W / im.width, H / im.height) * 1.15; /* overscan cho parallax */
       var dw = im.width * s, dh = im.height * s;
-      _ctx.drawImage(im, (W - dw) / 2, (H - dh) / 2, dw, dh);
+      var maxOx = Math.max(0, (dw - W) / 2), maxOy = Math.max(0, (dh - H) / 2);
+      var ox = (W - dw) / 2 - Math.max(-maxOx, Math.min(maxOx, cam.x * 0.3));
+      var oy = (H - dh) / 2 - Math.max(-maxOy, Math.min(maxOy, cam.y * 0.3));
+      _ctx.drawImage(im, ox, oy, dw, dh);
+      _drawMist(W, H); /* lớp sương mù trôi */
     } else {
       _ctx.fillStyle = '#f3e9d2';
       _ctx.font = '14px sans-serif';
       _ctx.textAlign = 'center';
       _ctx.fillText(_mapName(), W / 2, 30);
     }
+    }
 
-    var cam = _camera();
     _ctx.save();
     _ctx.translate(-cam.x, -cam.y);
 
@@ -778,15 +1834,15 @@ var Engine = (function () {
       _ctx.beginPath(); _ctx.arc(g.x, g.y, 32, 0, Math.PI * 2); _ctx.stroke();
     }
 
-    // NPC
-    for (var ni = 0; ni < _npcs.length; ni++) _drawNpc(_npcs[ni]);
-
-    // Entities xếp theo y (trên-dưới)
+    // Entities xếp theo y (trên-dưới): quái, NPC, pet, người chơi — pseudo-3D Y-sort
     var ents = [];
     for (var mi = 0; mi < _monsters.length; mi++) {
       if (!_monsters[mi].dead) ents.push({ y: _monsters[mi].y, k: 'm', o: _monsters[mi] });
     }
+    for (var ni = 0; ni < _npcs.length; ni++) ents.push({ y: _npcs[ni].y, k: 'n', o: _npcs[ni] });
+    for (var oi2 = 0; oi2 < _objects.length; oi2++) ents.push({ y: _objects[oi2].y, k: 'obj', o: _objects[oi2] });
     ents.push({ y: player.y, k: 'p' });
+    if (_petActive()) ents.push({ y: _pet.y, k: 't' });
     var others = _visiblePlayers();
     for (var oi = 0; oi < others.length; oi++) ents.push({ y: others[oi].y, k: 'o', o: others[oi] });
     ents.sort(function (a, b) { return a.y - b.y; });
@@ -794,16 +1850,89 @@ var Engine = (function () {
       var e = ents[ei];
       if (e.k === 'm') _drawMonster(e.o);
       else if (e.k === 'p') _drawPlayer();
+      else if (e.k === 'n') _drawNpc(e.o);
+      else if (e.k === 't') _drawPet();
+      else if (e.k === 'obj') _drawObject(e.o);
       else _drawOther(e.o);
     }
 
-    // Hiệu ứng skill: vòng tròn xung theo hệ
+    // Hiệu ứng skill: vòng tròn xung theo hệ + chiêu thức
     for (var fi = 0; fi < _fx.length; fi++) {
       var f = _fx[fi];
       var alpha = Math.max(0, f.t / f.maxT);
       _ctx.globalAlpha = alpha;
       if (lvl.shadows) { _ctx.shadowBlur = 12; _ctx.shadowColor = f.color; }
-      if (f.dot) {
+      var kind = f.kind || 'ring';
+      if (kind === 'slash') {
+        /* nhát chém vòng cung trắng/hồng */
+        _ctx.strokeStyle = f.color;
+        _ctx.lineWidth = 5;
+        var pr = 1 - f.t / f.maxT;
+        _ctx.beginPath();
+        _ctx.arc(f.x, f.y, f.r, -0.6 + pr * 1.2, 1.4 + pr * 1.2);
+        _ctx.stroke();
+        _ctx.lineWidth = 2;
+        _ctx.strokeStyle = '#ffffff';
+        _ctx.beginPath();
+        _ctx.arc(f.x, f.y, f.r * 0.8, -0.6 + pr * 1.2, 1.4 + pr * 1.2);
+        _ctx.stroke();
+      } else if (kind === 'fire') {
+        /* vụ nổ lửa cam */
+        var grad = _ctx.createRadialGradient(f.x, f.y, 2, f.x, f.y, f.r);
+        grad.addColorStop(0, '#fff3b0');
+        grad.addColorStop(0.5, f.color);
+        grad.addColorStop(1, 'rgba(255,60,0,0)');
+        _ctx.fillStyle = grad;
+        _ctx.beginPath(); _ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); _ctx.fill();
+      } else if (kind === 'lightning') {
+        /* sét tím đánh xuống */
+        _ctx.strokeStyle = f.color;
+        _ctx.lineWidth = 4;
+        for (var li = 0; li < 3; li++) {
+          var lx = f.x + (li - 1) * 26;
+          _ctx.beginPath();
+          _ctx.moveTo(lx, f.y - 130);
+          var yy = f.y - 130, xx = lx;
+          for (var sgi = 0; sgi < 5; sgi++) {
+            xx += (Math.random() - 0.5) * 36; yy += 30;
+            _ctx.lineTo(xx, yy);
+          }
+          _ctx.stroke();
+        }
+        _ctx.fillStyle = 'rgba(179,136,255,0.35)';
+        _ctx.beginPath(); _ctx.arc(f.x, f.y, 60, 0, Math.PI * 2); _ctx.fill();
+      } else if (kind === 'circle') {
+        /* trận pháp vòng tròn xanh xoay */
+        var rot = (1 - f.t / f.maxT) * Math.PI * 2;
+        _ctx.strokeStyle = f.color;
+        _ctx.lineWidth = 3;
+        _ctx.beginPath(); _ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); _ctx.stroke();
+        _ctx.lineWidth = 2;
+        for (var ci = 0; ci < 8; ci++) {
+          var a = rot + ci * Math.PI / 4;
+          _ctx.beginPath();
+          _ctx.moveTo(f.x + Math.cos(a) * f.r * 0.55, f.y + Math.sin(a) * f.r * 0.55);
+          _ctx.lineTo(f.x + Math.cos(a) * f.r * 0.95, f.y + Math.sin(a) * f.r * 0.95);
+          _ctx.stroke();
+        }
+        _ctx.fillStyle = f.color;
+        _ctx.beginPath(); _ctx.arc(f.x, f.y, 6, 0, Math.PI * 2); _ctx.fill();
+      } else if (kind === 'bolt') {
+        /* đạn kiếm khí bay */
+        var ang = Math.atan2(f.ty - f.y, f.tx - f.x);
+        _ctx.save();
+        _ctx.translate(f.x, f.y);
+        _ctx.rotate(ang);
+        var blen = 34;
+        var bgrad = _ctx.createLinearGradient(-blen, 0, 6, 0);
+        bgrad.addColorStop(0, 'rgba(255,255,255,0)');
+        bgrad.addColorStop(1, f.color);
+        _ctx.fillStyle = bgrad;
+        _ctx.fillRect(-blen, -4, blen + 6, 8);
+        _ctx.fillStyle = '#ffffff';
+        _ctx.fillRect(-8, -2, 12, 4);
+        _ctx.restore();
+      } else if (f.dot) {
         _ctx.fillStyle = f.color;
         _ctx.fillRect(f.x - 2, f.y - 2, 4, 4);
       } else {
@@ -812,6 +1941,22 @@ var Engine = (function () {
         _ctx.beginPath(); _ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); _ctx.stroke();
       }
       _ctx.shadowBlur = 0;
+      _ctx.globalAlpha = 1;
+    }
+
+    /* Vòng tròn đỏ báo AoE boss */
+    for (var ti = 0; ti < _bossTele.length; ti++) {
+      var tp = _bossTele[ti];
+      var pulse = 0.5 + 0.3 * Math.sin(Date.now() / 90);
+      _ctx.globalAlpha = pulse;
+      _ctx.fillStyle = 'rgba(255,40,40,0.25)';
+      _ctx.beginPath(); _ctx.arc(tp.x, tp.y, tp.r, 0, Math.PI * 2); _ctx.fill();
+      _ctx.globalAlpha = 0.9;
+      _ctx.strokeStyle = '#ff2828';
+      _ctx.lineWidth = 3;
+      _ctx.setLineDash([10, 8]);
+      _ctx.beginPath(); _ctx.arc(tp.x, tp.y, tp.r, 0, Math.PI * 2); _ctx.stroke();
+      _ctx.setLineDash([]);
       _ctx.globalAlpha = 1;
     }
 
@@ -827,6 +1972,12 @@ var Engine = (function () {
     _ctx.globalAlpha = 1;
 
     _ctx.restore();
+    /* Vignette chiều sâu (screen-space) */
+    var vg = _ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.42, W / 2, H / 2, Math.max(W, H) * 0.75);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(10,8,20,0.22)');
+    _ctx.fillStyle = vg;
+    _ctx.fillRect(0, 0, W, H);
   }
 
   /* ---------- Vòng lặp ---------- */
@@ -895,6 +2046,7 @@ var Engine = (function () {
     onGate: null,         // (toMapId)
     onKill: null,         // (monster)
     onNpc: null,          // (npcId)
+    talkNpcId: null,      // npcId đang mở hội thoại (để vẽ 💬)
     onStageClear: null,   // (stageIdx, rewards)
     onDungeonDone: null,  // ()
     auto: true,
@@ -907,11 +2059,29 @@ var Engine = (function () {
     setAuto: setAuto,
     setFly: setFly,
     setRun: setRun,
+    setTapMove: function (v) { _tapMove = !!v; _moveTarget = null; }, /* bật/tắt chạm-map-di-chuyển */
+    tapMoveOn: function () { return _tapMove; },
     setGraphics: setGraphics,
     tryInteract: tryInteract,
     enterDungeonRun: enterDungeonRun,
+    enterSecretRealm: enterSecretRealm,
+    secretRealmId: secretRealmId,
+    leaveSecretRealm: leaveSecretRealm,
     nextStage: nextStage,
     bindState: bindState,
+    useSkill: useSkill,         // (skillId) → {ok, reason?}
+    manualAttack: manualAttack, // () → bool
+    dash: dash,                 // () → bool
+    navigateTo: function (x, y) { _moveTarget = { x: x, y: y }; }, // tự tìm đường tới điểm
+    getBossInfo: getBossInfo,   // () → {name,hp,maxHp,weak} | null
+    isWeak: isWeak,             // () → bool (cửa sổ SƠ HỞ)
+    dashCdLeft: function () { return Math.max(0, _dashCd); },
+    khu: function () { return _khuOf(player.x, player.y); }, // khu hiện tại (lưới 400x400)
+    /* test hook: logic quay mặt (không dùng trong game) */
+    _faceTest: { angLerp: _angLerp, face4: _face4 },
+    khuOf: _khuOf,                 // (x, y) → số khu
+    hitSolid: _hitSolid,           // (x, y) → bool (va chạm vật thể)
+    getObjects: function () { return _objects; },
   };
   return Engine;
 })();

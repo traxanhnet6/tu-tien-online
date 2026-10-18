@@ -13,8 +13,20 @@
 <body>
 <div id="app">
 
+  <!-- ============ MÀN HÌNH LOADING ============ -->
+  <section id="screen-loading" class="screen">
+    <img class="screen-bg" src="assets/ui/ui_loading.webp" alt="">
+    <div class="loading-wrap">
+      <div class="loading-bar"><div id="loading-fill"></div></div>
+      <div class="loading-row">
+        <span id="loading-label" data-t="loading_label">Đang tải dữ liệu...</span>
+        <span id="loading-pct">0%</span>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ MÀN HÌNH MENU ============ -->
-  <section id="screen-menu" class="screen">
+  <section id="screen-menu" class="screen hidden">
     <img class="screen-bg" src="../assets-ai/menu-nen-thuy-mac.webp" alt=""
          onerror="this.style.display='none'">
     <div class="menu-wrap">
@@ -24,6 +36,7 @@
         <button id="btn-continue" class="btn btn-jade big hidden" data-t="btn_continue">Tiếp tục</button>
         <button id="btn-new" class="btn btn-jade big" data-t="btn_create_role">Tạo nhân vật</button>
         <button id="btn-checkin" class="btn btn-paper big hidden" data-t="checkin">Điểm danh</button>
+        <button id="btn-friends" class="btn btn-paper big hidden" data-t="nav_friends">Bạn bè</button>
         <div class="menu-lang">
           <button id="btn-lang-vi" class="btn btn-small">VI</button>
           <button id="btn-lang-en" class="btn btn-small">EN</button>
@@ -75,26 +88,48 @@
 
     <div id="hud">
       <div id="offline-banner" data-t="hud_offline">Chưa đồng bộ</div>
-      <div class="hud-top">
-        <div class="hud-char">
-          <div class="hud-name"><span id="hud-name">-</span> · <span id="hud-realm">-</span></div>
-          <div class="hud-bar"><div id="hud-hp-fill" class="fill hp"></div><span id="hud-hp-txt" class="bar-txt"></span></div>
-          <div class="hud-bar"><div id="hud-mp-fill" class="fill mp"></div><span id="hud-mp-txt" class="bar-txt"></span></div>
-        </div>
-        <div class="hud-right">
-          <div class="hud-stones">💎 <span id="hud-stones">0</span></div>
-          <div class="hud-kills"><span data-t="hud_kills">Quái hôm nay</span>: <span id="hud-kills">0/10000</span></div>
-        </div>
-      </div>
-      <div class="hud-toggles">
-        <button id="btn-auto" class="tgl" data-t="btn_auto">Auto</button>
-        <button id="btn-fly" class="tgl" data-t="btn_fly">Phi Hành</button>
-        <button id="btn-run" class="tgl" data-t="btn_run">Chạy</button>
-        <button id="btn-interact" class="tgl interact">?</button>
-      </div>
-    </div>
+      <div id="secret-banner" class="hidden"></div>
 
-    <div id="joystick"><div id="joy-knob"></div></div>
+      <!-- Panel nhân vật trên-trái: 4 thanh -->
+      <div id="char-panel">
+        <div class="hud-name"><span id="hud-name">-</span> · <span id="hud-realm">-</span></div>
+        <div class="cbar"><div id="hud-hp-fill" class="cfill hp"></div><span id="hud-hp-txt" class="cbar-txt"></span></div>
+        <div class="cbar"><div id="hud-mp-fill" class="cfill mp"></div><span id="hud-mp-txt" class="cbar-txt"></span></div>
+        <div class="cbar"><div id="hud-focus-fill" class="cfill focus"></div><span id="hud-focus-txt" class="cbar-txt"></span></div>
+        <div class="cbar"><div id="hud-shield-fill" class="cfill shield"></div><span id="hud-shield-txt" class="cbar-txt"></span></div>
+      </div>
+
+      <!-- Thanh boss trên-giữa -->
+      <div id="boss-bar" class="hidden">
+        <div id="boss-name">-</div>
+        <div class="boss-hpbar"><div id="boss-hp-fill"></div></div>
+        <div id="boss-weak" class="boss-weak hidden" data-t="boss_weak">SƠ HỞ +25%</div>
+      </div>
+
+      <div class="hud-right">
+        <div class="hud-stones">💎 <span id="hud-stones">0</span></div>
+        <div class="hud-kills"><span data-t="hud_kills">Quái hôm nay</span>: <span id="hud-kills">0/10000</span></div>
+        <button id="btn-fly" class="tgl" data-t="btn_fly">Ngự Kiếm</button>
+        <button id="btn-chat" class="tgl">💬<span id="chat-badge" class="badge hidden">0</span></button>
+      </div>
+
+      <!-- Thanh skill 7 ô dưới-giữa (ui.js dựng) -->
+      <div id="skillbar"></div>
+
+      <!-- Cụm nút tròn bên phải -->
+      <div id="round-btns">
+        <button id="btn-interact" class="rbtn">?</button>
+        <button id="btn-auto" class="rbtn" data-t="btn_auto">Auto</button>
+        <button id="btn-potion-mp" class="rbtn small">🧪</button>
+        <button id="btn-potion-hp" class="rbtn small">💊</button>
+        <button id="btn-dash" class="rbtn">💨</button>
+        <button id="btn-atk" class="rbtn big">🗡️</button>
+      </div>
+
+      <!-- Joystick dưới-trái + nút Chạy phía trên -->
+      <div id="joystick"><div id="joy-knob"></div></div>
+      <button id="btn-run" class="tgl" data-t="btn_run">Chạy</button>
+    </div>
 
     <nav id="bottomnav">
       <button data-panel="bag" data-t="nav_bag">Túi</button>
@@ -116,13 +151,29 @@
 <script src="js/stages.js"></script>
 <script src="js/data.js"></script>
 <script src="js/state.js"></script>
+<script src="js/bodycult.js"></script>
+<script src="js/lifespan.js"></script>
+<script src="js/secret.js"></script>
+<script src="js/tower.js"></script>
+<script src="js/social.js"></script>
+<script src="js/skills.js"></script>
+<script src="js/sect.js"></script>
+<script src="js/sectquest.js"></script>
+<script src="js/alliance.js"></script>
+<script src="js/encounter.js"></script>
+<script src="js/gacha.js"></script>
+<script src="js/pet.js"></script>
+<script src="js/market.js"></script>
+<script src="js/farm.js"></script>
 <script src="js/online.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/combat.js"></script>
 <script src="js/npc.js"></script>
 <script src="js/quest.js"></script>
+<script src="js/mapload.js"></script>
 <script src="js/ui.js"></script>
+<script src="js/gamepad.js"></script>
 <script>UI.boot();</script>
 </body>
 </html>

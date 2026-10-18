@@ -149,6 +149,9 @@ var AudioSys = (function () {
         }); break;
       case 'fail':    // tone xuống
         _tone({ f: 300, f2: 140, d: 0.4, type: 'sawtooth', v: 0.18 }); break;
+      case 'message': // tin nhắn mới: ting nhẹ 2 nốt
+        _tone({ f: 1046, d: 0.09, v: 0.16 });
+        _tone({ f: 1568, d: 0.12, v: 0.14, delay: 0.09 }); break;
     }
   }
 
