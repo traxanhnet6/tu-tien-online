@@ -2,32 +2,127 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0d1420">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#6b4a2f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Tu Tiên Online</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div id="app">
-  <header id="hud" style="display:none"></header>
-  <main id="screen"></main>
-  <nav id="bottomnav" style="display:none"></nav>
+
+  <!-- ============ MÀN HÌNH MENU ============ -->
+  <section id="screen-menu" class="screen">
+    <img class="screen-bg" src="../assets-ai/menu-nen-thuy-mac.webp" alt=""
+         onerror="this.style.display='none'">
+    <div class="menu-wrap">
+      <h1 class="game-title" data-t="app_title">Tu Tiên Online</h1>
+      <p class="game-sub" data-t="menu_sub">Con đường tu tiên vạn dặm bắt đầu từ một bước chân</p>
+      <div class="menu-btns">
+        <button id="btn-continue" class="btn btn-jade big hidden" data-t="btn_continue">Tiếp tục</button>
+        <button id="btn-new" class="btn btn-jade big" data-t="btn_create_role">Tạo nhân vật</button>
+        <button id="btn-checkin" class="btn btn-paper big hidden" data-t="checkin">Điểm danh</button>
+        <div class="menu-lang">
+          <button id="btn-lang-vi" class="btn btn-small">VI</button>
+          <button id="btn-lang-en" class="btn btn-small">EN</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MÀN HÌNH TẠO NHÂN VẬT ============ -->
+  <section id="screen-create" class="screen hidden">
+    <img class="screen-bg" src="../assets-ai/taonhanvat-nen.webp" alt=""
+         onerror="this.style.display='none'">
+    <div class="create-wrap panel-wood">
+      <h2 data-t="btn_create_role">Tạo nhân vật</h2>
+      <label class="fld-label" data-t="create_name_label">Tên nhân vật</label>
+      <input id="create-name" class="fld-input" maxlength="12"
+             data-t-ph="input_name" placeholder="Nhập tên nhân vật">
+      <label class="fld-label" data-t="create_sect_label">Chọn hệ phái</label>
+      <div class="sect-cards">
+        <button class="sect-card" data-sect="kiem">
+          <span class="sect-icon">🗡️</span>
+          <span class="sect-name" data-t="sect_kiem">Kiếm Tu</span>
+          <span class="sect-desc" data-t="sect_desc_kiem">Sát thương cao</span>
+        </button>
+        <button class="sect-card" data-sect="phap">
+          <span class="sect-icon">🔮</span>
+          <span class="sect-name" data-t="sect_phap">Pháp Tu</span>
+          <span class="sect-desc" data-t="sect_desc_phap">Linh lực dồi dào</span>
+        </button>
+        <button class="sect-card" data-sect="the">
+          <span class="sect-icon">🛡️</span>
+          <span class="sect-name" data-t="sect_the">Thể Tu</span>
+          <span class="sect-desc" data-t="sect_desc_the">Thân thể cường hãn</span>
+        </button>
+      </div>
+      <label class="fld-label" data-t="create_lingen_label">Linh căn</label>
+      <div class="lingen-row">
+        <div id="lingen-result" class="lingen-result" data-t="lingen_none">Chưa tẩy cốt</div>
+        <button id="btn-taycot" class="btn btn-jade" data-t="btn_taycot">Tẩy Cốt</button>
+      </div>
+      <button id="btn-begin" class="btn btn-jade big" data-t="btn_begin">Bắt đầu tu tiên</button>
+      <button id="btn-create-back" class="btn btn-paper" data-t="ui_back">Quay lại</button>
+    </div>
+  </section>
+
+  <!-- ============ MÀN HÌNH GAME ============ -->
+  <section id="screen-game" class="screen hidden">
+    <canvas id="game"></canvas>
+
+    <div id="hud">
+      <div id="offline-banner" data-t="hud_offline">Chưa đồng bộ</div>
+      <div class="hud-top">
+        <div class="hud-char">
+          <div class="hud-name"><span id="hud-name">-</span> · <span id="hud-realm">-</span></div>
+          <div class="hud-bar"><div id="hud-hp-fill" class="fill hp"></div><span id="hud-hp-txt" class="bar-txt"></span></div>
+          <div class="hud-bar"><div id="hud-mp-fill" class="fill mp"></div><span id="hud-mp-txt" class="bar-txt"></span></div>
+        </div>
+        <div class="hud-right">
+          <div class="hud-stones">💎 <span id="hud-stones">0</span></div>
+          <div class="hud-kills"><span data-t="hud_kills">Quái hôm nay</span>: <span id="hud-kills">0/10000</span></div>
+        </div>
+      </div>
+      <div class="hud-toggles">
+        <button id="btn-auto" class="tgl" data-t="btn_auto">Auto</button>
+        <button id="btn-fly" class="tgl" data-t="btn_fly">Phi Hành</button>
+        <button id="btn-run" class="tgl" data-t="btn_run">Chạy</button>
+        <button id="btn-interact" class="tgl interact">?</button>
+      </div>
+    </div>
+
+    <div id="joystick"><div id="joy-knob"></div></div>
+
+    <nav id="bottomnav">
+      <button data-panel="bag" data-t="nav_bag">Túi</button>
+      <button data-panel="char" data-t="nav_char">Nhân vật</button>
+      <button data-panel="skill" data-t="nav_skill">Kỹ năng</button>
+      <button data-panel="quest" data-t="nav_quest">Nhiệm vụ</button>
+      <button data-panel="map" data-t="nav_map">Bản đồ</button>
+      <button data-panel="dungeon" data-t="nav_dungeon">Phụ bản</button>
+      <button data-panel="gift" data-t="nav_gift">Giftcode</button>
+      <button data-panel="settings" data-t="nav_settings">Cài đặt</button>
+    </nav>
+  </section>
+
+  <div id="panels"></div>
+  <div id="toasts"></div>
 </div>
-<div id="toasts"></div>
-<div id="fx-layer"></div>
 
 <script src="js/lang.js"></script>
+<script src="js/stages.js"></script>
 <script src="js/data.js"></script>
 <script src="js/state.js"></script>
-<script src="js/game.js"></script>
+<script src="js/online.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/npc.js"></script>
+<script src="js/quest.js"></script>
 <script src="js/ui.js"></script>
-<script>
-// Khởi động
-(function () {
-  let st = loadGame();
-  if (!st) st = defaultState();
-  initGame(st);
-})();
-</script>
+<script>UI.boot();</script>
 </body>
 </html>
