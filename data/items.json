@@ -200,6 +200,15 @@
   "price": 2000,
   "sell": 600
  },
+ "pill_taycotdan": {
+  "kind": "pill",
+  "nameKey": "it_pill_taycotdan",
+  "descKey": "it_pill_taycotdan_desc",
+  "taycot": 1,
+  "price": 1500,
+  "sell": 450,
+  "icon": "🟡"
+ },
  "taycothao": {
   "kind": "material",
   "nameKey": "it_taycothao",

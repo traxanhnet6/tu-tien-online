@@ -14,11 +14,17 @@ if (typeof NPCS === "undefined" && typeof require !== "undefined") {
 }
 function _npcs() {
   if (typeof globalThis !== "undefined" && typeof globalThis.NPCS !== "undefined") return globalThis.NPCS;
-  return _ND.NPCS;
+  if (_ND && _ND.NPCS !== undefined) return _ND.NPCS;
+  /* browser: data.js nạp dạng classic script, const NPCS nằm ở lexical
+   * scope toàn cục chứ không gắn lên globalThis → đọc trực tiếp */
+  if (typeof NPCS !== "undefined") return NPCS;
+  throw new Error("missing dep: NPCS");
 }
 function _quests() {
   if (typeof globalThis !== "undefined" && typeof globalThis.QUESTS !== "undefined") return globalThis.QUESTS;
-  return _ND.QUESTS;
+  if (_ND && _ND.QUESTS !== undefined) return _ND.QUESTS;
+  if (typeof QUESTS !== "undefined") return QUESTS;
+  throw new Error("missing dep: QUESTS");
 }
 
 var NPC = {

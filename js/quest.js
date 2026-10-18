@@ -25,6 +25,9 @@ if (typeof gainExp === "undefined" && typeof require !== "undefined") {
 function _gq(name) {
   if (typeof globalThis !== "undefined" && typeof globalThis[name] !== "undefined") return globalThis[name];
   if (_QD && _QD[name] !== undefined) return _QD[name];
+  /* browser: data.js nạp dạng classic script, const QUESTS nằm ở lexical
+   * scope toàn cục chứ không gắn lên globalThis → đọc trực tiếp */
+  if (name === "QUESTS" && typeof QUESTS !== "undefined") return QUESTS;
   throw new Error("missing dep: " + name);
 }
 function _gs(name) {
@@ -88,7 +91,17 @@ var Quest = {
       _gs("addItem")(state, it.id, it.qty || 1, !!it.locked);
     });
     state.quests[id] = { status: "done", count: s.count || 0 };
-    return { ok: true, reward: rw };
+    /* Chuỗi cốt truyện: tự nhận quest tiếp theo có autoAccept (data-driven) */
+    var autoAccepted = [];
+    try {
+      _QUESTS().forEach(function (nq) {
+        if (nq.req === id && nq.autoAccept) {
+          var r = Quest.accept(state, nq.id);
+          if (r && r.ok) autoAccepted.push(nq);
+        }
+      });
+    } catch (e) {}
+    return { ok: true, reward: rw, autoAccepted: autoAccepted };
   },
 
   /* Gọi mỗi khi giết 1 con quái: tăng count cho quest kill đang active */

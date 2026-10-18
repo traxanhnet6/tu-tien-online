@@ -40,7 +40,7 @@
  "objects": [
   {
    "x": 800,
-   "y": 220,
+   "y": 250,
    "sprite": "assets/map/obj_kim_cang_tong_chua.png",
    "w": 380,
    "h": 320,
@@ -49,8 +49,8 @@
    "sh": 70
   },
   {
-   "x": 1220,
-   "y": 240,
+   "x": 350,
+   "y": 280,
    "sprite": "assets/map/obj_kim_cang_tong_bao_thap.png",
    "w": 180,
    "h": 240,
@@ -59,8 +59,8 @@
    "sh": 40
   },
   {
-   "x": 380,
-   "y": 250,
+   "x": 1250,
+   "y": 280,
    "sprite": "assets/map/obj_nha_ngoi.png",
    "w": 230,
    "h": 190,
@@ -70,17 +70,7 @@
   },
   {
    "x": 300,
-   "y": 120,
-   "sprite": "assets/map/obj_hang_rao_go.png",
-   "w": 220,
-   "h": 66,
-   "solid": true,
-   "sw": 154,
-   "sh": 30
-  },
-  {
-   "x": 800,
-   "y": 120,
+   "y": 650,
    "sprite": "assets/map/obj_hang_rao_go.png",
    "w": 220,
    "h": 66,
@@ -90,7 +80,7 @@
   },
   {
    "x": 1300,
-   "y": 120,
+   "y": 650,
    "sprite": "assets/map/obj_hang_rao_go.png",
    "w": 220,
    "h": 66,
@@ -99,8 +89,18 @@
    "sh": 30
   },
   {
-   "x": 520,
-   "y": 420,
+   "x": 150,
+   "y": 950,
+   "sprite": "assets/map/obj_hang_rao_go.png",
+   "w": 220,
+   "h": 66,
+   "solid": true,
+   "sw": 154,
+   "sh": 30
+  },
+  {
+   "x": 700,
+   "y": 600,
    "sprite": "assets/map/obj_den_da.png",
    "w": 54,
    "h": 94,
@@ -109,8 +109,8 @@
    "sh": 30
   },
   {
-   "x": 1080,
-   "y": 420,
+   "x": 900,
+   "y": 600,
    "sprite": "assets/map/obj_den_da.png",
    "w": 54,
    "h": 94,
@@ -119,8 +119,8 @@
    "sh": 30
   },
   {
-   "x": 520,
-   "y": 800,
+   "x": 700,
+   "y": 950,
    "sprite": "assets/map/obj_den_da.png",
    "w": 54,
    "h": 94,
@@ -129,8 +129,8 @@
    "sh": 30
   },
   {
-   "x": 1080,
-   "y": 800,
+   "x": 900,
+   "y": 950,
    "sprite": "assets/map/obj_den_da.png",
    "w": 54,
    "h": 94,
@@ -139,8 +139,8 @@
    "sh": 30
   },
   {
-   "x": 1350,
-   "y": 650,
+   "x": 1400,
+   "y": 500,
    "sprite": "assets/map/obj_gieng.png",
    "w": 104,
    "h": 116,
@@ -149,8 +149,8 @@
    "sh": 36
   },
   {
-   "x": 140,
-   "y": 200,
+   "x": 150,
+   "y": 150,
    "sprite": "assets/map/obj_cay_dao.png",
    "w": 130,
    "h": 130,
@@ -159,8 +159,8 @@
    "sh": 26
   },
   {
-   "x": 1460,
-   "y": 200,
+   "x": 1480,
+   "y": 150,
    "sprite": "assets/map/obj_cay_dao.png",
    "w": 130,
    "h": 130,
@@ -169,8 +169,8 @@
    "sh": 26
   },
   {
-   "x": 140,
-   "y": 900,
+   "x": 150,
+   "y": 1150,
    "sprite": "assets/map/obj_cay_dao.png",
    "w": 130,
    "h": 130,
@@ -179,8 +179,8 @@
    "sh": 26
   },
   {
-   "x": 300,
-   "y": 830,
+   "x": 450,
+   "y": 1000,
    "sprite": "assets/map/obj_leu.png",
    "w": 200,
    "h": 132,
@@ -189,8 +189,8 @@
    "sh": 50
   },
   {
-   "x": 1300,
-   "y": 830,
+   "x": 1150,
+   "y": 1000,
    "sprite": "assets/map/obj_leu.png",
    "w": 200,
    "h": 132,

@@ -579,6 +579,7 @@ function refreshHUD() {
   $("hud-kills").textContent = kc + "/10000";
   updateBossBar();
   skillbarTick();
+  updatePotionBadges(); /* số lượng đan dược trên nút uống nhanh */
   updateChatBadge(); /* badge tin nhắn chưa đọc */
   function setBar(id, cur, max) {
     var f = $(id + "-fill"), tx = $(id + "-txt");
@@ -588,6 +589,25 @@ function refreshHUD() {
 }
 
 /* Thanh boss trên-giữa + cửa sổ SƠ HỞ */
+/* Đếm đan dược còn trong túi để hiện badge trên 2 nút uống nhanh */
+function countPotion(kind) {
+  var n = 0;
+  if (!state || !state.bag) return 0;
+  for (var i = 0; i < state.bag.length; i++) {
+    var it = state.bag[i];
+    if (it.locked || !it.qty) continue;
+    var d = (typeof itemDef === "function") ? itemDef(it.id) : null;
+    if (!d || d.kind !== "pill") continue;
+    var v = kind === "hp" ? (d.healHp || 0) : (d.healMp || 0);
+    if (v > 0) n += it.qty;
+  }
+  return n;
+}
+function updatePotionBadges() {
+  var bh = $("badge-hp"), bm = $("badge-mp");
+  if (bh) bh.textContent = countPotion("hp") || "";
+  if (bm) bm.textContent = countPotion("mp") || "";
+}
 function updateBossBar() {
   var bar = $("boss-bar");
   if (!bar) return;
@@ -714,7 +734,7 @@ function renderFriendList() {
       (p.requested ? '<button class="mini" data-act="fr-cancel-req" data-id="' + esc(p.id) + '">' + esc(t("fr_req_out")) + " ✕</button>"
                    : '<button class="mini" data-act="fr-add" data-id="' + esc(p.id) + '">＋ ' + esc(t("fr_add")) + "</button>");
     return '<div class="fr-row">' + frStatusDot(p.online) +
-      '<div class="fr-info"><b>' + esc(p.name) + '</b> <span class="fr-id">' + esc(Social.shortId(p.id)) + "</span>" +
+      '<div class="fr-info"><b class="insp-name" data-inspect="' + esc(p.id) + '">' + esc(p.name) + '</b> <span class="fr-id">' + esc(Social.shortId(p.id)) + "</span>" +
       '<div class="fr-sub">' + esc(stageName(p.realm, p.tier)) + " · " + esc(t(p.online ? "fr_online" : "fr_offline")) + "</div></div>" +
       '<div class="fr-btns">' + btn + "</div></div>";
   }).join("") + "</div>";
@@ -723,7 +743,7 @@ function renderFriendList() {
   h += friends.map(function (f) {
     var unread = (Social._soc(state).unread[f.id] || 0);
     return '<div class="fr-row">' + frStatusDot(f.online) +
-      '<div class="fr-info"><b>' + esc(f.name) + '</b> <span class="fr-id">' + esc(Social.shortId(f.id)) + "</span>" +
+      '<div class="fr-info"><b class="insp-name" data-inspect="' + esc(f.id) + '">' + esc(f.name) + '</b> <span class="fr-id">' + esc(Social.shortId(f.id)) + "</span>" +
       '<div class="fr-sub">' + esc(stageName(f.realm, f.tier)) + " · " + esc(t(f.online ? "fr_online" : "fr_offline")) + "</div></div>" +
       '<div class="fr-btns"><button class="mini" data-act="fr-chat" data-id="' + esc(f.id) + '">' + esc(t("fr_chat")) +
       (unread ? ' <span class="badge inbtn">' + unread + "</span>" : "") + "</button>" +
@@ -756,7 +776,7 @@ function renderChat() {
   var f = hasSocial() && fid ? Social.getFriend(state, fid) : null;
   if (!f) return '<p class="sect-note">' + esc(t("fr_notfound")) + "</p>";
   var h = '<div class="chat-head"><button class="mini" data-act="chat-back">←</button>' +
-    '<div class="chat-title">' + frStatusDot(f.online) + " <b>" + esc(f.name) + '</b> <span class="fr-id">' +
+    '<div class="chat-title">' + frStatusDot(f.online) + ' <b class="insp-name" data-inspect="' + esc(fid) + '">' + esc(f.name) + '</b> <span class="fr-id">' +
     esc(Social.shortId(f.id)) + '</span><div class="fr-sub">' + esc(t(f.online ? "fr_online" : "fr_offline")) + "</div></div></div>";
   var th = Social.getThread(state, fid);
   h += '<div class="chat-log" id="chat-log">' +
@@ -792,7 +812,7 @@ function renderWorld() {
   h += '<div class="chat-log" id="world-log">' +
     (w.length ? w.map(function (m) {
       return '<div class="msg-row ' + (m.me ? "me" : "them") + '">' +
-        (m.me ? "" : '<div class="msg-name">' + esc(m.name) + ' <span class="fr-id">' + esc(Social.shortId(m.charId)) + "</span></div>") +
+        (m.me ? "" : '<div class="msg-name insp-name"' + (m.charId ? ' data-inspect="' + esc(m.charId) + '"' : "") + ">" + esc(m.name) + ' <span class="fr-id">' + esc(Social.shortId(m.charId)) + "</span></div>") +
         '<div class="msg-bubble">' + esc(m.text) + "</div></div>";
     }).join("") : '<p class="sect-note">' + esc(t("world_empty")) + "</p>") + "</div>";
   h += '<div class="chat-input-row"><input id="world-in" class="fld-input" maxlength="200" placeholder="' +
@@ -2351,6 +2371,18 @@ function doBagUse(idx) {
     Engine.player.shield = Math.min(Engine.player.maxShield, (Engine.player.shield || 0) + amt);
     Engine.player.shieldT = d.shieldDur || 30;
   }
+  /* Tẩy Cốt Đan: +N cấp Căn Cốt vĩnh viễn (story quest q_story_03) */
+  if (d.taycot && typeof BodyCult !== "undefined") {
+    try {
+      var _ccNl = BodyCult.setLv(state, "cancot", BodyCult.lvOf(state, "cancot") + (d.taycot || 1));
+      var _ccMs = BodyCult.milestoneAt("cancot", _ccNl);
+      if (_ccMs) {
+        state.bcTitles = state.bcTitles || [];
+        if (state.bcTitles.indexOf(_ccMs.titleKey) < 0) state.bcTitles.push(_ccMs.titleKey);
+      }
+      toast(t("taycot_drink", { n: _ccNl }));
+    } catch (e) {}
+  }
   /* Thọ Nguyên Đan: cộng năm thọ nguyên, hiệu quả giảm dần mỗi lần dùng (lifespan.js) */
   if (d.tnYears) {
     var _tnM = _pillM; /* buff Dược Vương Tông cũng tăng hiệu quả đan thọ nguyên */
@@ -2633,32 +2665,69 @@ function applyDisplaySettings() {
   } catch (e) {}
 }
 
+/* ============ JOYSTICK N\u1ed4I (floating) — di chuy\u1ec3n d\u1ec5 v\u00e0 \u0111\u1eb9p ============
+ * - Ch\u1ea1m b\u1ea5t k\u1ef3 \u0111\u00e2u \u1edf n\u1eeda tr\u00e1i d\u01b0\u1edbi m\u00e0n h\u00ecnh → joystick hi\u1ec7n ngay t\u1ea1i \u0111i\u1ec3m ch\u1ea1m
+ * - K\u00e9o \u0111\u1ec3 \u0111i 8 h\u01b0\u1edbng (analog, m\u01b0\u1ee3t); th\u1ea3 ra → d\u1eebng
+ * - Ch\u1ea1m nhanh kh\u00f4ng k\u00e9o (tap) → KH\u00d4NG ch\u1eb7n → canvas nh\u1eadn tap-to-move t\u1ef1 \u0111i
+ * - N\u00fat b\u1ea5m (skill, n\u00fat tr\u00f2n, bottomnav) \u0111\u01b0\u1ee3c b\u1ecf qua
+ * - Gi\u1eef nguy\u00ean giao di\u1ec7n v\u1edbi engine: Engine.joy = {dx, dy}
+ */
 function bindJoystick() {
-  var joy = $("joystick"), knob = $("joy-knob");
-  if (!joy || !knob) return;
-  var active = false;
+  var joy = $("joystick"), knob = $("joy-knob"), game = $("screen-game");
+  if (!joy || !knob || !game) return;
+  var joyId = null, cx0 = 0, cy0 = 0, R = 60, KNOB = 44, DEAD = 0.15;
   function setJoy(dx, dy) {
     if (hasEngine()) Engine.joy = { dx: dx, dy: dy };
-    knob.style.transform = "translate(" + dx * 30 + "px," + dy * 30 + "px)";
+    knob.style.transform = "translate(" + (dx * KNOB) + "px," + (dy * KNOB) + "px)";
+    joy.classList.toggle("active", !!(dx || dy));
   }
-  function handle(e) {
-    var r = joy.getBoundingClientRect();
-    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    var p = e.touches && e.touches[0] ? e.touches[0] : e;
-    var dx = (p.clientX - cx) / (r.width / 2), dy = (p.clientY - cy) / (r.height / 2);
-    var len = Math.sqrt(dx * dx + dy * dy);
-    if (len > 1) { dx /= len; dy /= len; }
+  function showJoy(x, y) {
+    var w = window.innerWidth, h = window.innerHeight;
+    var half = joy.offsetWidth / 2 || 75;
+    R = half - 15;
+    /* núm không tràn khỏi vòng ngoài */
+    KNOB = Math.max(20, half - (knob.offsetWidth / 2 || 34) - 6);
+    x = Math.max(half + 4, Math.min(w - half - 4, x));
+    y = Math.max(half + 4, Math.min(h - half - 4, y));
+    joy.style.left = (x - half) + "px";
+    joy.style.top = (y - half) + "px";
+    joy.style.bottom = "auto"; joy.style.right = "auto";
+    joy.classList.add("show");
+  }
+  function hideJoy() {
+    joy.classList.remove("show", "active");
+    setJoy(0, 0);
+    joyId = null;
+  }
+  function isButtonTarget(t) {
+    return t && t.closest && (t.closest("button") || t.closest("#bottomnav") ||
+      t.closest("#skillbar") || t.closest("#round-btns"));
+  }
+  function inJoyZone(x, y) {
+    var w = window.innerWidth, h = window.innerHeight;
+    return x < w * 0.45 && y > h * 0.28;
+  }
+  game.addEventListener("pointerdown", function (e) {
+    if (joyId !== null) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (isButtonTarget(e.target)) return;
+    if (!inJoyZone(e.clientX, e.clientY)) return;
+    joyId = e.pointerId; cx0 = e.clientX; cy0 = e.clientY;
+    showJoy(cx0, cy0);
+    setJoy(0, 0);
+  });
+  game.addEventListener("pointermove", function (e) {
+    if (e.pointerId !== joyId) return;
+    var dx = (e.clientX - cx0) / R, dy = (e.clientY - cy0) / R;
+    var len = Math.hypot(dx, dy);
+    if (len > 1) { dx /= len; dy /= len; len = 1; }
+    if (len < DEAD) { dx = 0; dy = 0; }
     setJoy(dx, dy);
-  }
-  joy.addEventListener("pointerdown", function (e) { active = true; joy.setPointerCapture(e.pointerId); handle(e); e.preventDefault(); });
-  joy.addEventListener("pointermove", function (e) { if (active) handle(e); });
-  function end() { active = false; setJoy(0, 0); }
-  joy.addEventListener("pointerup", end);
-  joy.addEventListener("pointercancel", end);
-  /* fallback cảm ứng cũ */
-  joy.addEventListener("touchstart", function (e) { active = true; handle(e); e.preventDefault(); }, { passive: false });
-  joy.addEventListener("touchmove", function (e) { if (active) handle(e); e.preventDefault(); }, { passive: false });
-  joy.addEventListener("touchend", end);
+    if (e.cancelable) e.preventDefault();
+  }, { passive: false });
+  function endJoy(e) { if (e.pointerId === joyId) hideJoy(); }
+  game.addEventListener("pointerup", endJoy);
+  game.addEventListener("pointercancel", endJoy);
 }
 
 /* ================= THANH SKILL 7 Ô ================= */
@@ -3722,6 +3791,95 @@ function renderDisplayRows() {
   return h;
 }
 
+/* ================= XEM TRANG BỊ — chạm vào tên =================
+ * Mở panel xem trang bị + túi đồ của 1 người chơi.
+ * - Tên mình (HUD): dữ liệu đầy đủ từ state.
+ * - Người chơi khác (bạn bè/chat): có gì hiện nấy; thiếu thì hiện
+ *   "Chưa có thông tin" lịch sự, không vỡ layout.
+ * Chỉ THÊM hàm mới, không đụng hàm hiện có. */
+function inspectPowerOf(s) {
+  return Math.round((s.atk || 0) * 3 + (s.maxHp || 0) / 5 + (s.maxMp || 0) / 10 + (s.def || 0) * 5);
+}
+function inspectData(pid) {
+  if (!pid || pid === "me") {
+    var s = getStats();
+    return {
+      isMe: true, name: state.char.name, gender: state.char.gender || "nam",
+      sect: state.char.sect, realm: state.char.realm, tier: state.char.tier,
+      online: true, power: inspectPowerOf(s),
+      equip: state.equip, bag: state.bag
+    };
+  }
+  var f = (typeof Social !== "undefined") ? Social.getFriend(state, pid) : null;
+  if (!f) return null;
+  return {
+    isMe: false, name: f.name, gender: f.gender || "nam", sect: f.sect,
+    realm: f.realm, tier: f.tier, online: f.online !== false,
+    power: null, equip: null, bag: null
+  };
+}
+function renderInspect(d) {
+  var sprG = "assets/sprs/char_" + (d.gender === "nu" ? "nu" : "nam") + "_xuong_idle.png";
+  var h = '<div class="insp-head"><div class="insp-ava"><img src="' + sprG + '" alt="" ' +
+    'onerror="this.style.display=\'none\'"></div>' +
+    '<div class="insp-who"><div class="insp-nm">' + esc(d.name) + "</div>" +
+    '<div class="insp-sub">' + esc(stageName(d.realm, d.tier)) +
+    (d.sect ? " · " + esc(t("sect_" + d.sect)) : "") + "</div>" +
+    '<div class="insp-sub">' + (d.online ? "🟢 Đang online" : "⚪ Ngoại tuyến") + "</div></div>" +
+    '<div class="insp-power"><div class="pv">' + (d.power != null ? d.power : "—") +
+    '</div><div class="pl">Lực chiến</div></div></div>';
+  /* 9 ô trang bị */
+  h += '<div class="insp-sec">⚔️ Trang bị đang mặc</div>';
+  if (d.equip) {
+    var slots = ["vukhi", "phapbao", "phihanh", "giap", "huanh", "phapboi", "yphuc", "hanhngoa", "linhgioi"];
+    h += '<div class="insp-equip">' + slots.map(function (slot) {
+      var id = d.equip[slot], def = id ? itemDef(id) : null;
+      return '<div class="insp-slot' + (def ? "" : " empty") + '">' +
+        '<span class="ic">' + (def ? esc(itemIcon(id)) : "＋") + "</span>" +
+        '<span class="nm">' + esc(t("slot_" + slot)) + "</span>" +
+        (def ? '<span class="it">' + esc(itemName(id)) + "</span>" : "") + "</div>";
+    }).join("") + "</div>";
+  } else {
+    h += '<div class="insp-noinfo">Chưa có thông tin trang bị<br>của người chơi này</div>';
+  }
+  /* túi đồ */
+  h += '<div class="insp-sec">🎒 Vật phẩm trong túi</div>';
+  if (d.bag) {
+    if (!d.bag.length) h += '<div class="insp-noinfo">Túi trống</div>';
+    else h += '<div class="item-grid">' + d.bag.map(function (it) {
+      return '<div class="item-cell"><span class="item-cell-icon">' + esc(itemIcon(it.id)) +
+        '</span><span class="item-cell-qty">x' + it.qty + '</span><span class="item-cell-name">' +
+        esc(itemName(it.id)) + "</span></div>";
+    }).join("") + "</div>";
+  } else {
+    h += '<div class="insp-noinfo">Chưa có thông tin túi đồ<br>của người chơi này</div>';
+  }
+  return h;
+}
+function closeInspect() {
+  var ov = (typeof document !== "undefined") ? document.getElementById("inspect-overlay") : null;
+  if (ov && ov.parentNode) ov.parentNode.removeChild(ov);
+}
+function openInspect(pid) {
+  if (typeof document === "undefined") return;
+  var d = inspectData(pid);
+  if (!d) { toast("Không tìm thấy người chơi"); return; }
+  closeInspect();
+  var ov = document.createElement("div");
+  ov.className = "panel-overlay";
+  ov.id = "inspect-overlay";
+  ov.innerHTML = '<div class="panel"><div class="panel-head"><h3>Xem Trang Bị</h3>' +
+    '<button class="panel-x" id="inspect-x">✕</button></div>' +
+    '<div class="panel-body">' + renderInspect(d) + "</div></div>";
+  var app = document.getElementById("app") || document.body;
+  app.appendChild(ov);
+  document.getElementById("inspect-x").addEventListener("click", function () { closeInspect(); });
+  ov.addEventListener("pointerdown", function (e) {
+    if (e.target && e.target.id === "inspect-overlay") closeInspect();
+  });
+  try { if (typeof sfx !== "undefined") sfx("click"); } catch (e) {}
+}
+
 return {
   boot: boot,
   show: show,
@@ -3729,7 +3887,8 @@ return {
   refreshHUD: refreshHUD,
   openPanel: openPanel,
   closePanel: closePanel,
-  getStats: getStats
+  getStats: getStats,
+  inspectPlayer: openInspect
 };
 
 })();
@@ -3737,4 +3896,16 @@ return {
 /* Node.js export: chỉ hàm thuần logic (formatTien) */
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { formatTien: formatTien };
+}
+
+/* Chạm vào tên → xem trang bị. Lắng nghe toàn cục, không đụng hệ thống
+ * data-act hiện có. Chạy sau UI để UI.inspectPlayer tồn tại. */
+if (typeof document !== "undefined") {
+  document.addEventListener("click", function (e) {
+    if (!e.target || !e.target.closest) return;
+    var el = e.target.closest("[data-inspect]");
+    var pid = el ? el.getAttribute("data-inspect") : null;
+    if ((!pid || !pid.length) && e.target.closest("#hud-name")) pid = "me";
+    if (pid && typeof UI !== "undefined" && UI.inspectPlayer) UI.inspectPlayer(pid);
+  });
 }

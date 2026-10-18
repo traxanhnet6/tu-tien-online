@@ -29,9 +29,12 @@
   "su_gia_ma"
  ],
  "quests": [
-  "q_taycot",
-  "q_kill5",
-  "q_boss1"
+  "q_story_01",
+  "q_story_02",
+  "q_story_03",
+  "q_story_04",
+  "q_story_05",
+  "q_story_10"
  ],
  "gates": [
   {
@@ -111,8 +114,8 @@
  "ground": "assets/map/tile_thanh_van_tran.webp",
  "objects": [
   {
-   "x": 950,
-   "y": 220,
+   "x": 1050,
+   "y": 300,
    "sprite": "assets/map/obj_nha_go.png",
    "w": 170,
    "h": 150,
@@ -121,8 +124,8 @@
    "sh": 40
   },
   {
-   "x": 1250,
-   "y": 260,
+   "x": 1350,
+   "y": 450,
    "sprite": "assets/map/obj_nha_go.png",
    "w": 170,
    "h": 150,
@@ -131,8 +134,8 @@
    "sh": 40
   },
   {
-   "x": 200,
-   "y": 900,
+   "x": 500,
+   "y": 1050,
    "sprite": "assets/map/obj_nha_go.png",
    "w": 170,
    "h": 150,
@@ -141,8 +144,8 @@
    "sh": 40
   },
   {
-   "x": 850,
-   "y": 760,
+   "x": 150,
+   "y": 950,
    "sprite": "assets/map/obj_cay_dao.png",
    "w": 110,
    "h": 130,
@@ -151,7 +154,7 @@
    "sh": 24
   },
   {
-   "x": 130,
+   "x": 1400,
    "y": 1080,
    "sprite": "assets/map/obj_cay_dao.png",
    "w": 110,
@@ -161,8 +164,8 @@
    "sh": 24
   },
   {
-   "x": 1450,
-   "y": 900,
+   "x": 900,
+   "y": 1050,
    "sprite": "assets/map/obj_cay_dao.png",
    "w": 110,
    "h": 130,
@@ -171,8 +174,8 @@
    "sh": 24
   },
   {
-   "x": 500,
-   "y": 720,
+   "x": 800,
+   "y": 700,
    "sprite": "assets/map/obj_den_long.png",
    "w": 50,
    "h": 90,
@@ -181,8 +184,8 @@
    "sh": 16
   },
   {
-   "x": 900,
-   "y": 520,
+   "x": 1100,
+   "y": 800,
    "sprite": "assets/map/obj_den_long.png",
    "w": 50,
    "h": 90,
@@ -191,8 +194,8 @@
    "sh": 16
   },
   {
-   "x": 1400,
-   "y": 170,
+   "x": 300,
+   "y": 800,
    "sprite": "assets/map/obj_tang_da.png",
    "w": 80,
    "h": 60,
@@ -201,8 +204,8 @@
    "sh": 30
   },
   {
-   "x": 110,
-   "y": 320,
+   "x": 1300,
+   "y": 200,
    "sprite": "assets/map/obj_tang_da.png",
    "w": 80,
    "h": 60,

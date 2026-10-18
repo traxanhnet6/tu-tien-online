@@ -313,7 +313,7 @@ const MAPS = [
     monsters: ["da_tru", "son_ke"],
     boss: "da_tru_vuong",
     npcs: ["dai_phu", "van_tien_cac", "truong_lao", "tam_tien_bi_tich", "truong_tran", "lao_ren", "thuong_nhan", "tieu_nhi", "su_gia_kiem", "su_gia_phap", "su_gia_the", "tuan_thu_su", "lao_dan_duong", "thu_thap_nhan", "su_gia_duoc", "su_gia_thu", "minh_chu", "thuong_nhan_du_hanh", "su_gia_ma"],
-    quests: ["q_taycot", "q_kill5", "q_boss1"],
+    quests: ["q_story_01", "q_story_02", "q_story_03", "q_story_04", "q_story_05", "q_story_10"],
     gates: [{to: 1, x: 720, y: 80}, {to: 3, x: 80, y: 500}, {to: 4, x: 1500, y: 80}, {to: 5, x: 80, y: 1000}, {to: 6, x: 400, y: 1120}, {to: 7, x: 800, y: 1120}, {to: 8, x: 1200, y: 1120}, {to: 9, x: 1500, y: 1000}, {to: 10, x: 1500, y: 600}, {to: 11, x: 1500, y: 450}, {to: 12, x: 1500, y: 300}],
     stoneDrop: [2, 5],
     unlock: null,
@@ -728,6 +728,11 @@ const ITEMS = {
   pill_truccodan: {
     kind: "pill", nameKey: "it_pill_truccodan", descKey: "it_pill_truccodan_desc",
     price: 2000, sell: 600,
+  },
+  pill_taycotdan: {
+    kind: "pill", nameKey: "it_pill_taycotdan", descKey: "it_pill_taycotdan_desc",
+    taycot: 1, /* uống: +1 cấp Căn Cốt vĩnh viễn (xử lý ở doBagUse) */
+    price: 1500, sell: 450, icon: "🟡",
   },
   /* --- Nguyên liệu --- */
   taycothao: {
@@ -1195,33 +1200,77 @@ const NPCS = {
  * req: quest id phải hoàn thành trước (chuỗi nhiệm vụ)
  * ============================================================ */
 const QUESTS = [
+  /* ============ CHUỖI CỐT TRUYỆN TÂN THỦ (Bui duyệt 2026-10-18) ============
+   * Sau khi tạo nhân vật: xem story intro (js/story.js) → tự nhận q_story_01.
+   * Mỗi quest autoAccept: trả xong tự nhận quest tiếp theo trong chuỗi. */
   {
-    id: "q_taycot", nameKey: "q_taycot", descKey: "q_taycot_desc",
+    id: "q_story_01", nameKey: "q_story_01", descKey: "q_story_01_desc",
     npc: "dai_phu",
+    need: { type: "talk" },
+    reward: { stones: 50, exp: 40 },
+  },
+  {
+    id: "q_story_02", nameKey: "q_story_02", descKey: "q_story_02_desc",
+    npc: "dai_phu", req: "q_story_01", autoAccept: true,
     need: { type: "item", item: "taycothao", count: 3 },
-    reward: { stones: 100, exp: 50, items: [{ id: "pill_hx", qty: 2 }] },
+    reward: { stones: 150, exp: 120 },
+  },
+  {
+    id: "q_story_03", nameKey: "q_story_03", descKey: "q_story_03_desc",
+    npc: "dai_phu", req: "q_story_02", autoAccept: true,
+    need: { type: "talk" },
+    reward: { stones: 50, exp: 100, items: [{ id: "pill_taycotdan", qty: 1 }] },
+  },
+  {
+    id: "q_story_04", nameKey: "q_story_04", descKey: "q_story_04_desc",
+    npc: "dai_phu", req: "q_story_03", autoAccept: true,
+    need: { type: "kill", monster: "da_tru", count: 5 },
+    reward: { stones: 120, exp: 150, items: [{ id: "dan_hx_tieu", qty: 2 }] },
+  },
+  {
+    id: "q_story_05", nameKey: "q_story_05", descKey: "q_story_05_desc",
+    npc: "dai_phu", req: "q_story_04", autoAccept: true,
+    need: { type: "kill", monster: "son_ke", count: 8 },
+    reward: { stones: 150, exp: 220, items: [{ id: "pill_hl", qty: 2 }] },
+  },
+  {
+    id: "q_story_06", nameKey: "q_story_06", descKey: "q_story_06_desc",
+    npc: "truong_tran", req: "q_story_05", autoAccept: true,
+    need: { type: "kill", monster: "phong_lang", count: 10 },
+    reward: { stones: 200, exp: 350, items: [{ id: "dan_hx_tieu", qty: 2 }] },
+  },
+  {
+    id: "q_story_07", nameKey: "q_story_07", descKey: "q_story_07_desc",
+    npc: "truong_tran", req: "q_story_06", autoAccept: true,
+    need: { type: "kill", monster: "hu_thi", count: 10 },
+    reward: { stones: 250, exp: 450, items: [{ id: "dan_hl_tieu", qty: 2 }] },
+  },
+  {
+    id: "q_story_08", nameKey: "q_story_08", descKey: "q_story_08_desc",
+    npc: "dai_phu", req: "q_story_07", autoAccept: true,
+    need: { type: "kill", monster: "u_hon", count: 12 },
+    reward: { stones: 300, exp: 600, items: [{ id: "dan_hx_trung", qty: 2 }] },
+  },
+  {
+    id: "q_story_09", nameKey: "q_story_09", descKey: "q_story_09_desc",
+    npc: "dai_phu", req: "q_story_08", autoAccept: true,
+    need: { type: "kill", monster: "thi_ma", count: 12 },
+    reward: { stones: 400, exp: 800, items: [{ id: "dan_hl_trung", qty: 2 }] },
+  },
+  {
+    id: "q_story_10", nameKey: "q_story_10", descKey: "q_story_10_desc",
+    npc: "truong_tran", req: "q_story_09", autoAccept: true,
+    need: { type: "kill", monster: "da_tru_vuong", count: 1 },
+    reward: {
+      stones: 800, exp: 1200,
+      items: [{ id: "wpn_linh", qty: 1, locked: true }],
+    },
   },
   {
     id: "q_pet_intro", nameKey: "q_pet_intro", descKey: "q_pet_intro_desc",
     npc: "tuan_thu_su",
     need: { type: "talk" },
     reward: { stones: 0, exp: 100, items: [{ id: "trung_pham", qty: 1 }] },
-  },
-  {
-    id: "q_kill5", nameKey: "q_kill5", descKey: "q_kill5_desc",
-    npc: "dai_phu",
-    need: { type: "kill", monster: "da_tru", count: 5 },
-    reward: { stones: 80, exp: 60, items: [{ id: "pill_hx", qty: 2 }] },
-  },
-  {
-    id: "q_boss1", nameKey: "q_boss1", descKey: "q_boss1_desc",
-    npc: "dai_phu",
-    req: "q_kill5",
-    need: { type: "kill", monster: "da_tru_vuong", count: 1 },
-    reward: {
-      stones: 300, exp: 150,
-      items: [{ id: "wpn_linh", qty: 1, locked: true }],
-    },
   },
   /* ---- Nhiệm vụ ma đạo ở Huyết Ma Vực ---- */
   {
