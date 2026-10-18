@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d1420">
+<title>Tu Tiên Online</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <header id="hud" style="display:none"></header>
+  <main id="screen"></main>
+  <nav id="bottomnav" style="display:none"></nav>
+</div>
+<div id="toasts"></div>
+<div id="fx-layer"></div>
+
+<script src="js/lang.js"></script>
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script>
+// Khởi động
+(function () {
+  let st = loadGame();
+  if (!st) st = defaultState();
+  initGame(st);
+})();
+</script>
+</body>
+</html>

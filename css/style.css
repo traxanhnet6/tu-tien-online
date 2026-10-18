@@ -1,0 +1,182 @@
+/* Tu Tiên Online v1 — mobile-first, phong cách tiên hiệp */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #0d1420;
+  color: #e8dfc8;
+  min-height: 100vh;
+}
+#app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative;
+  background: linear-gradient(180deg, #101a2c 0%, #0d1420 100%);
+  padding-bottom: 76px; }
+#app.shake { animation: shake .4s; }
+@keyframes shake {
+  0%,100% { transform: translate(0); } 20% { transform: translate(-6px,3px); }
+  40% { transform: translate(5px,-4px); } 60% { transform: translate(-4px,-3px); }
+  80% { transform: translate(4px,3px); }
+}
+
+/* HUD */
+#hud { padding: 10px 12px 6px; background: rgba(20,28,44,.92); border-bottom: 2px solid #6b4f1d;
+  position: sticky; top: 0; z-index: 20; }
+.hud-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.hud-name { font-weight: bold; font-size: 15px; color: #ffd97a; }
+.hud-name .realm { display: block; font-size: 12px; color: #9fd8ff; font-weight: normal; }
+.hud-right { display: flex; gap: 8px; align-items: center; }
+.stone { color: #7ee2ff; font-weight: bold; font-size: 14px; }
+.bar { position: relative; height: 18px; background: #222c3f; border-radius: 9px; margin: 4px 0; overflow: hidden; }
+.bar > div { height: 100%; border-radius: 9px; transition: width .3s; }
+.bar span { position: absolute; inset: 0; font-size: 11px; line-height: 18px; text-align: center; color: #fff; text-shadow: 0 1px 2px #000; }
+.bar-hp { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+.bar-mp { background: linear-gradient(90deg, #2471a3, #2e86c1); }
+.bar-exp { background: linear-gradient(90deg, #7d6608, #d4ac0d); }
+.bar.exp { height: 14px; } .bar.exp span { line-height: 14px; font-size: 10px; }
+.lc-badge { font-size: 12px; color: #b8f0b8; margin-top: 4px; }
+
+/* Nút bấm */
+button { font-family: inherit; cursor: pointer; }
+.big-btn {
+  display: block; width: 100%; margin: 10px 0; padding: 13px;
+  font-size: 16px; font-weight: bold; color: #1a1206;
+  background: linear-gradient(180deg, #ffe9a8, #d9a441);
+  border: 2px solid #8a6d1f; border-radius: 10px;
+}
+.big-btn:disabled { opacity: .45; }
+.big-btn.danger { background: linear-gradient(180deg, #e6a8a8, #c0392b); color: #fff; border-color: #7b241c; }
+.mini-btn { padding: 6px 10px; font-size: 12px; border-radius: 8px;
+  background: #2c3a55; color: #cfe3ff; border: 1px solid #4a5f85; }
+.atk-btn, .skill-btn {
+  flex: 1; padding: 12px 6px; font-size: 15px; font-weight: bold; border-radius: 10px;
+  color: #fff; border: 2px solid #7b241c;
+  background: linear-gradient(180deg, #e74c3c, #922b21);
+}
+.skill-btn { background: linear-gradient(180deg, #2e86c1, #1a5276); border-color: #1a3a5c; }
+.skill-btn.el { background: linear-gradient(180deg, #8e44ad, #5b2c6f); border-color: #4a235a; }
+.auto-btn { width: 100%; margin-top: 8px; padding: 10px; border-radius: 10px; font-size: 14px;
+  background: #2c3a55; color: #cfe3ff; border: 1px solid #4a5f85; }
+.auto-btn.on { background: linear-gradient(180deg, #27ae60, #1e8449); color: #fff; border-color: #145a32; }
+
+/* Màn hình */
+#screen { padding: 12px; min-height: 60vh; }
+#screen h2 { color: #ffd97a; font-size: 18px; margin: 6px 0 10px; }
+.flavor { color: #9aa7c2; font-style: italic; font-size: 13px; }
+.note { color: #8a94a8; font-size: 12px; }
+.empty { color: #8a94a8; text-align: center; padding: 20px; }
+
+/* Tạo nhân vật */
+.create-box { text-align: center; padding: 30px 16px; }
+.game-logo { font-size: 64px; }
+.create-box h1 { color: #ffd97a; margin: 8px 0; }
+.create-box label { display: block; text-align: left; margin: 12px 0 4px; font-size: 13px; color: #9aa7c2; }
+.create-box input { width: 100%; padding: 12px; font-size: 16px; border-radius: 10px;
+  border: 1px solid #4a5f85; background: #16202f; color: #fff; }
+
+/* Map */
+.map-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+.map-tab { flex: 1; padding: 10px 4px; font-size: 13px; border-radius: 10px;
+  background: #22304a; color: #cfe3ff; border: 1px solid #4a5f85; }
+.map-tab.active { background: linear-gradient(180deg, #d9a441, #8a6d1f); color: #1a1206; font-weight: bold; }
+.map-tab.locked { opacity: .5; }
+.map-area { position: relative; border-radius: 12px; min-height: 300px; padding: 12px;
+  border: 2px solid #3a4a68; overflow: hidden; }
+.bg-town { background: linear-gradient(180deg, #87a8c8 0%, #5d7f9e 40%, #3d5a3a 100%); }
+.bg-forest { background: linear-gradient(180deg, #1e3a24 0%, #142a18 60%, #0d1f10 100%); }
+.bg-valley { background: linear-gradient(180deg, #3a2a5a 0%, #2a1e40 60%, #1a1228 100%); }
+.map-area .hint { text-align: center; color: rgba(255,255,255,.65); font-size: 12px; }
+.player { position: absolute; left: 18%; bottom: 90px; font-size: 44px; }
+.enemy { position: absolute; right: 18%; bottom: 90px; font-size: 52px; }
+.mobs { position: absolute; bottom: 8px; left: 8px; right: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+.mob { flex: 1; min-width: 80px; padding: 8px 4px; border-radius: 10px; font-size: 12px;
+  background: rgba(10,16,28,.75); color: #fff; border: 1px solid #4a5f85; }
+.mob-icon { font-size: 24px; display: block; }
+.mob-name.low { color: #7bed9f; } .mob-name.same { color: #ffe9a8; } .mob-name.high { color: #ff7f7f; }
+.mob-name i { font-style: normal; font-size: 10px; opacity: .7; }
+.boss-btn { width: 100%; margin-top: 10px; padding: 12px; font-size: 15px; font-weight: bold;
+  border-radius: 10px; color: #fff; border: 2px solid #7b241c;
+  background: linear-gradient(180deg, #922b21, #5b1a14); }
+.boss-btn:disabled { opacity: .55; }
+.npc-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.npc-btn { flex: 1; padding: 11px; border-radius: 10px; font-size: 14px;
+  background: linear-gradient(180deg, #2e86c1, #1a5276); color: #fff; border: 1px solid #1a3a5c; }
+#combat-panel { margin-top: 10px; }
+.target-bar { margin-bottom: 8px; font-size: 14px; }
+.btn-row { display: flex; gap: 8px; }
+
+/* Túi đồ */
+.eq-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.eq-slot { flex: 1; background: #16202f; border: 1px solid #3a4a68; border-radius: 10px; padding: 8px; font-size: 12px; text-align: center; }
+.eq-slot span:first-child { color: #8a94a8; display: block; margin-bottom: 4px; }
+.eq-item { font-size: 12px; background: #22304a; color: #ffe9a8; border: 1px solid #8a6d1f; border-radius: 8px; padding: 6px; }
+.eq-empty { color: #4a5f85; }
+.bag-list { display: flex; flex-direction: column; gap: 8px; }
+.bag-item { display: flex; align-items: center; gap: 10px; background: #16202f;
+  border: 1px solid #3a4a68; border-radius: 10px; padding: 10px; }
+.b-icon { font-size: 28px; }
+.bag-item .b-icon img { width: 34px; height: 34px; object-fit: contain; }
+.b-name { flex: 1; font-size: 14px; }
+.b-acts { display: flex; gap: 6px; }
+.b-acts button { padding: 8px 10px; font-size: 12px; border-radius: 8px;
+  background: #2e86c1; color: #fff; border: 1px solid #1a5276; }
+
+/* Nhân vật */
+.char-card { background: #16202f; border: 1px solid #3a4a68; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.char-card p { margin: 6px 0; font-size: 14px; }
+.bt-box { background: linear-gradient(180deg, #2a1e40, #1a1228); border: 2px solid #8e44ad;
+  border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.bt-box h3 { color: #d7a8ff; margin: 0 0 8px; }
+.quest-box { background: #16202f; border: 1px solid #3a4a68; border-radius: 12px; padding: 12px; }
+.quest-box h3 { margin: 0 0 8px; color: #ffd97a; }
+.lc-reveal { font-size: 22px; text-align: center; color: #b8f0b8; font-weight: bold; }
+
+/* Shop */
+.shop-list { display: flex; flex-direction: column; gap: 8px; }
+.shop-item { display: flex; align-items: center; gap: 10px; background: #16202f;
+  border: 1px solid #3a4a68; border-radius: 10px; padding: 10px; }
+.shop-item .b-name small { color: #8a94a8; }
+.shop-item button { padding: 10px 12px; font-size: 13px; border-radius: 8px; white-space: nowrap;
+  background: linear-gradient(180deg, #d9a441, #8a6d1f); color: #1a1206; font-weight: bold; border: none; }
+.locked-box { text-align: center; padding: 40px 16px; font-size: 48px; }
+.locked-box h2 { font-size: 20px; }
+
+/* More */
+.more-list { display: flex; flex-direction: column; gap: 4px; }
+
+/* Nav dưới */
+#bottomnav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px; display: flex; z-index: 30;
+  background: rgba(16,22,36,.96); border-top: 2px solid #6b4f1d; }
+.nav-btn { flex: 1; padding: 10px 2px 12px; background: none; border: none; color: #8a94a8;
+  font-size: 20px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.nav-btn span { font-size: 11px; }
+.nav-btn.active { color: #ffd97a; }
+
+/* Toast, modal, hiệu ứng */
+#toasts { position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+  width: min(92%, 440px); z-index: 100; pointer-events: none; }
+.toast { background: rgba(10,14,24,.92); border: 1px solid #6b4f1d; color: #ffe9a8;
+  padding: 10px 14px; border-radius: 10px; margin-bottom: 6px; font-size: 13px; text-align: center;
+  opacity: 0; transform: translateY(-8px); transition: all .3s; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.modal-ov { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 90;
+  display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal { background: #16202f; border: 2px solid #6b4f1d; border-radius: 14px;
+  padding: 18px; width: 100%; max-width: 400px; max-height: 80vh; overflow-y: auto; }
+.modal h3 { color: #ffd97a; margin-top: 0; }
+#fx-layer { position: fixed; inset: 0; pointer-events: none; z-index: 80; }
+.skill-fx { position: absolute; width: 120px; height: 120px; animation: fxpop .7s ease-out forwards; }
+@keyframes fxpop {
+  0% { transform: scale(.4) rotate(0deg); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: scale(1.6) rotate(120deg); opacity: 0; }
+}
+.float-txt { position: absolute; font-weight: bold; font-size: 18px; transform: translateX(-50%);
+  animation: floatup 1s ease-out forwards; text-shadow: 0 2px 4px #000; }
+.float-txt.dmg { color: #ffd97a; } .float-txt.dmg-p { color: #ff7f7f; }
+@keyframes floatup {
+  0% { opacity: 1; margin-top: 0; } 100% { opacity: 0; margin-top: -46px; }
+}
+.tribulation { position: absolute; inset: 0; background: rgba(20,8,40,.85);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.tribulation img { width: 220px; height: 220px; animation: fxpop 1.8s ease-out infinite; }
+.trib-txt { color: #d7a8ff; font-size: 20px; font-weight: bold; margin-top: 12px; }
