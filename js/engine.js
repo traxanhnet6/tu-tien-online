@@ -432,9 +432,14 @@ var Engine = (function () {
     _monsters = [];
     _bossDef = _mapDef.boss || null;
     _bossRespawnAt = 0;
-    var ids = (_mapDef.monsters && _mapDef.monsters.length) ? _mapDef.monsters : ['da_tru'];
+    /* Map an toàn tuyệt đối (tông môn, đại điện, linh điền): không spawn quái/boss hoang dã (Bui 2026-10-19) */
+    if (_mapDef.safe) { _bossDef = null; return; }
+    var _mf = _mapDef.monsters;
+    var ids = (_mf && _mf.length) ? _mf : (_mf ? [] : ['da_tru']);
     var zones = _mapDef.spawnZones;
-    if (zones && zones.length) {
+    /* Không có quái hoang dã nào (vd bí cảnh tông môn chỉ có boss): bỏ qua spawn thường, vẫn spawn boss */
+    var _skipWild = !ids.length;
+    if (zones && zones.length && !_skipWild) {
       /* Spawn theo BÃI QUÁI: chia đều quái cho các bãi, mỗi bãi spawn loại quái của bãi */
       var spawned = 0, zi, k;
       var perZone = Math.max(1, Math.floor(MAP_MON_COUNT / zones.length));
@@ -456,7 +461,7 @@ var Engine = (function () {
         _monsters.push(m0);
         spawned++;
       }
-    } else { /* map chưa có spawnZones: giữ cách cũ (spawn random khắp map) */
+    } else if (!_skipWild) { /* map chưa có spawnZones: giữ cách cũ (spawn random khắp map) */
       for (var i = 0; i < MAP_MON_COUNT; i++) {
         var p2 = _randPosClear(160, 110);
         _monsters.push(_spawnMon(ids[i % ids.length], p2.x, p2.y, false));
@@ -1507,6 +1512,7 @@ var Engine = (function () {
 
   function _updateRespawn(dt) {
     if (_dungeon) return; // bí cảnh: không respawn giữa ải
+    if (_mapDef.safe) return; // map an toàn: không respawn quái hoang dã (Bui 2026-10-19)
     _respawnT -= dt;
     if (_respawnT > 0) return;
     _respawnT = 2.5;
@@ -1515,8 +1521,9 @@ var Engine = (function () {
       var m = _monsters[i];
       if (!m.dead) { if (m.boss) bossAlive = true; else aliveN++; }
     }
-    if (aliveN < MAP_MON_COUNT) {
-      var ids = (_mapDef.monsters && _mapDef.monsters.length) ? _mapDef.monsters : ['da_tru'];
+    var _mf2 = _mapDef.monsters;
+    var ids = (_mf2 && _mf2.length) ? _mf2 : (_mf2 ? [] : ['da_tru']);
+    if (ids.length && aliveN < MAP_MON_COUNT) {
       var zones = _mapDef.spawnZones, zn = null, zids = ids;
       if (zones && zones.length) { /* respawn đúng trong bãi quái */
         zn = zones[Math.floor(Math.random() * zones.length)];

@@ -603,6 +603,7 @@ const MAPS = [
   },
   {
     id: 3,
+    safe: true,
     nameKey: "map_linh_dien",
     bg: "assets/maps/map_linh_dien.webp",
     ground: "assets/map/tile_ground_farm.png",
@@ -640,6 +641,7 @@ const MAPS = [
   },
   {
     id: 5,
+    safe: true,
     nameKey: "map_kiem_tong",
     bg: "assets/maps/map_kiem_tong.webp",
     ground: "assets/map/tile_ground_sect.png",
@@ -656,6 +658,7 @@ const MAPS = [
   },
   {
     id: 6,
+    safe: true,
     nameKey: "map_thien_phap_tong",
     bg: "assets/maps/map_thien_phap_tong.webp",
     ground: "assets/map/tile_ground_sect.png",
@@ -672,6 +675,7 @@ const MAPS = [
   },
   {
     id: 7,
+    safe: true,
     nameKey: "map_kim_cang_tong",
     bg: "assets/maps/map_kim_cang_tong.webp",
     ground: "assets/map/tile_ground_sect.png",
@@ -688,6 +692,7 @@ const MAPS = [
   },
   {
     id: 8,
+    safe: true,
     nameKey: "map_duoc_vuong_tong",
     bg: "assets/maps/map_duoc_vuong_tong.webp",
     ground: "assets/map/tile_ground_sect.png",
@@ -704,6 +709,7 @@ const MAPS = [
   },
   {
     id: 9,
+    safe: true,
     nameKey: "map_ngu_thu_tong",
     bg: "assets/maps/map_ngu_thu_tong.webp",
     ground: "assets/map/tile_ground_sect.png",
@@ -720,6 +726,7 @@ const MAPS = [
   },
   {
     id: 10,
+    safe: true,
     nameKey: "map_cuu_u_ma_tong",
     bg: "assets/maps/map_cuu_u_ma_tong.webp",
     ground: "assets/map/tile_ground_blood.png",
@@ -728,7 +735,7 @@ const MAPS = [
     dao: "ma",
     monsters: [],
     boss: null,
-    npcs: ["truong_lao_ma", "de_tu_ma_1", "de_tu_ma_2", "ma_luyen_su"],
+    npcs: ["truong_lao_ma", "de_tu_ma_1", "de_tu_ma_2", "ma_luyen_su", "u_minh_ton_gia", "mac_vo_tam"],
     quests: [],
     gates: [{to: 0, x: 1500, y: 600}],
     stoneDrop: [0, 0],
@@ -812,6 +819,7 @@ const MAPS = [
   },
   {
     id: 14,
+    safe: true,
     nameKey: "map_dai_dien_tong_mon",
     bg: "assets/maps/map_dai_dien_tong_mon.webp",
     loadingBg: "assets/maps/loading_0.webp",
