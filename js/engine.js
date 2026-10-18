@@ -2521,6 +2521,12 @@ var Engine = (function () {
     start: start,
     stop: stop,
     enterMap: enterMap,
+    setPlayerPos: function (x, y) {
+      if (typeof x === "number" && typeof y === "number") {
+        player.x = Math.max(16, Math.min(WORLD_W - 16, x));
+        player.y = Math.max(16, Math.min(WORLD_H - 16, y));
+      }
+    },
     setAuto: setAuto,
     setFly: setFly,
     setRun: setRun,

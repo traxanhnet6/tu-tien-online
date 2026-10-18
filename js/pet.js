@@ -28,6 +28,8 @@ var PET_EGGS = {
   trung_huyen: { tier: 2, hatchCost: 4000,  waitMin: 30 },
   trung_dia:   { tier: 3, hatchCost: 10000, waitMin: 30 },
   trung_thien: { tier: 4, hatchCost: 30000, waitMin: 30 },
+  /* Trứng Thuần Hóa: nhận khi thu phục yêu thú ở bãi quái — phẩm theo hàng đợi tameQueue */
+  trung_thuan_hoa: { tier: 0, hatchCost: 2000, waitMin: 30, tameEgg: true },
 };
 var PET_REST_MS = 5 * 60 * 1000;
 var PET_MAX_LEVEL = 50;
@@ -109,8 +111,15 @@ function _doHatch(state, eggId, e) {
       break;
     }
   }
-  var st = petStats({ tier: e.tier, level: 1 });
-  state.pet = { tier: e.tier, name: "", level: 1, exp: 0, hp: st.maxHp };
+  /* Trứng Thuần Hóa: lấy phẩm + loài từ hàng đợi thu phục */
+  var tier = e.tier, speciesId = null;
+  if (eggId === "trung_thuan_hoa" && state.tameQueue && state.tameQueue.length) {
+    var tq = state.tameQueue.shift();
+    if (tq) { tier = tq.tier || 0; speciesId = tq.speciesId || null; }
+  }
+  var st = petStats({ tier: tier, level: 1 });
+  state.pet = { tier: tier, name: "", level: 1, exp: 0, hp: st.maxHp };
+  if (speciesId) state.pet.speciesId = speciesId;
   state.petHatch = null;
   state.petRestUntil = 0;
   _save();

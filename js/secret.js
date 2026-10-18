@@ -13,6 +13,12 @@
  * data.js để chạy file:// + node; test kiểm tra 2 nơi đồng bộ).
  * ============================================================ */
 
+/* --- Dependency: BC_REALMS từ data.js (browser: global lexical; node: require) --- */
+var _SRD = null;
+if (typeof BC_REALMS === "undefined" && typeof require !== "undefined") {
+  try { _SRD = require("./data.js"); } catch (e) { _SRD = null; }
+}
+
 var SECRET_DEF = {
   "realms": [
     {
@@ -47,10 +53,18 @@ var Secret = (function () {
   "use strict";
 
   function _defs() {
+    var base = [];
     if (typeof SECRET_REALMS !== "undefined" && SECRET_REALMS && SECRET_REALMS.realms) {
-      return SECRET_REALMS.realms;
+      base = base.concat(SECRET_REALMS.realms);
+    } else {
+      base = base.concat(SECRET_DEF.realms);
     }
-    return SECRET_DEF.realms;
+    /* Bí cảnh tông môn + thế giới (Bui 2026-10-18): BC_REALMS gộp vào đây */
+    var _bc = null;
+    if (typeof BC_REALMS !== "undefined" && BC_REALMS && BC_REALMS.realms) _bc = BC_REALMS;
+    else if (_SRD && _SRD.BC_REALMS && _SRD.BC_REALMS.realms) _bc = _SRD.BC_REALMS;
+    if (_bc) base = base.concat(_bc.realms);
+    return base;
   }
   function realm(id) {
     var ds = _defs();
@@ -188,6 +202,15 @@ var Secret = (function () {
     if (!r) return { ok: false, reason: "no_realm" };
     var need = (r.unlock && r.unlock.realm) || 0;
     if (_realmRank(state) < need) return { ok: false, reason: "locked", need: need };
+    /* Bí cảnh tông môn: chỉ đệ tử tông đó được vào (Bui 2026-10-18) */
+    if (r.unlock && r.unlock.sect) {
+      var joined = null;
+      try {
+        if (typeof Sect !== "undefined" && Sect.joinedSect) joined = Sect.joinedSect(state);
+        else if (state && state.sectInfo) joined = state.sectInfo.joined;
+      } catch (e) {}
+      if (joined !== r.unlock.sect) return { ok: false, reason: "wrong_sect", need: r.unlock.sect };
+    }
     return { ok: true };
   }
   /* Vào bí cảnh (đang mở + đủ cảnh giới) */

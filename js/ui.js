@@ -533,6 +533,7 @@ function beginGame() {
   state.char.name = name;
   state.char.sect = createSel.sect;
   state.char.gender = (createSel.gender === "nu") ? "nu" : "nam";
+  if (!createSel.element) rollLingen();
   state.char.element = createSel.element;
   state.char.elementQuality = createSel.quality;
   state.char.roots = createSel.element ? [createSel.element] : []; /* linh căn đã khai mở (taycot.js) */
@@ -586,6 +587,21 @@ function startGame() {
               _ydId += "_" + _els[Math.floor(Math.random() * _els.length)];
             }
             drops.push({ id: _ydId, qty: 1 });
+          }
+        }
+      } catch (e) {}
+      /* Thu phục yêu thú hóa hình ở bãi quái (GrindZone): thường 0.5% / tinh anh 3% / boss 10% */
+      try {
+        if (typeof GrindZone !== "undefined" && def && def.loai === "thu") {
+          var _tame = GrindZone.tameRoll(monId, def, !!ev.elite, !!def.boss, curMapId);
+          if (_tame) {
+            addItem(state, "trung_thuan_hoa", 1);
+            state.tameQueue = state.tameQueue || [];
+            state.tameQueue.push(_tame);
+            var _sp = (typeof petSpecies === "function") ? petSpecies(_tame.speciesId) : null;
+            var _spName = _sp ? _sp.vi : _tame.speciesId;
+            toast(t("tame_success", { name: _spName }), "gold");
+            sfx("success");
           }
         }
       } catch (e) {}
@@ -1308,6 +1324,10 @@ function questTab() { return (panelArg && panelArg.tab) || "avail"; }
 function renderQuest() {
   if (typeof QUESTS === "undefined" || typeof Quest === "undefined") return "";
   if (questTab() === "sect") return renderSectQuests();
+  /* Đang khiêu chiến boss bí cảnh: hiện trận đấu (Bui 2026-10-18) */
+  if (panelArg && panelArg.trial) return tabBtns(
+    [["avail", t("q_tab_avail")], ["active", t("q_tab_active")], ["done", t("q_tab_done")], ["sect", t("q_tab_sect")]],
+    questTab(), "qtab") + renderQuestTrial(panelArg.trial);
   var h = tabBtns(
     [["avail", t("q_tab_avail")], ["active", t("q_tab_active")], ["done", t("q_tab_done")], ["sect", t("q_tab_sect")]],
     questTab(), "qtab");
@@ -1332,7 +1352,15 @@ function renderQuest() {
     if (q.reward) r += '<div class="item-desc">' + esc(t("q_reward")) + ": " + esc(rewardText(q.reward)) + "</div>";
     r += '</div><div class="row-btns">';
     if (o.st === "avail") r += '<button class="mini" data-act="quest-accept" data-id="' + esc(q.id) + '">' + esc(t("quest_accept")) + "</button>";
-    else if (o.st === "active") r += '<button class="mini" data-act="quest-turnin" data-id="' + esc(q.id) + '">' + esc(t("quest_turnin")) + "</button>";
+    else if (o.st === "active") {
+      /* Boss bí cảnh: nút khiêu chiến trước khi trả (Bui 2026-10-18) */
+      var _isTrial = q.need && q.need.type === "trial";
+      var _passed = o.e && o.e.trialPass;
+      if (_isTrial && !_passed) {
+        r += '<button class="mini" data-act="quest-trial-start" data-id="' + esc(q.id) + '">' + esc(t("q_trial_start")) + "</button>";
+      }
+      r += '<button class="mini" data-act="quest-turnin" data-id="' + esc(q.id) + '">' + esc(t("quest_turnin")) + "</button>";
+    }
     else r += '<span class="item-desc">✓ ' + esc(t("quest_done")) + "</span>";
     return r + "</div></div>";
   }).join("");
@@ -1514,6 +1542,61 @@ function sectTrialTick() {
   }
   renderPanel();
 }
+/* ---- Khiêu chiến boss bí cảnh (nhiệm vụ chính, Bui 2026-10-18) ----
+ * Tái dùng cơ chế quick-battle như trial tông môn, nhưng cho QUESTS chính. */
+var questTrial = null, questTrialTimer = null;
+function renderQuestTrial(qid) {
+  var b = questTrial;
+  if (!b || b.qid !== qid) return "<p>" + esc(t("q_no")) + "</p>";
+  var h = '<div class="npc-lines" style="text-align:center;font-size:17px">⚔ ' +
+    esc(t(b.q.eventKey || b.q.nameKey)) + " ⚔</div>" +
+    '<div class="item-desc" style="text-align:center">' + esc(t(b.q.need.boss.nameKey)) + "</div>" +
+    '<div class="hp-duel">' + _qtDuelBar(t(b.q.need.boss.nameKey), b.ehp, b.emax) +
+    _qtDuelBar(state.char.name, b.php, b.pmax) + "</div>";
+  return h;
+  function _qtDuelBar(nm, cur, max) {
+    return '<div class="duel-row"><div class="duel-name">' + esc(nm) + "</div>" +
+      '<div class="hud-bar"><div class="fill hp" style="width:' +
+      Math.max(0, cur / max * 100) + '%"></div></div></div>';
+  }
+}
+function startQuestTrial(qid) {
+  if (typeof Quest === "undefined") return;
+  var chk = Quest.trialEligible(state, qid);
+  if (!chk.ok) { toast(t("q_incomplete")); sfx("fail"); return; }
+  var q = chk.quest, s = getStats(), b = q.need.boss;
+  questTrial = {
+    qid: qid, q: q,
+    pmax: s.maxHp, php: s.maxHp, patk: s.atk, pdef: s.def,
+    emax: b.hp, ehp: b.hp, eatk: b.atk, edef: b.def,
+  };
+  try { sectFlash(q.fx || "#ffd76a", t(q.eventKey || q.nameKey)); } catch (e) {}
+  openPanel("quest", { trial: qid });
+  if (questTrialTimer) clearInterval(questTrialTimer);
+  questTrialTimer = setInterval(questTrialTick, 800);
+}
+function questTrialTick() {
+  var b = questTrial;
+  if (!b) { if (questTrialTimer) { clearInterval(questTrialTimer); questTrialTimer = null; } return; }
+  b.ehp -= calcDmg(b.patk, b.edef, 1);
+  if (b.ehp <= 0) {
+    clearInterval(questTrialTimer); questTrialTimer = null; questTrial = null;
+    Quest.passTrial(state, b.qid);
+    saveGame(state);
+    toast(t("sq_trial_win")); sfx("success");
+    openPanel("quest", { tab: "active" });
+    return;
+  }
+  b.php -= calcDmg(b.eatk, b.pdef, 1);
+  sfx("hit");
+  if (b.php <= 0) {
+    clearInterval(questTrialTimer); questTrialTimer = null; questTrial = null;
+    toast(t("sq_trial_lose")); sfx("fail");
+    renderPanel();
+    return;
+  }
+  renderPanel();
+}
 /* Hiệu ứng hoành tráng khi bắt đầu sự kiện tông môn */
 function sectFlash(color, text) {
   try {
@@ -1631,6 +1714,15 @@ function questProgress(q, e) {
   var need = q.need || {};
   if (need.type === "kill") return t("q_progress", { a: e.count || 0, b: need.count });
   if (need.type === "item") return t("q_progress", { a: countItem(state, need.item), b: need.count });
+  /* Tiến trình nhiệm vụ bí cảnh (Bui 2026-10-18) */
+  if (need.type === "secret_enter" || need.type === "secret_nodes" || need.type === "secret_party")
+    return t("q_progress", { a: e.count || 0, b: need.count || 1 });
+  if (need.type === "tower_floor") {
+    var _b = 0;
+    try { _b = (state.tower && state.tower.best) || 0; } catch (ex) {}
+    return t("q_progress", { a: Math.min(_b, need.floor), b: need.floor });
+  }
+  if (need.type === "trial") return (e.trialPass ? "✓ " : "") + t("q_trial_boss", { n: t(need.boss.nameKey) });
   return "";
 }
 function rewardText(rw) {
@@ -1670,9 +1762,11 @@ function renderDungeon() {
   if (typeof DUNGEONS === "undefined") return "";
   var h = tabBtns([
     ["pb", t("panel_dungeon")], ["bc", t("panel_secret")], ["sb", t("sb_tab")],
+    ["gz", t("dungeon_tab_grind")],
   ], dungeonTab(), "dg-tab");
   if (dungeonTab() === "bc") return h + renderSecretList();
   if (dungeonTab() === "sb") return h + renderSecretBook();
+  if (dungeonTab() === "gz") return h + renderGrindZones();
   return h + DUNGEONS.map(function (d, i) {
     var tp = dungeonType(d.typeId) || { phi: 0 };
     var left = dungeonLeft(state, d.id, d.typeId);
@@ -1837,10 +1931,18 @@ function doSecretEnter(realmId) {
   var r = Secret.enter(state, realmId, Date.now());
   if (!r.ok) {
     var msg = r.reason === "locked" ? t("sr_locked", { realm: stageName(r.need || 2, 0) }) :
+      r.reason === "wrong_sect" ? t("sr_wrong_sect") :
       r.reason === "not_open_yet" ? t("sr_not_open") : t("sr_ended");
     toast(msg); sfx("fail"); return;
   }
   var def = Secret.realm(realmId);
+  /* Nhiệm vụ bí cảnh: cập nhật tiến trình khám phá/tổ đội (Bui 2026-10-18) */
+  try {
+    if (typeof Quest !== "undefined" && Quest.onSecretEnter) {
+      var _friends = (state.social && state.social.friends) ? state.social.friends.length : 0;
+      Quest.onSecretEnter(state, realmId, 1 + _friends);
+    }
+  } catch (e) {}
   curSecretRealm = realmId;
   var _sbPriority = false;
   try { if (typeof SecretBook !== "undefined") _sbPriority = SecretBook.checkin(state, realmId, Date.now()).priority; } catch (e) {}
@@ -1865,6 +1967,8 @@ function doSecretGather() {
   }
   secretGatherCdUntil = now + 6000;
   toast(t("sr_gather_ok", { n: r.qty, name: itemName(r.itemId) })); sfx("pickup");
+  /* Nhiệm vụ bí cảnh: cập nhật tiến trình thu thập (Bui 2026-10-18) */
+  try { if (typeof Quest !== "undefined" && Quest.onSecretNode) Quest.onSecretNode(state, curSecretRealm); } catch (e) {}
   saveGame(state); refreshHUD(); updateSecretActions(Date.now());
 }
 function doSecretConsolation() {
@@ -2301,7 +2405,7 @@ var RENDER = {
   npc: renderNpc, shop: renderShop, breakthrough: renderBreakthrough, donate: renderDonate,
   friends: renderFriends, chat: renderChat, rename: renderRename, gender: renderGender,
   dao: renderDao, refine: renderRefine, death: renderDeath, tower: renderTower,
-  alchemy: renderAlchemy, equipdetail: renderEquipDetail
+  alchemy: renderAlchemy, equipdetail: renderEquipDetail, fragx: renderFragx
 };
 
 /* ================= THÔNG THIÊN THÁP + SỰ KIỆN NGÀY (tower.js) ================= */
@@ -2583,6 +2687,7 @@ function onPanelClick(e) {
       break;
     }
     case "sect-trial-start": startSectTrial(el.getAttribute("data-id")); break;
+    case "quest-trial-start": startQuestTrial(el.getAttribute("data-id")); break;
     case "sect-daily-claim": {
       var dc = (typeof SectQuest !== "undefined") ? SectQuest.claimDaily(state, el.getAttribute("data-id")) : null;
       if (dc && dc.ok) {
@@ -2631,6 +2736,8 @@ function onPanelClick(e) {
     case "dg-enter": doDungeonEnter(DUNGEONS[+i]); break;
     case "dg-buy": doDungeonBuy(DUNGEONS[+i]); break;
     case "dg-tab": panelArg = { dtab: v }; renderPanel(); break;
+    case "gz-go": doGrindTravel(el.getAttribute("data-id")); break;
+    case "fragx-do": doFragExchange(parseInt(el.getAttribute("data-i"), 10)); break;
     case "secret-enter": doSecretEnter(el.getAttribute("data-id")); break;
     case "gift-redeem": doGiftRedeem(); break;
     case "set-music":
@@ -3004,6 +3111,7 @@ function doNpcOpt(el) {
   if (opact === "farm") { openPanel("farm"); return; }
   if (opact === "enhance") { openPanel("char", { tab: "equip" }); return; }
   if (opact === "refine") { openPanel("refine"); return; }
+  if (opact === "fragx") { openPanel("fragx"); return; }
   if (opact === "alchemy") { openPanel("alchemy"); return; }
   if (opact === "alchemy-craft") { doAlchemyCraft(el.getAttribute("data-recipe")); return; }
   if (opact === "sect-join") { doSectJoin(opt.sect || el.getAttribute("data-sect")); return; }
@@ -3034,7 +3142,8 @@ function bindStatic() {
 
   $("create-gender-nam").onclick = function () { createSel.gender = "nam"; syncCreateGender(); sfx("click"); };
   $("create-gender-nu").onclick = function () { createSel.gender = "nu"; syncCreateGender(); sfx("click"); };
-  $("btn-taycot").onclick = function () { rollLingen(); };
+  var _btnTaycot = $("btn-taycot");
+  if (_btnTaycot) _btnTaycot.onclick = function () { rollLingen(); };
   $("btn-begin").onclick = function () { beginGame(); };
   $("btn-create-back").onclick = function () { sfx("click"); show("menu"); refreshMenu(); };
 
@@ -3541,6 +3650,110 @@ function renderRefine() {
   });
   if (!found) h += '<div class="bc-desc">' + esc(t("bc_no_yaodan")) + "</div>";
   return h;
+}
+/* ================= BÃI QUÁI CÀY CẤP + ĐỔI MẢNH TRANG BỊ (GrindZone) ================= */
+function gzRealmName(r) {
+  try {
+    if (typeof STAGES !== "undefined" && STAGES[r]) return STAGES[r].ten;
+  } catch (e) {}
+  return "?" + r;
+}
+function renderGrindZones() {
+  if (typeof GrindZone === "undefined") return "";
+  var myRealm = (state.char && state.char.realm) || 0;
+  var h = '<div class="item-name">⚔️ ' + esc(t("dungeon_tab_grind")) + "</div>";
+  h += '<div class="item-desc">' + esc(t("gz_tame_info")) + "</div>";
+  var lastRealm = -1;
+  GrindZone.GRIND_ZONES.forEach(function (z) {
+    if (z.realm !== lastRealm) {
+      lastRealm = z.realm;
+      h += '<div class="dg-realm">' + esc(gzRealmName(z.realm)) + "</div>";
+    }
+    var can = GrindZone.canEnter(state, z);
+    var mons = z.monsters.map(function (m) { return esc(monName(m)); }).join(", ");
+    var bossTxt = z.boss ? " · 👹 " + esc(monName(z.boss)) : "";
+    var spNames = z.tameSpecies.map(function (s) {
+      var sp = (typeof petSpecies === "function") ? petSpecies(s) : null;
+      return esc(sp ? sp.vi : s);
+    }).join(", ");
+    h += '<div class="row"><div><div class="item-name">' + esc(t(z.nameKey)) +
+      (can ? "" : ' 🔒') + "</div>" +
+      '<div class="item-desc">' + esc(t(z.descKey)) + "</div>" +
+      '<div class="item-desc">👾 ' + mons + bossTxt + "</div>" +
+      '<div class="item-desc">✨ ' + esc(t("gz_exp_hour", { n: (z.expGio || 0).toLocaleString("vi-VN") })) +
+      " · 🥚 " + spNames + "</div>" +
+      '<div class="item-desc">💎 ' + esc(t("gz_yaodan_frag", { n: z.yaodanTier, r: z.fragRealm })) + "</div>" +
+      "</div>" +
+      '<div class="row-btns"><button class="mini" data-act="gz-go" data-id="' + z.id + '"' +
+      (can ? "" : " disabled") + ">" +
+      esc(can ? t("gz_travel") : t("gz_need_realm", { n: gzRealmName(z.realm) })) +
+      "</button></div></div>";
+  });
+  return h;
+}
+function doGrindTravel(zoneId) {
+  if (typeof GrindZone === "undefined") return;
+  var z = GrindZone.zone(zoneId);
+  if (!z) return;
+  if (!GrindZone.canEnter(state, z)) {
+    toast(t("gz_need_realm", { n: gzRealmName(z.realm) })); sfx("fail"); return;
+  }
+  closePanel();
+  curMapId = z.mapId;
+  state.map.id = z.mapId;
+  curSecretRealm = null;
+  try { if (typeof Engine !== "undefined" && Engine.leaveSecretRealm) Engine.leaveSecretRealm(); } catch (e) {}
+  try {
+    if (typeof Engine !== "undefined" && Engine.enterMap) {
+      Engine.enterMap(z.mapId);
+      if (Engine.setPlayerPos) Engine.setPlayerPos(z.x, z.y);
+    }
+  } catch (e) {}
+  var m = mapDef(z.mapId);
+  try {
+    state.mapAura = (typeof mapDaoMismatch === "function" && m && mapDaoMismatch(m)) ? { mapDao: m.dao } : null;
+  } catch (e) {}
+  saveGame(state);
+  try { if (typeof music === "function") music("map"); } catch (e) {}
+  if (m) toast(t(m.nameKey) + " — " + t(z.nameKey));
+  refreshHUD();
+  sfx("click");
+}
+/* Đổi mảnh trang bị ở Lão Rèn */
+function renderFragx() {
+  if (typeof GrindZone === "undefined") return "";
+  var h = '<div class="item-name">🧩 ' + esc(t("npc_frag_exchange")) + "</div>";
+  h += '<div class="item-desc">' + esc(t("fragx_desc")) + "</div>";
+  var lastRealm = -1;
+  GrindZone.FRAG_RECIPES.forEach(function (rc, i) {
+    if (rc.realm !== lastRealm) {
+      lastRealm = rc.realm;
+      h += '<div class="dg-realm">' + esc(gzRealmName(rc.realm)) + " → " + esc(gzRealmName(rc.realm + 1)) + "</div>";
+    }
+    var have = (typeof countItem === "function") ? countItem(state, rc.frag) : 0;
+    var ok = have >= rc.need;
+    h += '<div class="row"><div><div class="item-name">' + esc(itemName(rc.frag)) +
+      ' <span class="item-desc">x' + have + "/" + rc.need + "</span></div>" +
+      '<div class="item-desc">→ ' + esc(itemName(rc.out)) + "</div></div>" +
+      '<div class="row-btns"><button class="mini" data-act="fragx-do" data-i="' + i + '"' +
+      (ok ? "" : " disabled") + ">" + esc(t("fragx_exchange")) + "</button></div></div>";
+  });
+  return h;
+}
+function doFragExchange(idx) {
+  if (typeof GrindZone === "undefined") return;
+  var r = GrindZone.doFragExchange(state, idx,
+    function (st, id, q) { addItem(st, id, q); },
+    function (st, id, q) { removeItem(st, id, q); },
+    function (st, id) { return countItem(st, id); });
+  if (!r.ok) {
+    toast(t(r.reason === "not_enough" ? "fragx_not_enough" : "fragx_fail")); sfx("fail"); return;
+  }
+  toast(t("fragx_done", { name: itemName(r.out) }), "gold");
+  sfx("success");
+  saveGame(state);
+  renderPanel();
+  refreshHUD();
 }
 /* ================= CHI TIẾT TRANG BỊ + KHÍ LINH + LUYỆN HÓA ================= */
 function equipDetailSlot() {

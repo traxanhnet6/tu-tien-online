@@ -327,6 +327,7 @@ function _forgeTalk(npcId, def) {
       { label: "npc_shop", act: "shop", stock: def.stock || null },
       { label: "npc_enhance", act: "enhance" },
       { label: "npc_refine_yaodan", act: "refine" },
+      { label: "npc_frag_exchange", act: "fragx" },
       { label: "npc_bye", act: "bye" },
     ],
   };

@@ -65,6 +65,9 @@ const MONSTERS = {
       { id: "trung_linh", rate: 0.002, min: 1, max: 1 },
       { id: "dan_hx_tieu", rate: 0.05, min: 1, max: 1 },
       { id: "thit_yeu_thu", rate: 0.03, min: 1, max: 1 },
+          { id: "frag_r1_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r1_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r1_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   son_ke: {
@@ -78,6 +81,9 @@ const MONSTERS = {
       { id: "dan_hx_tieu", rate: 0.05, min: 1, max: 1 },
       { id: "thit_yeu_thu", rate: 0.03, min: 1, max: 1 },
       { id: "hat_linh_chi", rate: 0.03, min: 1, max: 1 },
+          { id: "frag_r1_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r1_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r1_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   son_tac: {
@@ -193,6 +199,9 @@ const MONSTERS = {
       { id: "trung_linh", rate: 0.002, min: 1, max: 1 },
       { id: "dan_hl_tieu", rate: 0.05, min: 1, max: 1 },
       { id: "linh_tra", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r2_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r2_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r2_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   hu_thi: {
@@ -206,6 +215,9 @@ const MONSTERS = {
       { id: "dan_hl_tieu", rate: 0.05, min: 1, max: 1 },
       { id: "linh_tra", rate: 0.02, min: 1, max: 1 },
       { id: "hat_truc_co_thao", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r2_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r2_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r2_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   lang_vuong: {
@@ -234,6 +246,9 @@ const MONSTERS = {
       { id: "trung_linh", rate: 0.002, min: 1, max: 1 },
       { id: "duong_than_dan", rate: 0.04, min: 1, max: 1 },
       { id: "thanh_tam_qua", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   thi_ma: {
@@ -247,6 +262,9 @@ const MONSTERS = {
       { id: "duong_than_dan", rate: 0.04, min: 1, max: 1 },
       { id: "thanh_tam_qua", rate: 0.02, min: 1, max: 1 },
       { id: "hat_dia_linh_qua", rate: 0.015, min: 1, max: 1 },
+          { id: "frag_r3_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   cot_tuong: {
@@ -274,6 +292,9 @@ const MONSTERS = {
       { id: "huyet_tinh", rate: 0.10, min: 1, max: 1 },
       { id: "trung_linh", rate: 0.005, min: 1, max: 1 },
       { id: "dan_hx_trung", rate: 0.05, min: 1, max: 1 },
+          { id: "frag_r4_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   oan_linh: {
@@ -284,6 +305,9 @@ const MONSTERS = {
       { id: "yaodan1", rate: 0.06, min: 1, max: 1 },
       { id: "oan_hon_thach", rate: 0.10, min: 1, max: 1 },
       { id: "duong_than_dan", rate: 0.04, min: 1, max: 1 },
+          { id: "frag_r4_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   ma_lang: {
@@ -295,6 +319,9 @@ const MONSTERS = {
       { id: "huyet_tinh", rate: 0.08, min: 1, max: 1 },
       { id: "thit_yeu_thu", rate: 0.05, min: 1, max: 1 },
       { id: "trung_huyen", rate: 0.003, min: 1, max: 1 },
+          { id: "frag_r4_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   u_hon_lang: {
@@ -304,6 +331,9 @@ const MONSTERS = {
       { id: "pill_hx", rate: 0.06, min: 1, max: 1 },
       { id: "yaodan1", rate: 0.04, min: 1, max: 1 },
       { id: "oan_hon_thach", rate: 0.05, min: 1, max: 1 },
+          { id: "frag_r2_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r2_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r2_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   thach_giap_trung: {
@@ -312,6 +342,9 @@ const MONSTERS = {
     drops: [
       { id: "pill_hx", rate: 0.06, min: 1, max: 1 },
       { id: "tran_than_thach", rate: 0.08, min: 1, max: 1 },
+          { id: "frag_r1_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r1_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r1_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   tinh_thach_quai: {
@@ -320,6 +353,9 @@ const MONSTERS = {
     drops: [
       { id: "pill_hl", rate: 0.06, min: 1, max: 1 },
       { id: "linh_thach_tho", rate: 0.08, min: 1, max: 1 },
+          { id: "frag_r1_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r1_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r1_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   huyet_ma_vuong: {
@@ -344,6 +380,9 @@ const MONSTERS = {
       { id: "tien_thao", rate: 0.12, min: 1, max: 1 },
       { id: "yaodan1", rate: 0.06, min: 1, max: 1 },
       { id: "trung_linh", rate: 0.005, min: 1, max: 1 },
+          { id: "frag_r3_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   thien_hac: {
@@ -354,6 +393,9 @@ const MONSTERS = {
       { id: "tien_thao", rate: 0.10, min: 1, max: 1 },
       { id: "yaodan1", rate: 0.06, min: 1, max: 1 },
       { id: "linh_tra", rate: 0.04, min: 1, max: 1 },
+          { id: "frag_r3_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r3_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
   thien_tuong: {
@@ -388,6 +430,191 @@ const MONSTERS = {
       { id: "dan_hl_trung", rate: 0.3, min: 1, max: 2 },
     ],
   },
+  am_anh_thu: {
+    nameKey: "mon_am_anh_thu", hp: 600, atk: 130, def: 40, exp: 200,
+    img: null, fb: "#4a3a6a", loai: "thu",
+    drops: [
+      { id: "yaodan3", rate: 0.06, min: 1, max: 1 },
+      { id: "trung_huyen", rate: 0.01, min: 1, max: 1 },
+      { id: "dan_hl_trung", rate: 0.08, min: 1, max: 1 },
+          { id: "frag_r4_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_phapbao", rate: 0.02, min: 1, max: 1 },
+    ],
+  },
+  huyet_buc: {
+    nameKey: "mon_huyet_buc", hp: 550, atk: 125, def: 38, exp: 190,
+    img: null, fb: "#8a2a3a", loai: "thu", bay: true,
+    drops: [
+      { id: "yaodan3", rate: 0.06, min: 1, max: 1 },
+      { id: "trung_huyen", rate: 0.01, min: 1, max: 1 },
+      { id: "dan_hx_trung", rate: 0.08, min: 1, max: 1 },
+          { id: "frag_r4_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r4_phapbao", rate: 0.02, min: 1, max: 1 },
+    ],
+  },
+  thien_ma: {
+    nameKey: "mon_thien_ma", hp: 1500, atk: 280, def: 80, exp: 600,
+    img: null, fb: "#2a1a4a", loai: "ma", bay: true,
+    drops: [
+      { id: "yaodan4", rate: 0.08, min: 1, max: 1 },
+      { id: "trung_dia", rate: 0.01, min: 1, max: 1 },
+      { id: "dan_hl_dai", rate: 0.08, min: 1, max: 1 },
+          { id: "frag_r5_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r5_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r5_phapbao", rate: 0.02, min: 1, max: 1 },
+    ],
+  },
+  cuu_u_ma_tuong: {
+    nameKey: "mon_cuu_u_ma_tuong", hp: 5000, atk: 380, def: 110, exp: 1500,
+    img: null, fb: "#1a0a2a", loai: "ma", boss: true, cg: 20,
+    drops: [
+      { id: "yaodan4", rate: 0.5, min: 1, max: 2 },
+      { id: "trung_dia", rate: 0.08, min: 1, max: 1 },
+      { id: "manual_boss_ma_tuong", rate: 0.08, eliteRate: 0.15, min: 1, max: 1 },
+          { id: "frag_r5_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r5_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r5_phapbao", rate: 0.02, min: 1, max: 1 },
+    ],
+  },
+  hon_don_thu: {
+    nameKey: "mon_hon_don_thu", hp: 3000, atk: 500, def: 150, exp: 1200,
+    img: null, fb: "#5a4a7a", loai: "thu",
+    drops: [
+      { id: "yaodan4", rate: 0.1, min: 1, max: 1 },
+      { id: "trung_dia", rate: 0.015, min: 1, max: 1 },
+      { id: "dan_hx_dai", rate: 0.1, min: 1, max: 1 },
+          { id: "frag_r6_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r6_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r6_phapbao", rate: 0.02, min: 1, max: 1 },
+    ],
+  },
+  thai_hu_thu_vuong: {
+    nameKey: "mon_thai_hu_thu_vuong", hp: 9000, atk: 700, def: 200, exp: 3000,
+    img: null, fb: "#3a2a5a", loai: "thu", boss: true, cg: 25,
+    drops: [
+      { id: "yaodan5", rate: 0.4, min: 1, max: 1 },
+      { id: "trung_thien", rate: 0.06, min: 1, max: 1 },
+      { id: "manual_boss_thaihu", rate: 0.08, eliteRate: 0.15, min: 1, max: 1 },
+          { id: "frag_r6_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r6_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r6_phapbao", rate: 0.02, min: 1, max: 1 },
+    ],
+  },
+  cuu_kiep_loi_thu: {
+    nameKey: "mon_cuu_kiep_loi_thu", hp: 6000, atk: 1000, def: 300, exp: 2500,
+    img: null, fb: "#6a5a2a", loai: "thu",
+    drops: [
+      { id: "yaodan5", rate: 0.1, min: 1, max: 1 },
+      { id: "trung_thien", rate: 0.015, min: 1, max: 1 },
+          { id: "frag_r7_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r7_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r7_phapbao", rate: 0.02, min: 1, max: 1 },
+    ],
+  },
+  huyet_ma_phan_than: {
+    nameKey: "mon_huyet_ma_phan_than", hp: 15000, atk: 1400, def: 400, exp: 6000,
+    img: null, fb: "#5a0a0a", loai: "ma", boss: true, cg: 30,
+    drops: [
+      { id: "yaodan5", rate: 0.6, min: 1, max: 2 },
+      { id: "trung_thien", rate: 0.1, min: 1, max: 1 },
+      { id: "manual_boss_huyetma", rate: 0.08, eliteRate: 0.15, min: 1, max: 1 },
+          { id: "frag_r7_vukhi", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r7_giap", rate: 0.02, min: 1, max: 1 },
+          { id: "frag_r7_phapbao", rate: 0.02, min: 1, max: 1 },
+    ],
+  },
+  /* --- Trứng Thuần Hóa: thu phục yêu thú ở bãi quái cày cấp --- */
+  trung_thuan_hoa: {
+    kind: "pet_egg", tier: 0, nameKey: "it_egg_tame", descKey: "it_egg_tame_desc",
+    price: 1000, sell: 200, tameEgg: true, icon: "\U0001f95a",
+  },
+  /* --- Mảnh trang bị: đủ số lượng đổi ở Lão Rèn --- */
+  frag_r1_vukhi: {
+    kind: "frag", nameKey: "it_frag_r1_vukhi", descKey: "it_frag_r1_desc",
+    fragRealm: 1, fragSlot: "vukhi", price: 100, sell: 30, icon: "\U0001f9e9",
+  },
+  frag_r1_giap: {
+    kind: "frag", nameKey: "it_frag_r1_giap", descKey: "it_frag_r1_desc",
+    fragRealm: 1, fragSlot: "giap", price: 100, sell: 30, icon: "\U0001f9e9",
+  },
+  frag_r1_phapbao: {
+    kind: "frag", nameKey: "it_frag_r1_phapbao", descKey: "it_frag_r1_desc",
+    fragRealm: 1, fragSlot: "phapbao", price: 100, sell: 30, icon: "\U0001f9e9",
+  },
+  frag_r2_vukhi: {
+    kind: "frag", nameKey: "it_frag_r2_vukhi", descKey: "it_frag_r2_desc",
+    fragRealm: 2, fragSlot: "vukhi", price: 200, sell: 60, icon: "\U0001f9e9",
+  },
+  frag_r2_giap: {
+    kind: "frag", nameKey: "it_frag_r2_giap", descKey: "it_frag_r2_desc",
+    fragRealm: 2, fragSlot: "giap", price: 200, sell: 60, icon: "\U0001f9e9",
+  },
+  frag_r2_phapbao: {
+    kind: "frag", nameKey: "it_frag_r2_phapbao", descKey: "it_frag_r2_desc",
+    fragRealm: 2, fragSlot: "phapbao", price: 200, sell: 60, icon: "\U0001f9e9",
+  },
+  frag_r3_vukhi: {
+    kind: "frag", nameKey: "it_frag_r3_vukhi", descKey: "it_frag_r3_desc",
+    fragRealm: 3, fragSlot: "vukhi", price: 300, sell: 90, icon: "\U0001f9e9",
+  },
+  frag_r3_giap: {
+    kind: "frag", nameKey: "it_frag_r3_giap", descKey: "it_frag_r3_desc",
+    fragRealm: 3, fragSlot: "giap", price: 300, sell: 90, icon: "\U0001f9e9",
+  },
+  frag_r3_phapbao: {
+    kind: "frag", nameKey: "it_frag_r3_phapbao", descKey: "it_frag_r3_desc",
+    fragRealm: 3, fragSlot: "phapbao", price: 300, sell: 90, icon: "\U0001f9e9",
+  },
+  frag_r4_vukhi: {
+    kind: "frag", nameKey: "it_frag_r4_vukhi", descKey: "it_frag_r4_desc",
+    fragRealm: 4, fragSlot: "vukhi", price: 400, sell: 120, icon: "\U0001f9e9",
+  },
+  frag_r4_giap: {
+    kind: "frag", nameKey: "it_frag_r4_giap", descKey: "it_frag_r4_desc",
+    fragRealm: 4, fragSlot: "giap", price: 400, sell: 120, icon: "\U0001f9e9",
+  },
+  frag_r4_phapbao: {
+    kind: "frag", nameKey: "it_frag_r4_phapbao", descKey: "it_frag_r4_desc",
+    fragRealm: 4, fragSlot: "phapbao", price: 400, sell: 120, icon: "\U0001f9e9",
+  },
+  frag_r5_vukhi: {
+    kind: "frag", nameKey: "it_frag_r5_vukhi", descKey: "it_frag_r5_desc",
+    fragRealm: 5, fragSlot: "vukhi", price: 500, sell: 150, icon: "\U0001f9e9",
+  },
+  frag_r5_giap: {
+    kind: "frag", nameKey: "it_frag_r5_giap", descKey: "it_frag_r5_desc",
+    fragRealm: 5, fragSlot: "giap", price: 500, sell: 150, icon: "\U0001f9e9",
+  },
+  frag_r5_phapbao: {
+    kind: "frag", nameKey: "it_frag_r5_phapbao", descKey: "it_frag_r5_desc",
+    fragRealm: 5, fragSlot: "phapbao", price: 500, sell: 150, icon: "\U0001f9e9",
+  },
+  frag_r6_vukhi: {
+    kind: "frag", nameKey: "it_frag_r6_vukhi", descKey: "it_frag_r6_desc",
+    fragRealm: 6, fragSlot: "vukhi", price: 600, sell: 180, icon: "\U0001f9e9",
+  },
+  frag_r6_giap: {
+    kind: "frag", nameKey: "it_frag_r6_giap", descKey: "it_frag_r6_desc",
+    fragRealm: 6, fragSlot: "giap", price: 600, sell: 180, icon: "\U0001f9e9",
+  },
+  frag_r6_phapbao: {
+    kind: "frag", nameKey: "it_frag_r6_phapbao", descKey: "it_frag_r6_desc",
+    fragRealm: 6, fragSlot: "phapbao", price: 600, sell: 180, icon: "\U0001f9e9",
+  },
+  frag_r7_vukhi: {
+    kind: "frag", nameKey: "it_frag_r7_vukhi", descKey: "it_frag_r7_desc",
+    fragRealm: 7, fragSlot: "vukhi", price: 700, sell: 210, icon: "\U0001f9e9",
+  },
+  frag_r7_giap: {
+    kind: "frag", nameKey: "it_frag_r7_giap", descKey: "it_frag_r7_desc",
+    fragRealm: 7, fragSlot: "giap", price: 700, sell: 210, icon: "\U0001f9e9",
+  },
+  frag_r7_phapbao: {
+    kind: "frag", nameKey: "it_frag_r7_phapbao", descKey: "it_frag_r7_desc",
+    fragRealm: 7, fragSlot: "phapbao", price: 700, sell: 210, icon: "\U0001f9e9",
+  },
 };
 /* ============================================================
  * BẢN ĐỒ — 3 map Luyện Khí
@@ -410,6 +637,7 @@ const MAPS = [
       { x: 280, y: 800, r: 150, monsters: ["da_tru"] },
       { x: 1300, y: 850, r: 150, monsters: ["son_ke"] },
       { x: 1050, y: 650, r: 150, monsters: ["son_tac"] },
+      { x: 600, y: 300, r: 160, monsters: ["da_tru", "son_ke"] },
     ],
     bossSpawn: { x: 800, y: 880 },
     npcs: ["dai_phu", "van_tien_cac", "truong_lao", "tam_tien_bi_tich", "truong_tran", "lao_ren", "thuong_nhan", "tieu_nhi", "su_gia_kiem", "su_gia_phap", "su_gia_the", "tuan_thu_su", "lao_dan_duong", "thu_thap_nhan", "su_gia_duoc", "su_gia_thu", "minh_chu", "thuong_nhan_du_hanh", "su_gia_ma", "truong_lang", "co_tran_tu", "to_uyen_nhi", "diep_van"],
@@ -432,6 +660,7 @@ const MAPS = [
       { x: 300, y: 380, r: 160, monsters: ["phong_lang"] },
       { x: 1250, y: 680, r: 160, monsters: ["hu_thi"] },
       { x: 750, y: 950, r: 150, monsters: ["u_hon_lang"] },
+      { x: 1000, y: 250, r: 160, monsters: ["phong_lang", "hu_thi"] },
     ],
     bossSpawn: { x: 1150, y: 180 },
     npcs: ["tho_san", "an_sy"],
@@ -453,6 +682,7 @@ const MAPS = [
     spawnZones: [
       { x: 800, y: 280, r: 170, monsters: ["u_hon"] },
       { x: 800, y: 920, r: 170, monsters: ["thi_ma"] },
+      { x: 1300, y: 600, r: 160, monsters: ["u_hon", "thi_ma"] },
     ],
     bossSpawn: { x: 1300, y: 300 },
     npcs: [],
@@ -490,6 +720,7 @@ const MAPS = [
     spawnZones: [
       { x: 350, y: 720, r: 150, monsters: ["thach_giap_trung"] },
       { x: 1250, y: 450, r: 150, monsters: ["tinh_thach_quai"] },
+      { x: 800, y: 950, r: 160, monsters: ["thach_giap_trung", "tinh_thach_quai"] },
     ],
     npcs: ["quan_mo", "thuong_nhan_mo"],
     quests: [],
@@ -607,6 +838,11 @@ const MAPS = [
       { x: 300, y: 750, r: 160, monsters: ["ma_binh"] },
       { x: 1250, y: 400, r: 160, monsters: ["oan_linh"] },
       { x: 700, y: 220, r: 150, monsters: ["ma_lang"] },
+      { x: 1100, y: 950, r: 160, monsters: ["ma_binh", "ma_lang"] },
+      { x: 500, y: 1000, r: 160, monsters: ["oan_linh", "am_anh_thu"] },
+      { x: 180, y: 500, r: 150, monsters: ["thien_ma"] },
+      { x: 1450, y: 1000, r: 150, monsters: ["thien_ma", "am_anh_thu"] },
+      { x: 800, y: 300, r: 150, monsters: ["huyet_ma_phan_than", "thien_ma"] },
     ],
     bossSpawn: { x: 1300, y: 950 },
     npcs: ["ma_thuong_nhan", "co_hon", "huyet_ma_tu"],
@@ -628,6 +864,8 @@ const MAPS = [
     spawnZones: [
       { x: 300, y: 620, r: 150, monsters: ["ngoc_tho"] },
       { x: 900, y: 950, r: 160, monsters: ["thien_hac"] },
+      { x: 1200, y: 300, r: 160, monsters: ["ngoc_tho", "thien_hac"] },
+      { x: 500, y: 200, r: 150, monsters: ["huyet_buc", "thien_hac"] },
     ],
     bossSpawn: { x: 1200, y: 250 },
     npcs: ["tien_ong"],
@@ -650,6 +888,9 @@ const MAPS = [
       { x: 1250, y: 700, r: 160, monsters: ["thien_hac"] },
       { x: 350, y: 850, r: 150, monsters: ["ngoc_tho"] },
       { x: 800, y: 300, r: 150, monsters: ["u_hon_lang"] },
+      { x: 800, y: 1000, r: 160, monsters: ["thien_hac", "huyet_buc"] },
+      { x: 1300, y: 300, r: 160, monsters: ["hon_don_thu", "u_minh_cu_mang"] },
+      { x: 200, y: 600, r: 150, monsters: ["cuu_kiep_loi_thu", "hac_long"] },
     ],
     bossSpawn: { x: 1200, y: 950 },
     npcs: [],
@@ -660,6 +901,104 @@ const MAPS = [
     expMult: 2,
   },
 ];
+
+/* ============ BÍ CẢNH TÔNG MÔN + THẾ GIỚI (Bui 2026-10-18) ============
+ * 6 bí cảnh riêng tông môn (khóa theo tông) + 2 bí cảnh chung thế giới.
+ * Đọc bởi Secret._defs() gộp với SECRET_REALMS. Lịch: daily = mỗi ngày 3 khung,
+ * daily2 = mỗi ngày 2 khung, weekly = T7+CN.
+ */
+function _bcDailyWindows() {
+  var out = [];
+  for (var d = 0; d < 7; d++) { ["10:00", "15:00", "21:00"].forEach(function (s) { out.push({ day: d, start: s }); }); }
+  return out;
+}
+function _bcDaily2Windows() {
+  var out = [];
+  for (var d = 0; d < 7; d++) { ["12:00", "20:00"].forEach(function (s) { out.push({ day: d, start: s }); }); }
+  return out;
+}
+const BC_REALMS = {"realms": [
+  {
+    id: "kiem_trung", nameKey: "bc_realm_kiem_trung", descKey: "bc_realm_kiem_trung_desc",
+    icon: "⚔️", bg: "assets/maps/map_kiem_tong.webp", fb: "#2a3a5a",
+    schedule: _bcDailyWindows(),
+    durationMin: 60, soonMin: 30,
+    nodes: 20, nodeItem: "kiem_hon_thach", nodeNameKey: "bc_node_dac_san", nodeQty: [1, 2],
+    monsters: [], boss: "Kiếm Hồn",
+    unlock: {realm: 2, sect: "kiem_tong"},
+    consolation: {stones: 500, items: [["kiem_hon_thach", 2]]},
+  },
+  {
+    id: "tinh_than_bi_canh", nameKey: "bc_realm_tinh_than_bi_canh", descKey: "bc_realm_tinh_than_bi_canh_desc",
+    icon: "✨", bg: null, fb: "#2e2a4a",
+    schedule: _bcDailyWindows(),
+    durationMin: 60, soonMin: 30,
+    nodes: 20, nodeItem: "tinh_than_sa", nodeNameKey: "bc_node_dac_san", nodeQty: [1, 2],
+    monsters: [], boss: "Tinh Không Thú",
+    unlock: {realm: 2, sect: "thien_phap_tong"},
+    consolation: {stones: 500, items: [["tinh_than_sa", 2]]},
+  },
+  {
+    id: "la_han_dong", nameKey: "bc_realm_la_han_dong", descKey: "bc_realm_la_han_dong_desc",
+    icon: "🛕", bg: null, fb: "#4a3a20",
+    schedule: _bcDailyWindows(),
+    durationMin: 60, soonMin: 30,
+    nodes: 20, nodeItem: "la_han_xa_loi", nodeNameKey: "bc_node_dac_san", nodeQty: [1, 2],
+    monsters: [], boss: "Kim Cang La Hán",
+    unlock: {realm: 2, sect: "kim_cang_tong"},
+    consolation: {stones: 500, items: [["la_han_xa_loi", 2]]},
+  },
+  {
+    id: "duoc_vuong_coc", nameKey: "bc_realm_duoc_vuong_coc", descKey: "bc_realm_duoc_vuong_coc_desc",
+    icon: "🌿", bg: "assets/maps/map_duoc_vuong_tong.webp", fb: "#2e4a2e",
+    schedule: _bcDailyWindows(),
+    durationMin: 60, soonMin: 30,
+    nodes: 20, nodeItem: "van_nien_linh_chi", nodeNameKey: "bc_node_dac_san", nodeQty: [1, 2],
+    monsters: [], boss: "Dược Linh",
+    unlock: {realm: 2, sect: "duoc_vuong_tong"},
+    consolation: {stones: 500, items: [["van_nien_linh_chi", 2]]},
+  },
+  {
+    id: "van_thu_quat", nameKey: "bc_realm_van_thu_quat", descKey: "bc_realm_van_thu_quat_desc",
+    icon: "🐾", bg: "assets/maps/map_hac_phong_lam.webp", fb: "#3a4a2a",
+    schedule: _bcDailyWindows(),
+    durationMin: 60, soonMin: 30,
+    nodes: 20, nodeItem: "thu_vuong_huyet", nodeNameKey: "bc_node_dac_san", nodeQty: [1, 2],
+    monsters: [], boss: "Thú Vương",
+    unlock: {realm: 2, sect: "ngu_thu_tong"},
+    consolation: {stones: 500, items: [["thu_vuong_huyet", 2]]},
+  },
+  {
+    id: "huyet_ma_quat", nameKey: "bc_realm_huyet_ma_quat", descKey: "bc_realm_huyet_ma_quat_desc",
+    icon: "🩸", bg: "assets/maps/map_cuu_u_ma_tong.webp", fb: "#4a1a2a",
+    schedule: _bcDailyWindows(),
+    durationMin: 60, soonMin: 30,
+    nodes: 20, nodeItem: "huyet_ma_tinh", nodeNameKey: "bc_node_dac_san", nodeQty: [1, 2],
+    monsters: [], boss: "Huyết Ma Tướng",
+    unlock: {realm: 2, sect: "cuu_u_ma_tong"},
+    consolation: {stones: 500, items: [["huyet_ma_tinh", 2]]},
+  },
+  {
+    id: "huyet_hai_ngoai_vi", nameKey: "bc_realm_huyet_hai_ngoai_vi", descKey: "bc_realm_huyet_hai_ngoai_vi_desc",
+    icon: "🌊", bg: "assets/maps/map_huyet_ma_vuc.webp", fb: "#1a2a4a",
+    schedule: _bcDaily2Windows(),
+    durationMin: 60, soonMin: 30,
+    nodes: 30, nodeItem: "huyet_hai_chau", nodeNameKey: "bc_node_dac_san", nodeQty: [1, 2],
+    monsters: [], boss: "Huyết Hải Ma Kình",
+    unlock: {realm: 4},
+    consolation: {stones: 500, items: [["huyet_hai_chau", 2]]},
+  },
+  {
+    id: "thien_khuyet_phe_tich", nameKey: "bc_realm_thien_khuyet_phe_tich", descKey: "bc_realm_thien_khuyet_phe_tich_desc",
+    icon: "🏛️", bg: null, fb: "#3a3a5a",
+    schedule: [{day: 6, start: "20:00"}, {day: 0, start: "20:00"}],
+    durationMin: 60, soonMin: 30,
+    nodes: 20, nodeItem: "thien_khuyet_manh", nodeNameKey: "bc_node_dac_san", nodeQty: [1, 2],
+    monsters: [], boss: "Thủ Hộ Giả Thiên Khuyết",
+    unlock: {realm: 6},
+    consolation: {stones: 500, items: [["thien_khuyet_manh", 2]]},
+  },
+]};
 
 /* ============================================================
  * BÍ CẢNH TRANH ĐOẠT — 3 cái theo lịch tuần (xem secret.js)
@@ -2404,6 +2743,302 @@ const QUESTS = [
   },
 ];
 
+/* ============ NHIỆM VỤ BÍ CẢNH (Bui 2026-10-18) ============
+ * Mỗi bí cảnh tông môn: khám phá → thu thập → boss. Bí cảnh thế giới thêm: tổ đội.
+ * Thông Thiên Tháp: nhiệm vụ theo mốc tầng 10/25/50/75/100.
+ */
+QUESTS.push(
+  {
+    id: "q_bc_kiem_trung_explore", nameKey: "q_bc_kiem_trung_explore", descKey: "q_bc_kiem_trung_explore_desc",
+    npc: "truong_lao_kiem",
+    autoAccept: true,
+    sect: "kiem_tong",
+    need: { type: "secret_enter", realm: "kiem_trung", count: 1 },
+    acceptTalk: "q_bc_kiem_trung_explore_accept", turninTalk: "q_bc_kiem_trung_explore_turnin",
+    reward: { stones: 500, exp: 800, items: [{ id: "kiem_hon_thach", qty: 3 }] },
+  },
+  {
+    id: "q_bc_kiem_trung_collect", nameKey: "q_bc_kiem_trung_collect", descKey: "q_bc_kiem_trung_collect_desc",
+    npc: "truong_lao_kiem",
+    req: "q_bc_kiem_trung_explore", autoAccept: true,
+    sect: "kiem_tong",
+    need: { type: "secret_nodes", realm: "kiem_trung", count: 10 },
+    reward: { stones: 800, exp: 1200, items: [{ id: "kiem_hon_thach", qty: 5 }] },
+  },
+  {
+    id: "q_bc_kiem_trung_boss", nameKey: "q_bc_kiem_trung_boss", descKey: "q_bc_kiem_trung_boss_desc",
+    npc: "truong_lao_kiem",
+    req: "q_bc_kiem_trung_collect", autoAccept: true,
+    sect: "kiem_tong",
+    need: { type: "trial", boss: { nameKey: "bc_boss_kiem_hon", hp: 2500, atk: 120, def: 40 } },
+    acceptTalk: "q_bc_kiem_trung_boss_accept", turninTalk: "q_bc_kiem_trung_boss_turnin",
+    eventKey: "q_bc_kiem_trung_boss_event", fx: "#9fd8ff",
+    reward: { stones: 2000, exp: 3000, items: [{ id: "manual_kiem_1", qty: 1 }, { id: "kiem_hon_thach", qty: 5 }] },
+  },
+  {
+    id: "q_bc_tinh_than_bi_canh_explore", nameKey: "q_bc_tinh_than_bi_canh_explore", descKey: "q_bc_tinh_than_bi_canh_explore_desc",
+    npc: "truong_lao_phap",
+    autoAccept: true,
+    sect: "thien_phap_tong",
+    need: { type: "secret_enter", realm: "tinh_than_bi_canh", count: 1 },
+    acceptTalk: "q_bc_tinh_than_bi_canh_explore_accept", turninTalk: "q_bc_tinh_than_bi_canh_explore_turnin",
+    reward: { stones: 500, exp: 800, items: [{ id: "tinh_than_sa", qty: 3 }] },
+  },
+  {
+    id: "q_bc_tinh_than_bi_canh_collect", nameKey: "q_bc_tinh_than_bi_canh_collect", descKey: "q_bc_tinh_than_bi_canh_collect_desc",
+    npc: "truong_lao_phap",
+    req: "q_bc_tinh_than_bi_canh_explore", autoAccept: true,
+    sect: "thien_phap_tong",
+    need: { type: "secret_nodes", realm: "tinh_than_bi_canh", count: 10 },
+    reward: { stones: 800, exp: 1200, items: [{ id: "tinh_than_sa", qty: 5 }] },
+  },
+  {
+    id: "q_bc_tinh_than_bi_canh_boss", nameKey: "q_bc_tinh_than_bi_canh_boss", descKey: "q_bc_tinh_than_bi_canh_boss_desc",
+    npc: "truong_lao_phap",
+    req: "q_bc_tinh_than_bi_canh_collect", autoAccept: true,
+    sect: "thien_phap_tong",
+    need: { type: "trial", boss: { nameKey: "bc_boss_tinh_khong_thu", hp: 2500, atk: 125, def: 35 } },
+    acceptTalk: "q_bc_tinh_than_bi_canh_boss_accept", turninTalk: "q_bc_tinh_than_bi_canh_boss_turnin",
+    eventKey: "q_bc_tinh_than_bi_canh_boss_event", fx: "#b48cff",
+    reward: { stones: 2000, exp: 3000, items: [{ id: "manual_phap_1", qty: 1 }, { id: "tinh_than_sa", qty: 5 }] },
+  },
+  {
+    id: "q_bc_la_han_dong_explore", nameKey: "q_bc_la_han_dong_explore", descKey: "q_bc_la_han_dong_explore_desc",
+    npc: "truong_lao_the",
+    autoAccept: true,
+    sect: "kim_cang_tong",
+    need: { type: "secret_enter", realm: "la_han_dong", count: 1 },
+    acceptTalk: "q_bc_la_han_dong_explore_accept", turninTalk: "q_bc_la_han_dong_explore_turnin",
+    reward: { stones: 500, exp: 800, items: [{ id: "la_han_xa_loi", qty: 3 }] },
+  },
+  {
+    id: "q_bc_la_han_dong_collect", nameKey: "q_bc_la_han_dong_collect", descKey: "q_bc_la_han_dong_collect_desc",
+    npc: "truong_lao_the",
+    req: "q_bc_la_han_dong_explore", autoAccept: true,
+    sect: "kim_cang_tong",
+    need: { type: "secret_nodes", realm: "la_han_dong", count: 10 },
+    reward: { stones: 800, exp: 1200, items: [{ id: "la_han_xa_loi", qty: 5 }] },
+  },
+  {
+    id: "q_bc_la_han_dong_boss", nameKey: "q_bc_la_han_dong_boss", descKey: "q_bc_la_han_dong_boss_desc",
+    npc: "truong_lao_the",
+    req: "q_bc_la_han_dong_collect", autoAccept: true,
+    sect: "kim_cang_tong",
+    need: { type: "trial", boss: { nameKey: "bc_boss_kim_cang_la_han", hp: 3000, atk: 110, def: 70 } },
+    acceptTalk: "q_bc_la_han_dong_boss_accept", turninTalk: "q_bc_la_han_dong_boss_turnin",
+    eventKey: "q_bc_la_han_dong_boss_event", fx: "#ffd76a",
+    reward: { stones: 2000, exp: 3000, items: [{ id: "manual_the_1", qty: 1 }, { id: "la_han_xa_loi", qty: 5 }] },
+  },
+  {
+    id: "q_bc_duoc_vuong_coc_explore", nameKey: "q_bc_duoc_vuong_coc_explore", descKey: "q_bc_duoc_vuong_coc_explore_desc",
+    npc: "truong_lao_duoc",
+    autoAccept: true,
+    sect: "duoc_vuong_tong",
+    need: { type: "secret_enter", realm: "duoc_vuong_coc", count: 1 },
+    acceptTalk: "q_bc_duoc_vuong_coc_explore_accept", turninTalk: "q_bc_duoc_vuong_coc_explore_turnin",
+    reward: { stones: 500, exp: 800, items: [{ id: "van_nien_linh_chi", qty: 3 }] },
+  },
+  {
+    id: "q_bc_duoc_vuong_coc_collect", nameKey: "q_bc_duoc_vuong_coc_collect", descKey: "q_bc_duoc_vuong_coc_collect_desc",
+    npc: "truong_lao_duoc",
+    req: "q_bc_duoc_vuong_coc_explore", autoAccept: true,
+    sect: "duoc_vuong_tong",
+    need: { type: "secret_nodes", realm: "duoc_vuong_coc", count: 10 },
+    reward: { stones: 800, exp: 1200, items: [{ id: "van_nien_linh_chi", qty: 5 }] },
+  },
+  {
+    id: "q_bc_duoc_vuong_coc_boss", nameKey: "q_bc_duoc_vuong_coc_boss", descKey: "q_bc_duoc_vuong_coc_boss_desc",
+    npc: "truong_lao_duoc",
+    req: "q_bc_duoc_vuong_coc_collect", autoAccept: true,
+    sect: "duoc_vuong_tong",
+    need: { type: "trial", boss: { nameKey: "bc_boss_duoc_linh", hp: 2200, atk: 130, def: 30 } },
+    acceptTalk: "q_bc_duoc_vuong_coc_boss_accept", turninTalk: "q_bc_duoc_vuong_coc_boss_turnin",
+    eventKey: "q_bc_duoc_vuong_coc_boss_event", fx: "#7fe08a",
+    reward: { stones: 2000, exp: 3000, items: [{ id: "manual_duoc_1", qty: 1 }, { id: "van_nien_linh_chi", qty: 5 }] },
+  },
+  {
+    id: "q_bc_van_thu_quat_explore", nameKey: "q_bc_van_thu_quat_explore", descKey: "q_bc_van_thu_quat_explore_desc",
+    npc: "truong_lao_thu",
+    autoAccept: true,
+    sect: "ngu_thu_tong",
+    need: { type: "secret_enter", realm: "van_thu_quat", count: 1 },
+    acceptTalk: "q_bc_van_thu_quat_explore_accept", turninTalk: "q_bc_van_thu_quat_explore_turnin",
+    reward: { stones: 500, exp: 800, items: [{ id: "thu_vuong_huyet", qty: 3 }] },
+  },
+  {
+    id: "q_bc_van_thu_quat_collect", nameKey: "q_bc_van_thu_quat_collect", descKey: "q_bc_van_thu_quat_collect_desc",
+    npc: "truong_lao_thu",
+    req: "q_bc_van_thu_quat_explore", autoAccept: true,
+    sect: "ngu_thu_tong",
+    need: { type: "secret_nodes", realm: "van_thu_quat", count: 10 },
+    reward: { stones: 800, exp: 1200, items: [{ id: "thu_vuong_huyet", qty: 5 }] },
+  },
+  {
+    id: "q_bc_van_thu_quat_boss", nameKey: "q_bc_van_thu_quat_boss", descKey: "q_bc_van_thu_quat_boss_desc",
+    npc: "truong_lao_thu",
+    req: "q_bc_van_thu_quat_collect", autoAccept: true,
+    sect: "ngu_thu_tong",
+    need: { type: "trial", boss: { nameKey: "bc_boss_thu_vuong", hp: 2700, atk: 125, def: 50 } },
+    acceptTalk: "q_bc_van_thu_quat_boss_accept", turninTalk: "q_bc_van_thu_quat_boss_turnin",
+    eventKey: "q_bc_van_thu_quat_boss_event", fx: "#ff9a5a",
+    reward: { stones: 2000, exp: 3000, items: [{ id: "manual_thu_1", qty: 1 }, { id: "thu_vuong_huyet", qty: 5 }] },
+  },
+  {
+    id: "q_bc_huyet_ma_quat_explore", nameKey: "q_bc_huyet_ma_quat_explore", descKey: "q_bc_huyet_ma_quat_explore_desc",
+    npc: "truong_lao_ma",
+    autoAccept: true,
+    sect: "cuu_u_ma_tong",
+    need: { type: "secret_enter", realm: "huyet_ma_quat", count: 1 },
+    acceptTalk: "q_bc_huyet_ma_quat_explore_accept", turninTalk: "q_bc_huyet_ma_quat_explore_turnin",
+    reward: { stones: 500, exp: 800, items: [{ id: "huyet_ma_tinh", qty: 3 }] },
+  },
+  {
+    id: "q_bc_huyet_ma_quat_collect", nameKey: "q_bc_huyet_ma_quat_collect", descKey: "q_bc_huyet_ma_quat_collect_desc",
+    npc: "truong_lao_ma",
+    req: "q_bc_huyet_ma_quat_explore", autoAccept: true,
+    sect: "cuu_u_ma_tong",
+    need: { type: "secret_nodes", realm: "huyet_ma_quat", count: 10 },
+    reward: { stones: 800, exp: 1200, items: [{ id: "huyet_ma_tinh", qty: 5 }] },
+  },
+  {
+    id: "q_bc_huyet_ma_quat_boss", nameKey: "q_bc_huyet_ma_quat_boss", descKey: "q_bc_huyet_ma_quat_boss_desc",
+    npc: "truong_lao_ma",
+    req: "q_bc_huyet_ma_quat_collect", autoAccept: true,
+    sect: "cuu_u_ma_tong",
+    need: { type: "trial", boss: { nameKey: "bc_boss_huyet_ma_tuong", hp: 2700, atk: 140, def: 40 } },
+    acceptTalk: "q_bc_huyet_ma_quat_boss_accept", turninTalk: "q_bc_huyet_ma_quat_boss_turnin",
+    eventKey: "q_bc_huyet_ma_quat_boss_event", fx: "#ff3d5a",
+    reward: { stones: 2000, exp: 3000, items: [{ id: "manual_ma_1", qty: 1 }, { id: "huyet_ma_tinh", qty: 5 }] },
+  },
+  {
+    id: "q_bc_huyet_hai_ngoai_vi_explore", nameKey: "q_bc_huyet_hai_ngoai_vi_explore", descKey: "q_bc_huyet_hai_ngoai_vi_explore_desc",
+    npc: "minh_chu",
+    autoAccept: true,
+    need: { type: "secret_enter", realm: "huyet_hai_ngoai_vi", count: 1 },
+    acceptTalk: "q_bc_huyet_hai_ngoai_vi_explore_accept", turninTalk: "q_bc_huyet_hai_ngoai_vi_explore_turnin",
+    reward: { stones: 500, exp: 800, items: [{ id: "huyet_hai_chau", qty: 3 }] },
+  },
+  {
+    id: "q_bc_huyet_hai_ngoai_vi_collect", nameKey: "q_bc_huyet_hai_ngoai_vi_collect", descKey: "q_bc_huyet_hai_ngoai_vi_collect_desc",
+    npc: "minh_chu",
+    req: "q_bc_huyet_hai_ngoai_vi_explore", autoAccept: true,
+    need: { type: "secret_nodes", realm: "huyet_hai_ngoai_vi", count: 10 },
+    reward: { stones: 800, exp: 1200, items: [{ id: "huyet_hai_chau", qty: 5 }] },
+  },
+  {
+    id: "q_bc_huyet_hai_ngoai_vi_boss", nameKey: "q_bc_huyet_hai_ngoai_vi_boss", descKey: "q_bc_huyet_hai_ngoai_vi_boss_desc",
+    npc: "minh_chu",
+    req: "q_bc_huyet_hai_ngoai_vi_collect", autoAccept: true,
+    need: { type: "trial", boss: { nameKey: "bc_boss_huyet_hai_ma_kinh", hp: 6500, atk: 220, def: 80 } },
+    acceptTalk: "q_bc_huyet_hai_ngoai_vi_boss_accept", turninTalk: "q_bc_huyet_hai_ngoai_vi_boss_turnin",
+    eventKey: "q_bc_huyet_hai_ngoai_vi_boss_event", fx: "#ff3d5a",
+    reward: { stones: 2000, exp: 3000, items: [{ id: "manual_boss_datru", qty: 1 }, { id: "huyet_hai_chau", qty: 5 }] },
+  },
+  {
+    id: "q_bc_huyet_hai_ngoai_vi_party", nameKey: "q_bc_huyet_hai_ngoai_vi_party", descKey: "q_bc_huyet_hai_ngoai_vi_party_desc",
+    npc: "minh_chu",
+    req: "q_bc_huyet_hai_ngoai_vi_boss", autoAccept: true,
+    need: { type: "secret_party", realm: "huyet_hai_ngoai_vi", count: 1 },
+    acceptTalk: "q_bc_huyet_hai_ngoai_vi_party_accept", turninTalk: "q_bc_huyet_hai_ngoai_vi_party_turnin",
+    reward: { stones: 3000, exp: 5000, items: [{ id: "huyet_hai_chau", qty: 8 }] },
+  },
+  {
+    id: "q_bc_thien_khuyet_phe_tich_explore", nameKey: "q_bc_thien_khuyet_phe_tich_explore", descKey: "q_bc_thien_khuyet_phe_tich_explore_desc",
+    npc: "minh_chu",
+    autoAccept: true,
+    need: { type: "secret_enter", realm: "thien_khuyet_phe_tich", count: 1 },
+    acceptTalk: "q_bc_thien_khuyet_phe_tich_explore_accept", turninTalk: "q_bc_thien_khuyet_phe_tich_explore_turnin",
+    reward: { stones: 500, exp: 800, items: [{ id: "thien_khuyet_manh", qty: 3 }] },
+  },
+  {
+    id: "q_bc_thien_khuyet_phe_tich_collect", nameKey: "q_bc_thien_khuyet_phe_tich_collect", descKey: "q_bc_thien_khuyet_phe_tich_collect_desc",
+    npc: "minh_chu",
+    req: "q_bc_thien_khuyet_phe_tich_explore", autoAccept: true,
+    need: { type: "secret_nodes", realm: "thien_khuyet_phe_tich", count: 10 },
+    reward: { stones: 800, exp: 1200, items: [{ id: "thien_khuyet_manh", qty: 5 }] },
+  },
+  {
+    id: "q_bc_thien_khuyet_phe_tich_boss", nameKey: "q_bc_thien_khuyet_phe_tich_boss", descKey: "q_bc_thien_khuyet_phe_tich_boss_desc",
+    npc: "minh_chu",
+    req: "q_bc_thien_khuyet_phe_tich_collect", autoAccept: true,
+    need: { type: "trial", boss: { nameKey: "bc_boss_thu_ho_gia", hp: 15000, atk: 400, def: 150 } },
+    acceptTalk: "q_bc_thien_khuyet_phe_tich_boss_accept", turninTalk: "q_bc_thien_khuyet_phe_tich_boss_turnin",
+    eventKey: "q_bc_thien_khuyet_phe_tich_boss_event", fx: "#ffe9a8",
+    reward: { stones: 2000, exp: 3000, items: [{ id: "manual_boss_datru", qty: 1 }, { id: "thien_khuyet_manh", qty: 5 }] },
+  },
+  {
+    id: "q_bc_thien_khuyet_phe_tich_party", nameKey: "q_bc_thien_khuyet_phe_tich_party", descKey: "q_bc_thien_khuyet_phe_tich_party_desc",
+    npc: "minh_chu",
+    req: "q_bc_thien_khuyet_phe_tich_boss", autoAccept: true,
+    need: { type: "secret_party", realm: "thien_khuyet_phe_tich", count: 1 },
+    acceptTalk: "q_bc_thien_khuyet_phe_tich_party_accept", turninTalk: "q_bc_thien_khuyet_phe_tich_party_turnin",
+    reward: { stones: 3000, exp: 5000, items: [{ id: "thien_khuyet_manh", qty: 8 }] },
+  },
+  {
+    id: "q_bc_tower_10", nameKey: "q_bc_tower_10", descKey: "q_bc_tower_10_desc",
+    npc: "truong_tran",
+    autoAccept: true,
+    need: { type: "tower_floor", floor: 10 },
+    reward: { stones: 500, exp: 1000, items: [{ id: "dan_hx_tieu", qty: 2 }] },
+  },
+  {
+    id: "q_bc_tower_25", nameKey: "q_bc_tower_25", descKey: "q_bc_tower_25_desc",
+    npc: "truong_tran",
+    req: "q_bc_tower_10", autoAccept: true,
+    need: { type: "tower_floor", floor: 25 },
+    reward: { stones: 1200, exp: 2500, items: [{ id: "dan_hl_trung", qty: 2 }] },
+  },
+  {
+    id: "q_bc_tower_50", nameKey: "q_bc_tower_50", descKey: "q_bc_tower_50_desc",
+    npc: "truong_tran",
+    req: "q_bc_tower_25", autoAccept: true,
+    need: { type: "tower_floor", floor: 50 },
+    reward: { stones: 2500, exp: 5000, items: [{ id: "yaodan2", qty: 2 }] },
+  },
+  {
+    id: "q_bc_tower_75", nameKey: "q_bc_tower_75", descKey: "q_bc_tower_75_desc",
+    npc: "truong_tran",
+    req: "q_bc_tower_50", autoAccept: true,
+    need: { type: "tower_floor", floor: 75 },
+    reward: { stones: 4000, exp: 8000, items: [{ id: "yaodan3", qty: 2 }] },
+  },
+  {
+    id: "q_bc_tower_100", nameKey: "q_bc_tower_100", descKey: "q_bc_tower_100_desc",
+    npc: "truong_tran",
+    req: "q_bc_tower_75", autoAccept: true,
+    need: { type: "tower_floor", floor: 100 },
+    reward: { stones: 8000, exp: 15000, items: [{ id: "manual_boss_datru", qty: 2 }] },
+  },
+);
+
+/* ---- Vật phẩm đặc sản bí cảnh (Bui 2026-10-18: nhiệm vụ bí cảnh) ---- */
+Object.assign(ITEMS, {
+  kiem_hon_thach: { kind: "material", nameKey: "it_kiem_hon_thach", descKey: "it_kiem_hon_thach_desc",
+    price: 800, sell: 400, icon: "🗡️", doHiem: 3, doKho: 2, bcRealm: "kiem_trung",
+    useFor: ["luyen_hoa", "nuoi_khi_linh"] },
+  tinh_than_sa: { kind: "material", nameKey: "it_tinh_than_sa", descKey: "it_tinh_than_sa_desc",
+    price: 800, sell: 400, icon: "✨", doHiem: 3, doKho: 2, bcRealm: "tinh_than_bi_canh",
+    useFor: ["luyen_hoa", "nuoi_khi_linh"] },
+  la_han_xa_loi: { kind: "material", nameKey: "it_la_han_xa_loi", descKey: "it_la_han_xa_loi_desc",
+    price: 800, sell: 400, icon: "📿", doHiem: 3, doKho: 2, bcRealm: "la_han_dong",
+    useFor: ["luyen_hoa", "nuoi_khi_linh"] },
+  van_nien_linh_chi: { kind: "material", nameKey: "it_van_nien_linh_chi", descKey: "it_van_nien_linh_chi_desc",
+    price: 800, sell: 400, icon: "🍄", doHiem: 3, doKho: 2, bcRealm: "duoc_vuong_coc",
+    useFor: ["luyen_hoa", "nuoi_khi_linh"] },
+  thu_vuong_huyet: { kind: "material", nameKey: "it_thu_vuong_huyet", descKey: "it_thu_vuong_huyet_desc",
+    price: 800, sell: 400, icon: "🩸", doHiem: 3, doKho: 2, bcRealm: "van_thu_quat",
+    useFor: ["luyen_hoa", "nuoi_khi_linh"] },
+  huyet_ma_tinh: { kind: "material", nameKey: "it_huyet_ma_tinh", descKey: "it_huyet_ma_tinh_desc",
+    price: 800, sell: 400, icon: "🔮", doHiem: 3, doKho: 2, bcRealm: "huyet_ma_quat",
+    useFor: ["luyen_hoa", "nuoi_khi_linh"] },
+  huyet_hai_chau: { kind: "material", nameKey: "it_huyet_hai_chau", descKey: "it_huyet_hai_chau_desc",
+    price: 800, sell: 400, icon: "🔴", doHiem: 3, doKho: 2, bcRealm: "huyet_hai_ngoai_vi",
+    useFor: ["luyen_hoa", "nuoi_khi_linh"] },
+  thien_khuyet_manh: { kind: "material", nameKey: "it_thien_khuyet_manh", descKey: "it_thien_khuyet_manh_desc",
+    price: 800, sell: 400, icon: "💠", doHiem: 3, doKho: 2, bcRealm: "thien_khuyet_phe_tich",
+    useFor: ["luyen_hoa", "nuoi_khi_linh"] },
+});
+
 /* Node.js export (cho smoke test) */
 
 /* ---- Pháp khí (thiếu = skill tương ứng chỉ 50% damage) ---- */
@@ -4051,7 +4686,7 @@ const SECT_QUEST_WEEKLY = [{"id": "sqw_kiem_grand", "sect": "kiem_tong", "tname"
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     ELEMENTS, LINGEN_RATES,
-    MONSTERS, MAPS, DUNGEONS, SECRET_REALMS, genRandomDungeon,
+    MONSTERS, MAPS, DUNGEONS, SECRET_REALMS, genRandomDungeon, BC_REALMS,
     ITEMS, SKILLS, SHOP_STOCK, GIFT_CODES, RARITY, DOKHO, YD_ELEM_STAT,
     NPCS, QUESTS,
     SECT_QUESTS, SECT_QUEST_CUNGCO, SECT_QUEST_DAILY, SECT_QUEST_WEEKLY,

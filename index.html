@@ -11,7 +11,7 @@
 <script>
 /* TT_BUILD: phiên bản build — tăng mỗi lần deploy để tránh cache JS/CSS cũ.
    (Giá trị dùng chung cho toàn trang, khai báo 1 lần duy nhất tại đây.) */
-var TT_BUILD = "20261018-07";
+var TT_BUILD = "20261018-08";
 </script>
 <script>document.write('<link rel="stylesheet" href="css/style.css?v=' + TT_BUILD + '">');</script>
 <script>document.write('<link rel="stylesheet" href="css/hud-tutien2d.css?v=' + TT_BUILD + '">');</script>
@@ -76,8 +76,7 @@ var TT_BUILD = "20261018-07";
              data-t-ph="input_name" placeholder="Nhập tên nhân vật">
       <label class="fld-label" data-t="create_lingen_label">Linh căn</label>
       <div class="lingen-row">
-        <div id="lingen-result" class="lingen-result" data-t="lingen_none">Chưa tẩy cốt</div>
-        <button id="btn-taycot" class="btn btn-jade" data-t="btn_taycot">Tẩy Cốt</button>
+        <div id="lingen-result" class="lingen-result">Ngẫu nhiên khi vào game</div>
       </div>
       <button id="btn-begin" class="btn btn-jade big" data-t="btn_begin">Bắt đầu tu tiên</button>
       <button id="btn-create-back" class="btn btn-paper" data-t="ui_back">Quay lại</button>
@@ -244,7 +243,7 @@ var TT_BUILD = "20261018-07";
   var core = ["js/lang.js", "js/stages.js", "js/data.js", "js/state.js", "js/dataclear.js",
     "js/bodycult.js", "js/taycot.js", "js/khilinh.js", "js/lifespan.js", "js/secret.js", "js/secretbook.js", "js/tower.js",
     "js/social.js", "js/skills.js", "js/sect.js", "js/sectquest.js", "js/alliance.js",
-    "js/encounter.js", "js/gacha.js", "js/pet.js", "js/market.js", "js/farm.js"];
+    "js/encounter.js", "js/gacha.js", "js/pet.js", "js/market.js", "js/farm.js", "js/grindzone.js"];
   for (var i = 0; i < core.length; i++) {
     document.write('<script src="' + core[i] + '?v=' + TT_BUILD + '"><\/script>');
   }
