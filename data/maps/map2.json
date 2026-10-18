@@ -1,7 +1,7 @@
 {
  "id": 1,
  "nameKey": "map_hac_phong_lam",
- "bg": "assets/map/map_hac_phong_lam.webp",
+ "bg": "assets/maps/map_hac_phong_lam.webp",
  "fb": "#5f7d5a",
  "monsters": [
   "phong_lang",
@@ -36,7 +36,7 @@
   "tier": 3
  },
  "assets": {
-  "bg": "assets/map/map_hac_phong_lam.webp",
+  "bg": "assets/maps/map_hac_phong_lam.webp",
   "sprites": [
    "assets/sprs/sprs_mon_phong_lang.png",
    "assets/sprs/sprs_mon_lang_vuong.png",
@@ -45,5 +45,7 @@
    "assets/sprs/sprs_player_the.png"
   ]
  },
- "dao": "chinh"
+ "dao": "chinh",
+ "ground": "assets/map/tile_ground_forest.png",
+ "loadingBg": "assets/maps/loading_1.webp"
 }

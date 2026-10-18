@@ -1,1 +1,41 @@
-{"id":4,"nameKey":"map_mo_linh_thach","bg":"assets/maps/media-generation-map-mo-linh-thach-tutien-0-5c5e59ff-45cb-43b8-9deb-9e862cc3b72a.webp","fb":"#4a5a6a","monsters":["thach_giap_trung","tinh_thach_quai"],"boss":null,"npcs":["quan_mo","thuong_nhan_mo"],"quests":[],"gates":[{"to":0,"x":80,"y":80}],"stoneDrop":[8,16],"unlock":{"realm":1,"tier":5},"dao":"chinh","assets":{"bg":"assets/maps/media-generation-map-mo-linh-thach-tutien-0-5c5e59ff-45cb-43b8-9deb-9e862cc3b72a.webp","sprites":["assets/sprs/npc_lao_ren.png","assets/sprs/npc_thuong_nhan.png"]}}
+{
+ "id": 4,
+ "nameKey": "map_mo_linh_thach",
+ "bg": "assets/maps/map_mo_linh_thach.webp",
+ "fb": "#4a5a6a",
+ "monsters": [
+  "thach_giap_trung",
+  "tinh_thach_quai"
+ ],
+ "boss": null,
+ "npcs": [
+  "quan_mo",
+  "thuong_nhan_mo"
+ ],
+ "quests": [],
+ "gates": [
+  {
+   "to": 0,
+   "x": 80,
+   "y": 80
+  }
+ ],
+ "stoneDrop": [
+  8,
+  16
+ ],
+ "unlock": {
+  "realm": 1,
+  "tier": 5
+ },
+ "dao": "chinh",
+ "assets": {
+  "bg": "assets/maps/map_mo_linh_thach.webp",
+  "sprites": [
+   "assets/sprs/npc_lao_ren.png",
+   "assets/sprs/npc_thuong_nhan.png"
+  ]
+ },
+ "ground": "assets/map/tile_ground_mine.png",
+ "loadingBg": "assets/maps/loading_4.webp"
+}

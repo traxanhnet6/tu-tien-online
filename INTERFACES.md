@@ -605,3 +605,36 @@ const MAPS) là bản đồng bộ cho node smoke test; sửa JSON rồi chạy
 - lang.js: key `panel_tower`, `npc_thu_thap_nhan*`, `tw_*` (đủ vi+en).
 - test-smoke.js: test `tw:` (sự kiện ngày, công thức tầng, tỉ lệ thắng,
   lượt/reset ngày, leo thắng-thua, rương mốc 1 lần, BXH tuần, sync JSON).
+
+## js/secret.js — Bí Cảnh tranh đoạt theo lịch + Thông Thiên Giới
+- 3 bí cảnh (`data/secret_realms.json` canonical + mirror `SECRET_REALMS`
+  trong `js/data.js`; test kiểm tra 2 nơi đồng bộ):
+  Linh Dược Cốc (T3+T6 20:00, 24 điểm Thất Diệp Linh Chi),
+  Khoáng Mạch Cổ (T4+CN 12:00, 18 điểm Huyền Thiết),
+  Yêu Đan Sào (T5+T7 20:00, 15 điểm Yêu Đan 4/5).
+  Mỗi lượt mở 60 phút; trước 30 phút phase 'soon'.
+- `Secret.status(realmId, nowMs)` → `{phase:'open'|'soon'|'closed',
+  slotKey, slotStartMs, msLeft, msUntilOpen}` (giờ địa phương, day = getDay()).
+  `slotKeyFor(realmId, slotStartMs)` = `"id@YYYYMMDD-HHmm"`.
+- Tranh đoạt giả lập: `takenByOthers(slotKey, nodeCount, elapsedMin)` —
+  deterministic (hash FNV), % điểm bị lấy = min(90, phút_mở × 1.5).
+- State: `secret: {claims: {slotKey: {entered, nodes:{}, consolation}}}`
+  (ensure + prune slot > 8 ngày). `enter` (đang mở + đủ cảnh giới),
+  `claimNode` (điểm trống nhỏ nhất, qty ngẫu nhiên nodeQty),
+  `giveConsolation` (1 lần/lượt mở), `nodesLeft`, `weekSchedule`.
+- Thông Thiên Giới: map id 13 trong MAPS (`data/maps/map14.json`),
+  `unlock: {realm: 4}` (Nguyên Anh+), `expMult: 2` (ui.js onKill nhân exp),
+  cổng từ Thái Hư Tiên Cảnh (id 12, x 1500 y 540).
+- Engine: `enterSecretRealm(realmDef)` (mapId `'secret:'+id`, cổng về map 0),
+  `secretRealmId()`, `leaveSecretRealm()`; `enterMap` reset `_secret`.
+- UI (ui.js): `secretTick()` trong hudTick — banner `#secret-banner`
+  (open: nút "Vào ngay"; soon: đếm ngược + toast 1 lần/slot),
+  `#secret-actions` (nút Thu thập cooldown 6s + Quà an ủi) khi trong bí cảnh;
+  hết giờ tự đá về map 0. Tab "Bí Cảnh" trong panel Phụ bản
+  (`renderSecretList`: trạng thái + lịch tuần). onKill: bỏ stoneDrop trong
+  bí cảnh; map 13 exp x2.
+- lang.js: key `sr_*`, `panel_secret`, `map_thong_thien_gioi`,
+  `it_that_diep_chi*`, `it_huyen_thiet*` (đủ vi+en). index.html: script
+  `js/secret.js` sau lifespan.js + div `#secret-banner`.
+- test-smoke.js: test `sr:` (lịch/status các phase, slotKey, takenByOthers
+  deterministic, enter/claim/consolation, sync JSON, map 13 unlock+expMult).

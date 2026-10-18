@@ -65,11 +65,11 @@
       "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_dau.png",
       "offset": [
         347,
-        359
+        336
       ],
       "size": [
         395,
-        370
+        393
       ],
       "pivot": [
         560,
@@ -118,12 +118,12 @@
       "name": "phu_kien_mu",
       "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_phu_kien_mu.png",
       "offset": [
-        268,
-        168
+        282,
+        145
       ],
       "size": [
-        465,
-        197
+        451,
+        192
       ],
       "pivot": [
         560,

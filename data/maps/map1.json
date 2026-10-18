@@ -1,7 +1,7 @@
 {
  "id": 0,
  "nameKey": "map_thanh_van_tran",
- "bg": "assets/map/map_thanh_van_tran.webp",
+ "bg": "assets/maps/map_thanh_van_tran.webp",
  "fb": "#b9d3a0",
  "monsters": [
   "da_tru",
@@ -96,7 +96,7 @@
  ],
  "unlock": null,
  "assets": {
-  "bg": "assets/map/map_thanh_van_tran.webp",
+  "bg": "assets/maps/map_thanh_van_tran.webp",
   "sprites": [
    "assets/sprs/sprs_mon_da_tru.png",
    "assets/sprs/sprs_mon_son_ke.png",
@@ -210,5 +210,6 @@
    "sw": 60,
    "sh": 30
   }
- ]
+ ],
+ "loadingBg": "assets/maps/loading_0.webp"
 }

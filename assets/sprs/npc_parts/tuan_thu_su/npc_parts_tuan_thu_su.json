@@ -7,6 +7,24 @@
   },
   "parts": [
     {
+      "name": "phu_kien_bong_do",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_bong_do.png",
+      "offset": [
+        116,
+        1985
+      ],
+      "size": [
+        864,
+        171
+      ],
+      "pivot": [
+        560,
+        2072
+      ],
+      "z": -1,
+      "note": "Vệt màu nước dưới chân (bóng đổ): tĩnh, không gắn xương — vẽ sau cùng dưới chân nhân vật."
+    },
+    {
       "name": "phu_kien_ong_ten",
       "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_ong_ten.png",
       "offset": [
@@ -94,54 +112,18 @@
         1232
       ],
       "z": 2,
-      "note": "Thân giáp da (catch-all): trung tâm -> nghiêng ngắm bắn, đi lại."
-    },
-    {
-      "name": "tay_trai",
-      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_tay_trai.png",
-      "offset": [
-        772,
-        604
-      ],
-      "size": [
-        193,
-        741
-      ],
-      "pivot": [
-        851,
-        672
-      ],
-      "z": 4,
-      "note": "Tay trái: vai (pivot) -> giương cung (kết hợp phu_kien_cung), vẫy tay."
-    },
-    {
-      "name": "tay_phai",
-      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_tay_phai.png",
-      "offset": [
-        164,
-        604
-      ],
-      "size": [
-        206,
-        741
-      ],
-      "pivot": [
-        269,
-        672
-      ],
-      "z": 4,
-      "note": "Tay phải: vai (pivot) -> cầm cung, vẫy tay."
+      "note": "Thân giáp da (catch-all, claim CUỐI để không nuốt bóng đổ): trung tâm -> nghiêng ngắm bắn, đi lại."
     },
     {
       "name": "dau",
       "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_dau.png",
       "offset": [
         408,
-        213
+        212
       ],
       "size": [
         301,
-        516
+        517
       ],
       "pivot": [
         560,
@@ -149,24 +131,6 @@
       ],
       "z": 5,
       "note": "Đầu + râu: cổ (pivot) -> gật/lắc đầu, ngắm bắn."
-    },
-    {
-      "name": "phu_kien_mu",
-      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_mu.png",
-      "offset": [
-        455,
-        145
-      ],
-      "size": [
-        179,
-        68
-      ],
-      "pivot": [
-        560,
-        179
-      ],
-      "z": 6,
-      "note": "Mũ nhỏ đen: gắn đỉnh đầu, đi theo dau."
     },
     {
       "name": "phu_kien_dao",
@@ -183,8 +147,62 @@
         717,
         1053
       ],
+      "z": 6,
+      "note": "Dao găm đeo hông: gắn hông -> rút ra khi chiến đấu (tay_trai nắm chuôi, 2 part đi theo nhau)."
+    },
+    {
+      "name": "phu_kien_mu",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_mu.png",
+      "offset": [
+        454,
+        134
+      ],
+      "size": [
+        180,
+        59
+      ],
+      "pivot": [
+        560,
+        179
+      ],
+      "z": 6,
+      "note": "Mũ nhỏ đen: gắn đỉnh đầu, đi theo dau."
+    },
+    {
+      "name": "tay_trai",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_tay_trai.png",
+      "offset": [
+        772,
+        604
+      ],
+      "size": [
+        193,
+        741
+      ],
+      "pivot": [
+        851,
+        672
+      ],
       "z": 7,
-      "note": "Dao găm đeo hông: gắn hông -> rút ra khi chiến đấu (anim riêng)."
+      "note": "Tay trái: vai (pivot) -> giương cung (kết hợp phu_kien_cung), rút dao, vẫy tay."
+    },
+    {
+      "name": "tay_phai",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_tay_phai.png",
+      "offset": [
+        164,
+        604
+      ],
+      "size": [
+        206,
+        741
+      ],
+      "pivot": [
+        269,
+        672
+      ],
+      "z": 7,
+      "note": "Tay phải: vai (pivot) -> cầm cung, vẫy tay."
     },
     {
       "name": "phu_kien_cho",
@@ -195,7 +213,7 @@
       ],
       "size": [
         420,
-        449
+        415
       ],
       "pivot": [
         874,

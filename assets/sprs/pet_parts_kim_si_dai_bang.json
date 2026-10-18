@@ -1,5 +1,6 @@
 {
   "pet": "kim_si_dai_bang",
+  "source": "pet_kim_si_dai_bang.webp",
   "canvas": {
     "width": 1024,
     "height": 1024
@@ -22,8 +23,8 @@
     "canh_trai": {
       "file": "pet_kim_si_dai_bang_part_canh_trai.png",
       "pivot": [
-        309,
-        536
+        350,
+        595
       ],
       "z": 1,
       "pixels": 177999,
@@ -35,8 +36,8 @@
     "canh_phai": {
       "file": "pet_kim_si_dai_bang_part_canh_phai.png",
       "pivot": [
-        718,
-        544
+        669,
+        594
       ],
       "z": 2,
       "pixels": 189710,
@@ -62,7 +63,7 @@
       "file": "pet_kim_si_dai_bang_part_chan.png",
       "pivot": [
         515,
-        702
+        753
       ],
       "z": 4,
       "pixels": 143940,
@@ -74,8 +75,8 @@
     "dau": {
       "file": "pet_kim_si_dai_bang_part_dau.png",
       "pivot": [
-        515,
-        467
+        510,
+        486
       ],
       "z": 5,
       "pixels": 122469,

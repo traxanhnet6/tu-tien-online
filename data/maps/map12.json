@@ -1,1 +1,49 @@
-{"id":11,"nameKey":"map_huyet_ma_vuc","bg":"assets/maps/map_huyet_ma_vuc.webp","fb":"#5a1a1a","monsters":["ma_binh","oan_linh","ma_lang"],"boss":"huyet_ma_vuong","npcs":["ma_thuong_nhan","co_hon","huyet_ma_tu"],"quests":["q_ma_kill10","q_ma_boss"],"gates":[{"to":2,"x":80,"y":540}],"stoneDrop":[10,20],"unlock":{"realm":2},"dao":"ma","assets":{"bg":"assets/maps/map_huyet_ma_vuc.webp","sprites":["assets/sprs/mon_ma_binh.png","assets/sprs/mon_oan_linh.png","assets/sprs/mon_ma_lang.png","assets/sprs/mon_huyet_ma_vuong.png","assets/sprs/npc_thuong_nhan.png","assets/sprs/npc_su_gia_ma.png"]}}
+{
+ "id": 11,
+ "nameKey": "map_huyet_ma_vuc",
+ "bg": "assets/maps/map_huyet_ma_vuc.webp",
+ "fb": "#5a1a1a",
+ "monsters": [
+  "ma_binh",
+  "oan_linh",
+  "ma_lang"
+ ],
+ "boss": "huyet_ma_vuong",
+ "npcs": [
+  "ma_thuong_nhan",
+  "co_hon",
+  "huyet_ma_tu"
+ ],
+ "quests": [
+  "q_ma_kill10",
+  "q_ma_boss"
+ ],
+ "gates": [
+  {
+   "to": 2,
+   "x": 80,
+   "y": 540
+  }
+ ],
+ "stoneDrop": [
+  10,
+  20
+ ],
+ "unlock": {
+  "realm": 2
+ },
+ "dao": "ma",
+ "assets": {
+  "bg": "assets/maps/map_huyet_ma_vuc.webp",
+  "sprites": [
+   "assets/sprs/mon_ma_binh.png",
+   "assets/sprs/mon_oan_linh.png",
+   "assets/sprs/mon_ma_lang.png",
+   "assets/sprs/mon_huyet_ma_vuong.png",
+   "assets/sprs/npc_thuong_nhan.png",
+   "assets/sprs/npc_su_gia_ma.png"
+  ]
+ },
+ "ground": "assets/map/tile_ground_blood.png",
+ "loadingBg": "assets/maps/loading_11.webp"
+}

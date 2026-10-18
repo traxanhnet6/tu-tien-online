@@ -5,19 +5,23 @@
     "height": 1600
   },
   "source": "boss_u_minh_cu_mang.png",
-  "note": "U Minh Cu Mang coiled snake. ham_duoi reused from mouth-task cut (boss_part_u_minh_cu_mang_ham_duoi.png, RGB-identical), claimed BEFORE dau so the jaw is not eaten by the head rect. dau includes the red tongue. duoi = tapering tail tip (bottom-right coil). than_3 = outer coils + smoke wisps (fallback).",
+  "note": "U Minh Cu Mang coiled snake, 6 body segments ordered head->tail along a hand-traced body centerline (neck->crown->top arc->right column->middle coil->left side->bottom coil->tail tip; re-cut from old than_1..3 union, exact tiling preserved). pivot = head-side joint, pivot_b = tail-side joint (\"diem noi 2 dau\"). ham_duoi reused from mouth-task cut, claimed before dau. duoi = tapering tail tip. Smoke wisps assigned to nearest body segment.",
   "variants_note": "_combat: red overlay 25% + saturation x1.3; _tinh_anh: gold overlay 25% + brightness x1.1. All variants share the same pivot and z-order.",
   "parts": {
-    "than_3": {
-      "file": "boss_u_minh_cu_mang_part_than_3.png",
-      "file_combat": "boss_u_minh_cu_mang_part_than_3_combat.png",
-      "file_tinh_anh": "boss_u_minh_cu_mang_part_than_3_tinh_anh.png",
+    "than_6": {
+      "file": "boss_u_minh_cu_mang_part_than_6.png",
+      "file_combat": "boss_u_minh_cu_mang_part_than_6_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_than_6_tinh_anh.png",
       "pivot": [
-        800,
-        1100
+        478,
+        1404
       ],
       "z": 0,
-      "pixels": 597965
+      "pixels": 212507,
+      "pivot_b": [
+        1398,
+        1449
+      ]
     },
     "duoi": {
       "file": "boss_u_minh_cu_mang_part_duoi.png",
@@ -30,16 +34,65 @@
       "z": 1,
       "pixels": 6104
     },
+    "than_5": {
+      "file": "boss_u_minh_cu_mang_part_than_5.png",
+      "file_combat": "boss_u_minh_cu_mang_part_than_5_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_than_5_tinh_anh.png",
+      "pivot": [
+        598,
+        1100
+      ],
+      "z": 2,
+      "pixels": 280365,
+      "pivot_b": [
+        478,
+        1404
+      ]
+    },
+    "than_4": {
+      "file": "boss_u_minh_cu_mang_part_than_4.png",
+      "file_combat": "boss_u_minh_cu_mang_part_than_4_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_than_4_tinh_anh.png",
+      "pivot": [
+        1346,
+        763
+      ],
+      "z": 3,
+      "pixels": 357093,
+      "pivot_b": [
+        598,
+        1100
+      ]
+    },
+    "than_3": {
+      "file": "boss_u_minh_cu_mang_part_than_3.png",
+      "file_combat": "boss_u_minh_cu_mang_part_than_3_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_than_3_tinh_anh.png",
+      "pivot": [
+        664,
+        528
+      ],
+      "z": 4,
+      "pixels": 178982,
+      "pivot_b": [
+        1346,
+        763
+      ]
+    },
     "than_2": {
       "file": "boss_u_minh_cu_mang_part_than_2.png",
       "file_combat": "boss_u_minh_cu_mang_part_than_2_combat.png",
       "file_tinh_anh": "boss_u_minh_cu_mang_part_than_2_tinh_anh.png",
       "pivot": [
-        800,
-        850
+        531,
+        310
       ],
-      "z": 2,
-      "pixels": 488586
+      "z": 5,
+      "pixels": 183804,
+      "pivot_b": [
+        664,
+        528
+      ]
     },
     "than_1": {
       "file": "boss_u_minh_cu_mang_part_than_1.png",
@@ -47,10 +100,14 @@
       "file_tinh_anh": "boss_u_minh_cu_mang_part_than_1_tinh_anh.png",
       "pivot": [
         800,
-        480
+        800
       ],
-      "z": 3,
-      "pixels": 194509
+      "z": 6,
+      "pixels": 68309,
+      "pivot_b": [
+        531,
+        310
+      ]
     },
     "dau": {
       "file": "boss_u_minh_cu_mang_part_dau.png",
@@ -60,7 +117,7 @@
         800,
         640
       ],
-      "z": 4,
+      "z": 7,
       "pixels": 369702
     },
     "ham_duoi": {
@@ -71,7 +128,7 @@
         820,
         660
       ],
-      "z": 5,
+      "z": 8,
       "pixels": 18136
     }
   }

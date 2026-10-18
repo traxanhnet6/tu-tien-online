@@ -1,5 +1,6 @@
 {
   "pet": "cuu_vi_yeu_ho",
+  "source": "pet_cuu_vi_yeu_ho.webp",
   "canvas": {
     "width": 1024,
     "height": 1024
@@ -35,8 +36,8 @@
     "chan_trai_sau": {
       "file": "pet_cuu_vi_yeu_ho_part_chan_trai_sau.png",
       "pivot": [
-        250,
-        632
+        239,
+        654
       ],
       "z": 2,
       "pixels": 29540,
@@ -48,8 +49,8 @@
     "chan_phai_sau": {
       "file": "pet_cuu_vi_yeu_ho_part_chan_phai_sau.png",
       "pivot": [
-        765,
-        632
+        774,
+        656
       ],
       "z": 3,
       "pixels": 31450,
@@ -62,7 +63,7 @@
       "file": "pet_cuu_vi_yeu_ho_part_chan_trai_truoc.png",
       "pivot": [
         350,
-        672
+        704
       ],
       "z": 4,
       "pixels": 45670,
@@ -75,7 +76,7 @@
       "file": "pet_cuu_vi_yeu_ho_part_chan_phai_truoc.png",
       "pivot": [
         660,
-        672
+        704
       ],
       "z": 5,
       "pixels": 40312,
@@ -88,7 +89,7 @@
       "file": "pet_cuu_vi_yeu_ho_part_dau.png",
       "pivot": [
         510,
-        499
+        525
       ],
       "z": 6,
       "pixels": 198471,

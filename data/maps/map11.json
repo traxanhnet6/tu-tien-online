@@ -1,7 +1,7 @@
 {
  "id": 10,
  "nameKey": "map_cuu_u_ma_tong",
- "bg": "assets/maps/media-generation-map-cuu-u-ma-tong-0-b7696611-b1f0-47f0-8667-acf3baf2653f.webp",
+ "bg": "assets/maps/map_cuu_u_ma_tong.webp",
  "fb": "#3a2a4a",
  "monsters": [
   "hac_long"
@@ -30,11 +30,175 @@
  },
  "dao": "ma",
  "assets": {
-  "bg": "assets/maps/media-generation-map-cuu-u-ma-tong-0-b7696611-b1f0-47f0-8667-acf3baf2653f.webp",
+  "bg": "assets/maps/map_cuu_u_ma_tong.webp",
   "sprites": [
    "assets/sprs/npc_truong_tran.png",
    "assets/sprs/npc_su_gia.png",
    "assets/sprs/npc_lao_ren.png"
   ]
- }
+ },
+ "ground": "assets/map/tile_ground_blood.png",
+ "loadingBg": "assets/maps/loading_10.webp",
+ "objects": [
+  {
+   "x": 800,
+   "y": 220,
+   "sprite": "assets/map/obj_cuu_u_ma_tong_ma_dien.png",
+   "w": 380,
+   "h": 330,
+   "solid": true,
+   "sw": 280,
+   "sh": 70
+  },
+  {
+   "x": 1220,
+   "y": 260,
+   "sprite": "assets/map/obj_nha_go.png",
+   "w": 220,
+   "h": 180,
+   "solid": true,
+   "sw": 170,
+   "sh": 44
+  },
+  {
+   "x": 380,
+   "y": 250,
+   "sprite": "assets/map/obj_nha_ngoi.png",
+   "w": 230,
+   "h": 190,
+   "solid": true,
+   "sw": 170,
+   "sh": 44
+  },
+  {
+   "x": 300,
+   "y": 120,
+   "sprite": "assets/map/obj_hang_rao_go.png",
+   "w": 220,
+   "h": 66,
+   "solid": true,
+   "sw": 154,
+   "sh": 30
+  },
+  {
+   "x": 800,
+   "y": 120,
+   "sprite": "assets/map/obj_hang_rao_go.png",
+   "w": 220,
+   "h": 66,
+   "solid": true,
+   "sw": 154,
+   "sh": 30
+  },
+  {
+   "x": 1300,
+   "y": 120,
+   "sprite": "assets/map/obj_hang_rao_go.png",
+   "w": 220,
+   "h": 66,
+   "solid": true,
+   "sw": 154,
+   "sh": 30
+  },
+  {
+   "x": 520,
+   "y": 420,
+   "sprite": "assets/map/obj_den_long.png",
+   "w": 64,
+   "h": 64,
+   "solid": true,
+   "sw": 44,
+   "sh": 30
+  },
+  {
+   "x": 1080,
+   "y": 420,
+   "sprite": "assets/map/obj_den_long.png",
+   "w": 64,
+   "h": 64,
+   "solid": true,
+   "sw": 44,
+   "sh": 30
+  },
+  {
+   "x": 520,
+   "y": 800,
+   "sprite": "assets/map/obj_den_long.png",
+   "w": 64,
+   "h": 64,
+   "solid": true,
+   "sw": 44,
+   "sh": 30
+  },
+  {
+   "x": 1080,
+   "y": 800,
+   "sprite": "assets/map/obj_den_long.png",
+   "w": 64,
+   "h": 64,
+   "solid": true,
+   "sw": 44,
+   "sh": 30
+  },
+  {
+   "x": 1350,
+   "y": 650,
+   "sprite": "assets/map/obj_gieng.png",
+   "w": 104,
+   "h": 116,
+   "solid": true,
+   "sw": 84,
+   "sh": 36
+  },
+  {
+   "x": 140,
+   "y": 200,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 130,
+   "h": 130,
+   "solid": true,
+   "sw": 56,
+   "sh": 26
+  },
+  {
+   "x": 1460,
+   "y": 200,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 130,
+   "h": 130,
+   "solid": true,
+   "sw": 56,
+   "sh": 26
+  },
+  {
+   "x": 140,
+   "y": 900,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 130,
+   "h": 130,
+   "solid": true,
+   "sw": 56,
+   "sh": 26
+  },
+  {
+   "x": 300,
+   "y": 830,
+   "sprite": "assets/map/obj_leu.png",
+   "w": 200,
+   "h": 132,
+   "solid": true,
+   "sw": 160,
+   "sh": 50
+  },
+  {
+   "x": 1300,
+   "y": 830,
+   "sprite": "assets/map/obj_leu.png",
+   "w": 200,
+   "h": 132,
+   "solid": true,
+   "sw": 160,
+   "sh": 50
+  }
+ ]
 }

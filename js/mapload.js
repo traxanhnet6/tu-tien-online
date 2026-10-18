@@ -23,6 +23,8 @@ var MapLoading = (function () {
   var BG_BY_NAMEKEY = {
     map_thanh_van_tran: "assets/maps/loading_0.webp",
     map_hac_phong_lam: "assets/maps/loading_1.webp",
+    map_u_minh_coc: "assets/maps/loading_2.webp",
+    map_linh_dien: "assets/maps/loading_3.webp",
     map_mo_linh_thach: "assets/maps/loading_4.webp",
     map_kiem_tong: "assets/maps/loading_5.webp",
     map_thien_phap_tong: "assets/maps/loading_6.webp",
@@ -30,7 +32,9 @@ var MapLoading = (function () {
     map_duoc_vuong_tong: "assets/maps/loading_8.webp",
     map_ngu_thu_tong: "assets/maps/loading_9.webp",
     map_cuu_u_ma_tong: "assets/maps/loading_10.webp",
-    map_huyet_ma_vuc:    null, /* chưa có ảnh → dùng ảnh mặc định cũ */
+    map_huyet_ma_vuc: "assets/maps/loading_11.webp",
+    map_thai_hu_tien_canh: "assets/maps/loading_12.webp",
+    map_thong_thien_gioi: "assets/maps/loading_12.webp",
   };
 
   /* Ảnh chờ của 1 map: loadingBg trong def → bảng → mặc định. */

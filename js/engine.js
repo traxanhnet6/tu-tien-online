@@ -315,9 +315,18 @@ var Engine = (function () {
     }
     _ctx.restore();
   }
+  /* Cầu có độ cao: entity đứng trong deck zone được nâng lift —
+   * y-sort + bóng đổ đúng thứ tự depth khi đi trên cầu */
+  function _bridgeLiftAt(x, y) {
+    for (var i = 0; i < _objects.length; i++) {
+      var o = _objects[i];
+      if (!o.bridge || !o.lift) continue;
+      if (Math.abs(x - o.x) <= o.deckW / 2 && Math.abs(y - o.y) <= o.deckH / 2) return o.lift;
+    }
+    return 0;
+  }
   /* Vật thể trang trí: bóng dưới chân + y-sort theo chân vật */
-  function _drawObject(o) {
-    _drawShadow(o.x, o.y, o.w * 0.30, 0.30);
+  function _drawObject(o) {    _drawShadow(o.x, o.y, o.w * 0.30, 0.30);
     var im = _img(o.sprite);
     if (im) _ctx.drawImage(im, o.x - o.w / 2, o.y - o.h, o.w, o.h);
     else {
@@ -458,10 +467,13 @@ var Engine = (function () {
     _gates = (_mapDef.gates || []).map(function (g) {
       return { to: g.to, x: g.x, y: g.y };
     });
-    /* Vật thể trang trí theo tọa độ: {x, y, sprite, w, h, solid, sw, sh} */
+    /* Vật thể trang trí theo tọa độ: {x, y, sprite, w, h, solid, sw, sh,
+     * bridge/lift/deckW/deckH: cầu đi được có độ cao} */
     _objects = (_mapDef.objects || []).map(function (o) {
       return { x: o.x, y: o.y, sprite: o.sprite, w: o.w || 90, h: o.h || 90,
-               solid: o.solid !== false, sw: o.sw || 46, sh: o.sh || 30 };
+               solid: o.solid !== false, sw: o.sw || 46, sh: o.sh || 30,
+               bridge: !!o.bridge, lift: o.lift || 0,
+               deckW: o.deckW || o.w || 90, deckH: o.deckH || 40 };
     });
     if (_gates.length) { // đặt player ở cổng vào
       player.x = Math.min(WORLD_W - 60, _gates[0].x + 70);
@@ -1104,17 +1116,19 @@ var Engine = (function () {
     /* animation theo kiểu di chuyển của loài */
     var now = Date.now() / 1000;
     var bx = _pet.x, by = _pet.y, lift = 0, size = 36, noTilt = false;
+    var blift = _bridgeLiftAt(_pet.x, _pet.y); /* đứng trên cầu: nâng theo mặt cầu */
     if (mv === 'fly') {
       lift = 26; /* bay lượn: vỗ cánh nhấp nhô trên không */
-      by = _pet.y - lift + Math.sin(now * 3.2) * 7;
+      by = _pet.y - lift - blift + Math.sin(now * 3.2) * 7;
       size = 40;
     } else if (mv === 'crawl') {
       bx = _pet.x + Math.sin(now * 2.1) * 8; /* bò/trườn: uốn mình */
-      by = _pet.y + Math.abs(Math.sin(now * 2.1)) * 3;
+      by = _pet.y - blift + Math.abs(Math.sin(now * 2.1)) * 3;
       size = 38; noTilt = true;
     } else {
       var pd = Math.abs(_pet.x - (_pet.__px == null ? _pet.x : _pet.__px));
-      if (pd > 0.4) by = _pet.y - Math.abs(Math.sin(now * 9)) * 5; /* chạy: nhấp nhô chân */
+      if (pd > 0.4) by = _pet.y - blift - Math.abs(Math.sin(now * 9)) * 5; /* chạy: nhấp nhô chân */
+      else by = _pet.y - blift;
     }
     /* hào quang theo phẩm */
     _ctx.globalAlpha = 0.5;
@@ -1126,7 +1140,7 @@ var Engine = (function () {
     var pface = _face4(_pet, _pet.ang == null ? Math.PI / 2 : _pet.ang);
     var pimg = _petDirSrc(img, pface);
     _drawCreature(_pet, bx, by, size, size, pimg, '#c9a227',
-      { lift: lift, shadowY: _pet.y + 14, noTilt: noTilt, faceAng: _pet.ang });
+      { lift: lift + blift, shadowY: _pet.y + 14 - blift, noTilt: noTilt, faceAng: _pet.ang });
   }
   /* Tự uống thuốc theo cài đặt */
   function _autoPotion(ps) {
@@ -1618,6 +1632,7 @@ var Engine = (function () {
   }
   function _drawPlayer() {
     var lift = Engine.fly ? -10 : 0;
+    var blift = _bridgeLiftAt(player.x, player.y); /* đứng trên cầu: nâng theo mặt cầu */
     /* chồm lên khi đánh/tung chiêu */
     var lunge = 0;
     if (player.atkT > 0) lunge = Math.sin((player.atkT / 0.25) * Math.PI) * 10 * player.dir;
@@ -1629,7 +1644,7 @@ var Engine = (function () {
       _ctx.globalAlpha = 0.6;
       _ctx.strokeStyle = '#7fd4ff';
       _ctx.lineWidth = 3;
-      _ctx.beginPath(); _ctx.arc(player.x + lunge, player.y + lift, 30, 0, Math.PI * 2); _ctx.stroke();
+      _ctx.beginPath(); _ctx.arc(player.x + lunge, player.y + lift - blift, 30, 0, Math.PI * 2); _ctx.stroke();
       _ctx.globalAlpha = 1;
     }
     /* vòng buff */
@@ -1639,14 +1654,14 @@ var Engine = (function () {
         _ctx.globalAlpha = 0.35;
         _ctx.strokeStyle = _buffs[bi].fx;
         _ctx.lineWidth = 2;
-        _ctx.beginPath(); _ctx.arc(player.x + lunge, player.y + lift, 26 + bi * 5, 0, Math.PI * 2); _ctx.stroke();
+        _ctx.beginPath(); _ctx.arc(player.x + lunge, player.y + lift - blift, 26 + bi * 5, 0, Math.PI * 2); _ctx.stroke();
         _ctx.globalAlpha = 1;
       }
     }
-    _drawCreature(player, player.x + lunge, player.y + lift, 44, 44, _playerSprite(), '#2fa3a0',
-      { lift: Engine.fly ? 26 : 0, shadowY: player.y + 18, faceAng: player.ang });
+    _drawCreature(player, player.x + lunge, player.y + lift - blift, 44, 44, _playerSprite(), '#2fa3a0',
+      { lift: (Engine.fly ? 26 : 0) + blift, shadowY: player.y + 18 - blift, faceAng: player.ang });
     var ps = _getStats();
-    _drawHpBar(player.x, player.y + lift - 32, 40, player.hp / ps.maxHp, false);
+    _drawHpBar(player.x, player.y + lift - blift - 32, 40, player.hp / ps.maxHp, false);
   }
 
   function _drawOther(o) {
@@ -1835,16 +1850,18 @@ var Engine = (function () {
     }
 
     // Entities xếp theo y (trên-dưới): quái, NPC, pet, người chơi — pseudo-3D Y-sort
+    // (trừ lift cầu: đứng trên cầu thì sort theo mặt cầu)
     var ents = [];
     for (var mi = 0; mi < _monsters.length; mi++) {
-      if (!_monsters[mi].dead) ents.push({ y: _monsters[mi].y, k: 'm', o: _monsters[mi] });
+      if (_monsters[mi].dead) continue;
+      ents.push({ y: _monsters[mi].y - _bridgeLiftAt(_monsters[mi].x, _monsters[mi].y), k: 'm', o: _monsters[mi] });
     }
-    for (var ni = 0; ni < _npcs.length; ni++) ents.push({ y: _npcs[ni].y, k: 'n', o: _npcs[ni] });
+    for (var ni = 0; ni < _npcs.length; ni++) ents.push({ y: _npcs[ni].y - _bridgeLiftAt(_npcs[ni].x, _npcs[ni].y), k: 'n', o: _npcs[ni] });
     for (var oi2 = 0; oi2 < _objects.length; oi2++) ents.push({ y: _objects[oi2].y, k: 'obj', o: _objects[oi2] });
-    ents.push({ y: player.y, k: 'p' });
-    if (_petActive()) ents.push({ y: _pet.y, k: 't' });
+    ents.push({ y: player.y - _bridgeLiftAt(player.x, player.y), k: 'p' });
+    if (_petActive()) ents.push({ y: _pet.y - _bridgeLiftAt(_pet.x, _pet.y), k: 't' });
     var others = _visiblePlayers();
-    for (var oi = 0; oi < others.length; oi++) ents.push({ y: others[oi].y, k: 'o', o: others[oi] });
+    for (var oi = 0; oi < others.length; oi++) ents.push({ y: others[oi].y - _bridgeLiftAt(others[oi].x, others[oi].y), k: 'o', o: others[oi] });
     ents.sort(function (a, b) { return a.y - b.y; });
     for (var ei = 0; ei < ents.length; ei++) {
       var e = ents[ei];

@@ -1,19 +1,20 @@
 {
   "pet": "hac_long",
+  "source": "pet_hac_long_down.png",
   "canvas": {
     "width": 1600,
     "height": 1600
   },
-  "note": "Rong den PET (khac boss Hac Long): DUNG _down.png (khong co webp). Pose serpentine, chi thay 2 tay truoc. Khong co canh trong art. Bong dat da loai.",
+  "note": "Rong den PET (khac boss Hac Long): DUNG _down.png (khong co webp). Pose serpentine, chi thay 2 tay truoc. Khong co canh trong art. Bong dat (ellipse day) gom vao duoi (part gan nhat) de rap khit.",
   "parts": {
     "duoi": {
       "file": "pet_hac_long_part_duoi.png",
       "pivot": [
-        867,
-        1401
+        814,
+        1434
       ],
       "z": 0,
-      "pixels": 618,
+      "pixels": 65404,
       "variants": {
         "combat": "pet_hac_long_part_duoi_combat.png",
         "tinh_anh": "pet_hac_long_part_duoi_tinh_anh.png"
@@ -26,7 +27,7 @@
         1313
       ],
       "z": 1,
-      "pixels": 48149,
+      "pixels": 48147,
       "variants": {
         "combat": "pet_hac_long_part_than_2_combat.png",
         "tinh_anh": "pet_hac_long_part_than_2_tinh_anh.png"
@@ -48,8 +49,8 @@
     "chan_trai_truoc": {
       "file": "pet_hac_long_part_chan_trai_truoc.png",
       "pivot": [
-        585,
-        963
+        582,
+        985
       ],
       "z": 3,
       "pixels": 30181,
@@ -61,8 +62,8 @@
     "chan_phai_truoc": {
       "file": "pet_hac_long_part_chan_phai_truoc.png",
       "pivot": [
-        1026,
-        963
+        1028,
+        987
       ],
       "z": 4,
       "pixels": 33836,
@@ -87,8 +88,8 @@
     "dau": {
       "file": "pet_hac_long_part_dau.png",
       "pivot": [
-        808,
-        902
+        804,
+        938
       ],
       "z": 6,
       "pixels": 849917,

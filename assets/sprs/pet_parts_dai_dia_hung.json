@@ -1,5 +1,6 @@
 {
   "pet": "dai_dia_hung",
+  "source": "pet_dai_dia_hung.webp",
   "canvas": {
     "width": 1024,
     "height": 1024
@@ -22,8 +23,8 @@
     "chan_trai_sau": {
       "file": "pet_dai_dia_hung_part_chan_trai_sau.png",
       "pivot": [
-        385,
-        802
+        382,
+        836
       ],
       "z": 1,
       "pixels": 48230,
@@ -35,8 +36,8 @@
     "chan_phai_sau": {
       "file": "pet_dai_dia_hung_part_chan_phai_sau.png",
       "pivot": [
-        636,
-        802
+        638,
+        837
       ],
       "z": 2,
       "pixels": 49281,
@@ -48,8 +49,8 @@
     "chan_trai_truoc": {
       "file": "pet_dai_dia_hung_part_chan_trai_truoc.png",
       "pivot": [
-        156,
-        381
+        235,
+        591
       ],
       "z": 3,
       "pixels": 87290,
@@ -61,8 +62,8 @@
     "chan_phai_truoc": {
       "file": "pet_dai_dia_hung_part_chan_phai_truoc.png",
       "pivot": [
-        884,
-        370
+        807,
+        554
       ],
       "z": 4,
       "pixels": 96794,
@@ -74,8 +75,8 @@
     "dau": {
       "file": "pet_dai_dia_hung_part_dau.png",
       "pivot": [
-        517,
-        530
+        510,
+        565
       ],
       "z": 5,
       "pixels": 195194,

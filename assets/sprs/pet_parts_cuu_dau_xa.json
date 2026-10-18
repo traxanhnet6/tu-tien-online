@@ -1,5 +1,6 @@
 {
   "pet": "cuu_dau_xa",
+  "source": "pet_cuu_dau_xa.webp",
   "canvas": {
     "width": 1024,
     "height": 1024
@@ -48,8 +49,8 @@
     "dau": {
       "file": "pet_cuu_dau_xa_part_dau.png",
       "pivot": [
-        511,
-        598
+        506,
+        639
       ],
       "z": 3,
       "pixels": 432625,

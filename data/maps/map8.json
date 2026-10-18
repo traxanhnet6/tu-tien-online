@@ -1,1 +1,202 @@
-{"id":7,"nameKey":"map_kim_cang_tong","bg":"assets/maps/media-generation-map-kim-cang-tong-0-549d9978-ea10-4d6c-8518-3e81eff05d2c.webp","fb":"#c8a860","monsters":[],"boss":null,"npcs":["truong_lao_the","de_tu_the_1","de_tu_the_2","vo_tang"],"quests":[],"gates":[{"to":0,"x":800,"y":1120}],"stoneDrop":[0,0],"unlock":{"realm":2},"dao":"chinh","assets":{"bg":"assets/maps/media-generation-map-kim-cang-tong-0-549d9978-ea10-4d6c-8518-3e81eff05d2c.webp","sprites":["assets/sprs/npc_truong_tran.png","assets/sprs/npc_su_gia.png","assets/sprs/npc_lao_dan_duong.png"]}}
+{
+ "id": 7,
+ "nameKey": "map_kim_cang_tong",
+ "bg": "assets/maps/map_kim_cang_tong.webp",
+ "fb": "#c8a860",
+ "monsters": [],
+ "boss": null,
+ "npcs": [
+  "truong_lao_the",
+  "de_tu_the_1",
+  "de_tu_the_2",
+  "vo_tang"
+ ],
+ "quests": [],
+ "gates": [
+  {
+   "to": 0,
+   "x": 800,
+   "y": 1120
+  }
+ ],
+ "stoneDrop": [
+  0,
+  0
+ ],
+ "unlock": {
+  "realm": 2
+ },
+ "dao": "chinh",
+ "assets": {
+  "bg": "assets/maps/map_kim_cang_tong.webp",
+  "sprites": [
+   "assets/sprs/npc_truong_tran.png",
+   "assets/sprs/npc_su_gia.png",
+   "assets/sprs/npc_lao_dan_duong.png"
+  ]
+ },
+ "ground": "assets/map/tile_ground_sect.png",
+ "loadingBg": "assets/maps/loading_7.webp",
+ "objects": [
+  {
+   "x": 800,
+   "y": 220,
+   "sprite": "assets/map/obj_kim_cang_tong_chua.png",
+   "w": 380,
+   "h": 320,
+   "solid": true,
+   "sw": 280,
+   "sh": 70
+  },
+  {
+   "x": 1220,
+   "y": 240,
+   "sprite": "assets/map/obj_kim_cang_tong_bao_thap.png",
+   "w": 180,
+   "h": 240,
+   "solid": true,
+   "sw": 120,
+   "sh": 40
+  },
+  {
+   "x": 380,
+   "y": 250,
+   "sprite": "assets/map/obj_nha_ngoi.png",
+   "w": 230,
+   "h": 190,
+   "solid": true,
+   "sw": 170,
+   "sh": 44
+  },
+  {
+   "x": 300,
+   "y": 120,
+   "sprite": "assets/map/obj_hang_rao_go.png",
+   "w": 220,
+   "h": 66,
+   "solid": true,
+   "sw": 154,
+   "sh": 30
+  },
+  {
+   "x": 800,
+   "y": 120,
+   "sprite": "assets/map/obj_hang_rao_go.png",
+   "w": 220,
+   "h": 66,
+   "solid": true,
+   "sw": 154,
+   "sh": 30
+  },
+  {
+   "x": 1300,
+   "y": 120,
+   "sprite": "assets/map/obj_hang_rao_go.png",
+   "w": 220,
+   "h": 66,
+   "solid": true,
+   "sw": 154,
+   "sh": 30
+  },
+  {
+   "x": 520,
+   "y": 420,
+   "sprite": "assets/map/obj_den_da.png",
+   "w": 54,
+   "h": 94,
+   "solid": true,
+   "sw": 37,
+   "sh": 30
+  },
+  {
+   "x": 1080,
+   "y": 420,
+   "sprite": "assets/map/obj_den_da.png",
+   "w": 54,
+   "h": 94,
+   "solid": true,
+   "sw": 37,
+   "sh": 30
+  },
+  {
+   "x": 520,
+   "y": 800,
+   "sprite": "assets/map/obj_den_da.png",
+   "w": 54,
+   "h": 94,
+   "solid": true,
+   "sw": 37,
+   "sh": 30
+  },
+  {
+   "x": 1080,
+   "y": 800,
+   "sprite": "assets/map/obj_den_da.png",
+   "w": 54,
+   "h": 94,
+   "solid": true,
+   "sw": 37,
+   "sh": 30
+  },
+  {
+   "x": 1350,
+   "y": 650,
+   "sprite": "assets/map/obj_gieng.png",
+   "w": 104,
+   "h": 116,
+   "solid": true,
+   "sw": 84,
+   "sh": 36
+  },
+  {
+   "x": 140,
+   "y": 200,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 130,
+   "h": 130,
+   "solid": true,
+   "sw": 56,
+   "sh": 26
+  },
+  {
+   "x": 1460,
+   "y": 200,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 130,
+   "h": 130,
+   "solid": true,
+   "sw": 56,
+   "sh": 26
+  },
+  {
+   "x": 140,
+   "y": 900,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 130,
+   "h": 130,
+   "solid": true,
+   "sw": 56,
+   "sh": 26
+  },
+  {
+   "x": 300,
+   "y": 830,
+   "sprite": "assets/map/obj_leu.png",
+   "w": 200,
+   "h": 132,
+   "solid": true,
+   "sw": 160,
+   "sh": 50
+  },
+  {
+   "x": 1300,
+   "y": 830,
+   "sprite": "assets/map/obj_leu.png",
+   "w": 200,
+   "h": 132,
+   "solid": true,
+   "sw": 160,
+   "sh": 50
+  }
+ ]
+}

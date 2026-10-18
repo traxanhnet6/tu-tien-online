@@ -5,6 +5,14 @@
  * nút xanh ngọc #2fa3a0, chữ đen thư pháp #2b2118, nhấn đỏ #b03a2e.
  * Mobile-first.
  * ============================================================ */
+@font-face{font-family:'Noto Serif VN';font-style:normal;font-weight:400;font-display:swap;
+ src:url('../assets/fonts/NotoSerif-Regular.ttf') format('truetype');}
+@font-face{font-family:'Noto Serif VN';font-style:normal;font-weight:700;font-display:swap;
+ src:url('../assets/fonts/NotoSerif-Bold.ttf') format('truetype');}
+@font-face{font-family:'Noto Sans VN';font-style:normal;font-weight:400;font-display:swap;
+ src:url('../assets/fonts/NotoSans-Regular.ttf') format('truetype');}
+@font-face{font-family:'Noto Sans VN';font-style:normal;font-weight:700;font-display:swap;
+ src:url('../assets/fonts/NotoSans-Bold.ttf') format('truetype');}
 :root{
   --paper:#f3e9d2;
   --cream:#efe3c8;
@@ -15,7 +23,7 @@
   --ink:#2b2118;
   --red:#b03a2e;
   --gold:#c9a227;
-  --font:"Songti SC","STKaiti","KaiTi","Noto Serif CJK SC",serif;
+  --font:"Noto Serif VN","Noto Sans VN","Songti SC","STKaiti","KaiTi","Noto Serif CJK SC",serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#1a140d}

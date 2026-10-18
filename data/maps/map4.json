@@ -1,7 +1,7 @@
 {
  "id": 3,
  "nameKey": "map_linh_dien",
- "bg": null,
+ "bg": "assets/maps/map_linh_dien.webp",
  "fb": "#7a9a5a",
  "monsters": [],
  "boss": null,
@@ -24,12 +24,14 @@
  ],
  "unlock": null,
  "assets": {
-  "bg": null,
+  "bg": "assets/maps/map_linh_dien.webp",
   "sprites": [
    "assets/sprs/sprs_player_kiem.png",
    "assets/sprs/sprs_player_phap.png",
    "assets/sprs/sprs_player_the.png"
   ]
  },
- "dao": "chinh"
+ "dao": "chinh",
+ "ground": "assets/map/tile_ground_farm.png",
+ "loadingBg": "assets/maps/loading_3.webp"
 }

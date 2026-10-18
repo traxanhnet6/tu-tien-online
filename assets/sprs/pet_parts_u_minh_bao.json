@@ -1,5 +1,6 @@
 {
   "pet": "u_minh_bao",
+  "source": "pet_u_minh_bao.webp",
   "canvas": {
     "width": 1024,
     "height": 1024
@@ -35,8 +36,8 @@
     "chan_trai_sau": {
       "file": "pet_u_minh_bao_part_chan_trai_sau.png",
       "pivot": [
-        95,
-        441
+        104,
+        548
       ],
       "z": 2,
       "pixels": 28701,
@@ -48,8 +49,8 @@
     "chan_phai_sau": {
       "file": "pet_u_minh_bao_part_chan_phai_sau.png",
       "pivot": [
-        866,
-        537
+        851,
+        610
       ],
       "z": 3,
       "pixels": 64439,
@@ -61,8 +62,8 @@
     "chan_trai_truoc": {
       "file": "pet_u_minh_bao_part_chan_trai_truoc.png",
       "pivot": [
-        244,
-        632
+        243,
+        686
       ],
       "z": 4,
       "pixels": 87206,
@@ -75,7 +76,7 @@
       "file": "pet_u_minh_bao_part_chan_phai_truoc.png",
       "pivot": [
         665,
-        637
+        692
       ],
       "z": 5,
       "pixels": 91365,
@@ -87,8 +88,8 @@
     "dau": {
       "file": "pet_u_minh_bao_part_dau.png",
       "pivot": [
-        503,
-        485
+        509,
+        507
       ],
       "z": 6,
       "pixels": 178734,

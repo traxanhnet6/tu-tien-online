@@ -1,5 +1,6 @@
 {
   "pet": "thach_giap_long_quy",
+  "source": "pet_thach_giap_long_quy.webp",
   "canvas": {
     "width": 1024,
     "height": 1024
@@ -35,8 +36,8 @@
     "chan_trai_sau": {
       "file": "pet_thach_giap_long_quy_part_chan_trai_sau.png",
       "pivot": [
-        328,
-        782
+        332,
+        835
       ],
       "z": 2,
       "pixels": 40765,
@@ -48,8 +49,8 @@
     "chan_phai_sau": {
       "file": "pet_thach_giap_long_quy_part_chan_phai_sau.png",
       "pivot": [
-        720,
-        782
+        716,
+        828
       ],
       "z": 3,
       "pixels": 45744,
@@ -61,8 +62,8 @@
     "chan_trai_truoc": {
       "file": "pet_thach_giap_long_quy_part_chan_trai_truoc.png",
       "pivot": [
-        240,
-        563
+        251,
+        673
       ],
       "z": 4,
       "pixels": 20094,
@@ -74,8 +75,8 @@
     "chan_phai_truoc": {
       "file": "pet_thach_giap_long_quy_part_chan_phai_truoc.png",
       "pivot": [
-        743,
-        563
+        729,
+        652
       ],
       "z": 5,
       "pixels": 27383,
@@ -87,8 +88,8 @@
     "dau": {
       "file": "pet_thach_giap_long_quy_part_dau.png",
       "pivot": [
-        505,
-        527
+        527,
+        554
       ],
       "z": 6,
       "pixels": 229258,

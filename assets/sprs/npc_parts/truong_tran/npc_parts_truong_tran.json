@@ -101,11 +101,11 @@
       "file": "npc_parts/truong_tran/npc_truong_tran_part_dau.png",
       "offset": [
         416,
-        213
+        212
       ],
       "size": [
         309,
-        560
+        561
       ],
       "pivot": [
         571,
@@ -119,11 +119,11 @@
       "file": "npc_parts/truong_tran/npc_truong_tran_part_phu_kien_mu.png",
       "offset": [
         469,
-        145
+        134
       ],
       "size": [
-        182,
-        68
+        170,
+        59
       ],
       "pivot": [
         571,

@@ -1,5 +1,6 @@
 {
   "pet": "tam_dau_khuyen",
+  "source": "pet_tam_dau_khuyen.webp",
   "canvas": {
     "width": 1024,
     "height": 1024
@@ -35,8 +36,8 @@
     "chan_trai_sau": {
       "file": "pet_tam_dau_khuyen_part_chan_trai_sau.png",
       "pivot": [
-        204,
-        583
+        199,
+        698
       ],
       "z": 2,
       "pixels": 49172,
@@ -48,8 +49,8 @@
     "chan_phai_sau": {
       "file": "pet_tam_dau_khuyen_part_chan_phai_sau.png",
       "pivot": [
-        829,
-        583
+        838,
+        683
       ],
       "z": 3,
       "pixels": 50641,
@@ -62,7 +63,7 @@
       "file": "pet_tam_dau_khuyen_part_chan_trai_truoc.png",
       "pivot": [
         355,
-        742
+        777
       ],
       "z": 4,
       "pixels": 54840,
@@ -75,7 +76,7 @@
       "file": "pet_tam_dau_khuyen_part_chan_phai_truoc.png",
       "pivot": [
         670,
-        742
+        778
       ],
       "z": 5,
       "pixels": 53228,
@@ -87,8 +88,8 @@
     "dau": {
       "file": "pet_tam_dau_khuyen_part_dau.png",
       "pivot": [
-        503,
-        542
+        509,
+        564
       ],
       "z": 6,
       "pixels": 342966,

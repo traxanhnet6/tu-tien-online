@@ -46,11 +46,11 @@
       "name": "than",
       "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_than.png",
       "offset": [
-        298,
+        220,
         93
       ],
       "size": [
-        521,
+        686,
         2057
       ],
       "pivot": [
@@ -75,7 +75,7 @@
         560,
         526
       ],
-      "z": 2,
+      "z": 3,
       "note": "Đầu: cổ (pivot) -> gật/lắc đầu, cúi chào khách."
     },
     {
@@ -93,62 +93,62 @@
         750,
         582
       ],
-      "z": 3,
+      "z": 4,
       "note": "Khăn trắng vắt vai: gắn vai trái, đung đưa nhẹ khi đi."
-    },
-    {
-      "name": "tay_trai",
-      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_tay_trai.png",
-      "offset": [
-        715,
-        627
-      ],
-      "size": [
-        196,
-        449
-      ],
-      "pivot": [
-        818,
-        694
-      ],
-      "z": 4,
-      "note": "Tay trái đỡ khay: vai (pivot) -> nâng/hạ khay, vẫy tay khi không bưng."
-    },
-    {
-      "name": "tay_phai",
-      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_tay_phai.png",
-      "offset": [
-        220,
-        627
-      ],
-      "size": [
-        185,
-        449
-      ],
-      "pivot": [
-        302,
-        694
-      ],
-      "z": 4,
-      "note": "Tay phải đỡ khay: vai (pivot) -> nâng/hạ khay, vẫy tay khi không bưng."
     },
     {
       "name": "phu_kien_khay_tra",
       "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_phu_kien_khay_tra.png",
       "offset": [
-        313,
+        359,
         828
       ],
       "size": [
-        528,
+        402,
         237
       ],
       "pivot": [
         571,
         963
       ],
+      "z": 5,
+      "note": "Khay trà (ấm+chén): gắn 2 tay (đi theo tay_trai/tay_phai), giữ thăng bằng khi đi/cúi chào; tách ấm/chén riêng nếu cần anim rót trà."
+    },
+    {
+      "name": "tay_trai",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_tay_trai.png",
+      "offset": [
+        694,
+        627
+      ],
+      "size": [
+        217,
+        438
+      ],
+      "pivot": [
+        818,
+        694
+      ],
       "z": 6,
-      "note": "Khay trà (ấm+chén): gắn 2 tay, giữ thăng bằng khi đi/cúi chào; tách ấm/chén riêng nếu cần anim rót trà."
+      "note": "Tay trái (tay áo + cẳng tay + bàn tay): vai (pivot) -> đỡ khay, nâng/hạ khay, vẫy tay khi không bưng."
+    },
+    {
+      "name": "tay_phai",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_tay_phai.png",
+      "offset": [
+        230,
+        627
+      ],
+      "size": [
+        196,
+        438
+      ],
+      "pivot": [
+        302,
+        694
+      ],
+      "z": 6,
+      "note": "Tay phải (tay áo + cẳng tay + bàn tay): vai (pivot) -> đỡ khay, nâng/hạ khay, vẫy tay khi không bưng."
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
  "id": 2,
  "nameKey": "map_u_minh_coc",
- "bg": null,
+ "bg": "assets/maps/map_u_minh_coc.webp",
  "fb": "#3a3f5c",
  "monsters": [
   "u_hon",
@@ -31,7 +31,7 @@
   "tier": 5
  },
  "assets": {
-  "bg": null,
+  "bg": "assets/maps/map_u_minh_coc.webp",
   "sprites": [
    "assets/sprs/sprs_mon_u_hon.png",
    "assets/sprs/sprs_mon_thi_ma.png",
@@ -41,5 +41,7 @@
    "assets/sprs/sprs_player_the.png"
   ]
  },
- "dao": "chinh"
+ "dao": "chinh",
+ "ground": "assets/map/tile_ground_nether.png",
+ "loadingBg": "assets/maps/loading_2.webp"
 }
