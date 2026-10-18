@@ -1,62 +1,78 @@
 {
  "elements": {
   "kim": {
-   "fx": "gold",
+   "fx": "#e8e8e8",
    "nameKey": "el_kim"
   },
   "moc": {
-   "fx": "wood",
+   "fx": "#66bb6a",
    "nameKey": "el_moc"
   },
   "thuy": {
-   "fx": "water",
+   "fx": "#42a5f5",
    "nameKey": "el_thuy"
   },
   "hoa": {
-   "fx": "fire",
+   "fx": "#ef5350",
    "nameKey": "el_hoa"
   },
   "tho": {
-   "fx": "earth",
+   "fx": "#a1887f",
    "nameKey": "el_tho"
   },
   "bang": {
-   "fx": "ice",
+   "fx": "#9be8ff",
    "nameKey": "el_bang"
   },
   "loi": {
-   "fx": "thunder",
+   "fx": "#b388ff",
    "nameKey": "el_loi"
   },
   "phong": {
-   "fx": "wind",
+   "fx": "#b2ff59",
    "nameKey": "el_phong"
   },
+  "quang": {
+   "fx": "#fff9c4",
+   "nameKey": "el_quang"
+  },
+  "am": {
+   "fx": "#7b1fa2",
+   "nameKey": "el_am"
+  },
+  "doc": {
+   "fx": "#76ff03",
+   "nameKey": "el_doc"
+  },
+  "huyet": {
+   "fx": "#ff5252",
+   "nameKey": "el_huyet"
+  },
   "hondon": {
-   "fx": "chaos",
+   "fx": "#8e8e93",
    "nameKey": "el_hondon"
   }
  },
  "lingen_rates": [
   [
    "kim",
-   18
+   16
   ],
   [
    "moc",
-   18
+   16
   ],
   [
    "thuy",
-   18
+   16
   ],
   [
    "hoa",
-   18
+   16
   ],
   [
    "tho",
-   18
+   16
   ],
   [
    "bang",
@@ -69,6 +85,22 @@
   [
    "phong",
    3
+  ],
+  [
+   "quang",
+   2
+  ],
+  [
+   "am",
+   2
+  ],
+  [
+   "doc",
+   2
+  ],
+  [
+   "huyet",
+   2
   ],
   [
    "hondon",

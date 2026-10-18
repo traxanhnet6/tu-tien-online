@@ -66,6 +66,7 @@ var Engine = (function () {
   var ELEMENT_FX = { // fallback khi ELEMENTS (data.js) chưa load
     kim: '#e8e8e8', moc: '#66bb6a', thuy: '#42a5f5', hoa: '#ef5350',
     tho: '#a1887f', bang: '#9be8ff', loi: '#b388ff', phong: '#b2ff59',
+    quang: '#fff9c4', am: '#7b1fa2', doc: '#76ff03', huyet: '#ff5252',
     hondon: '#8e8e93',
   };
 
@@ -355,7 +356,7 @@ var Engine = (function () {
 
   /* ---------- Entity ---------- */
   var player = { x: 800, y: 600, dir: 1, ang: Math.PI / 2, hp: 100, mp: 50, shield: 0, maxShield: 0, shieldT: 0,
-                 focus: 100, speed: 150, target: null, teamId: null, atkT: 0 };
+                 focus: 100, speed: 150, target: null, teamId: null, atkT: 0, skillT: 0 };
   var joy = { dx: 0, dy: 0 };
   /* Linh thú đi theo */
   var PET_SPRITE = 'assets/sprs/sprs_pet_linh_thu.png';
@@ -1014,6 +1015,7 @@ var Engine = (function () {
     player.mp = Math.max(0, player.mp - chk.power.mp);
     if (S.char) S.char.mp = player.mp;
     player.atkT = 0.25; // chồm lên khi tung chiêu
+    player.skillT = 0.4; // khung skill riêng (không dùng khung đánh thường)
     var ps = _effStats(_getStats());
     var def = cast.def, wm = _weakMult();
     _audio(function (A) { A.sfx('slash'); });
@@ -1323,6 +1325,7 @@ var Engine = (function () {
       var dmg = _applyResist(Math.max(1, Math.round(m.atk * 1.5 - ps.def * 0.6))); /* kháng hiệu ứng */
       player.hp -= dmg;
       _dmgNum(player.x, player.y - 26, '-' + dmg, '#ff6b6b');
+      _vibrate(60); /* rung khi trúng AoE boss */
       _audio(function (A) { A.sfx('hit'); });
       if (player.hp <= 0) _playerDie(ps);
     }
@@ -1331,6 +1334,7 @@ var Engine = (function () {
   function _playerDie(ps) {
     player.hp = ps.maxHp;
     player.mp = ps.maxMp;
+    _vibrate([70, 50, 120]); /* rung mạnh khi chết */
     player.x = WORLD_W / 2; player.y = WORLD_H / 2;
     player.target = null; _moveTarget = null;
   }
@@ -1521,6 +1525,7 @@ var Engine = (function () {
     }
     _attackCd -= dt;
     if (player.atkT > 0) player.atkT -= dt;
+    if (player.skillT > 0) player.skillT -= dt;
     if (_dashCd > 0) _dashCd -= dt;
 
     /* Lướt */
@@ -1682,9 +1687,10 @@ var Engine = (function () {
     cands.push('assets/sprs/mon_' + m.monId + '_' + huong + '_walk' + ph + '.png');
     for (var i = 0; i < cands.length; i++) {
       var ce = _imgCache[cands[i]];
-      if (ce && ce.done && !ce.ok) continue; /* file không tồn tại → thử ứng viên tiếp */
-      if (!ce) _img(cands[i]); /* warm cache */
-      return { src: cands[i], directional: true };
+      if (!ce) { _img(cands[i]); continue; } /* chưa tải lần nào → warm rồi dùng fallback, KHÔNG vẽ ô vuông */
+      if (!ce.done) continue; /* đang tải → dùng fallback */
+      if (!ce.ok) continue; /* file không tồn tại → thử ứng viên tiếp */
+      return { src: cands[i], directional: true }; /* đã tải xong mới dùng */
     }
     return { src: m.def.img, directional: false };
   }
@@ -1738,13 +1744,14 @@ var Engine = (function () {
    * char_<gioi>_fly.png khi ngự kiếm bay. Có frame riêng cho cả 4 hướng
    * (xuong/len/trai/phai) nên không flip sprite — thân luôn đứng thẳng. */
   var _CHAR_HUONG = { down: 'xuong', up: 'len', left: 'trai', right: 'phai' };
-  var _WPN_ART_KEYS = ['kiem','dao','thuong','cung','phien','tieu','roi','liem','kiemhap','but'];
+  /* key dài trước để 'kiem_hap' không bị match nhầm thành 'kiem' */
+  var _WPN_ART_KEYS = ['kiemhap','thuong','phien','cung','liem','kiem','dao','tieu','roi','but'];
   function _weaponArtKey() {
     /* loại vũ khí đang cầm -> key art atk (mặc định kiếm) */
     try {
       var S = _S(), wid = S && S.equip && S.equip.vukhi;
       if (wid) {
-        var w = String(wid).toLowerCase();
+        var w = String(wid).toLowerCase().replace(/_/g, '');
         for (var i = 0; i < _WPN_ART_KEYS.length; i++)
           if (w.indexOf(_WPN_ART_KEYS[i]) >= 0) return _WPN_ART_KEYS[i];
       }
@@ -1757,14 +1764,24 @@ var Engine = (function () {
     var ang = (typeof player.ang === 'number') ? player.ang : Math.PI / 2;
     var huong = _CHAR_HUONG[_face4(player, ang)] || 'xuong';
     var src = null;
-    /* đang tung chiêu/đánh: dùng frame tấn công theo vũ khí (art char_*_atk_*) */
+    /* đang TUNG SKILL: khung skill riêng theo hướng (char_*_skill*) — chỉ dùng khi đã tải xong */
+    if (player.skillT > 0) {
+      var _sf = (player.skillT > 0.2) ? 1 : 2;
+      var _ssrc = 'assets/sprs/char_' + gioi + '_' + huong + '_skill' + _sf + '.png';
+      var _sce = _imgCache[_ssrc];
+      if (!_sce) _img(_ssrc);
+      else if (_sce.done && _sce.ok) return _ssrc;
+      /* chưa tải xong hoặc art thiếu -> rớt xuống frame tấn công */
+    }
+    /* đang đánh thường: dùng frame tấn công theo vũ khí (art char_*_atk_*) — chỉ dùng khi đã tải xong */
     if (player.atkT > 0) {
       var _wk = _weaponArtKey();
       var _af = (player.atkT > 0.12) ? 1 : 2;
       var _asrc = 'assets/sprs/char_' + gioi + '_atk_' + _wk + '_' + _af + '.png';
       var _ace = _imgCache[_asrc];
-      if (!(_ace && _ace.done && !_ace.ok)) { _img(_asrc); return _asrc; }
-      /* art thiếu -> rớt xuống frame thường */
+      if (!_ace) _img(_asrc);
+      else if (_ace.done && _ace.ok) return _asrc;
+      /* chưa tải xong hoặc art thiếu -> rớt xuống frame thường */
     }
     try {
       if (typeof Engine !== 'undefined' && Engine.fly)
@@ -1781,9 +1798,10 @@ var Engine = (function () {
       }
     }
     var ce = _imgCache[src];
-    if (ce) return (ce.done && !ce.ok) ? _playerSpriteOld() : src;
-    _img(src); /* warm cache */
-    return src;
+    if (ce && ce.done && !ce.ok) return _playerSpriteOld(); /* file không tồn tại → sprite cũ */
+    if (ce && ce.done && ce.ok) return src; /* đã tải xong */
+    _img(src); /* warm cache lần đầu */
+    return _playerSpriteOld(); /* đang tải → dùng sprite cũ, KHÔNG vẽ ô vuông */
   }
   /* Pháp bảo ngự kiếm theo hệ phái: kiếm (Kiếm) / phất trần (Pháp) / đài sen (Thể) */
   function _drawMount(x, y, dir) {

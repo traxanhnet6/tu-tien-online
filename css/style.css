@@ -933,3 +933,8 @@ body.landscape #skillbar .skill-slot{width:40px;height:40px;flex-basis:40px}
 body.landscape #round-btns{width:140px;height:150px;bottom:calc(8px + env(safe-area-inset-bottom))}
 body.landscape #round-btns #btn-fly{right:86px;width:52px;height:52px}
 body.landscape #hud-leftmid{top:40%}
+
+/* ---- Preview đồ tông môn khi gia nhập ---- */
+.sect-join-row{align-items:center;gap:10px}
+.sect-join-preview{flex:0 0 64px;width:64px;height:84px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);border:1px solid var(--gold-dim,#8a6d3b);border-radius:10px;overflow:hidden}
+.sect-join-preview img{max-width:60px;max-height:80px;object-fit:contain}

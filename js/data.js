@@ -1239,6 +1239,8 @@ const NPCS = {
 const QUESTS = [
   /* ============ CHUỖI CỐT TRUYỆN TÂN THỦ (Bui duyệt 2026-10-18) ============
    * Sau khi tạo nhân vật: xem story intro (js/story.js) → tự nhận q_story_01.
+   * Thứ tự (Bui chốt 2026-10-18): Phàm Nhân → KỲ NGỘ trước → TẨY CỐT cuối:
+   *   q_story_01 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 02 → 03 → 11 (gia nhập tông môn).
    * Mỗi quest autoAccept: trả xong tự nhận quest tiếp theo trong chuỗi. */
   {
     id: "q_story_01", nameKey: "q_story_01", descKey: "q_story_01_desc",
@@ -1248,7 +1250,7 @@ const QUESTS = [
   },
   {
     id: "q_story_02", nameKey: "q_story_02", descKey: "q_story_02_desc",
-    npc: "dai_phu", req: "q_story_01", autoAccept: true,
+    npc: "dai_phu", req: "q_story_10", autoAccept: true,
     need: { type: "item", item: "taycothao", count: 3 },
     reward: { stones: 150, exp: 120 },
   },
@@ -1260,7 +1262,7 @@ const QUESTS = [
   },
   {
     id: "q_story_04", nameKey: "q_story_04", descKey: "q_story_04_desc",
-    npc: "dai_phu", req: "q_story_03", autoAccept: true,
+    npc: "dai_phu", req: "q_story_01", autoAccept: true,
     need: { type: "kill", monster: "da_tru", count: 5 },
     reward: { stones: 120, exp: 150, items: [{ id: "dan_hx_tieu", qty: 2 }] },
   },
@@ -1302,6 +1304,12 @@ const QUESTS = [
       stones: 800, exp: 1200,
       items: [{ id: "wpn_linh", qty: 1, locked: true }],
     },
+  },
+  {
+    id: "q_story_11", nameKey: "q_story_11", descKey: "q_story_11_desc",
+    npc: "dai_phu", req: "q_story_03", autoAccept: true,
+    need: { type: "joinsect" },
+    reward: { stones: 500, exp: 800 },
   },
   {
     id: "q_pet_intro", nameKey: "q_pet_intro", descKey: "q_pet_intro_desc",

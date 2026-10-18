@@ -81,6 +81,14 @@ var Quest = {
     } else if (need.type === "item") {
       if (_gs("countItem")(state, need.item) < need.count) return { ok: false, reason: "need_not_met" };
       _gs("removeItem")(state, need.item, need.count);
+    } else if (need.type === "joinsect") {
+      /* Gia nhập tông môn: kiểm tra state.sectInfo.joined */
+      var _joined = false;
+      try {
+        if (typeof Sect !== "undefined" && Sect.joinedSect) _joined = !!Sect.joinedSect(state);
+        else _joined = !!(state.sectInfo && state.sectInfo.joined);
+      } catch (e) {}
+      if (!_joined) return { ok: false, reason: "need_not_met" };
     }
     /* type 'talk': luôn đủ điều kiện */
 

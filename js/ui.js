@@ -304,11 +304,8 @@ function doCheckin() {
 
 /* ---------------- tạo nhân vật ---------------- */
 function initCreate() {
+  /* Đầu game là phàm nhân — không chọn tông môn/hệ phái, mặc định kiếm cho chỉ số */
   createSel = { sect: "kiem", element: null, quality: null, gender: "nam" };
-  var cards = document.querySelectorAll(".sect-card");
-  for (var i = 0; i < cards.length; i++) {
-    cards[i].classList.toggle("sel", cards[i].getAttribute("data-sect") === "kiem");
-  }
   $("lingen-result").textContent = t("lingen_none");
   syncCreateGender();
   startCreatePreview();
@@ -328,17 +325,12 @@ function updateCreatePreview() {
   var img = $("create-char-img");
   if (!img) return;
   var g = (createSel.gender === "nu") ? "nu" : "nam";
-  img.src = "assets/sprs/char_" + g + "_xuong_walk" + ((_createPreviewFrame % 4) + 1) + ".png";
+  /* Đầu game là phàm nhân — preview áo vải thô theo giới tính */
+  img.src = "assets/sprs/mortal_preview_" + g + ".png";
 }
 function startCreatePreview() {
   stopCreatePreview();
-  _createPreviewFrame = 0;
   updateCreatePreview();
-  _createPreviewTimer = setInterval(function () {
-    if (typeof screen !== "undefined" && screen !== "create") { stopCreatePreview(); return; }
-    _createPreviewFrame++;
-    updateCreatePreview();
-  }, 280);
 }
 function stopCreatePreview() {
   if (_createPreviewTimer) { clearInterval(_createPreviewTimer); _createPreviewTimer = null; }
@@ -351,7 +343,8 @@ function rollLingen() {
   for (i = 0; i < rates.length; i++) total += rates[i][1];
   var r = Math.random() * total, el = rates[0][0];
   for (i = 0; i < rates.length; i++) { r -= rates[i][1]; if (r <= 0) { el = rates[i][0]; break; } }
-  var rare = (el === "bang" || el === "loi" || el === "phong" || el === "hondon");
+  var rare = (el === "bang" || el === "loi" || el === "phong" || el === "hondon" ||
+              el === "quang" || el === "am" || el === "doc" || el === "huyet");
   var q = Math.random();
   var quality = q < 0.05 ? "thien" : (q < 0.30 ? "dia" : "pham");
   if (rare && quality === "pham") quality = "dia"; /* linh căn hiếm tối thiểu địa phẩm */
@@ -2594,19 +2587,6 @@ function bindStatic() {
   $("btn-lang-vi").onclick = function () { setLang("vi"); state.lang = "vi"; saveGame(state); applyI18n(); refreshMenu(); };
   $("btn-lang-en").onclick = function () { setLang("en"); state.lang = "en"; saveGame(state); applyI18n(); refreshMenu(); };
 
-  var cards = document.querySelectorAll(".sect-card");
-  for (var i = 0; i < cards.length; i++) {
-    cards[i].onclick = (function (c) {
-      return function () {
-        createSel.sect = c.getAttribute("data-sect");
-        for (var j = 0; j < cards.length; j++) cards[j].classList.toggle("sel", cards[j] === c);
-        /* doi he phai -> gioi tinh mac dinh theo phai (user co the doi lai) */
-        createSel.gender = (createSel.sect === "phap") ? "nu" : "nam";
-        syncCreateGender();
-        sfx("click");
-      };
-    })(cards[i]);
-  }
   $("create-gender-nam").onclick = function () { createSel.gender = "nam"; syncCreateGender(); sfx("click"); };
   $("create-gender-nu").onclick = function () { createSel.gender = "nu"; syncCreateGender(); sfx("click"); };
   $("btn-taycot").onclick = function () { rollLingen(); };
@@ -3102,9 +3082,13 @@ function renderEquipTab() {
   var left = ["vukhi", "giap", "phapboi", "hanhngoa"];
   var right = ["phihanh", "huanh", "yphuc", "linhgioi"];
   h += '<div class="equip-col">' + left.map(equipSlot).join("") + "</div>";
-  /* nhân vật ở giữa — đổi vũ khí theo trang bị đang đeo, sprite theo giới tính */
+  /* nhân vật ở giữa — đã gia nhập tông môn thì mặc đồ tông, chưa thì áo phàm nhân */
   var wpn = state.equip.vukhi ? itemDef(state.equip.vukhi) : null;
-  var sprG = "assets/sprs/char_" + (c.gender === "nu" ? "nu" : "nam") + "_xuong_idle.png";
+  var _g = (c.gender === "nu" ? "nu" : "nam");
+  var _joined = (typeof Sect !== "undefined" && Sect.joinedSect) ? Sect.joinedSect(state) : null;
+  var sprG = _joined
+    ? "assets/sprs/sect_preview_" + _joined + "_" + _g + ".png"
+    : "assets/sprs/mortal_preview_" + _g + ".png";
   var sprFb = "assets/sprs/sprs_player_" + (c.sect === "phap" ? "phap" : (c.sect === "the" ? "the" : "kiem")) + ".png";
   h += '<div class="char-sprite">' + equipSlot("phapbao") + '<img src="' + sprG + '" data-fb="' + sprFb + '" alt="" ' +
     'onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb=\'\';}else{this.style.display=\'none\'}">' +
@@ -3313,11 +3297,13 @@ function renderSect() {
   var tb = sectTab();
   if (tb === "info") {
     if (!joined) {
+      var _jg = (state && state.char && state.char.gender === "nu") ? "nu" : "nam";
       h += Object.keys(SECTS).map(function (sid) {
         var sc = SECTS[sid];
         /* Cửu U Ma Tông: chỉ Ma Đạo — hiện khóa nếu chưa phải ma đạo */
         var maLock = sc.dao === "ma" && (!state || state.dao !== "ma");
-        return '<div class="row"><div><div class="item-name">' + esc(t(sc.nameKey)) +
+        var previewImg = "assets/sprs/sect_preview_" + sid + "_" + _jg + ".png";
+        return '<div class="row sect-join-row"><div class="sect-join-preview"><img src="' + previewImg + '" alt="" loading="lazy"></div><div><div class="item-name">' + esc(t(sc.nameKey)) +
           (maLock ? ' <span class="dg-tag">😈 ' + esc(t("dao_ma")) + "</span>" : "") + "</div>" +
           '<div class="item-desc">' + esc(t(sc.descKey)) +
           (maLock ? " — " + esc(t("sect_need_ma")) : "") + "</div></div>" +
