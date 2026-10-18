@@ -1257,6 +1257,7 @@ var Engine = (function () {
         var a = Math.atan2(player.y - m.y, player.x - m.x);
         m.x += Math.cos(a) * spd * dt;
         m.y += Math.sin(a) * spd * dt;
+        m._lastMove = Date.now();
         /* quái/boss quay mặt theo hướng di chuyển — boss xoay chậm hơn (nặng nề) */
         m.ang = _angLerp(m.ang == null ? a : m.ang, a, Math.min(1, dt * (m.boss ? 4 : 6)));
       } else if (d >= MONSTER_AGGRO) { // đi lang thang
@@ -1264,6 +1265,7 @@ var Engine = (function () {
         if (m.wanderT <= 0) { m.wanderA = Math.random() * Math.PI * 2; m.wanderT = 2 + Math.random() * 3; }
         m.x += Math.cos(m.wanderA) * spd * 0.3 * dt;
         m.y += Math.sin(m.wanderA) * spd * 0.3 * dt;
+        m._lastMove = Date.now();
         m.ang = _angLerp(m.ang == null ? m.wanderA : m.ang, m.wanderA, Math.min(1, dt * 6));
       }
       m.x = Math.max(20, Math.min(WORLD_W - 20, m.x));
@@ -1552,6 +1554,24 @@ var Engine = (function () {
     _ctx.fillRect(x - w / 2, y, w * Math.max(0, ratio), h);
   }
 
+  /* Frame quái/boss theo hướng di chuyển (4 hướng, 2 khung bước).
+   * Trả {src, directional}; directional=false → dùng sprite cũ + lật gương. */
+  function _monsterFrame(m) {
+    var huong = _CHAR_HUONG[_face4(m, (typeof m.ang === 'number') ? m.ang : Math.PI / 2)] || 'xuong';
+    var moving = false;
+    try { moving = (Date.now() - (m._lastMove || 0)) < 400; } catch (e) {}
+    var ph = moving ? (1 + (Math.floor(Date.now() / 300) % 2)) : 1;
+    var cands = [];
+    if (m.boss) cands.push('assets/sprs/boss_' + m.monId + '_' + huong + '_walk' + ph + '.png');
+    cands.push('assets/sprs/mon_' + m.monId + '_' + huong + '_walk' + ph + '.png');
+    for (var i = 0; i < cands.length; i++) {
+      var ce = _imgCache[cands[i]];
+      if (ce && ce.done && !ce.ok) continue; /* file không tồn tại → thử ứng viên tiếp */
+      if (!ce) _img(cands[i]); /* warm cache */
+      return { src: cands[i], directional: true };
+    }
+    return { src: m.def.img, directional: false };
+  }
   function _drawMonster(m) {
     var elite = !!m.elite;
     var size = m.boss ? 64 : (elite ? 57 : 44); /* tinh anh to hơn 30% */
@@ -1563,8 +1583,11 @@ var Engine = (function () {
       _ctx.beginPath(); _ctx.arc(m.x, m.y, size / 2 + 7, 0, Math.PI * 2); _ctx.stroke();
       _ctx.restore();
     }
-    /* quái/boss quay mặt theo hướng di chuyển: lật ngang khi đi sang trái, thân đứng thẳng */
-    _drawCreature(m, m.x, m.y, size, size, m.def.img, m.def.fb || '#888', { faceAng: m.ang });
+    /* quái/boss 4 hướng di chuyển: art riêng từng hướng (mon_/boss_<id>_<huong>_walk<n>),
+       fallback sprite cũ + lật gương khi chưa có art hướng */
+    var _mfr = _monsterFrame(m);
+    _drawCreature(m, m.x, m.y, size, size, _mfr.src, m.def.fb || '#888',
+      _mfr.directional ? { noAutoFlip: true } : { faceAng: m.ang });
     if (m.hitT > 0) { // chớp trắng khi trúng đòn
       _ctx.globalAlpha = 0.45;
       _ctx.fillStyle = '#fff';
