@@ -1218,303 +1218,303 @@ const ITEMS = {
   },
   /* --- Trang bị chuẩn theo cảnh giới (tự sinh) --- */
   eq_r2_vukhi: {
-    kind: "equip", nameKey: "it_eq_r2_vukhi", slot: "vukhi", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_vukhi", slot: "vukhi", tier: 1, rarity: "uu",
     atk: 105, price: 1260, sell: 420, reqRealm: 2,
     skillLine: [
       { skill: "sword_qi", lv: 1 }
     ]
   },
   eq_r2_giap: {
-    kind: "equip", nameKey: "it_eq_r2_giap", slot: "giap", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_giap", slot: "giap", tier: 1, rarity: "uu",
     def: 49, hp: 255, price: 756, sell: 252, reqRealm: 2
   },
   eq_r2_yphuc: {
-    kind: "equip", nameKey: "it_eq_r2_yphuc", slot: "yphuc", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_yphuc", slot: "yphuc", tier: 1, rarity: "uu",
     def: 35, hp: 340, price: 1020, sell: 340, reqRealm: 2
   },
   eq_r2_phapbao: {
-    kind: "equip", nameKey: "it_eq_r2_phapbao", slot: "phapbao", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_phapbao", slot: "phapbao", tier: 1, rarity: "uu",
     atk: 42, def: 28, hp: 170, price: 504, sell: 168, reqRealm: 2
   },
   eq_r2_phapboi: {
-    kind: "equip", nameKey: "it_eq_r2_phapboi", slot: "phapboi", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_phapboi", slot: "phapboi", tier: 1, rarity: "uu",
     atk: 32, mp: 212, price: 500, sell: 166, reqRealm: 2
   },
   eq_r2_linhgioi: {
-    kind: "equip", nameKey: "it_eq_r2_linhgioi", slot: "linhgioi", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_linhgioi", slot: "linhgioi", tier: 1, rarity: "uu",
     atk: 32, hp: 128, price: 500, sell: 166, reqRealm: 2
   },
   eq_r2_hanhngoa: {
-    kind: "equip", nameKey: "it_eq_r2_hanhngoa", slot: "hanhngoa", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_hanhngoa", slot: "hanhngoa", tier: 1, rarity: "uu",
     def: 21, hp: 170, price: 504, sell: 168, reqRealm: 2
   },
   eq_r2_huanh: {
-    kind: "equip", nameKey: "it_eq_r2_huanh", slot: "huanh", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_huanh", slot: "huanh", tier: 1, rarity: "uu",
     atk: 21, def: 21, hp: 128, price: 500, sell: 166, reqRealm: 2
   },
   eq_r2_phihanh: {
-    kind: "equip", nameKey: "it_eq_r2_phihanh", slot: "phihanh", tier: 1,
+    kind: "equip", nameKey: "it_eq_r2_phihanh", slot: "phihanh", tier: 1, rarity: "uu",
     def: 14, hp: 212, price: 636, sell: 212, reqRealm: 2
   },
   eq_r3_vukhi: {
-    kind: "equip", nameKey: "it_eq_r3_vukhi", slot: "vukhi", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_vukhi", slot: "vukhi", tier: 1, rarity: "uu",
     atk: 290, price: 3480, sell: 1160, reqRealm: 3,
     skillLine: [
       { skill: "sword_qi", lv: 1 }
     ]
   },
   eq_r3_giap: {
-    kind: "equip", nameKey: "it_eq_r3_giap", slot: "giap", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_giap", slot: "giap", tier: 1, rarity: "uu",
     def: 130, hp: 660, price: 1980, sell: 660, reqRealm: 3,
     skillLine: [
       { stat: "maxHp", pct: 0.05 }
     ]
   },
   eq_r3_yphuc: {
-    kind: "equip", nameKey: "it_eq_r3_yphuc", slot: "yphuc", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_yphuc", slot: "yphuc", tier: 1, rarity: "uu",
     def: 92, hp: 880, price: 2640, sell: 880, reqRealm: 3,
     skillLine: [
       { stat: "maxHp", pct: 0.05 }
     ]
   },
   eq_r3_phapbao: {
-    kind: "equip", nameKey: "it_eq_r3_phapbao", slot: "phapbao", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_phapbao", slot: "phapbao", tier: 1, rarity: "uu",
     atk: 116, def: 74, hp: 440, price: 1392, sell: 464, reqRealm: 3
   },
   eq_r3_phapboi: {
-    kind: "equip", nameKey: "it_eq_r3_phapboi", slot: "phapboi", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_phapboi", slot: "phapboi", tier: 1, rarity: "uu",
     atk: 87, mp: 550, price: 1044, sell: 348, reqRealm: 3,
     skillLine: [
       { stat: "maxMp", pct: 0.10 }
     ]
   },
   eq_r3_linhgioi: {
-    kind: "equip", nameKey: "it_eq_r3_linhgioi", slot: "linhgioi", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_linhgioi", slot: "linhgioi", tier: 1, rarity: "uu",
     atk: 87, hp: 330, price: 1044, sell: 348, reqRealm: 3
   },
   eq_r3_hanhngoa: {
-    kind: "equip", nameKey: "it_eq_r3_hanhngoa", slot: "hanhngoa", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_hanhngoa", slot: "hanhngoa", tier: 1, rarity: "uu",
     def: 56, hp: 440, price: 1320, sell: 440, reqRealm: 3
   },
   eq_r3_huanh: {
-    kind: "equip", nameKey: "it_eq_r3_huanh", slot: "huanh", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_huanh", slot: "huanh", tier: 1, rarity: "uu",
     atk: 58, def: 56, hp: 330, price: 984, sell: 328, reqRealm: 3
   },
   eq_r3_phihanh: {
-    kind: "equip", nameKey: "it_eq_r3_phihanh", slot: "phihanh", tier: 1,
+    kind: "equip", nameKey: "it_eq_r3_phihanh", slot: "phihanh", tier: 1, rarity: "uu",
     def: 37, hp: 550, price: 1644, sell: 548, reqRealm: 3
   },
   eq_r4_vukhi: {
-    kind: "equip", nameKey: "it_eq_r4_vukhi", slot: "vukhi", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_vukhi", slot: "vukhi", tier: 2, rarity: "hiem",
     atk: 675, price: 8100, sell: 2700, reqRealm: 4,
     skillLine: [
       { skill: "sword_qi", lv: 2 }
     ]
   },
   eq_r4_giap: {
-    kind: "equip", nameKey: "it_eq_r4_giap", slot: "giap", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_giap", slot: "giap", tier: 2, rarity: "hiem",
     def: 315, hp: 1590, price: 4764, sell: 1588, reqRealm: 4,
     skillLine: [
       { stat: "maxHp", pct: 0.05 }
     ]
   },
   eq_r4_yphuc: {
-    kind: "equip", nameKey: "it_eq_r4_yphuc", slot: "yphuc", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_yphuc", slot: "yphuc", tier: 2, rarity: "hiem",
     def: 225, hp: 2120, price: 6360, sell: 2120, reqRealm: 4,
     skillLine: [
       { stat: "maxHp", pct: 0.05 }
     ]
   },
   eq_r4_phapbao: {
-    kind: "equip", nameKey: "it_eq_r4_phapbao", slot: "phapbao", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_phapbao", slot: "phapbao", tier: 2, rarity: "hiem",
     atk: 270, def: 180, hp: 1060, price: 3240, sell: 1080, reqRealm: 4
   },
   eq_r4_phapboi: {
-    kind: "equip", nameKey: "it_eq_r4_phapboi", slot: "phapboi", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_phapboi", slot: "phapboi", tier: 2, rarity: "hiem",
     atk: 202, mp: 1325, price: 2424, sell: 808, reqRealm: 4,
     skillLine: [
       { stat: "maxMp", pct: 0.10 }
     ]
   },
   eq_r4_linhgioi: {
-    kind: "equip", nameKey: "it_eq_r4_linhgioi", slot: "linhgioi", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_linhgioi", slot: "linhgioi", tier: 2, rarity: "hiem",
     atk: 202, hp: 795, price: 2424, sell: 808, reqRealm: 4,
     skillLine: [
       { stat: "atk", pct: 0.05 }
     ]
   },
   eq_r4_hanhngoa: {
-    kind: "equip", nameKey: "it_eq_r4_hanhngoa", slot: "hanhngoa", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_hanhngoa", slot: "hanhngoa", tier: 2, rarity: "hiem",
     def: 135, hp: 1060, price: 3180, sell: 1060, reqRealm: 4
   },
   eq_r4_huanh: {
-    kind: "equip", nameKey: "it_eq_r4_huanh", slot: "huanh", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_huanh", slot: "huanh", tier: 2, rarity: "hiem",
     atk: 135, def: 135, hp: 795, price: 2376, sell: 792, reqRealm: 4
   },
   eq_r4_phihanh: {
-    kind: "equip", nameKey: "it_eq_r4_phihanh", slot: "phihanh", tier: 2,
+    kind: "equip", nameKey: "it_eq_r4_phihanh", slot: "phihanh", tier: 2, rarity: "hiem",
     def: 90, hp: 1325, price: 3972, sell: 1324, reqRealm: 4,
     skillLine: [
       { stat: "def", pct: 0.05 }
     ]
   },
   eq_r5_vukhi: {
-    kind: "equip", nameKey: "it_eq_r5_vukhi", slot: "vukhi", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_vukhi", slot: "vukhi", tier: 2, rarity: "hiem",
     atk: 1500, price: 18000, sell: 6000, reqRealm: 5,
     skillLine: [
       { skill: "sword_qi", lv: 2 }
     ]
   },
   eq_r5_giap: {
-    kind: "equip", nameKey: "it_eq_r5_giap", slot: "giap", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_giap", slot: "giap", tier: 2, rarity: "hiem",
     def: 735, hp: 3600, price: 10800, sell: 3600, reqRealm: 5,
     skillLine: [
       { stat: "maxHp", pct: 0.10 }
     ]
   },
   eq_r5_yphuc: {
-    kind: "equip", nameKey: "it_eq_r5_yphuc", slot: "yphuc", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_yphuc", slot: "yphuc", tier: 2, rarity: "hiem",
     def: 525, hp: 4800, price: 14400, sell: 4800, reqRealm: 5,
     skillLine: [
       { stat: "maxHp", pct: 0.10 }
     ]
   },
   eq_r5_phapbao: {
-    kind: "equip", nameKey: "it_eq_r5_phapbao", slot: "phapbao", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_phapbao", slot: "phapbao", tier: 2, rarity: "hiem",
     atk: 600, def: 420, hp: 2400, price: 7200, sell: 2400, reqRealm: 5
   },
   eq_r5_phapboi: {
-    kind: "equip", nameKey: "it_eq_r5_phapboi", slot: "phapboi", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_phapboi", slot: "phapboi", tier: 2, rarity: "hiem",
     atk: 450, mp: 3000, price: 5400, sell: 1800, reqRealm: 5,
     skillLine: [
       { stat: "maxMp", pct: 0.10 }
     ]
   },
   eq_r5_linhgioi: {
-    kind: "equip", nameKey: "it_eq_r5_linhgioi", slot: "linhgioi", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_linhgioi", slot: "linhgioi", tier: 2, rarity: "hiem",
     atk: 450, hp: 1800, price: 5400, sell: 1800, reqRealm: 5,
     skillLine: [
       { stat: "atk", pct: 0.05 }
     ]
   },
   eq_r5_hanhngoa: {
-    kind: "equip", nameKey: "it_eq_r5_hanhngoa", slot: "hanhngoa", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_hanhngoa", slot: "hanhngoa", tier: 2, rarity: "hiem",
     def: 315, hp: 2400, price: 7200, sell: 2400, reqRealm: 5
   },
   eq_r5_huanh: {
-    kind: "equip", nameKey: "it_eq_r5_huanh", slot: "huanh", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_huanh", slot: "huanh", tier: 2, rarity: "hiem",
     atk: 300, def: 315, hp: 1800, price: 5400, sell: 1800, reqRealm: 5
   },
   eq_r5_phihanh: {
-    kind: "equip", nameKey: "it_eq_r5_phihanh", slot: "phihanh", tier: 2,
+    kind: "equip", nameKey: "it_eq_r5_phihanh", slot: "phihanh", tier: 2, rarity: "hiem",
     def: 210, hp: 3000, price: 9000, sell: 3000, reqRealm: 5,
     skillLine: [
       { stat: "def", pct: 0.05 }
     ]
   },
   eq_r6_vukhi: {
-    kind: "equip", nameKey: "it_eq_r6_vukhi", slot: "vukhi", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_vukhi", slot: "vukhi", tier: 3, rarity: "suth",
     atk: 3300, price: 39600, sell: 13200, reqRealm: 6,
     skillLine: [
       { skill: "sword_qi", lv: 3 }
     ]
   },
   eq_r6_giap: {
-    kind: "equip", nameKey: "it_eq_r6_giap", slot: "giap", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_giap", slot: "giap", tier: 3, rarity: "suth",
     def: 1617, hp: 7920, price: 23760, sell: 7920, reqRealm: 6,
     skillLine: [
       { stat: "maxHp", pct: 0.10 }
     ]
   },
   eq_r6_yphuc: {
-    kind: "equip", nameKey: "it_eq_r6_yphuc", slot: "yphuc", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_yphuc", slot: "yphuc", tier: 3, rarity: "suth",
     def: 1155, hp: 10560, price: 31680, sell: 10560, reqRealm: 6,
     skillLine: [
       { stat: "maxHp", pct: 0.10 }
     ]
   },
   eq_r6_phapbao: {
-    kind: "equip", nameKey: "it_eq_r6_phapbao", slot: "phapbao", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_phapbao", slot: "phapbao", tier: 3, rarity: "suth",
     atk: 1320, def: 924, hp: 5280, price: 15840, sell: 5280, reqRealm: 6
   },
   eq_r6_phapboi: {
-    kind: "equip", nameKey: "it_eq_r6_phapboi", slot: "phapboi", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_phapboi", slot: "phapboi", tier: 3, rarity: "suth",
     atk: 990, mp: 6600, price: 11880, sell: 3960, reqRealm: 6,
     skillLine: [
       { stat: "maxMp", pct: 0.10 }
     ]
   },
   eq_r6_linhgioi: {
-    kind: "equip", nameKey: "it_eq_r6_linhgioi", slot: "linhgioi", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_linhgioi", slot: "linhgioi", tier: 3, rarity: "suth",
     atk: 990, hp: 3960, price: 11880, sell: 3960, reqRealm: 6,
     skillLine: [
       { stat: "atk", pct: 0.05 }
     ]
   },
   eq_r6_hanhngoa: {
-    kind: "equip", nameKey: "it_eq_r6_hanhngoa", slot: "hanhngoa", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_hanhngoa", slot: "hanhngoa", tier: 3, rarity: "suth",
     def: 693, hp: 5280, price: 15840, sell: 5280, reqRealm: 6
   },
   eq_r6_huanh: {
-    kind: "equip", nameKey: "it_eq_r6_huanh", slot: "huanh", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_huanh", slot: "huanh", tier: 3, rarity: "suth",
     atk: 660, def: 693, hp: 3960, price: 11880, sell: 3960, reqRealm: 6
   },
   eq_r6_phihanh: {
-    kind: "equip", nameKey: "it_eq_r6_phihanh", slot: "phihanh", tier: 3,
+    kind: "equip", nameKey: "it_eq_r6_phihanh", slot: "phihanh", tier: 3, rarity: "suth",
     def: 462, hp: 6600, price: 19800, sell: 6600, reqRealm: 6,
     skillLine: [
       { stat: "def", pct: 0.05 }
     ]
   },
   eq_r7_vukhi: {
-    kind: "equip", nameKey: "it_eq_r7_vukhi", slot: "vukhi", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_vukhi", slot: "vukhi", tier: 3, rarity: "suth",
     atk: 7260, price: 87120, sell: 29040, reqRealm: 7,
     skillLine: [
       { skill: "sword_qi", lv: 3 }
     ]
   },
   eq_r7_giap: {
-    kind: "equip", nameKey: "it_eq_r7_giap", slot: "giap", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_giap", slot: "giap", tier: 3, rarity: "suth",
     def: 3557, hp: 17424, price: 52272, sell: 17424, reqRealm: 7,
     skillLine: [
       { stat: "maxHp", pct: 0.10 }
     ]
   },
   eq_r7_yphuc: {
-    kind: "equip", nameKey: "it_eq_r7_yphuc", slot: "yphuc", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_yphuc", slot: "yphuc", tier: 3, rarity: "suth",
     def: 2541, hp: 23232, price: 69696, sell: 23232, reqRealm: 7,
     skillLine: [
       { stat: "maxHp", pct: 0.10 }
     ]
   },
   eq_r7_phapbao: {
-    kind: "equip", nameKey: "it_eq_r7_phapbao", slot: "phapbao", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_phapbao", slot: "phapbao", tier: 3, rarity: "suth",
     atk: 2904, def: 2033, hp: 11616, price: 34848, sell: 11616, reqRealm: 7
   },
   eq_r7_phapboi: {
-    kind: "equip", nameKey: "it_eq_r7_phapboi", slot: "phapboi", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_phapboi", slot: "phapboi", tier: 3, rarity: "suth",
     atk: 2178, mp: 14520, price: 26136, sell: 8712, reqRealm: 7,
     skillLine: [
       { stat: "maxMp", pct: 0.10 }
     ]
   },
   eq_r7_linhgioi: {
-    kind: "equip", nameKey: "it_eq_r7_linhgioi", slot: "linhgioi", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_linhgioi", slot: "linhgioi", tier: 3, rarity: "suth",
     atk: 2178, hp: 8712, price: 26136, sell: 8712, reqRealm: 7,
     skillLine: [
       { stat: "atk", pct: 0.05 }
     ]
   },
   eq_r7_hanhngoa: {
-    kind: "equip", nameKey: "it_eq_r7_hanhngoa", slot: "hanhngoa", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_hanhngoa", slot: "hanhngoa", tier: 3, rarity: "suth",
     def: 1525, hp: 11616, price: 34848, sell: 11616, reqRealm: 7
   },
   eq_r7_huanh: {
-    kind: "equip", nameKey: "it_eq_r7_huanh", slot: "huanh", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_huanh", slot: "huanh", tier: 3, rarity: "suth",
     atk: 1452, def: 1525, hp: 8712, price: 26136, sell: 8712, reqRealm: 7
   },
   eq_r7_phihanh: {
-    kind: "equip", nameKey: "it_eq_r7_phihanh", slot: "phihanh", tier: 3,
+    kind: "equip", nameKey: "it_eq_r7_phihanh", slot: "phihanh", tier: 3, rarity: "suth",
     def: 1016, hp: 14520, price: 43560, sell: 14520, reqRealm: 7,
     skillLine: [
       { stat: "def", pct: 0.05 }

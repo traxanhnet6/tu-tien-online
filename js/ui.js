@@ -218,6 +218,13 @@ function getStats() {
         baseHp = _ss.hp || 0; baseMp = _ss.mp || 0;
       }
     } catch (e) {}
+    /* NGOẠI LỆ đồ hiếm vượt cấp: chỉ phát huy 50% hiệu quả */
+    try {
+      if (typeof Khilinh !== "undefined" && Khilinh.isOverlevel(state, it)) {
+        baseAtk = Math.round(baseAtk * 0.5); baseDef = Math.round(baseDef * 0.5);
+        baseHp = Math.round(baseHp * 0.5); baseMp = Math.round(baseMp * 0.5);
+      }
+    } catch (e) {}
     s.atk += Math.round(baseAtk * mult);
     s.def += Math.round(baseDef * mult);
     s.maxHp += Math.round(baseHp * mult);
@@ -1142,17 +1149,21 @@ function renderBag() {
     } else if (d && d.kind === "pill") {
       btns = '<button class="mini" data-act="bag-use" data-i="' + i + '">' + esc(t("ui_use")) + "</button>";
     } else if (d && d.kind === "equip" && d.slot) {
-      var canEq = true, reqTxt = "";
+      var canEq = true, reqTxt = "", overTxt = "";
       try {
         if (typeof Khilinh !== "undefined") {
           canEq = Khilinh.canEquip(state, d);
           var _rr = Khilinh.realmOfItem(d);
           reqTxt = t("eq_req_realm", { realm: stageName(_rr, 0) });
+          /* Đồ hiếm vượt cấp: cảnh báo hiệu quả -50%, tốn linh lực ×2 */
+          if (Khilinh.isOverlevel(state, d))
+            overTxt = t("eq_overlevel_warn");
         }
       } catch (e) {}
       btns = '<button class="mini' + (canEq ? "" : " paper") + '" data-act="bag-equip" data-i="' + i + '"' +
         (canEq ? "" : ' disabled style="opacity:.4"') + '>' + esc(t("ui_equip")) + "</button>";
       if (reqTxt) extra += ' <span class="' + (canEq ? "manual-lv" : "manual-locked") + '">' + esc(reqTxt) + "</span>";
+      if (overTxt) extra += ' <span class="manual-locked">⚠️ ' + esc(overTxt) + "</span>";
       /* Dòng skill trang bị (xanh) + gợi ý thay đồ cũ */
       try {
         if (typeof Khilinh !== "undefined") {
@@ -2806,7 +2817,7 @@ function doBagEquip(idx) {
   var it = state.bag[idx];
   var d = it && itemDef(it.id);
   if (!d || !d.slot || it.locked) return;
-  /* Chưa đủ cảnh giới → KHÔNG đeo được */
+  /* Chưa đủ cảnh giới → KHÔNG đeo được (trừ đồ hiếm vượt cấp: đeo được, bị phạt) */
   try {
     if (typeof Khilinh !== "undefined" && !Khilinh.canEquip(state, d)) {
       var _rn = stageName(Khilinh.realmOfItem(d), 0);
@@ -2831,6 +2842,11 @@ function doBagEquip(idx) {
   saveGame(state);
   sfx("success");
   toast(t("ui_equipped") + ": " + itemName(it.id));
+  /* Cảnh báo đồ hiếm vượt cấp */
+  try {
+    if (typeof Khilinh !== "undefined" && Khilinh.isOverlevel(state, d))
+      setTimeout(function () { toast("⚠️ " + t("eq_overlevel_warn")); }, 600);
+  } catch (e) {}
   refreshHUD(); renderPanel();
 }
 function doBagUnlock(idx) {
@@ -3486,6 +3502,217 @@ function renderRefine() {
   if (!found) h += '<div class="bc-desc">' + esc(t("bc_no_yaodan")) + "</div>";
   return h;
 }
+/* ================= CHI TIẾT TRANG BỊ + KHÍ LINH + LUYỆN HÓA ================= */
+function equipDetailSlot() {
+  return (panelArg && panelArg.slot) || "vukhi";
+}
+function renderEquipDetail() {
+  var slot = equipDetailSlot();
+  var id = (state.equip || {})[slot];
+  if (!id) return "<p>" + esc(t("bag_empty")) + "</p>";
+  var d = itemDef(id);
+  if (!d) return "";
+  var K = (typeof Khilinh !== "undefined") ? Khilinh : null;
+  var h = '<div class="item-name">' + itemIcon(id) + " " + esc(itemName(id)) + "</div>";
+
+  /* Cấp luyện hóa */
+  var rlv = K ? K.refineLvOf(state, id) : 0;
+  if (rlv > 0) h += '<div class="eq-skill">🔥 +' + rlv + "</div>";
+
+  /* Chỉ số cơ bản (hiển thị sau nâng phẩm nếu có) */
+  var effR = K ? K.effRealmOf(d, state, id) : K.realmOfItem(d);
+  var disp = { atk: d.atk || 0, def: d.def || 0, hp: d.hp || 0, mp: d.mp || 0 };
+  if (K && K.tierUpOf(state, id) > 0) {
+    var _ss = K.stdStats(effR, d.slot);
+    disp = { atk: _ss.atk || 0, def: _ss.def || 0, hp: _ss.hp || 0, mp: _ss.mp || 0 };
+  }
+  var statParts = [];
+  if (disp.atk) statParts.push(t("stat_atk") + " " + disp.atk);
+  if (disp.def) statParts.push(t("stat_def") + " " + disp.def);
+  if (disp.hp) statParts.push(t("stat_hp") + " " + disp.hp);
+  if (disp.mp) statParts.push(t("stat_mp") + " " + disp.mp);
+  if (statParts.length) h += '<div class="item-desc">' + esc(statParts.join(" · ")) + "</div>";
+
+  /* Dòng skill (xanh) */
+  var sld = equipSkillDesc(d);
+  if (sld) h += '<div class="item-desc">' + sld + "</div>";
+
+  /* Yêu cầu cảnh giới */
+  var reqR = K ? K.realmOfItem(d) : 1;
+  var canEq = K ? K.canEquip(state, d) : true;
+  h += '<div class="item-desc ' + (canEq ? "" : "manual-locked") + '">' +
+    esc(t("eq_req_realm", { realm: stageName(reqR, 0) })) + "</div>";
+  if (K && K.isOverlevel(state, d))
+    h += '<div class="item-desc manual-locked">⚠️ ' + esc(t("eq_overlevel_warn")) + "</div>";
+
+  /* ---- Luyện hóa ---- */
+  if (K && K.canRefineItem(d)) {
+    h += '<div class="item-name">🔥 ' + esc(t("refine_title")) + " +" + rlv + "/" + K.REFINE_MAX + "</div>";
+    if (rlv >= K.REFINE_MAX) {
+      h += '<div class="item-desc">' + esc(t("refine_max")) + "</div>";
+      /* Nâng phẩm */
+      var _tu = K.canTierUp(state, id, itemDef);
+      if (_tu.ok) {
+        var _tc = K.tierUpCost(state, id, itemDef);
+        h += '<div class="item-desc">' + esc(t("tierup_title")) + ": " +
+          esc(stageName(effR + 1, 0)) + " · " +
+          esc(t("refine_need", { cost: _tc.stones + " 💎 + " + _tc.da_cuong_hoa + "💎" + t("it_da_cuong_hoa") + " + " + _tc.yaodan + " " + t("it_yaodan1") })) +
+          '</div><button class="mini" data-act="eq-tierup">' + esc(t("tierup_do")) + "</button>";
+      } else if (_tu.reason === "max_pham") {
+        h += '<div class="item-desc">' + esc(t("tierup_max")) + "</div>";
+      }
+    } else {
+      var _cost = K.refineCost(rlv);
+      var _ch = Math.round(K.refineChance(rlv) * 100);
+      var _costTxt = _cost.stones + " 💎";
+      if (_cost.da_cuong_hoa > 0) _costTxt += " + " + _cost.da_cuong_hoa + " " + t("it_da_cuong_hoa");
+      if (_cost.yaodan > 0) _costTxt += " + " + _cost.yaodan + " " + t("it_yaodan1");
+      h += '<div class="item-desc">' + esc(t("refine_need", { cost: _costTxt })) + " · " +
+        esc(t("refine_chance", { pct: _ch })) + "</div>" +
+        '<button class="mini" data-act="eq-refine">' + esc(t("refine_do")) + " → +" + (rlv + 1) + "</button>";
+    }
+  }
+
+  /* ---- Khí linh ---- */
+  if (K && K.canAwaken(d)) {
+    h += '<div class="item-name">✨ ' + esc(t("spirit_title")) + "</div>";
+    var sp = K.spiritOf(state, id);
+    if (!sp) {
+      var _ch2 = Math.round(K.awakenChance(state, id) * 100);
+      h += '<div class="item-desc">' + esc(t("spirit_none")) + " (" + _ch2 + "%)</div>" +
+        '<button class="mini" data-act="spirit-awaken">' + esc(t("spirit_awaken")) + "</button> " +
+        '<button class="mini paper" data-act="spirit-awaken-pill">' + esc(t("it_duong_linh_dan")) + " (100%)</button>" +
+        '<div class="item-desc">' + esc(t("spirit_need_pill")) + "</div>";
+    } else {
+      h += '<div class="item-desc">👻 <b>' + esc(sp.name) + "</b> · " +
+        esc(t("spirit_lv", { lv: sp.lv })) + " · " +
+        esc(t("spirit_personality", { name: t("sp_" + sp.personality) })) + "</div>";
+      h += '<div class="item-desc">' + esc(t("spirit_exp", { exp: sp.exp, max: K.expForLevel(sp.lv) })) + "</div>";
+      if (sp.skills && sp.skills.length) {
+        h += '<div class="item-desc">' + sp.skills.map(function (sk) {
+          var _n = sk.skill;
+          try {
+            var _sd = Skills.skillDef(sk.skill);
+            if (_sd && _sd.nameKey) _n = t(_sd.nameKey);
+          } catch (e) {}
+          return "🔷 " + esc(_n) + " +" + sk.lv;
+        }).join(" · ") + "</div>";
+      }
+      /* Cho ăn: liệt kê yêu đan / đan dược trong túi */
+      h += '<div class="item-name">🍖 ' + esc(t("spirit_feed")) + "</div>";
+      var _foods = [];
+      (state.bag || []).forEach(function (it) {
+        var _fd = itemDef(it.id);
+        if (!_fd) return;
+        if (_fd.kind === "yaodan" || _fd.kind === "pill")
+          _foods.push(it);
+      });
+      if (_foods.length) {
+        h += _foods.slice(0, 6).map(function (it) {
+          return '<button class="mini" data-act="spirit-feed" data-food="' + it.id + '">' +
+            itemIcon(it.id) + " " + esc(itemName(it.id)) + " x" + it.qty + "</button>";
+        }).join(" ");
+      } else {
+        h += '<div class="item-desc">(' + esc(t("bag_empty")) + ")</div>";
+      }
+      h += '<div style="margin-top:6px"><button class="mini" data-act="spirit-feed-stones">' +
+        esc(t("spirit_feed_stones")) + " (100💎=10exp)</button> " +
+        '<button class="mini" data-act="spirit-enlighten">' + esc(t("spirit_enlighten")) + "</button></div>";
+    }
+  }
+  return h;
+}
+function equipDetailId() {
+  var slot = equipDetailSlot();
+  return (state.equip || {})[slot];
+}
+function doSpiritAwaken() {
+  var id = equipDetailId();
+  if (!id || typeof Khilinh === "undefined") return;
+  var r = Khilinh.awaken(state, id, false);
+  if (r.ok) { saveGame(state); sfx("success"); toast("✨ " + t("spirit_awakened", { name: r.spirit.name })); }
+  else { sfx("fail"); toast(t("spirit_awaken_fail")); }
+  renderPanel();
+}
+function doSpiritAwakenPill() {
+  var id = equipDetailId();
+  if (!id || typeof Khilinh === "undefined") return;
+  if (countItem(state, "duong_linh_dan") < 1) { sfx("fail"); toast(t("spirit_need_pill")); return; }
+  removeItem(state, "duong_linh_dan", 1);
+  var r = Khilinh.awaken(state, id, true);
+  if (r.ok) { saveGame(state); sfx("success"); toast("✨ " + t("spirit_awakened", { name: r.spirit.name })); }
+  renderPanel();
+}
+function doSpiritFeed(foodId) {
+  var id = equipDetailId();
+  if (!id || typeof Khilinh === "undefined") return;
+  var r = Khilinh.feed(state, id, foodId, itemDef(foodId), {
+    removeItem: removeItem, countItem: countItem,
+  });
+  if (!r.ok) { sfx("fail"); return; }
+  saveGame(state); sfx("success");
+  if (r.levelUps > 0) toast(t("spirit_levelup", { lv: r.spirit.lv }));
+  if (r.spirit.skills && r.levelUps > 0 && r.spirit.lv % 5 === 0) toast(t("spirit_new_skill"));
+  renderPanel(); refreshHUD();
+}
+function doSpiritFeedStones() {
+  var id = equipDetailId();
+  if (!id || typeof Khilinh === "undefined") return;
+  var amt = 1000;
+  try {
+    var _in = prompt(t("spirit_feed_amount"), "1000");
+    if (_in == null) return;
+    amt = Math.max(100, parseInt(_in, 10) || 0);
+  } catch (e) {}
+  var r = Khilinh.feedStones(state, id, amt);
+  if (!r.ok) { sfx("fail"); toast(t("eq_cannot_equip").replace("{realm}", "")); return; }
+  saveGame(state); sfx("success");
+  if (r.levelUps > 0) toast(t("spirit_levelup", { lv: r.spirit.lv }));
+  renderPanel(); refreshHUD();
+}
+function doSpiritEnlighten() {
+  var id = equipDetailId();
+  if (!id || typeof Khilinh === "undefined") return;
+  var cost = 500 * (Khilinh.spiritOf(state, id) || { lv: 1 }).lv;
+  var r = Khilinh.enlighten(state, id);
+  if (!r.ok) {
+    sfx("fail");
+    toast(r.reason === "ngo_dao_that_bai" ? t("spirit_enlighten_fail", { cost: cost }) : t("spirit_need_pill"));
+    if (r.reason === "ngo_dao_that_bai") { saveGame(state); renderPanel(); }
+    return;
+  }
+  saveGame(state); sfx("success");
+  var _n = r.skill.skill;
+  try {
+    var _sd = Skills.skillDef(r.skill.skill);
+    if (_sd && _sd.nameKey) _n = t(_sd.nameKey);
+  } catch (e) {}
+  toast(t("spirit_enlighten_ok", { name: _n }));
+  renderPanel(); refreshHUD();
+}
+function doEqRefine() {
+  var id = equipDetailId();
+  if (!id || typeof Khilinh === "undefined") return;
+  var r = Khilinh.doRefine(state, id, itemDef, { removeItem: removeItem, countItem: countItem });
+  if (!r.ok) {
+    sfx("fail");
+    toast(r.reason === "that_bai" ? t("refine_fail") : t("refine_need", { cost: "..." }));
+    if (r.lost) { saveGame(state); renderPanel(); }
+    return;
+  }
+  saveGame(state); sfx("success");
+  toast(t("refine_ok", { lv: r.level }));
+  renderPanel(); refreshHUD();
+}
+function doEqTierUp() {
+  var id = equipDetailId();
+  if (!id || typeof Khilinh === "undefined") return;
+  var r = Khilinh.doTierUp(state, id, itemDef, { removeItem: removeItem, countItem: countItem });
+  if (!r.ok) { sfx("fail"); return; }
+  saveGame(state); sfx("success");
+  toast(t("tierup_ok", { realm: stageName(r.newRealm, 0) }));
+  renderPanel(); refreshHUD();
+}
 function doBcUpgrade(typ, method) {
   if (typeof BodyCult === "undefined") return;
   var r = BodyCult.doUpgrade(state, typ, method);
@@ -3628,7 +3855,7 @@ function renderEquipTab() {
   function equipSlot(slot) {
     var id = state.equip[slot];
     var d = id ? itemDef(id) : null;
-    var tierCls = d ? ("tier-" + ["pham", "dia", "thien"][d.tier || 0]) : "";
+    var tierCls = d ? ("tier-" + ["pham", "dia", "thien", "tien"][d.tier || 0]) : "";
     return '<button class="equip-slot ' + tierCls + '" data-act="equip-detail" data-slot="' + slot + '">' +
       '<span class="equip-icon">' + (d ? itemIcon(id) : "＋") + "</span>" +
       '<span class="equip-slot-name">' + esc(t("slot_" + slot)) + "</span></button>";

@@ -151,13 +151,13 @@ def upgrade_burst(color, seed):
     """Explosive light burst effect for grade-up, 256x256."""
     rng = random.Random(seed)
     img = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
     cx, cy = SIZE//2, SIZE//2
     # faint outer halo (subtle)
     l = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
     dl = ImageDraw.Draw(l)
     dl.ellipse([cx-110, cy-110, cx+110, cy+110], fill=color + (45,))
     img = Image.alpha_composite(img, l.filter(ImageFilter.GaussianBlur(25)))
+    d = ImageDraw.Draw(img)  # NOTE: must create AFTER alpha_composite (it returns a new image)
     # sharp rays first (under core, over halo)
     nrays = 28
     for i in range(nrays):
@@ -181,8 +181,8 @@ def upgrade_burst(color, seed):
         x = cx + rad*math.cos(ang); y = cy + rad*math.sin(ang)
         s = rng.randint(1, 3)
         d.rectangle([x, y, x+s, y+s], fill=color + (235,))
-    # hot core on top
-    for rad, col, al in [(40, (255,255,255), 235), (26, color, 245), (14, (255,255,255), 255)]:
+    # hot core on top (small, so rays stay visible)
+    for rad, col, al in [(22, (255,255,255), 235), (14, color, 245), (7, (255,255,255), 255)]:
         d.ellipse([cx-rad, cy-rad, cx+rad, cy+rad], fill=col + (al,))
     return img
 

@@ -61,6 +61,10 @@ function defaultState() {
              phapboi: null, yphuc: null, hanhngoa: null, linhgioi: null },
     enhance: { vukhi: 0, phapbao: 0, phihanh: 0, giap: 0, huanh: 0,
                phapboi: 0, yphuc: 0, hanhngoa: 0, linhgioi: 0 },
+    spirits: {},                         // khí linh {itemId: {name, personality, lv, exp, skills[]}}
+    refine: {},                          // cấp luyện hóa {itemId: 0..15}
+    equipTierUp: {},                     // nâng phẩm {itemId: số lần nâng}
+    equipWornMs: {},                      // thời gian đeo (ms) {itemId: ms}
     skills: ["sword_qi"],
     skillsCd: {},                        // hồi chiêu bí thuật {skillId: timestampMs}
     skillGrades: {},                     // phẩm skill đã học {skillId: tier} (save cũ)

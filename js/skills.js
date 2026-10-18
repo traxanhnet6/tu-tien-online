@@ -428,12 +428,17 @@ function skillPower(state, skillId) {
   var tier = manualTier(state, skillId);
   var level = manualLevel(state, skillId) || 1;
   /* Dòng skill trên trang bị: +cấp skill (cộng dồn với cấp đã học) */
+  var _eqOverlevel = false;
   try {
     if (typeof Khilinh !== "undefined" && Khilinh.skillLvBonus) {
       var _eqLv = Khilinh.skillLvBonus(state, skillId, function (id) {
         return (typeof ITEMS !== "undefined" && ITEMS[id]) || null;
       });
       if (_eqLv > 0) level += _eqLv;
+      /* Đồ hiếm vượt cấp: skill từ vật phẩm tốn linh lực ×2 */
+      _eqOverlevel = Khilinh.hasOverlevelBonus(state, skillId, function (id) {
+        return (typeof ITEMS !== "undefined" && ITEMS[id]) || null;
+      });
     }
   } catch (e) {}
   var cfg = tierUpCfg(tier);
@@ -474,9 +479,10 @@ function skillPower(state, skillId) {
     if (_mt > 0 && skillDmgType(skillId) === "ma") mult *= 1 + 0.12 * _mt;
   } catch (e) {}
   return {
-    mult: mult, mp: d.mp || 0, cd: d.cd || 0, kind: d.kind,
+    mult: mult, mp: _eqOverlevel ? (d.mp || 0) * 2 : (d.mp || 0), cd: d.cd || 0, kind: d.kind,
     defMult: d.defMult || 0, dur: d.dur || 0, fx: d.fx, icon: d.icon,
     tier: tier, level: level, pierce: pierce, splash: splash, msKeys: msKeys,
+    overlevel: _eqOverlevel,
   };
 }
 

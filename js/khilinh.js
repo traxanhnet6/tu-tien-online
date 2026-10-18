@@ -76,7 +76,41 @@ var Khilinh = (function () {
   }
   /* Đủ cảnh giới → đeo được */
   function canEquip(state, def) {
+    if (!def) return false;
+    /* NGOẠI LỆ: vật phẩm HIẾM (tím trở lên) vượt cấp vẫn đeo được (bị phạt) */
+    if (isRare(def)) return true;
     return charRealm(state) >= realmOfItem(def);
+  }
+  /* Vật phẩm hiếm: độ hiếm Hiếm (tím) trở lên */
+  var RARE_RARITIES = ["hiem", "suth", "truyenthuyet", "tienpham", "tien"];
+  function isRare(def) {
+    if (!def || !def.rarity) return (def.tier || 0) >= 2; /* fallback theo tier */
+    return RARE_RARITIES.indexOf(def.rarity) >= 0;
+  }
+  /* Đang vượt cấp: cảnh giới nhân vật < yêu cầu VÀ là đồ hiếm */
+  function isOverlevel(state, def) {
+    return isRare(def) && charRealm(state) < realmOfItem(def);
+  }
+  /* Skill có nhận bonus từ đồ hiếm vượt cấp không → tốn linh lực ×2 */
+  function hasOverlevelBonus(state, skillId, itemDefFn) {
+    var eq = (state && state.equip) || {};
+    for (var i = 0; i < EQUIP_SLOTS.length; i++) {
+      var id = eq[EQUIP_SLOTS[i]];
+      var d = itemDefFn ? itemDefFn(id) : null;
+      if (!d || !isOverlevel(state, d)) continue;
+      var lines = linesOf(d);
+      for (var j = 0; j < lines.length; j++) {
+        if (lines[j].skill === skillId) return true;
+      }
+      /* khí linh của đồ vượt cấp cũng tính */
+      var sp = spiritOf(state, id);
+      if (sp && sp.skills) {
+        for (var k = 0; k < sp.skills.length; k++) {
+          if (sp.skills[k].skill === skillId) return true;
+        }
+      }
+    }
+    return false;
   }
   /* Đồ thấp hơn ≥2 đại cảnh giới → nên thay */
   function isOutdated(state, def) {
@@ -403,6 +437,9 @@ var Khilinh = (function () {
     stdStats: stdStats,
     realmOfItem: realmOfItem,
     canEquip: canEquip,
+    isRare: isRare,
+    isOverlevel: isOverlevel,
+    hasOverlevelBonus: hasOverlevelBonus,
     isOutdated: isOutdated,
     suggestUpgrades: suggestUpgrades,
     linesOf: linesOf,
