@@ -20,23 +20,29 @@ function _randInt(rng, a, b) { return _stg("randInt")(rng, a, b); }
 function _pickRng(rng, arr) { return _stg("pickRng")(rng, arr); }
 
 /* ============================================================
- * LINH CĂN — 9 hệ
+ * LINH CĂN — 13 hệ (5 cơ bản + 3 biến dị + 4 hiếm + hỗn độn)
  * ============================================================ */
 const ELEMENTS = {
-  kim:    { fx: "gold",      nameKey: "el_kim" },
-  moc:    { fx: "wood",      nameKey: "el_moc" },
-  thuy:   { fx: "water",     nameKey: "el_thuy" },
-  hoa:    { fx: "fire",      nameKey: "el_hoa" },
-  tho:    { fx: "earth",     nameKey: "el_tho" },
-  bang:   { fx: "ice",       nameKey: "el_bang" },
-  loi:    { fx: "thunder",   nameKey: "el_loi" },
-  phong:  { fx: "wind",      nameKey: "el_phong" },
-  hondon: { fx: "chaos",     nameKey: "el_hondon" },
+  kim:    { fx: "#e8e8e8", nameKey: "el_kim" },
+  moc:    { fx: "#66bb6a", nameKey: "el_moc" },
+  thuy:   { fx: "#42a5f5", nameKey: "el_thuy" },
+  hoa:    { fx: "#ef5350", nameKey: "el_hoa" },
+  tho:    { fx: "#a1887f", nameKey: "el_tho" },
+  bang:   { fx: "#9be8ff", nameKey: "el_bang" },
+  loi:    { fx: "#b388ff", nameKey: "el_loi" },
+  phong:  { fx: "#b2ff59", nameKey: "el_phong" },
+  quang:  { fx: "#fff9c4", nameKey: "el_quang" },
+  am:     { fx: "#7b1fa2", nameKey: "el_am" },
+  doc:    { fx: "#76ff03", nameKey: "el_doc" },
+  huyet:  { fx: "#ff5252", nameKey: "el_huyet" },
+  hondon: { fx: "#8e8e93", nameKey: "el_hondon" },
 };
-/* Tỉ lệ rút linh căn: 18/18/18/18/18/3/3/3/1 */
+/* Tỉ lệ rút linh căn: cơ bản 16 ×5, biến dị 3 ×3, hiếm 2 ×4, hỗn độn 1 */
 const LINGEN_RATES = [
-  ["kim", 18], ["moc", 18], ["thuy", 18], ["hoa", 18], ["tho", 18],
-  ["bang", 3], ["loi", 3], ["phong", 3], ["hondon", 1],
+  ["kim", 16], ["moc", 16], ["thuy", 16], ["hoa", 16], ["tho", 16],
+  ["bang", 3], ["loi", 3], ["phong", 3],
+  ["quang", 2], ["am", 2], ["doc", 2], ["huyet", 2],
+  ["hondon", 1],
 ];
 
 /* ============================================================

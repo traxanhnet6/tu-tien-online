@@ -350,8 +350,22 @@ function rollLingen() {
   if (rare && quality === "pham") quality = "dia"; /* linh căn hiếm tối thiểu địa phẩm */
   createSel.element = el;
   createSel.quality = quality;
-  $("lingen-result").textContent = t("lingen_result", { name: t("el_" + el) + " · " + t("qual_" + quality) });
+  $("lingen-result").innerHTML = lingenIconHtml(el, 28) + "<span>" +
+    esc(t("lingen_result", { name: t("el_" + el) + " · " + t("qual_" + quality) })) + "</span>";
   sfx("success");
+}
+
+/* Icon linh căn: <img> + fallback emoji nếu ảnh lỗi */
+function lingenIconHtml(el, size) {
+  size = size || 28;
+  var emo = { kim: "⚔️", moc: "🌿", thuy: "💧", hoa: "🔥", tho: "🪨", bang: "❄️",
+    loi: "⚡", phong: "🌪️", quang: "☀️", am: "🌙", doc: "☠️", huyet: "🩸", hondon: "🌀" }[el] || "✨";
+  var tip = "";
+  try { tip = t("el_" + el); } catch (e) {}
+  return '<img class="lingen-icon" width="' + size + '" height="' + size + '"' +
+    ' src="assets/linhcan/' + el + '.png" alt="" title="' + esc(tip) + '"' +
+    ' onerror="this.outerHTML=' + "'" + '<span>' + emo + "</span>'" + '"' +
+    ' style="vertical-align:-6px;margin-right:6px;border-radius:6px">';
 }
 
 function beginGame() {
@@ -1005,7 +1019,7 @@ function renderChar() {
   var c = state.char;
   var expMax = expMaxFor(c.realm, c.tier);
   var h = '<div class="item-name">' + esc(c.name) + " · " + esc(stageName(c.realm, c.tier)) + "</div>";
-  if (c.element) h += '<div class="item-desc">' + esc(t("lingen_result", { name: t("el_" + c.element) + " · " + t("qual_" + (c.elementQuality || "pham")) })) + "</div>";
+  if (c.element) h += '<div class="item-desc">' + lingenIconHtml(c.element, 24) + esc(t("lingen_result", { name: t("el_" + c.element) + " · " + t("qual_" + (c.elementQuality || "pham")) })) + "</div>";
   h += '<div class="stat-grid">' +
     cell(t("stat_atk"), s.atk) + cell(t("stat_def"), s.def) +
     cell(t("stat_hp"), s.maxHp) + cell(t("stat_mp"), s.maxMp) + "</div>";
@@ -2570,6 +2584,7 @@ function doNpcOpt(el) {
   if (opact === "enhance") { openPanel("char", { tab: "equip" }); return; }
   if (opact === "refine") { openPanel("refine"); return; }
   if (opact === "sect-join") { doSectJoin(opt.sect || el.getAttribute("data-sect")); return; }
+  if (opact === "assign-skill") { doAssignSkill(el.getAttribute("data-tech")); return; }
   if (opact === "inn-rest") { doInnRest(); return; }
   if (opact === "inn-rumor") { doInnRumor(); return; }
   if (opact === "checkin") { doCheckin(); renderPanel(); return; }
@@ -2749,6 +2764,14 @@ function skillbarSkills() {
   var out = [];
   try {
     if (typeof Skills === "undefined") return out;
+    /* Ưu tiên ô do người chơi tự gán (tab Bí Tịch → "Gắn vào ô") */
+    if (state.skillSlots && state.skillSlots.length) {
+      var anySet = false;
+      state.skillSlots.forEach(function (id) {
+        if (id && Skills.hasLearned(state, id)) { out.push(id); anySet = true; }
+      });
+      if (anySet) return out.slice(0, 7);
+    }
     var cls = (state.char && state.char.sect) || "kiem";
     var order = ["kiem_xuyen_van", "van_kiem_quy_tong", "kiem_cuong_ho_the", "kimdan_kiem_y"];
     if (cls === "phap") order = ["ngu_loi_oanh_dinh", "hoa_vu_luu_tinh", "linh_thuan", "kimdan_loi_phap"];
@@ -2791,7 +2814,10 @@ function renderSkillbar() {
   var slots = bar.querySelectorAll(".skill-slot[data-skill]");
   for (var s = 0; s < slots.length; s++) {
     (function (el) {
+      var sid = el.getAttribute("data-skill");
       el.onclick = function () { doSkillSlot(+(el.getAttribute("data-slot"))); };
+      bindSkillLongPress(el, sid);
+      if (sid === _lastUsedSkill) el.classList.add("active-skill");
     })(slots[s]);
   }
 }
@@ -2839,6 +2865,7 @@ function doSkillSlot(i) {
     else if (r.reason === "realm_lock") toast(t("skill_not_learned"));
     sfx("fail");
   } else {
+    markSkillActive(id);
     skillbarTick();
   }
 }
@@ -3211,29 +3238,7 @@ function doUnequip(slot) {
   refreshHUD(); renderPanel();
 }
 /* Tab Bí Tịch: lưới bí tịch đã học */
-function renderManualTab() {
-  if (typeof Skills === "undefined") return "";
-  var h = '<div class="item-grid">';
-  var sm = state.skillManual || {};
-  var keys = Object.keys(sm);
-  if (!keys.length) h += '<p class="sect-note">' + esc(t("skill_not_learned")) + "</p>";
-  keys.forEach(function (techId) {
-    var mid = sm[techId];
-    var mi = Skills.manualInfo(mid);
-    var lv = Skills.manualLevel(state, techId);
-    var isP = Skills.isPassive(techId);
-    var def = isP ? Skills.passiveDef(techId) : Skills.skillDef(techId);
-    var icon = def ? def.icon : "📕";
-    var tierCls = "tier-" + ["pham", "dia", "thien"][mi ? mi.tier : 0];
-    h += '<button class="manual-card ' + tierCls + '" data-act="manual-card" data-tech="' + esc(techId) + '">' +
-      '<span class="manual-icon">' + esc(icon) + "</span>" +
-      '<span class="manual-lv">Lv' + lv + "</span>" +
-      '<span class="manual-name">' + esc(t(def ? def.nameKey : techId)) + "</span>" +
-      '<span class="manual-type">' + esc(t(isP ? "manual_type_passive" : "manual_type_active")) + "</span></button>";
-  });
-  h += "</div>";
-  return h;
-}
+/* renderManualTab cũ đã thay bằng bản rõ ràng ở cuối file */
 /* Tab Tự Động Đánh */
 function renderAutoTab() {
   var cfg = state.autoCfg || {};
@@ -3839,6 +3844,7 @@ function inspectData(pid) {
     return {
       isMe: true, name: state.char.name, gender: state.char.gender || "nam",
       sect: state.char.sect, realm: state.char.realm, tier: state.char.tier,
+      element: state.char.element, elementQuality: state.char.elementQuality,
       online: true, power: inspectPowerOf(s),
       equip: state.equip, bag: state.bag
     };
@@ -3858,6 +3864,8 @@ function renderInspect(d) {
     '<div class="insp-who"><div class="insp-nm">' + esc(d.name) + "</div>" +
     '<div class="insp-sub">' + esc(stageName(d.realm, d.tier)) +
     (d.sect ? " · " + esc(t("sect_" + d.sect)) : "") + "</div>" +
+    (d.element ? '<div class="insp-sub">' + lingenIconHtml(d.element, 20) +
+      esc(t("el_" + d.element) + (d.elementQuality ? " · " + t("qual_" + d.elementQuality) : "")) + "</div>" : "") +
     '<div class="insp-sub">' + (d.online ? "🟢 Đang online" : "⚪ Ngoại tuyến") + "</div></div>" +
     '<div class="insp-power"><div class="pv">' + (d.power != null ? d.power : "—") +
     '</div><div class="pl">Lực chiến</div></div></div>';
@@ -3985,4 +3993,172 @@ if (typeof document !== "undefined") {
     if ((!pid || !pid.length) && e.target.closest("#hud-name")) pid = "me";
     if (pid && typeof UI !== "undefined" && UI.inspectPlayer) UI.inspectPlayer(pid);
   });
+}
+
+/* ================= TAB BÍ TỊCH RÕ RÀNG (Bui 2026-10-18) ================= */
+/* Liệt kê TẤT CẢ skill: đã học + chưa học (khóa + điều kiện) */
+function allSkillEntries() {
+  var out = [];
+  try {
+    if (typeof Skills === "undefined") return out;
+    var seen = {};
+    var cls = (state.char && state.char.sect) || "kiem";
+    var addEntry = function (techId, manualId) {
+      if (!techId || seen[techId]) return;
+      seen[techId] = 1;
+      var isP = Skills.isPassive(techId);
+      var def = isP ? Skills.passiveDef(techId) : Skills.skillDef(techId);
+      if (!def) return;
+      var learned = Skills.hasLearned(state, techId);
+      var realmOk = manualId ? Skills.manualRealmOk(state, manualId) : true;
+      var mi = manualId ? Skills.manualInfo(manualId) : null;
+      out.push({ id: techId, isP: isP, def: def, learned: learned,
+        realmOk: realmOk, realm: mi ? (mi.realm || 1) : 1, manualId: manualId });
+    };
+    /* Từ ITEMS: tất cả bí tịch */
+    if (typeof ITEMS !== "undefined" && ITEMS) {
+      for (var mid in ITEMS) {
+        var m = ITEMS[mid];
+        if (!m || m.kind !== "manual") continue;
+        /* Chỉ hiện skill cùng hệ phái hoặc bị động dùng chung */
+        if (m.skill) {
+          var d = Skills.skillDef(m.skill);
+          if (d && d.sect && d.sect !== cls && d.sect !== "all") continue;
+        }
+        addEntry(m.skill || m.passive, mid);
+      }
+    }
+    /* Từ SECT_SKILLS nếu có */
+    if (typeof SECT_SKILLS !== "undefined" && SECT_SKILLS) {
+      for (var sid in SECT_SKILLS) {
+        var sd = SECT_SKILLS[sid];
+        if (sd && (sd.sect === cls || sd.sect === "all" || !sd.sect))
+          addEntry(sid, Skills.manualIdForSkill ? Skills.manualIdForSkill(sid) : null);
+      }
+    }
+  } catch (e) {}
+  /* Đã học trước, chủ động trước bị động */
+  out.sort(function (a, b) {
+    if (a.learned !== b.learned) return a.learned ? -1 : 1;
+    if (a.isP !== b.isP) return a.isP ? 1 : -1;
+    return 0;
+  });
+  return out;
+}
+/* Tên cảnh giới yêu cầu */
+function realmReqName(realm) {
+  try {
+    if (typeof STAGES !== "undefined" && STAGES[realm]) return STAGES[realm].ten;
+  } catch (e) {}
+  return ["Phàm Nhân", "Luyện Khí", "Trúc Cơ", "Kim Đan", "Nguyên Anh", "Hóa Thần", "Đại Thừa", "Độ Kiếp"][realm] || "";
+}
+function renderManualTab() {
+  if (typeof Skills === "undefined") return "";
+  var entries = allSkillEntries();
+  var h = '<div class="manual-list">';
+  if (!entries.length) h += '<p class="sect-note">' + esc(t("skill_not_learned")) + "</p>";
+  entries.forEach(function (e) {
+    var def = e.def;
+    var lv = e.isP ? Skills.passiveLevel(state, e.id) : Skills.manualLevel(state, e.id);
+    var typeCls = e.isP ? "is-passive" : "is-active";
+    var typeBadge = '<span class="' + (e.isP ? "manual-type-passive" : "manual-type-active") + '">' +
+      esc(t(e.isP ? "manual_type_passive" : "manual_type_active")) + "</span>";
+    var lockCls = (!e.learned) ? " is-locked" : "";
+    h += '<div class="manual-card ' + typeCls + lockCls + '">' +
+      '<span class="manual-icon">' + skillIconHtml(e.id, def.icon) + "</span>" +
+      '<div class="manual-info">' +
+      '<div class="manual-name">' + esc(t(def.nameKey)) + typeBadge +
+      ' <span class="manual-lv2">Lv' + lv + "</span></div>" +
+      '<div class="manual-desc">' + esc(t(def.descKey || "")) + "</div>";
+    if (!e.learned) {
+      h += '<div class="manual-lock-reason">🔒 ' +
+        esc(t("skill_lock_realm", { realm: realmReqName(e.realm) })) + "</div>";
+    } else if (!e.isP) {
+      var onBar = state.skillSlots && state.skillSlots.indexOf(e.id) >= 0;
+      h += '<div class="manual-assign"><button class="btn-assign' + (onBar ? " on-bar" : "") +
+        '" data-act="assign-skill" data-tech="' + esc(e.id) + '">' +
+        esc(t(onBar ? "skill_on_bar" : "skill_assign")) + "</button></div>";
+    }
+    h += "</div></div>";
+  });
+  h += "</div>";
+  return h;
+}
+/* Gắn / gỡ skill khỏi thanh skill */
+function doAssignSkill(skillId) {
+  if (!state.skillSlots) state.skillSlots = [null, null, null, null, null, null, null];
+  var idx = state.skillSlots.indexOf(skillId);
+  if (idx >= 0) {
+    state.skillSlots[idx] = null;
+    toast(t("skill_unassigned"));
+  } else {
+    var empty = state.skillSlots.indexOf(null);
+    if (empty < 0) { toast(t("skill_bar_full")); return; }
+    state.skillSlots[empty] = skillId;
+    toast(t("skill_assigned", { n: empty + 1 }));
+  }
+  try { if (typeof saveGame === "function") saveGame(); } catch (e) {}
+  renderSkillbar();
+  if (typeof renderPanel === "function") renderPanel();
+}
+/* Tooltip nhấn giữ trên ô skill (mobile) */
+var _skillTipEl = null, _skillTipTimer = null;
+function showSkillTip(skillId, x, y) {
+  hideSkillTip();
+  try {
+    var def = Skills.skillDef(skillId);
+    if (!def) return;
+    var pw = Skills.skillPower(state, skillId);
+    _skillTipEl = document.createElement("div");
+    _skillTipEl.className = "skill-tip";
+    _skillTipEl.innerHTML = "<b>" + esc(t(def.nameKey)) + "</b> Lv" + pw.level + "<br>" +
+      esc(t(def.descKey || "")) + "<br><span class=\"tip-cd\">⏱ " + (def.cd || 0) + "s · 🔷 " + (pw.mp || 0) + " MP</span>";
+    document.body.appendChild(_skillTipEl);
+    var r = _skillTipEl.getBoundingClientRect();
+    var lx = Math.min(Math.max(8, x - r.width / 2), window.innerWidth - r.width - 8);
+    var ly = Math.max(8, y - r.height - 12);
+    _skillTipEl.style.left = lx + "px";
+    _skillTipEl.style.top = ly + "px";
+  } catch (e) {}
+}
+function hideSkillTip() {
+  if (_skillTipTimer) { clearTimeout(_skillTipTimer); _skillTipTimer = null; }
+  if (_skillTipEl && _skillTipEl.parentNode) _skillTipEl.parentNode.removeChild(_skillTipEl);
+  _skillTipEl = null;
+}
+function bindSkillLongPress(el, skillId) {
+  var sx = 0, sy = 0, fired = false;
+  var start = function (e) {
+    fired = false;
+    var p = e.touches && e.touches[0] ? e.touches[0] : e;
+    sx = p.clientX; sy = p.clientY;
+    _skillTipTimer = setTimeout(function () {
+      fired = true;
+      showSkillTip(skillId, sx, sy);
+      if (typeof sfx === "function") sfx("tap");
+    }, 500);
+  };
+  var cancel = function () {
+    if (_skillTipTimer) { clearTimeout(_skillTipTimer); _skillTipTimer = null; }
+    if (!fired) hideSkillTip();
+  };
+  el.addEventListener("touchstart", start, { passive: true });
+  el.addEventListener("touchend", cancel);
+  el.addEventListener("touchcancel", cancel);
+  el.addEventListener("touchmove", cancel);
+  /* Chuột: hover hiện tooltip */
+  el.addEventListener("mouseenter", function (e) { showSkillTip(skillId, e.clientX, e.clientY); });
+  el.addEventListener("mouseleave", hideSkillTip);
+}
+/* Skill vừa dùng: đánh dấu sáng */
+var _lastUsedSkill = null;
+function markSkillActive(skillId) {
+  _lastUsedSkill = skillId;
+  try {
+    var bar = document.getElementById("skillbar");
+    if (!bar) return;
+    var slots = bar.querySelectorAll(".skill-slot");
+    for (var i = 0; i < slots.length; i++)
+      slots[i].classList.toggle("active-skill", slots[i].getAttribute("data-skill") === skillId);
+  } catch (e) {}
 }

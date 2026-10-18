@@ -938,3 +938,49 @@ body.landscape #hud-leftmid{top:40%}
 .sect-join-row{align-items:center;gap:10px}
 .sect-join-preview{flex:0 0 64px;width:64px;height:84px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);border:1px solid var(--gold-dim,#8a6d3b);border-radius:10px;overflow:hidden}
 .sect-join-preview img{max-width:60px;max-height:80px;object-fit:contain}
+
+/* ================= SKILL RÕ RÀNG (Bui 2026-10-18) ================= */
+/* Số thứ tự ô skill to, dễ đọc */
+.skill-key{font-size:14px !important;min-width:20px;height:20px;line-height:20px;
+  text-align:center;background:#000a;border:1px solid var(--gold-dk);
+  border-radius:6px;padding:0 4px;top:2px !important;left:2px !important}
+/* Số cooldown to rõ */
+.skill-cdnum{font-size:28px !important;text-shadow:0 2px 6px #000,0 0 12px #000,0 0 4px #f00}
+/* Icon to hơn */
+.skill-icon .skill-img{width:48px !important;height:48px !important}
+/* Ô skill vừa dùng: viền vàng nhấp nháy */
+.skill-slot.active-skill{border-color:#ffe27a !important;
+  box-shadow:inset 0 0 0 1px #000,0 0 16px #ffd76acc !important;
+  animation:skillPulse .6s ease-out}
+@keyframes skillPulse{0%{box-shadow:0 0 24px #ffd76a}100%{box-shadow:0 0 8px #ffd76a55}}
+/* Tooltip nhấn giữ hiện tên + mô tả skill */
+.skill-tip{position:fixed;z-index:9999;max-width:240px;background:#1d140af2;
+  border:2px solid var(--gold);border-radius:12px;padding:10px 12px;
+  color:#f5e9c8;font-size:13px;line-height:1.5;box-shadow:0 6px 20px #000c;
+  pointer-events:none}
+.skill-tip b{color:var(--gold-lt);font-size:14px}
+.skill-tip .tip-cd{color:#8fd0ff}
+/* Thẻ skill trong tab Bí Tịch: phân biệt chủ động / bị động */
+.manual-card.is-active{border-color:var(--gold)}
+.manual-card.is-passive{border-color:#7a5cff;box-shadow:0 0 8px #7a5cff55}
+.manual-type-active{font-size:11px;color:#ffd76a;border:1px solid #ffd76a;
+  border-radius:6px;padding:1px 6px;margin-left:6px;background:#ffd76a18}
+.manual-type-passive{font-size:11px;color:#b9a8ff;border:1px solid #7a5cff;
+  border-radius:6px;padding:1px 6px;margin-left:6px;background:#7a5cff18}
+.manual-card.is-locked{opacity:.6}
+.manual-lock-reason{font-size:12px;color:#ff9d6b;margin-top:4px}
+.manual-assign{margin-top:6px}
+.btn-assign{background:linear-gradient(180deg,#e8b53d,#b07818);border:2px solid #7a5210;
+  color:#241a08;font-weight:bold;border-radius:8px;padding:6px 14px;font-size:13px}
+.btn-assign:active{transform:scale(.94)}
+.btn-assign.on-bar{background:#3a3a3a;color:#8a8a8a;border-color:#555}
+@media (max-width:520px){
+  .skill-key{font-size:12px !important;min-width:18px;height:18px;line-height:18px}
+  .skill-cdnum{font-size:22px !important}
+  .skill-icon .skill-img{width:40px !important;height:40px !important}
+}
+/* Icon linh căn */
+.lingen-icon{display:inline-block;vertical-align:middle;border-radius:6px;box-shadow:0 0 6px rgba(255,215,0,.35)}
+.lingen-result{display:flex;align-items:center}
+.manual-lv2{font-size:12px;font-weight:bold;color:var(--gold-lt);margin-left:6px}
+.manual-list .manual-icon .skill-img{width:52px;height:52px;object-fit:contain;image-rendering:pixelated}
