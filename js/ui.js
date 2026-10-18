@@ -1649,6 +1649,112 @@ function sectFlash(color, text) {
     }, 1600);
   } catch (e) {}
 }
+/* ============ FX CỐT TRUYỆN MỞ ĐẦU "ĐÊM MÁU LÀNG PHONG DIỆP" (Bui 2026-10-18) ============ */
+/* Cột sáng 9 màu khi trắc ra Cửu Sắc Linh Căn (NV2) */
+function showCuuSacFx() {
+  try {
+    var colors = ["#ff2d2d","#ff8c1a","#ffe93c","#4dff4d","#3cc8ff","#3c6bff","#b44dff","#ff4dd2","#ffffff"];
+    var wrap = document.createElement("div");
+    wrap.className = "cuusac-fx";
+    var html = "";
+    colors.forEach(function (c, i) {
+      html += '<div class="cuusac-beam" style="left:' + (8 + i * 9.5) + '%;background:' + c + ';animation-delay:' + (i * 0.12) + 's"></div>';
+    });
+    html += '<div class="cuusac-label">' + esc(t("q_story_22_fx")) + "</div>";
+    wrap.innerHTML = html;
+    var css = document.createElement("style");
+    css.textContent = ".cuusac-fx{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden}" +
+      ".cuusac-beam{position:absolute;bottom:-10%;width:4%;height:120%;opacity:0;filter:blur(2px);" +
+      "animation:cuusacRise 2.4s ease-out forwards}" +
+      "@keyframes cuusacRise{0%{opacity:0;transform:translateY(30%) scaleY(.3)}30%{opacity:.95}100%{opacity:0;transform:translateY(-8%) scaleY(1)}}" +
+      ".cuusac-label{position:absolute;top:38%;left:0;right:0;text-align:center;font-size:22px;font-weight:bold;" +
+      "color:#fff;text-shadow:0 0 18px #b44dff,0 2px 4px #000;animation:cuusacLbl 3s ease forwards}" +
+      "@keyframes cuusacLbl{0%{opacity:0;transform:scale(.7)}20%{opacity:1;transform:scale(1.05)}80%{opacity:1}100%{opacity:0}}";
+    document.head.appendChild(css);
+    $("app").appendChild(wrap);
+    sfx("success");
+    setTimeout(function () {
+      if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+      if (css.parentNode) css.parentNode.removeChild(css);
+    }, 3200);
+  } catch (e) {}
+}
+
+/* Sự kiện Hắc Phong Trại tấn công làng (NV3): cảnh báo đỏ + lửa cháy + spawn sơn tặc */
+function showBanditAttackFx() {
+  try {
+    /* Cảnh báo toàn màn hình */
+    var warn = document.createElement("div");
+    warn.className = "bandit-warn";
+    warn.innerHTML = '<div class="bandit-warn-text">⚠️ ' + esc(t("q_story_23_attack")) + ' ⚠️</div>' +
+      '<div class="bandit-warn-sub">' + esc(t("q_story_23_run_hint")) + '</div>';
+    var css = document.createElement("style");
+    css.textContent = ".bandit-warn{position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;" +
+      "flex-direction:column;align-items:center;justify-content:center;" +
+      "background:radial-gradient(circle,rgba(255,40,20,.28) 0%,rgba(120,0,0,.55) 100%);animation:banditFlash 1s ease 3}" +
+      "@keyframes banditFlash{0%,100%{opacity:1}50%{opacity:.35}}" +
+      ".bandit-warn-text{font-size:24px;font-weight:bold;color:#ffdf3c;text-shadow:0 0 12px #f00,0 2px 4px #000;text-align:center;padding:0 16px}" +
+      ".bandit-warn-sub{margin-top:12px;font-size:16px;color:#fff;text-shadow:0 2px 4px #000}" +
+      ".bandit-fire{position:fixed;left:0;right:0;bottom:0;height:26%;z-index:9997;pointer-events:none;opacity:.85;" +
+      "background:linear-gradient(to top,rgba(255,90,0,.75),rgba(255,180,0,.35) 55%,transparent);" +
+      "animation:fireFlick .5s ease-in-out infinite alternate}" +
+      "@keyframes fireFlick{from{transform:scaleY(1)}to{transform:scaleY(1.18)}}";
+    document.head.appendChild(css);
+    $("app").appendChild(warn);
+    var fire = document.createElement("div");
+    fire.className = "bandit-fire";
+    $("app").appendChild(fire);
+    sfx("fail");
+    setTimeout(function () { if (warn.parentNode) warn.parentNode.removeChild(warn); }, 3200);
+    setTimeout(function () {
+      if (fire.parentNode) fire.parentNode.removeChild(fire);
+      if (css.parentNode) css.parentNode.removeChild(css);
+    }, 12000);
+    /* Spawn 5 tên sơn tặc quanh làng (map 0) */
+    try {
+      if (typeof Engine !== "undefined" && Engine.spawnEventMonster && curMapId === 0) {
+        var px = [[500,500],[700,550],[900,480],[600,650],[800,700]];
+        px.forEach(function (p) { Engine.spawnEventMonster("son_tac", p[0], p[1]); });
+      }
+    } catch (e) {}
+  } catch (e) {}
+}
+
+/* Storyboard "Ngã Ba Định Mệnh" khi gia nhập tông môn xong (NV7) */
+function showNgaBaStoryboard() {
+  try {
+    var ov = document.createElement("div");
+    ov.className = "ngaba-story";
+    ov.innerHTML =
+      '<div class="ngaba-inner">' +
+      '<div class="ngaba-title">⚖️ ' + esc(t("q_story_27")) + '</div>' +
+      '<div class="ngaba-text">' + esc(t("q_story_27_turnin")) + '</div>' +
+      '<div class="ngaba-paths"><div class="ngaba-path chinh">☯️ ' + esc(t("dao_chinh")) + '</div>' +
+      '<div class="ngaba-path ma">😈 ' + esc(t("dao_ma")) + '</div></div>' +
+      '<button class="btn btn-jade" id="ngaba-close">' + esc(t("btn_continue")) + '</button></div>';
+    var css = document.createElement("style");
+    css.textContent = ".ngaba-story{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;" +
+      "background:rgba(5,5,15,.92)}" +
+      ".ngaba-inner{max-width:86%;text-align:center;padding:28px;border:2px solid #ffd76a;border-radius:14px;" +
+      "background:linear-gradient(160deg,#1a1030,#0d0d20);animation:ngabaIn .6s ease}" +
+      "@keyframes ngabaIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}" +
+      ".ngaba-title{font-size:22px;font-weight:bold;color:#ffd76a;margin-bottom:14px}" +
+      ".ngaba-text{font-size:16px;color:#eee;line-height:1.6;margin-bottom:18px}" +
+      ".ngaba-paths{display:flex;gap:14px;justify-content:center;margin-bottom:20px}" +
+      ".ngaba-path{flex:1;padding:14px;border-radius:10px;font-size:17px;font-weight:bold}" +
+      ".ngaba-path.chinh{background:linear-gradient(160deg,#1e5fbf,#0d2c5f);color:#cfe6ff;border:1px solid #3c8bff}" +
+      ".ngaba-path.ma{background:linear-gradient(160deg,#8f1e1e,#3d0a0a);color:#ffd7d7;border:1px solid #ff4d4d}";
+    document.head.appendChild(css);
+    document.body.appendChild(ov);
+    sfx("success");
+    document.getElementById("ngaba-close").onclick = function () {
+      if (ov.parentNode) ov.parentNode.removeChild(ov);
+      if (css.parentNode) css.parentNode.removeChild(css);
+      sfx("click");
+    };
+  } catch (e) {}
+}
+
 /* Lễ thăng cấp: overlay toàn màn hình */
 function showSectCeremony(c) {
   if (!c) return;
@@ -2680,6 +2786,8 @@ function onPanelClick(e) {
             var npcNK = (typeof NPCS !== "undefined" && NPCS[qd.npc]) ? NPCS[qd.npc].nameKey : null;
             showQuestTalk(qd.acceptTalk, npcNK);
           } else toast(t("quest_accept"));
+          /* NV3 Đêm Máu: sự kiện Hắc Phong Trại tấn công (Bui 2026-10-18) */
+          if (qd && qd.event === "bandit_attack") showBanditAttackFx();
         } catch (e) { toast(t("quest_accept")); }
         renderPanel();
       }
@@ -2697,6 +2805,12 @@ function onPanelClick(e) {
             var npcNK2 = (typeof NPCS !== "undefined" && NPCS[qd2.npc]) ? NPCS[qd2.npc].nameKey : null;
             showQuestTalk(qd2.turninTalk, npcNK2);
           } else toast(t("quest_done"));
+          /* NV2 Dị Tượng Cửu Sắc: cột sáng 9 màu (Bui 2026-10-18) */
+          if (qr.fx === "cuusac") showCuuSacFx();
+          /* NV5 Rời Làng: thông báo nhập đội */
+          if (qr.party && qr.party.length) toast(t("q_story_25_party"));
+          /* NV7 Ngã Ba Định Mệnh: storyboard */
+          if (qr.storyboard === "nga_ba_dinh_menh") showNgaBaStoryboard();
         } catch (e) { toast(t("quest_done")); }
         refreshHUD(); renderPanel();
       } else { toast(t("q_incomplete")); sfx("fail"); }
@@ -3476,6 +3590,21 @@ function renderChar() {
         '<span class="tn-bar"><span class="fill' + (_tnLow ? " low" : "") + '" style="width:' +
         Math.min(100, _tnY / Lifespan.barMax(state) * 100) + '%"></span></span>';
       if ((state.tnRebirths || 0) > 0) h += ' <span class="tn-rb">🔄×' + state.tnRebirths + "</span>";
+      h += "</div>";
+    }
+  } catch (e) {}
+  /* Đội đồng hành (NV5 Rời Làng — Bui 2026-10-18) */
+  try {
+    var _party = (state && state.party) || [];
+    if (_party.length) {
+      h += '<div class="party-strip">👥 <b>' + esc(t("party_title")) + ":</b> ";
+      h += _party.map(function (pid) {
+        var _nm = pid;
+        try {
+          if (typeof NPCS !== "undefined" && NPCS[pid] && NPCS[pid].nameKey) _nm = t(NPCS[pid].nameKey);
+        } catch (e) {}
+        return '<span class="party-mem">' + esc(_nm) + "</span>";
+      }).join(" · ");
       h += "</div>";
     }
   } catch (e) {}

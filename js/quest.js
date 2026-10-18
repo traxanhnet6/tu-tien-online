@@ -154,9 +154,29 @@ var Quest = {
       _gs("addItem")(state, it.id, it.qty || 1, !!it.locked);
     });
     state.quests[id] = { status: "done", count: s.count || 0 };
-    /* NV2 Dị Tượng Cửu Sắc: trắc linh căn tại đài trắc linh (Bui 2026-10-18) */
-    if (id === "q_story_22" && typeof rollLingenFor === "function") {
-      try { rollLingenFor(state); } catch (e) {}
+    /* NV2 Dị Tượng Cửu Sắc: trắc linh căn tại đài trắc linh (Bui 2026-10-18)
+     * Roll node-safe ngay trong quest.js (không phụ thuộc ui.js) */
+    if (id === "q_story_22" && !(state.char && state.char.element)) {
+      try {
+        var _rates = (typeof LINGEN_RATES !== "undefined") ? LINGEN_RATES :
+          [["kim", 16], ["moc", 16], ["thuy", 16], ["hoa", 16], ["tho", 16]];
+        if (typeof require !== "undefined" && (typeof LINGEN_RATES === "undefined")) {
+          try { _rates = require("./data.js").LINGEN_RATES || _rates; } catch (e) {}
+        }
+        var _tot = 0, _i;
+        for (_i = 0; _i < _rates.length; _i++) _tot += _rates[_i][1];
+        var _r = Math.random() * _tot, _el = _rates[0][0];
+        for (_i = 0; _i < _rates.length; _i++) { _r -= _rates[_i][1]; if (_r <= 0) { _el = _rates[_i][0]; break; } }
+        var _rare = (_el === "bang" || _el === "loi" || _el === "phong" || _el === "hondon" ||
+                     _el === "quang" || _el === "am" || _el === "doc" || _el === "huyet");
+        var _qq = Math.random();
+        var _ql = _qq < 0.05 ? "thien" : (_qq < 0.30 ? "dia" : "pham");
+        if (_rare && _ql === "pham") _ql = "dia";
+        state.char = state.char || {};
+        state.char.element = _el;
+        state.char.elementQuality = _ql;
+        state.char.roots = [_el];
+      } catch (e) {}
     }
     /* Chuỗi cốt truyện: tự nhận quest tiếp theo có autoAccept (data-driven) */
     var autoAccepted = [];

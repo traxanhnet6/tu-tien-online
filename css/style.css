@@ -1125,3 +1125,6 @@ body.landscape #hud-leftmid{top:40%}
 /* Đầu mục cảnh giới trong tab Bãi Quái / Đổi mảnh */
 .dg-realm{font-weight:bold;color:var(--gold);margin:10px 0 4px;padding:4px 8px;
   background:rgba(201,162,39,.12);border-left:3px solid var(--gold);border-radius:0 6px 6px 0}
+/* Đội đồng hành — NV5 Rời Làng (Bui 2026-10-18) */
+.party-strip{margin:8px 0;padding:8px 12px;background:linear-gradient(160deg,#14261a,#0c1a12);border:1px solid #3fae6a;border-radius:10px;font-size:14px;color:#d8f3e2}
+.party-mem{color:#7fe8a8;font-weight:bold}

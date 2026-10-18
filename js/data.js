@@ -550,7 +550,7 @@ const MAPS = [
       { x: 600, y: 300, r: 160, monsters: ["da_tru", "son_ke"] },
     ],
     bossSpawn: { x: 800, y: 880 },
-    npcs: ["dai_phu", "van_tien_cac", "truong_lao", "tam_tien_bi_tich", "truong_tran", "lao_ren", "thuong_nhan", "tieu_nhi", "su_gia_kiem", "su_gia_phap", "su_gia_the", "tuan_thu_su", "lao_dan_duong", "thu_thap_nhan", "su_gia_duoc", "su_gia_thu", "minh_chu", "thuong_nhan_du_hanh", "su_gia_ma", "truong_lang", "co_tran_tu", "to_uyen_nhi", "diep_van"],
+    npcs: ["dai_phu", "van_tien_cac", "truong_lao", "tam_tien_bi_tich", "truong_tran", "lao_ren", "thuong_nhan", "tieu_nhi", "su_gia_kiem", "su_gia_phap", "su_gia_the", "tuan_thu_su", "lao_dan_duong", "thu_thap_nhan", "su_gia_duoc", "su_gia_thu", "minh_chu", "thuong_nhan_du_hanh", "su_gia_ma", "truong_lang", "co_tran_tu", "to_uyen_nhi", "diep_van", "dan_lang_1", "dan_lang_2", "dan_lang_3"],
     quests: ["q_story_01", "q_story_02", "q_story_03", "q_story_04", "q_story_05", "q_story_10", "q_story_21", "q_story_22", "q_story_23", "q_story_24", "q_story_25", "q_story_26", "q_story_27"],
     gates: [{to: 1, x: 720, y: 80}, {to: 3, x: 80, y: 500}, {to: 4, x: 1500, y: 80}, {to: 5, x: 80, y: 1000}, {to: 6, x: 400, y: 1120}, {to: 7, x: 800, y: 1120}, {to: 8, x: 1200, y: 1120}, {to: 9, x: 1500, y: 1000}, {to: 10, x: 1500, y: 600}, {to: 11, x: 1500, y: 450}, {to: 12, x: 1500, y: 300}, {to: 14, x: 800, y: 80}],
     stoneDrop: [2, 5],
