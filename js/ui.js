@@ -579,6 +579,7 @@ function beginGame() {
   state.char.roots = []; /* linh căn trắc ở NV2, khai mở thêm bằng Khai Mạch Đan */
   state.char.cotPham = null; /* phẩm chất căn cốt — định khi uống Tẩy Cốt Đan đầu tiên */
   state.char.realm = 1; state.char.tier = 1; /* bắt đầu Luyện Khí tầng 1 */
+  state.map = { id: 0, zone: 13 }; /* nhân vật mới luôn spawn ở Thanh Vân Trấn (Bui 2026-10-19) */
   /* Luồng vào game mới: nhân vật mới → chiếu cốt truyện "Đêm Máu Làng Phong Diệp" 1 lần */
   state.flags.story_intro_done = false;
   if (typeof Social !== "undefined") { try { Social.ensureCharId(state); } catch (e) {} }
@@ -5292,6 +5293,27 @@ function drawMinimap() {
         ctx.beginPath(); ctx.arc(m.x * sx, m.y * sy, m.boss ? 3.5 : 2, 0, 6.3); ctx.fill();
       }
     }
+    /* Marker mục tiêu nhiệm vụ trên minimap (Bui 2026-10-19) */
+    try {
+      if (typeof QuestGuide !== "undefined" && QuestGuide.activeStoryQuest && QuestGuide.questTarget) {
+        var _qq = QuestGuide.activeStoryQuest(state);
+        var _qt = _qq ? QuestGuide.questTarget(state, _qq, curMapId) : null;
+        if (_qt && (_qt.map == null || _qt.map === curMapId)) {
+          var _qx = null, _qy = null;
+          if (_qt.kind === "npc" && typeof Engine.getNPCs === "function") {
+            var _qn = Engine.getNPCs() || [];
+            for (var _qi = 0; _qi < _qn.length; _qi++)
+              if (_qn[_qi].npcId === _qt.npcId) { _qx = _qn[_qi].x; _qy = _qn[_qi].y; break; }
+          } else if (_qt.x != null && _qt.y != null) { _qx = _qt.x; _qy = _qt.y; }
+          if (_qx != null) {
+            var _pulse = 3 + Math.sin(Date.now() / 300) * 1.5;
+            ctx.fillStyle = "#ffd76a";
+            ctx.strokeStyle = "#7a5c10"; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(_qx * sx, _qy * sy, _pulse, 0, 6.3); ctx.fill(); ctx.stroke();
+          }
+        }
+      }
+    } catch (_qe) {}
     var p = Engine.player;
     ctx.fillStyle = "#ffd76a";
     ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1;

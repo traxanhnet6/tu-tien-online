@@ -2051,6 +2051,53 @@ var Engine = (function () {
     }
     var ps = _getStats();
     _drawHpBar(player.x, player.y + lift - blift - 32, 40, player.hp / ps.maxHp, false);
+    /* Mũi tên vàng chỉ đường nhiệm vụ (Bui 2026-10-19) */
+    try { _drawQuestArrow(player.x, player.y + lift - blift); } catch (e) {}
+  }
+
+  /* Mũi tên vàng trên đầu nhân vật, chỉ hướng tới mục tiêu NV hiện tại */
+  function _drawQuestArrow(px, py) {
+    if (typeof QuestGuide === "undefined") return;
+    var S = _S();
+    var q = null;
+    try { q = QuestGuide.activeStoryQuest(S); } catch (e) { return; }
+    if (!q) return;
+    var tgt = null;
+    try { tgt = QuestGuide.questTarget(S, q, _mapId); } catch (e) { return; }
+    if (!tgt) return;
+    if (tgt.map != null && tgt.map !== _mapId) return; /* khác map: không vẽ */
+    var tx = null, ty = null;
+    if (tgt.kind === "npc") {
+      for (var i = 0; i < _npcs.length; i++)
+        if (_npcs[i].npcId === tgt.npcId) { tx = _npcs[i].x; ty = _npcs[i].y; break; }
+    } else if (tgt.x != null && tgt.y != null) {
+      tx = tgt.x; ty = tgt.y;
+    }
+    if (tx == null) return;
+    var dx = tx - px, dy = ty - py;
+    var dist = Math.hypot(dx, dy);
+    if (dist < 60) return; /* đã ở gần mục tiêu: ẩn mũi tên */
+    var ang = Math.atan2(dy, dx);
+    var bob = Math.sin(Date.now() / 300) * 4; /* nhấp nhô */
+    var ax = px, ay = py - 62 + bob;
+    _ctx.save();
+    _ctx.translate(ax, ay);
+    _ctx.rotate(ang + Math.PI / 2);
+    _ctx.fillStyle = "#ffd76a";
+    _ctx.strokeStyle = "#7a5c10";
+    _ctx.lineWidth = 2;
+    _ctx.beginPath();
+    _ctx.moveTo(0, -14);
+    _ctx.lineTo(10, 6);
+    _ctx.lineTo(4, 6);
+    _ctx.lineTo(4, 14);
+    _ctx.lineTo(-4, 14);
+    _ctx.lineTo(-4, 6);
+    _ctx.lineTo(-10, 6);
+    _ctx.closePath();
+    _ctx.fill();
+    _ctx.stroke();
+    _ctx.restore();
   }
 
   function _drawOther(o) {
