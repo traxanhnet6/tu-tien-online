@@ -1950,7 +1950,7 @@ var Engine = (function () {
         _skeletalOk = CharAnim.draw(_ctx, player.x + lunge, player.y + lift - blift,
           _anim, _at, {
             dir: player.dir || 1,
-            scale: 1,
+            scale: 0.2,
             gender: _gioi,
             equip: _eqOverride,
             flashRed: (player.hitT > 0) ? 1 : 0

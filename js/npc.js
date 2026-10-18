@@ -249,11 +249,12 @@ function _questTalk(npcId, def, state) {
   });
 
   var lines;
-  if (mine.length === 0) lines = ["npc_" + npcId + "_greet"];
-  else if (hasReadyTurnIn) lines = ["npc_dai_phu_turnin"];
-  else if (hasActive) lines = ["npc_dai_phu_progress"];
-  else if (allDone) lines = ["npc_dai_phu_alldone"];
-  else lines = ["npc_dai_phu_greet", "npc_dai_phu_has_quest"];
+  var _prefix = "npc_" + npcId;
+  if (mine.length === 0) lines = [_prefix + "_greet"];
+  else if (hasReadyTurnIn) lines = [_prefix + "_turnin"];
+  else if (hasActive) lines = [_prefix + "_progress"];
+  else if (allDone) lines = [_prefix + "_alldone"];
+  else lines = [_prefix + "_greet", _prefix + "_has_quest"];
 
   /* Thọ Nguyên thấp: Đại Phu nhắc nhở (lifespan.js) */
   try {
