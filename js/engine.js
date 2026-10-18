@@ -2044,7 +2044,7 @@ var Engine = (function () {
         _skeletalOk = CharAnim.draw(_ctx, player.x + lunge, player.y + lift - blift,
           _anim, _at, {
             dir: player.dir || 1,
-            scale: 0.2,
+            scale: 14, /* 1 unit = 14px: nhân vật ~48px, khớp sprite cũ 38x48 (art vẽ 96px/unit, nativeScale trong manifest) */
             gender: _gioi,
             equip: _eqOverride,
             flashRed: (player.hitT > 0) ? 1 : 0

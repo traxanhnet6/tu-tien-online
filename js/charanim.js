@@ -153,8 +153,8 @@
     if (flashRed) {
       ctx.globalAlpha = 0.35 * flashRed;
       ctx.fillStyle = '#ff2222';
-      // approximate body bounds
-      ctx.fillRect(x - 20 * scale, y - 60 * scale, 40 * scale, 60 * scale);
+      // approximate body bounds (theo unit: rộng ~1.6, cao ~2.9 từ chân lên đỉnh đầu)
+      ctx.fillRect(x - 0.8 * scale, y - 2.9 * scale, 1.6 * scale, 2.9 * scale);
       ctx.globalAlpha = opts.alpha != null ? opts.alpha : 1;
     }
 

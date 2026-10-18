@@ -1,1 +1,1819 @@
-{"animations":{"_base":{"desc":"Tư thế đứng chuẩn (tất cả anim kế thừa)","parts":{}},"atk_but":{"desc":"Bút: điểm huyệt — tay phải đâm nhanh chính xác","parts":{"dau":[{"rot":0,"t":0},{"rot":0.08,"t":0.3},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.5,"t":0},{"rot":-0.1,"t":0.3},{"rot":0,"t":1}],"tay_phai_tren":[{"dx":0,"rot":-0.3,"t":0},{"dx":0.3,"rot":0.2,"t":0.3},{"dx":0,"rot":-0.3,"t":0.5},{"dx":0,"rot":0,"t":1}],"than":[{"rot":0,"t":0},{"rot":0.12,"t":0.3},{"rot":0,"t":1}]}},"atk_cung":{"desc":"Cung: kéo dây — tay trái giữ cung, tay phải kéo","parts":{"dau":[{"rot":0.15,"t":0},{"rot":0.15,"t":0.7},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.4,"t":0},{"rot":-1.2,"t":0.5},{"rot":-0.2,"t":0.7},{"rot":0,"t":1}],"tay_phai_tren":[{"dx":0.1,"rot":0.3,"t":0},{"dx":-0.25,"rot":-0.2,"t":0.5},{"dx":0.15,"rot":0.5,"t":0.7},{"dx":0,"rot":0,"t":1}],"tay_trai_duoi":[{"rot":0,"t":0},{"rot":0,"t":1}],"tay_trai_tren":[{"rot":1.35,"t":0},{"rot":1.45,"t":0.5},{"rot":1.35,"t":0.7},{"rot":0,"t":1}],"than":[{"rot":-0.1,"t":0},{"rot":-0.1,"t":0.7},{"rot":0,"t":1}]}},"atk_dao":{"desc":"Đao: bổ dọc — tay phải giơ cao bổ xuống","parts":{"dau":[{"rot":-0.12,"t":0},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.5,"t":0},{"rot":0.1,"t":0.45},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":-2.2,"t":0},{"rot":0.8,"t":0.45},{"rot":0,"t":1}],"than":[{"dy":-0.05,"rot":-0.15,"t":0},{"dy":0.08,"rot":0.25,"t":0.45},{"dy":0,"rot":0,"t":1}]}},"atk_kiem":{"desc":"Kiếm: chém ngang — tay phải vung ngang, thân xoay","parts":{"dau":[{"rot":-0.1,"t":0},{"rot":0.12,"t":0.4},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.3,"t":0},{"rot":0.2,"t":0.4},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":-1.2,"t":0},{"rot":1.4,"t":0.4},{"rot":0,"t":1}],"tay_trai_tren":[{"rot":0.3,"t":0},{"rot":-0.4,"t":0.4},{"rot":0,"t":1}],"than":[{"rot":-0.25,"t":0},{"rot":0.3,"t":0.4},{"rot":0,"t":1}]}},"atk_kiemhap":{"desc":"Kiếm Hạp: ngự kiếm — hai tay kết ấn, kiếm bay","parts":{"ao":[{"rot":0,"t":0},{"rot":0.1,"t":0.5},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.8,"t":0},{"rot":-0.3,"t":0.5},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":-0.5,"t":0},{"rot":-1.2,"t":0.5},{"rot":0,"t":1}],"tay_trai_duoi":[{"rot":-0.8,"t":0},{"rot":-0.3,"t":0.5},{"rot":0,"t":1}],"tay_trai_tren":[{"rot":0.5,"t":0},{"rot":1.2,"t":0.5},{"rot":0,"t":1}],"than":[{"dy":0,"t":0},{"dy":-0.12,"t":0.5},{"dy":0,"t":1}],"toc":[{"rot":0,"t":0},{"dy":-0.1,"rot":0.2,"t":0.5},{"rot":0,"t":1}]}},"atk_liem":{"desc":"Liêm: móc giật — tay phải móc từ dưới lên","parts":{"tay_phai_duoi":[{"rot":0.5,"t":0},{"rot":-0.4,"t":0.4},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":0.8,"t":0},{"rot":-1.6,"t":0.4},{"rot":0,"t":1}],"than":[{"dy":0.05,"rot":0.2,"t":0},{"dy":-0.05,"rot":-0.2,"t":0.4},{"dy":0,"rot":0,"t":1}]}},"atk_phien":{"desc":"Phiên: phất cờ — tay phải vung tròn","parts":{"ao":[{"rot":-0.15,"t":0},{"rot":0.15,"t":0.5},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.3,"t":0},{"rot":0.3,"t":0.5},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":-1.5,"t":0},{"rot":1.0,"t":0.3},{"rot":-1.0,"t":0.6},{"rot":0,"t":1}],"than":[{"rot":-0.2,"t":0},{"rot":0.2,"t":0.5},{"rot":0,"t":1}]}},"atk_roi":{"desc":"Roi/Tiên: quất — tay phải vung vòng cung lớn","parts":{"dau":[{"rot":-0.15,"t":0},{"rot":0.1,"t":0.5},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.4,"t":0},{"rot":0.3,"t":0.5},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":-2.0,"t":0},{"rot":-2.5,"t":0.25},{"rot":1.2,"t":0.5},{"rot":0,"t":1}],"than":[{"rot":-0.3,"t":0},{"rot":0.35,"t":0.5},{"rot":0,"t":1}]}},"atk_thuong":{"desc":"Thương: đâm thẳng — tay phải đẩy tới, thân chúi","parts":{"chan_phai_tren":[{"rot":0,"t":0},{"rot":-0.3,"t":0.4},{"rot":0,"t":1}],"chan_trai_tren":[{"rot":0,"t":0},{"rot":0.35,"t":0.4},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.8,"t":0},{"rot":-0.1,"t":0.4},{"rot":0,"t":1}],"tay_phai_tren":[{"dx":-0.15,"rot":-0.5,"t":0},{"dx":0.35,"rot":0.1,"t":0.4},{"dx":0,"rot":0,"t":1}],"tay_trai_tren":[{"dx":-0.1,"rot":0.2,"t":0},{"dx":0.2,"rot":0,"t":0.4},{"dx":0,"rot":0,"t":1}],"than":[{"dx":-0.08,"rot":0.05,"t":0},{"dx":0.15,"rot":0.2,"t":0.4},{"dx":0,"rot":0,"t":1}]}},"atk_tieu":{"desc":"Tiêu: phi tiêu — tay phải vung ném","parts":{"tay_phai_duoi":[{"rot":-1.0,"t":0},{"rot":0,"t":0.35},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":-1.8,"t":0},{"rot":0.9,"t":0.35},{"rot":0,"t":1}],"than":[{"rot":-0.2,"t":0},{"rot":0.25,"t":0.35},{"rot":0,"t":1}]}},"charge":{"desc":"Tụ lực: cúi người, hai tay tụ khí, tóc bay","loop":true,"parts":{"ao":[{"rot":0,"t":0},{"rot":0.12,"t":0.5},{"rot":0,"t":1}],"chan_phai_tren":[{"rot":0,"t":0},{"rot":-0.25,"t":0.5},{"rot":0,"t":1}],"chan_trai_tren":[{"rot":0,"t":0},{"rot":0.25,"t":0.5},{"rot":0,"t":1}],"dau":[{"rot":0,"t":0},{"dy":0.05,"rot":-0.1,"t":0.5},{"rot":0,"t":1}],"tay_phai_duoi":[{"rot":-0.5,"t":0},{"rot":-1.1,"t":0.5},{"rot":-0.5,"t":1}],"tay_phai_tren":[{"rot":-0.3,"t":0},{"rot":-0.9,"t":0.5},{"rot":-0.3,"t":1}],"tay_trai_duoi":[{"rot":-0.5,"t":0},{"rot":-1.1,"t":0.5},{"rot":-0.5,"t":1}],"tay_trai_tren":[{"rot":0.3,"t":0},{"rot":0.9,"t":0.5},{"rot":0.3,"t":1}],"than":[{"dy":0,"rot":0,"sx":1,"t":0},{"dy":0.1,"rot":0.08,"sx":1.05,"t":0.5},{"dy":0,"rot":0,"sx":1,"t":1}],"toc":[{"rot":-0.1,"t":0},{"dy":-0.08,"rot":0.3,"t":0.5},{"rot":-0.1,"t":1}]}},"die":{"desc":"Chết: ngã xuống, mờ dần","parts":{"chan_phai_tren":[{"rot":0,"t":0},{"rot":-0.2,"t":1}],"chan_trai_tren":[{"rot":0,"t":0},{"rot":0.2,"t":1}],"dau":[{"rot":0,"t":0},{"rot":0.4,"t":1}],"tay_phai_tren":[{"rot":0,"t":0},{"rot":-1.2,"t":1}],"tay_trai_tren":[{"rot":0,"t":0},{"rot":1.2,"t":1}],"than":[{"dy":0,"rot":0,"t":0},{"dy":0.9,"rot":1.4,"t":0.6},{"dy":1.0,"rot":1.57,"t":1}],"toc":[{"dy":0,"t":0},{"dy":0.3,"t":1}]}},"hit":{"desc":"Bị đánh: giật lùi, nghiêng người","parts":{"dau":[{"rot":0,"t":0},{"rot":-0.3,"t":0.3},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":0,"t":0},{"rot":-0.7,"t":0.3},{"rot":0,"t":1}],"tay_trai_tren":[{"rot":0,"t":0},{"rot":0.7,"t":0.3},{"rot":0,"t":1}],"than":[{"dx":0,"rot":0,"t":0},{"dx":-0.2,"rot":-0.25,"t":0.3},{"dx":0,"rot":0,"t":1}],"toc":[{"rot":0,"t":0},{"rot":-0.25,"t":0.3},{"rot":0,"t":1}]}},"idle":{"desc":"Đứng yên: thở nhẹ, tóc bay","loop":true,"parts":{"ao":[{"rot":-0.02,"t":0},{"rot":0.02,"t":0.5},{"rot":-0.02,"t":1}],"dau":[{"rot":0,"t":0},{"rot":0.03,"t":0.5},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":-0.05,"t":0},{"rot":0.05,"t":0.5},{"rot":-0.05,"t":1}],"tay_trai_tren":[{"rot":0.05,"t":0},{"rot":-0.05,"t":0.5},{"rot":0.05,"t":1}],"than":[{"sy":1,"t":0},{"sy":1.022,"t":0.5},{"sy":1,"t":1}],"toc":[{"rot":-0.04,"t":0},{"rot":0.04,"t":0.5},{"rot":-0.04,"t":1}]}},"jump":{"desc":"Nhảy: co chân, tay giơ","parts":{"ao":[{"dy":0,"t":0},{"dy":-0.1,"t":0.5},{"dy":0,"t":1}],"chan_phai_duoi":[{"rot":0,"t":0},{"rot":1.0,"t":0.5},{"rot":0,"t":1}],"chan_phai_tren":[{"rot":0,"t":0},{"rot":0.7,"t":0.5},{"rot":0,"t":1}],"chan_trai_duoi":[{"rot":0,"t":0},{"rot":1.1,"t":0.5},{"rot":0,"t":1}],"chan_trai_tren":[{"rot":0,"t":0},{"rot":0.9,"t":0.5},{"rot":0,"t":1}],"tay_phai_tren":[{"rot":0,"t":0},{"rot":-1.4,"t":0.5},{"rot":0,"t":1}],"tay_trai_tren":[{"rot":0,"t":0},{"rot":1.4,"t":0.5},{"rot":0,"t":1}],"than":[{"dy":0,"t":0},{"dy":-0.35,"t":0.5},{"dy":0,"t":1}],"toc":[{"dy":0,"t":0},{"dy":-0.15,"t":0.5},{"dy":0,"t":1}]}},"run":{"desc":"Chạy: bước nhanh, thân nghiêng trước, tóc bay mạnh","loop":true,"parts":{"ao":[{"rot":-0.2,"t":0},{"rot":-0.12,"t":0.5},{"rot":-0.2,"t":1}],"chan_phai_duoi":[{"rot":0.2,"t":0},{"rot":0.4,"t":0.25},{"rot":0.2,"t":0.5},{"rot":1.0,"t":0.75},{"rot":0.2,"t":1}],"chan_phai_tren":[{"rot":-0.9,"t":0},{"rot":0.9,"t":0.5},{"rot":-0.9,"t":1}],"chan_trai_duoi":[{"rot":0.2,"t":0},{"rot":1.0,"t":0.25},{"rot":0.2,"t":0.5},{"rot":0.4,"t":0.75},{"rot":0.2,"t":1}],"chan_trai_tren":[{"rot":0.9,"t":0},{"rot":-0.9,"t":0.5},{"rot":0.9,"t":1}],"dau":[{"rot":-0.08,"t":0},{"rot":-0.08,"t":1}],"tay_phai_duoi":[{"rot":-0.6,"t":0},{"rot":-0.6,"t":1}],"tay_phai_tren":[{"rot":0.8,"t":0},{"rot":-0.8,"t":0.5},{"rot":0.8,"t":1}],"tay_trai_duoi":[{"rot":-0.6,"t":0},{"rot":-0.6,"t":1}],"tay_trai_tren":[{"rot":-0.8,"t":0},{"rot":0.8,"t":0.5},{"rot":-0.8,"t":1}],"than":[{"dy":-0.05,"rot":0.12,"t":0},{"dy":-0.1,"rot":0.12,"t":0.5},{"dy":-0.05,"rot":0.12,"t":1}],"toc":[{"dx":-0.1,"rot":-0.35,"t":0},{"dx":-0.08,"rot":-0.25,"t":0.5},{"dx":-0.1,"rot":-0.35,"t":1}]}},"walk":{"desc":"Đi bộ: chân bước xen kẽ, tay đung đưa, thân nhún","loop":true,"parts":{"ao":[{"rot":-0.05,"t":0},{"rot":0.05,"t":0.5},{"rot":-0.05,"t":1}],"chan_phai_duoi":[{"rot":0.1,"t":0},{"rot":0.2,"t":0.25},{"rot":0.1,"t":0.5},{"rot":0.6,"t":0.75},{"rot":0.1,"t":1}],"chan_phai_tren":[{"rot":-0.5,"t":0},{"rot":0.5,"t":0.5},{"rot":-0.5,"t":1}],"chan_trai_duoi":[{"rot":0.1,"t":0},{"rot":0.6,"t":0.25},{"rot":0.1,"t":0.5},{"rot":0.2,"t":0.75},{"rot":0.1,"t":1}],"chan_trai_tren":[{"rot":0.5,"t":0},{"rot":-0.5,"t":0.5},{"rot":0.5,"t":1}],"dau":[{"dy":0,"t":0},{"dy":-0.03,"t":0.5},{"dy":0,"t":1}],"tay_phai_tren":[{"rot":0.4,"t":0},{"rot":-0.4,"t":0.5},{"rot":0.4,"t":1}],"tay_trai_tren":[{"rot":-0.4,"t":0},{"rot":0.4,"t":0.5},{"rot":-0.4,"t":1}],"than":[{"dy":0,"t":0},{"dy":-0.05,"t":0.25},{"dy":0,"t":0.5},{"dy":-0.05,"t":0.75},{"dy":0,"t":1}],"toc":[{"rot":-0.08,"t":0},{"rot":0.08,"t":0.5},{"rot":-0.08,"t":1}]}}},"assets":"assets/charparts/","description":"Skeletal rig cho nhân vật chibi tu tiên — Bui 2026-10-18","parts":{"ao":{"anchor":[0,-1.8],"img":"assets/charparts/nam_ao.png","pivot":[0.5,0.9],"z":7},"chan_phai_duoi":{"anchor":[0.18,-0.55],"img":"assets/charparts/nam_chan_phai_duoi.png","pivot":[0.5,0.08],"z":2},"chan_phai_tren":{"anchor":[0.18,-1.05],"img":"assets/charparts/nam_chan_phai_tren.png","pivot":[0.5,0.92],"z":4},"chan_trai_duoi":{"anchor":[-0.18,-0.55],"img":"assets/charparts/nam_chan_trai_duoi.png","pivot":[0.5,0.08],"z":1},"chan_trai_tren":{"anchor":[-0.18,-1.05],"img":"assets/charparts/nam_chan_trai_tren.png","pivot":[0.5,0.92],"z":3},"co":{"anchor":[0,-1.85],"img":"assets/charparts/nam_co.png","pivot":[0.5,0.9],"z":10},"dau":{"anchor":[0,-2.25],"img":"assets/charparts/nam_dau.png","pivot":[0.5,0.88],"z":11},"quan":{"anchor":[0,-1.15],"img":"assets/charparts/nam_quan.png","pivot":[0.5,0.9],"z":5},"tay_phai_duoi":{"anchor":[0.42,-1.28],"img":"assets/charparts/nam_tay_phai_duoi.png","pivot":[0.5,0.08],"z":9},"tay_phai_tren":{"anchor":[0.32,-1.62],"img":"assets/charparts/nam_tay_phai_tren.png","pivot":[0.18,0.12],"z":8},"tay_trai_duoi":{"anchor":[-0.42,-1.28],"img":"assets/charparts/nam_tay_trai_duoi.png","pivot":[0.5,0.08],"z":9},"tay_trai_tren":{"anchor":[-0.32,-1.62],"img":"assets/charparts/nam_tay_trai_tren.png","pivot":[0.82,0.12],"z":8},"than":{"anchor":[0,-1.75],"img":"assets/charparts/nam_than.png","pivot":[0.5,0.95],"z":6},"toc":{"anchor":[0,-2.35],"img":"assets/charparts/nam_toc.png","pivot":[0.5,0.75],"z":12}},"unitPx":48,"version":"1.0"}
+{
+  "animations": {
+    "_base": {
+      "desc": "Tư thế đứng chuẩn (tất cả anim kế thừa)",
+      "parts": {}
+    },
+    "atk_but": {
+      "desc": "Bút: điểm huyệt — tay phải đâm nhanh chính xác",
+      "parts": {
+        "dau": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.08,
+            "t": 0.3
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.5,
+            "t": 0
+          },
+          {
+            "rot": -0.1,
+            "t": 0.3
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "dx": 0,
+            "rot": -0.3,
+            "t": 0
+          },
+          {
+            "dx": 0.3,
+            "rot": 0.2,
+            "t": 0.3
+          },
+          {
+            "dx": 0,
+            "rot": -0.3,
+            "t": 0.5
+          },
+          {
+            "dx": 0,
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.12,
+            "t": 0.3
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_cung": {
+      "desc": "Cung: kéo dây — tay trái giữ cung, tay phải kéo",
+      "parts": {
+        "dau": [
+          {
+            "rot": 0.15,
+            "t": 0
+          },
+          {
+            "rot": 0.15,
+            "t": 0.7
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.4,
+            "t": 0
+          },
+          {
+            "rot": -1.2,
+            "t": 0.5
+          },
+          {
+            "rot": -0.2,
+            "t": 0.7
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "dx": 0.1,
+            "rot": 0.3,
+            "t": 0
+          },
+          {
+            "dx": -0.25,
+            "rot": -0.2,
+            "t": 0.5
+          },
+          {
+            "dx": 0.15,
+            "rot": 0.5,
+            "t": 0.7
+          },
+          {
+            "dx": 0,
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_trai_duoi": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": 1.35,
+            "t": 0
+          },
+          {
+            "rot": 1.45,
+            "t": 0.5
+          },
+          {
+            "rot": 1.35,
+            "t": 0.7
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "rot": -0.1,
+            "t": 0
+          },
+          {
+            "rot": -0.1,
+            "t": 0.7
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_dao": {
+      "desc": "Đao: bổ dọc — tay phải giơ cao bổ xuống",
+      "parts": {
+        "dau": [
+          {
+            "rot": -0.12,
+            "t": 0
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.5,
+            "t": 0
+          },
+          {
+            "rot": 0.1,
+            "t": 0.45
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": -2.2,
+            "t": 0
+          },
+          {
+            "rot": 0.8,
+            "t": 0.45
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dy": -0.05,
+            "rot": -0.15,
+            "t": 0
+          },
+          {
+            "dy": 0.08,
+            "rot": 0.25,
+            "t": 0.45
+          },
+          {
+            "dy": 0,
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_kiem": {
+      "desc": "Kiếm: chém ngang — tay phải vung ngang, thân xoay",
+      "parts": {
+        "dau": [
+          {
+            "rot": -0.1,
+            "t": 0
+          },
+          {
+            "rot": 0.12,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.3,
+            "t": 0
+          },
+          {
+            "rot": 0.2,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": -1.2,
+            "t": 0
+          },
+          {
+            "rot": 1.4,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": 0.3,
+            "t": 0
+          },
+          {
+            "rot": -0.4,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "rot": -0.25,
+            "t": 0
+          },
+          {
+            "rot": 0.3,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_kiemhap": {
+      "desc": "Kiếm Hạp: ngự kiếm — hai tay kết ấn, kiếm bay",
+      "parts": {
+        "ao": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.1,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.8,
+            "t": 0
+          },
+          {
+            "rot": -0.3,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": -0.5,
+            "t": 0
+          },
+          {
+            "rot": -1.2,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_trai_duoi": [
+          {
+            "rot": -0.8,
+            "t": 0
+          },
+          {
+            "rot": -0.3,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": 0.5,
+            "t": 0
+          },
+          {
+            "rot": 1.2,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dy": 0,
+            "t": 0
+          },
+          {
+            "dy": -0.12,
+            "t": 0.5
+          },
+          {
+            "dy": 0,
+            "t": 1
+          }
+        ],
+        "toc": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "dy": -0.1,
+            "rot": 0.2,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_liem": {
+      "desc": "Liêm: móc giật — tay phải móc từ dưới lên",
+      "parts": {
+        "tay_phai_duoi": [
+          {
+            "rot": 0.5,
+            "t": 0
+          },
+          {
+            "rot": -0.4,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": 0.8,
+            "t": 0
+          },
+          {
+            "rot": -1.6,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dy": 0.05,
+            "rot": 0.2,
+            "t": 0
+          },
+          {
+            "dy": -0.05,
+            "rot": -0.2,
+            "t": 0.4
+          },
+          {
+            "dy": 0,
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_phien": {
+      "desc": "Phiên: phất cờ — tay phải vung tròn",
+      "parts": {
+        "ao": [
+          {
+            "rot": -0.15,
+            "t": 0
+          },
+          {
+            "rot": 0.15,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.3,
+            "t": 0
+          },
+          {
+            "rot": 0.3,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": -1.5,
+            "t": 0
+          },
+          {
+            "rot": 1.0,
+            "t": 0.3
+          },
+          {
+            "rot": -1.0,
+            "t": 0.6
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "rot": -0.2,
+            "t": 0
+          },
+          {
+            "rot": 0.2,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_roi": {
+      "desc": "Roi/Tiên: quất — tay phải vung vòng cung lớn",
+      "parts": {
+        "dau": [
+          {
+            "rot": -0.15,
+            "t": 0
+          },
+          {
+            "rot": 0.1,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.4,
+            "t": 0
+          },
+          {
+            "rot": 0.3,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": -2.0,
+            "t": 0
+          },
+          {
+            "rot": -2.5,
+            "t": 0.25
+          },
+          {
+            "rot": 1.2,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "rot": -0.3,
+            "t": 0
+          },
+          {
+            "rot": 0.35,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_thuong": {
+      "desc": "Thương: đâm thẳng — tay phải đẩy tới, thân chúi",
+      "parts": {
+        "chan_phai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": -0.3,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "chan_trai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.35,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.8,
+            "t": 0
+          },
+          {
+            "rot": -0.1,
+            "t": 0.4
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "dx": -0.15,
+            "rot": -0.5,
+            "t": 0
+          },
+          {
+            "dx": 0.35,
+            "rot": 0.1,
+            "t": 0.4
+          },
+          {
+            "dx": 0,
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "dx": -0.1,
+            "rot": 0.2,
+            "t": 0
+          },
+          {
+            "dx": 0.2,
+            "rot": 0,
+            "t": 0.4
+          },
+          {
+            "dx": 0,
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dx": -0.08,
+            "rot": 0.05,
+            "t": 0
+          },
+          {
+            "dx": 0.15,
+            "rot": 0.2,
+            "t": 0.4
+          },
+          {
+            "dx": 0,
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "atk_tieu": {
+      "desc": "Tiêu: phi tiêu — tay phải vung ném",
+      "parts": {
+        "tay_phai_duoi": [
+          {
+            "rot": -1.0,
+            "t": 0
+          },
+          {
+            "rot": 0,
+            "t": 0.35
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": -1.8,
+            "t": 0
+          },
+          {
+            "rot": 0.9,
+            "t": 0.35
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "rot": -0.2,
+            "t": 0
+          },
+          {
+            "rot": 0.25,
+            "t": 0.35
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "charge": {
+      "desc": "Tụ lực: cúi người, hai tay tụ khí, tóc bay",
+      "loop": true,
+      "parts": {
+        "ao": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.12,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "chan_phai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": -0.25,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "chan_trai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.25,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "dau": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "dy": 0.05,
+            "rot": -0.1,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.5,
+            "t": 0
+          },
+          {
+            "rot": -1.1,
+            "t": 0.5
+          },
+          {
+            "rot": -0.5,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": -0.3,
+            "t": 0
+          },
+          {
+            "rot": -0.9,
+            "t": 0.5
+          },
+          {
+            "rot": -0.3,
+            "t": 1
+          }
+        ],
+        "tay_trai_duoi": [
+          {
+            "rot": -0.5,
+            "t": 0
+          },
+          {
+            "rot": -1.1,
+            "t": 0.5
+          },
+          {
+            "rot": -0.5,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": 0.3,
+            "t": 0
+          },
+          {
+            "rot": 0.9,
+            "t": 0.5
+          },
+          {
+            "rot": 0.3,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dy": 0,
+            "rot": 0,
+            "sx": 1,
+            "t": 0
+          },
+          {
+            "dy": 0.1,
+            "rot": 0.08,
+            "sx": 1.05,
+            "t": 0.5
+          },
+          {
+            "dy": 0,
+            "rot": 0,
+            "sx": 1,
+            "t": 1
+          }
+        ],
+        "toc": [
+          {
+            "rot": -0.1,
+            "t": 0
+          },
+          {
+            "dy": -0.08,
+            "rot": 0.3,
+            "t": 0.5
+          },
+          {
+            "rot": -0.1,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "die": {
+      "desc": "Chết: ngã xuống, mờ dần",
+      "parts": {
+        "chan_phai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": -0.2,
+            "t": 1
+          }
+        ],
+        "chan_trai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.2,
+            "t": 1
+          }
+        ],
+        "dau": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.4,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": -1.2,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 1.2,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dy": 0,
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "dy": 0.9,
+            "rot": 1.4,
+            "t": 0.6
+          },
+          {
+            "dy": 1.0,
+            "rot": 1.57,
+            "t": 1
+          }
+        ],
+        "toc": [
+          {
+            "dy": 0,
+            "t": 0
+          },
+          {
+            "dy": 0.3,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "hit": {
+      "desc": "Bị đánh: giật lùi, nghiêng người",
+      "parts": {
+        "dau": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": -0.3,
+            "t": 0.3
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": -0.7,
+            "t": 0.3
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.7,
+            "t": 0.3
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dx": 0,
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "dx": -0.2,
+            "rot": -0.25,
+            "t": 0.3
+          },
+          {
+            "dx": 0,
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "toc": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": -0.25,
+            "t": 0.3
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "idle": {
+      "desc": "Đứng yên: thở nhẹ, tóc bay",
+      "loop": true,
+      "parts": {
+        "ao": [
+          {
+            "rot": -0.02,
+            "t": 0
+          },
+          {
+            "rot": 0.02,
+            "t": 0.5
+          },
+          {
+            "rot": -0.02,
+            "t": 1
+          }
+        ],
+        "dau": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.03,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": -0.05,
+            "t": 0
+          },
+          {
+            "rot": 0.05,
+            "t": 0.5
+          },
+          {
+            "rot": -0.05,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": 0.05,
+            "t": 0
+          },
+          {
+            "rot": -0.05,
+            "t": 0.5
+          },
+          {
+            "rot": 0.05,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "sy": 1,
+            "t": 0
+          },
+          {
+            "sy": 1.022,
+            "t": 0.5
+          },
+          {
+            "sy": 1,
+            "t": 1
+          }
+        ],
+        "toc": [
+          {
+            "rot": -0.04,
+            "t": 0
+          },
+          {
+            "rot": 0.04,
+            "t": 0.5
+          },
+          {
+            "rot": -0.04,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "jump": {
+      "desc": "Nhảy: co chân, tay giơ",
+      "parts": {
+        "ao": [
+          {
+            "dy": 0,
+            "t": 0
+          },
+          {
+            "dy": -0.1,
+            "t": 0.5
+          },
+          {
+            "dy": 0,
+            "t": 1
+          }
+        ],
+        "chan_phai_duoi": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 1.0,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "chan_phai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.7,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "chan_trai_duoi": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 1.1,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "chan_trai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 0.9,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": -1.4,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": 0,
+            "t": 0
+          },
+          {
+            "rot": 1.4,
+            "t": 0.5
+          },
+          {
+            "rot": 0,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dy": 0,
+            "t": 0
+          },
+          {
+            "dy": -0.35,
+            "t": 0.5
+          },
+          {
+            "dy": 0,
+            "t": 1
+          }
+        ],
+        "toc": [
+          {
+            "dy": 0,
+            "t": 0
+          },
+          {
+            "dy": -0.15,
+            "t": 0.5
+          },
+          {
+            "dy": 0,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "run": {
+      "desc": "Chạy: bước nhanh, thân nghiêng trước, tóc bay mạnh",
+      "loop": true,
+      "parts": {
+        "ao": [
+          {
+            "rot": -0.2,
+            "t": 0
+          },
+          {
+            "rot": -0.12,
+            "t": 0.5
+          },
+          {
+            "rot": -0.2,
+            "t": 1
+          }
+        ],
+        "chan_phai_duoi": [
+          {
+            "rot": 0.2,
+            "t": 0
+          },
+          {
+            "rot": 0.4,
+            "t": 0.25
+          },
+          {
+            "rot": 0.2,
+            "t": 0.5
+          },
+          {
+            "rot": 1.0,
+            "t": 0.75
+          },
+          {
+            "rot": 0.2,
+            "t": 1
+          }
+        ],
+        "chan_phai_tren": [
+          {
+            "rot": -0.9,
+            "t": 0
+          },
+          {
+            "rot": 0.9,
+            "t": 0.5
+          },
+          {
+            "rot": -0.9,
+            "t": 1
+          }
+        ],
+        "chan_trai_duoi": [
+          {
+            "rot": 0.2,
+            "t": 0
+          },
+          {
+            "rot": 1.0,
+            "t": 0.25
+          },
+          {
+            "rot": 0.2,
+            "t": 0.5
+          },
+          {
+            "rot": 0.4,
+            "t": 0.75
+          },
+          {
+            "rot": 0.2,
+            "t": 1
+          }
+        ],
+        "chan_trai_tren": [
+          {
+            "rot": 0.9,
+            "t": 0
+          },
+          {
+            "rot": -0.9,
+            "t": 0.5
+          },
+          {
+            "rot": 0.9,
+            "t": 1
+          }
+        ],
+        "dau": [
+          {
+            "rot": -0.08,
+            "t": 0
+          },
+          {
+            "rot": -0.08,
+            "t": 1
+          }
+        ],
+        "tay_phai_duoi": [
+          {
+            "rot": -0.6,
+            "t": 0
+          },
+          {
+            "rot": -0.6,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": 0.8,
+            "t": 0
+          },
+          {
+            "rot": -0.8,
+            "t": 0.5
+          },
+          {
+            "rot": 0.8,
+            "t": 1
+          }
+        ],
+        "tay_trai_duoi": [
+          {
+            "rot": -0.6,
+            "t": 0
+          },
+          {
+            "rot": -0.6,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": -0.8,
+            "t": 0
+          },
+          {
+            "rot": 0.8,
+            "t": 0.5
+          },
+          {
+            "rot": -0.8,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dy": -0.05,
+            "rot": 0.12,
+            "t": 0
+          },
+          {
+            "dy": -0.1,
+            "rot": 0.12,
+            "t": 0.5
+          },
+          {
+            "dy": -0.05,
+            "rot": 0.12,
+            "t": 1
+          }
+        ],
+        "toc": [
+          {
+            "dx": -0.1,
+            "rot": -0.35,
+            "t": 0
+          },
+          {
+            "dx": -0.08,
+            "rot": -0.25,
+            "t": 0.5
+          },
+          {
+            "dx": -0.1,
+            "rot": -0.35,
+            "t": 1
+          }
+        ]
+      }
+    },
+    "walk": {
+      "desc": "Đi bộ: chân bước xen kẽ, tay đung đưa, thân nhún",
+      "loop": true,
+      "parts": {
+        "ao": [
+          {
+            "rot": -0.05,
+            "t": 0
+          },
+          {
+            "rot": 0.05,
+            "t": 0.5
+          },
+          {
+            "rot": -0.05,
+            "t": 1
+          }
+        ],
+        "chan_phai_duoi": [
+          {
+            "rot": 0.1,
+            "t": 0
+          },
+          {
+            "rot": 0.2,
+            "t": 0.25
+          },
+          {
+            "rot": 0.1,
+            "t": 0.5
+          },
+          {
+            "rot": 0.6,
+            "t": 0.75
+          },
+          {
+            "rot": 0.1,
+            "t": 1
+          }
+        ],
+        "chan_phai_tren": [
+          {
+            "rot": -0.5,
+            "t": 0
+          },
+          {
+            "rot": 0.5,
+            "t": 0.5
+          },
+          {
+            "rot": -0.5,
+            "t": 1
+          }
+        ],
+        "chan_trai_duoi": [
+          {
+            "rot": 0.1,
+            "t": 0
+          },
+          {
+            "rot": 0.6,
+            "t": 0.25
+          },
+          {
+            "rot": 0.1,
+            "t": 0.5
+          },
+          {
+            "rot": 0.2,
+            "t": 0.75
+          },
+          {
+            "rot": 0.1,
+            "t": 1
+          }
+        ],
+        "chan_trai_tren": [
+          {
+            "rot": 0.5,
+            "t": 0
+          },
+          {
+            "rot": -0.5,
+            "t": 0.5
+          },
+          {
+            "rot": 0.5,
+            "t": 1
+          }
+        ],
+        "dau": [
+          {
+            "dy": 0,
+            "t": 0
+          },
+          {
+            "dy": -0.03,
+            "t": 0.5
+          },
+          {
+            "dy": 0,
+            "t": 1
+          }
+        ],
+        "tay_phai_tren": [
+          {
+            "rot": 0.4,
+            "t": 0
+          },
+          {
+            "rot": -0.4,
+            "t": 0.5
+          },
+          {
+            "rot": 0.4,
+            "t": 1
+          }
+        ],
+        "tay_trai_tren": [
+          {
+            "rot": -0.4,
+            "t": 0
+          },
+          {
+            "rot": 0.4,
+            "t": 0.5
+          },
+          {
+            "rot": -0.4,
+            "t": 1
+          }
+        ],
+        "than": [
+          {
+            "dy": 0,
+            "t": 0
+          },
+          {
+            "dy": -0.05,
+            "t": 0.25
+          },
+          {
+            "dy": 0,
+            "t": 0.5
+          },
+          {
+            "dy": -0.05,
+            "t": 0.75
+          },
+          {
+            "dy": 0,
+            "t": 1
+          }
+        ],
+        "toc": [
+          {
+            "rot": -0.08,
+            "t": 0
+          },
+          {
+            "rot": 0.08,
+            "t": 0.5
+          },
+          {
+            "rot": -0.08,
+            "t": 1
+          }
+        ]
+      }
+    }
+  },
+  "assets": "assets/charparts/",
+  "description": "Skeletal rig cho nhân vật chibi tu tiên — Bui 2026-10-18",
+  "parts": {
+    "ao": {
+      "anchor": [
+        0,
+        -1.8
+      ],
+      "img": "assets/charparts/nam_ao.png",
+      "pivot": [
+        0.5,
+        0.9
+      ],
+      "z": 7,
+      "nativeScale": 96
+    },
+    "chan_phai_duoi": {
+      "anchor": [
+        0.18,
+        -0.55
+      ],
+      "img": "assets/charparts/nam_chan_phai_duoi.png",
+      "pivot": [
+        0.5,
+        0.08
+      ],
+      "z": 2,
+      "nativeScale": 96
+    },
+    "chan_phai_tren": {
+      "anchor": [
+        0.18,
+        -1.05
+      ],
+      "img": "assets/charparts/nam_chan_phai_tren.png",
+      "pivot": [
+        0.5,
+        0.92
+      ],
+      "z": 4,
+      "nativeScale": 96
+    },
+    "chan_trai_duoi": {
+      "anchor": [
+        -0.18,
+        -0.55
+      ],
+      "img": "assets/charparts/nam_chan_trai_duoi.png",
+      "pivot": [
+        0.5,
+        0.08
+      ],
+      "z": 1,
+      "nativeScale": 96
+    },
+    "chan_trai_tren": {
+      "anchor": [
+        -0.18,
+        -1.05
+      ],
+      "img": "assets/charparts/nam_chan_trai_tren.png",
+      "pivot": [
+        0.5,
+        0.92
+      ],
+      "z": 3,
+      "nativeScale": 96
+    },
+    "co": {
+      "anchor": [
+        0,
+        -1.85
+      ],
+      "img": "assets/charparts/nam_co.png",
+      "pivot": [
+        0.5,
+        0.9
+      ],
+      "z": 10,
+      "nativeScale": 96
+    },
+    "dau": {
+      "anchor": [
+        0,
+        -2.25
+      ],
+      "img": "assets/charparts/nam_dau.png",
+      "pivot": [
+        0.5,
+        0.88
+      ],
+      "z": 11,
+      "nativeScale": 96
+    },
+    "quan": {
+      "anchor": [
+        0,
+        -1.15
+      ],
+      "img": "assets/charparts/nam_quan.png",
+      "pivot": [
+        0.5,
+        0.9
+      ],
+      "z": 5,
+      "nativeScale": 96
+    },
+    "tay_phai_duoi": {
+      "anchor": [
+        0.42,
+        -1.28
+      ],
+      "img": "assets/charparts/nam_tay_phai_duoi.png",
+      "pivot": [
+        0.5,
+        0.08
+      ],
+      "z": 9,
+      "nativeScale": 96
+    },
+    "tay_phai_tren": {
+      "anchor": [
+        0.32,
+        -1.62
+      ],
+      "img": "assets/charparts/nam_tay_phai_tren.png",
+      "pivot": [
+        0.18,
+        0.12
+      ],
+      "z": 8,
+      "nativeScale": 96
+    },
+    "tay_trai_duoi": {
+      "anchor": [
+        -0.42,
+        -1.28
+      ],
+      "img": "assets/charparts/nam_tay_trai_duoi.png",
+      "pivot": [
+        0.5,
+        0.08
+      ],
+      "z": 9,
+      "nativeScale": 96
+    },
+    "tay_trai_tren": {
+      "anchor": [
+        -0.32,
+        -1.62
+      ],
+      "img": "assets/charparts/nam_tay_trai_tren.png",
+      "pivot": [
+        0.82,
+        0.12
+      ],
+      "z": 8,
+      "nativeScale": 96
+    },
+    "than": {
+      "anchor": [
+        0,
+        -1.75
+      ],
+      "img": "assets/charparts/nam_than.png",
+      "pivot": [
+        0.5,
+        0.95
+      ],
+      "z": 6,
+      "nativeScale": 96
+    },
+    "toc": {
+      "anchor": [
+        0,
+        -2.35
+      ],
+      "img": "assets/charparts/nam_toc.png",
+      "pivot": [
+        0.5,
+        0.75
+      ],
+      "z": 12,
+      "nativeScale": 96
+    }
+  },
+  "unitPx": 48,
+  "version": "1.0"
+}
