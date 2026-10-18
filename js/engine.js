@@ -768,6 +768,13 @@ var Engine = (function () {
     if (player.x !== _ox || player.y !== _oy) {
       player._walkPhase = (player._walkPhase || 0) + dt;
       player._lastMove = Date.now();
+      /* vận tốc cho skeletal anim (run vs walk) */
+      if (dt > 0) {
+        player._vx = (player.x - _ox) / dt;
+        player._vy = (player.y - _oy) / dt;
+      }
+    } else {
+      player._vx = 0; player._vy = 0;
     }
   }
   function _moveToward(tx, ty, dt) {
@@ -920,6 +927,7 @@ var Engine = (function () {
       player.shield -= ab; dmg -= ab;
     }
     player.hp -= dmg;
+    player.hitT = 0.35; /* skeletal anim: bị đánh */
     _dmgNum(player.x, player.y - 26, '-' + dmg, '#ff6b6b');
     _vibrate(50); /* rung khi trúng đòn */
     _audio(function (A) { A.sfx('hit'); });
@@ -1542,6 +1550,7 @@ var Engine = (function () {
     _attackCd -= dt;
     if (player.atkT > 0) player.atkT -= dt;
     if (player.skillT > 0) player.skillT -= dt;
+    if (player.hitT > 0) player.hitT -= dt;
     if (_dashCd > 0) _dashCd -= dt;
 
     /* Lướt */
@@ -1864,6 +1873,28 @@ var Engine = (function () {
     _ctx.beginPath(); _ctx.ellipse(-44 * dir, 8, 14, 3, 0, 0, Math.PI * 2); _ctx.fill();
     _ctx.restore();
   }
+  /* ---------- Skeletal animation: map trạng thái -> tên animation CharAnim ----------
+   * (Bui 2026-10-18: chuyển động chi tiết từng bộ phận) */
+  function _playerAnimName() {
+    /* chết: hp <= 0 (hiếm vì _playerDie hồi sinh ngay, nhưng giữ cho chắc) */
+    if (player.hp <= 0) return "die";
+    /* bị đánh */
+    if (player.hitT > 0) return "hit";
+    /* đánh thường / tung skill: animation theo loại vũ khí */
+    if (player.atkT > 0 || player.skillT > 0) {
+      return "atk_" + _weaponArtKey();
+    }
+    /* di chuyển: run khi bay hoặc chạy nhanh, walk khi đi bộ */
+    var now = Date.now();
+    if (player._lastMove && (now - player._lastMove < 250)) {
+      if (Engine.fly) return "run";
+      /* tốc độ cao -> run */
+      var spd = Math.hypot(player._vx || 0, player._vy || 0);
+      return (spd > 140) ? "run" : "walk";
+    }
+    return "idle";
+  }
+
   function _drawPlayer() {
     var lift = Engine.fly ? -10 : 0;
     var blift = _bridgeLiftAt(player.x, player.y); /* đứng trên cầu: nâng theo mặt cầu */
@@ -1892,8 +1923,45 @@ var Engine = (function () {
         _ctx.globalAlpha = 1;
       }
     }
-    _drawCreature(player, player.x + lunge, player.y + lift - blift, 38, 48, _playerFrame(), '#2fa3a0',
-      { lift: (Engine.fly ? 26 : 0) + blift, shadowY: player.y + 18 - blift, noAutoFlip: true });
+    /* --- Skeletal animation (CharAnim) — Bui 2026-10-18 --- */
+    var _skeletalOk = false;
+    try {
+      if (typeof CharAnim !== "undefined" && CharAnim.draw) {
+        var _st8 = _S();
+        var _gioi = (_st8 && _st8.char && _st8.char.gender === "nu") ? "nu" : "nam";
+        var _anim = _playerAnimName();
+        var _at = Date.now() / 1000;
+        /* equip override: vũ khí/trang bị từ EquipSet nếu có */
+        var _eqOverride = null;
+        try {
+          if (_st8 && _st8.equipSet) {
+            _eqOverride = {};
+            /* map slot EquipSet -> part skeletal */
+            var _slot2part = { ao: "ao", quan: "quan", mu: "toc" };
+            for (var _esk in _slot2part) {
+              var _eid = _st8.equipSet[_esk];
+              if (_eid && typeof EquipSet !== "undefined") {
+                var _edef = EquipSet.getById(_eid);
+                if (_edef && _edef.icon) _eqOverride[_slot2part[_esk]] = _edef.icon;
+              }
+            }
+          }
+        } catch (_ee) {}
+        _skeletalOk = CharAnim.draw(_ctx, player.x + lunge, player.y + lift - blift,
+          _anim, _at, {
+            dir: player.dir || 1,
+            scale: 1,
+            gender: _gioi,
+            equip: _eqOverride,
+            flashRed: (player.hitT > 0) ? 1 : 0
+          });
+      }
+    } catch (_se) { _skeletalOk = false; }
+    if (!_skeletalOk) {
+      /* fallback: sprite full-body cũ */
+      _drawCreature(player, player.x + lunge, player.y + lift - blift, 38, 48, _playerFrame(), '#2fa3a0',
+        { lift: (Engine.fly ? 26 : 0) + blift, shadowY: player.y + 18 - blift, noAutoFlip: true });
+    }
     var ps = _getStats();
     _drawHpBar(player.x, player.y + lift - blift - 32, 40, player.hp / ps.maxHp, false);
   }

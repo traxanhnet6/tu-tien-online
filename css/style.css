@@ -1128,3 +1128,23 @@ body.landscape #hud-leftmid{top:40%}
 /* Đội đồng hành — NV5 Rời Làng (Bui 2026-10-18) */
 .party-strip{margin:8px 0;padding:8px 12px;background:linear-gradient(160deg,#14261a,#0c1a12);border:1px solid #3fae6a;border-radius:10px;font-size:14px;color:#d8f3e2}
 .party-mem{color:#7fe8a8;font-weight:bold}
+
+/* ================= EQUIPSET 9 Ô (Bui 2026-10-18) ================= */
+.eqset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+.eqset-slot { border: 2px solid #c9a227; border-radius: 8px; padding: 8px; text-align: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); cursor: pointer; min-height: 90px; }
+.eqset-slot:active { transform: scale(0.96); }
+.eqset-slot-name { font-size: 12px; color: #c9a227; font-weight: bold; margin-bottom: 4px; }
+.eqset-icon { width: 48px; height: 48px; object-fit: contain; }
+.eqset-item-name { font-size: 11px; color: #fff; margin-top: 4px; }
+.eqset-empty { font-size: 12px; color: #666; padding: 16px 0; }
+.eqset-detail { margin-top: 12px; border-top: 1px solid #c9a227; padding-top: 10px; }
+.eqset-cur { margin: 8px 0; padding: 8px; background: #1a2a1a; border-radius: 6px; }
+.eqset-list { max-height: 400px; overflow-y: auto; }
+.eqset-item { display: flex; align-items: center; gap: 8px; padding: 8px; margin: 6px 0;
+  border: 1px solid #444; border-radius: 6px; background: #1e1e2e; }
+.eqset-item.worn { border-color: #4caf50; background: #1a2a1a; }
+.eqset-item.locked { opacity: 0.5; }
+.eqset-icon-sm { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
+.eqset-item-info { flex: 1; }
+.eqset-realm { font-size: 11px; color: #c9a227; }

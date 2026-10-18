@@ -273,6 +273,27 @@ function getStats() {
       });
     }
   } catch (e) {}
+  /* EquipSet 9 ô mới (Bui 2026-10-18): cộng chỉ số từ đồ EquipSet đang đeo */
+  try {
+    if (typeof EquipSet !== "undefined" && state.equipSet) {
+      EquipSet.SLOTS.forEach(function (sl) {
+        var _eid = state.equipSet[sl.id];
+        if (!_eid) return;
+        var _edef = EquipSet.getById(_eid);
+        if (!_edef || !_edef.stats) return;
+        var _st = _edef.stats;
+        /* đồ hiếm vượt cấp: -50% hiệu quả (theo quy tắc Bui chốt) */
+        var _mult = 1;
+        if (_edef.rarity !== "thuong" && _edef.reqRealm > (state.char.realm || 1)) _mult = 0.5;
+        /* đồ thường vượt cấp: không đeo được -> bỏ qua */
+        if (_edef.rarity === "thuong" && _edef.reqRealm > (state.char.realm || 1)) return;
+        s.atk += Math.round((_st.atk || 0) * _mult);
+        s.def += Math.round((_st.def || 0) * _mult);
+        s.maxHp += Math.round((_st.hp || 0) * _mult);
+        s.maxMp += Math.round((_st.mp || 0) * _mult);
+      });
+    }
+  } catch (e) {}
   s.atk += (state.skills ? state.skills.length : 0) * 2; /* kiếm ý: mỗi skill +2 công */
   /* bị động: Kiếm Tâm / Thể Phách */
   try {
@@ -2662,7 +2683,8 @@ var RENDER = {
   npc: renderNpc, shop: renderShop, breakthrough: renderBreakthrough, donate: renderDonate,
   friends: renderFriends, chat: renderChat, rename: renderRename, gender: renderGender,
   dao: renderDao, refine: renderRefine, death: renderDeath, tower: renderTower,
-  alchemy: renderAlchemy, equipdetail: renderEquipDetail, fragx: renderFragx
+  alchemy: renderAlchemy, equipdetail: renderEquipDetail, fragx: renderFragx,
+  equipset: renderEquipSet
 };
 
 /* ================= THÔNG THIÊN THÁP + SỰ KIỆN NGÀY (tower.js) ================= */
@@ -2859,6 +2881,9 @@ function onPanelClick(e) {
     case "bag-equip": doBagEquip(+i); break;
     case "bag-unlock": doBagUnlock(+i); break;
     case "equip-detail": openPanel("equipdetail", { slot: el.getAttribute("data-slot") }); break;
+    case "eqset-slot": openPanel("equipset", { slot: el.getAttribute("data-v") }); break;
+    case "eqset-equip": doEquipSetEquip(el.getAttribute("data-v"), el.getAttribute("data-i")); break;
+    case "eqset-unequip": doEquipSetUnequip(el.getAttribute("data-v")); break;
     case "spirit-awaken": doSpiritAwaken(); break;
     case "spirit-awaken-pill": doSpiritAwakenPill(); break;
     case "spirit-feed": doSpiritFeed(el.getAttribute("data-food")); break;
@@ -5559,4 +5584,115 @@ if (typeof document !== "undefined") {
       try { onSecretBookClick(act, el); } catch (err) {}
     }
   });
+}
+
+/* ================= TRANG BỊ EQUIPSET 9 Ô (Bui 2026-10-18) =================
+ * Panel riêng cho bộ trang bị 9 ô × 7 cảnh giới từ js/equipset.js.
+ * Người chơi xem và đeo/tháo trang bị. Chỉ số cộng vào getStats().
+ */
+function hasEquipSet() { return typeof EquipSet !== "undefined"; }
+
+function equipSetSlotName(slotId) {
+  if (!hasEquipSet()) return slotId;
+  var sl = EquipSet.SLOTS.filter(function (s) { return s.id === slotId; })[0];
+  return sl ? sl.name : slotId;
+}
+
+function renderEquipSet() {
+  if (!hasEquipSet()) return '<div class="item-desc">EquipSet chưa tải.</div>';
+  var h = '<div class="item-name">⚔️ Bộ Trang Bị Tu Tiên</div>';
+  h += '<div class="item-desc">9 ô trang bị × 7 cảnh giới. Chạm vào ô để xem và đeo trang bị.</div>';
+  /* lưới 3x3 */
+  h += '<div class="eqset-grid">';
+  EquipSet.SLOTS.forEach(function (sl) {
+    var eid = state.equipSet ? state.equipSet[sl.id] : null;
+    var edef = eid ? EquipSet.getById(eid) : null;
+    h += '<div class="eqset-slot" data-act="eqset-slot" data-v="' + sl.id + '">';
+    h += '<div class="eqset-slot-name">' + esc(sl.name) + '</div>';
+    if (edef) {
+      h += '<img class="eqset-icon" src="' + esc(edef.icon) + '" alt="" onerror="this.style.display=\'none\'">';
+      h += '<div class="eqset-item-name">' + esc(edef.name) + '</div>';
+    } else {
+      h += '<div class="eqset-empty">— Trống —</div>';
+    }
+    h += '</div>';
+  });
+  h += '</div>';
+  /* chi tiết slot đang chọn */
+  var selSlot = (panelArg && panelArg.slot) || null;
+  if (selSlot) {
+    h += renderEquipSetSlotDetail(selSlot);
+  }
+  return h;
+}
+
+function renderEquipSetSlotDetail(slotId) {
+  var h = '<div class="eqset-detail">';
+  h += '<div class="item-name">📦 ' + esc(equipSetSlotName(slotId)) + '</div>';
+  var curId = state.equipSet ? state.equipSet[slotId] : null;
+  /* đồ đang đeo */
+  if (curId) {
+    var cur = EquipSet.getById(curId);
+    if (cur) {
+      h += '<div class="eqset-cur">Đang đeo: <b>' + esc(cur.name) + '</b> ';
+      h += '<button class="mini" data-act="eqset-unequip" data-v="' + slotId + '">Tháo</button></div>';
+    }
+  }
+  /* danh sách đồ có thể đeo */
+  var items = EquipSet.forSlot(slotId);
+  var realm = (state.char && state.char.realm) || 1;
+  h += '<div class="eqset-list">';
+  items.forEach(function (it) {
+    var canWear = (it.rarity === "thuong") ? (it.reqRealm <= realm) : true;
+    var worn = (curId === it.id);
+    h += '<div class="eqset-item' + (worn ? " worn" : "") + (canWear ? "" : " locked") + '">';
+    h += '<img class="eqset-icon-sm" src="' + esc(it.icon) + '" alt="" onerror="this.style.display=\'none\'">';
+    h += '<div class="eqset-item-info">';
+    h += '<div><b>' + esc(it.name) + '</b> <span class="eqset-realm">' + esc(EquipSet.REALMS[it.reqRealm].name) + '</span></div>';
+    h += '<div class="item-desc">' + esc(it.desc) + '</div>';
+    h += '<div class="item-desc">⚔️' + it.stats.atk + ' 🛡️' + it.stats.def + ' ❤️' + it.stats.hp + ' 🔷' + it.stats.mp + ' 👟' + it.stats.spd + '</div>';
+    h += '</div>';
+    if (!worn && canWear) {
+      h += '<button class="mini" data-act="eqset-equip" data-v="' + slotId + '" data-i="' + it.id + '">Đeo</button>';
+    } else if (!canWear) {
+      h += '<span class="item-desc">🔒 Chưa đủ cảnh giới</span>';
+    } else {
+      h += '<span class="item-desc">✓ Đang đeo</span>';
+    }
+    h += '</div>';
+  });
+  h += '</div></div>';
+  return h;
+}
+
+function doEquipSetEquip(slotId, itemId) {
+  if (!hasEquipSet()) return;
+  var it = EquipSet.getById(itemId);
+  if (!it || it.slot !== slotId) return;
+  var realm = (state.char && state.char.realm) || 1;
+  /* đồ thường vượt cấp không đeo được */
+  if (it.rarity === "thuong" && it.reqRealm > realm) {
+    toast("🔒 " + it.name + " yêu cầu cảnh giới " + EquipSet.REALMS[it.reqRealm].name);
+    return;
+  }
+  if (!state.equipSet) state.equipSet = {};
+  state.equipSet[slotId] = itemId;
+  /* đồ hiếm vượt cấp: cảnh báo -50% hiệu quả */
+  if (it.rarity !== "thuong" && it.reqRealm > realm) {
+    toast("⚠️ " + it.name + " vượt cấp: chỉ phát huy 50% hiệu quả, tốn linh lực ×2");
+  } else {
+    toast("✅ Đã đeo " + it.name);
+  }
+  sfx("equip");
+  saveGame(state);
+  renderPanel();
+}
+
+function doEquipSetUnequip(slotId) {
+  if (!state.equipSet) return;
+  state.equipSet[slotId] = null;
+  toast("Đã tháo trang bị");
+  sfx("click");
+  saveGame(state);
+  renderPanel();
 }

@@ -264,6 +264,8 @@ function migrateState(state) {
     state.equip = ne;
   }
   if (!state.equip) state.equip = { vukhi: null, phapbao: null, phihanh: null, giap: null, huanh: null, phapboi: null, yphuc: null, hanhngoa: null, linhgioi: null };
+  /* EquipSet 9 ô mới (Bui 2026-10-18): vukhi/ao/quan/giay/mu/daychuyen/nhan/phapbao/toaky */
+  if (!state.equipSet) state.equipSet = { vukhi: null, ao: null, quan: null, giay: null, mu: null, daychuyen: null, nhan: null, phapbao: null, toaky: null };
   if (state.enhance && state.enhance.weapon !== undefined) {
     var nh = { vukhi: 0, phapbao: 0, phihanh: 0, giap: 0, huanh: 0, phapboi: 0, yphuc: 0, hanhngoa: 0, linhgioi: 0 };
     if (state.enhance.weapon) nh.vukhi = state.enhance.weapon;

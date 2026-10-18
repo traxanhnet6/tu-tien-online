@@ -120,6 +120,10 @@
       // equipment override: e.g. "mu" (hat) replaces "toc" layer visually
       var src = def.img;
       if (opts.equip && opts.equip[pn]) src = opts.equip[pn];
+      // gender: swap nam_ -> nu_ for female character (Bui 2026-10-18)
+      if (opts.gender === "nu" && src && src.indexOf("nam_") >= 0) {
+        src = src.replace("nam_", "nu_");
+      }
 
       var img = _getImg(src);
       if (!img || !img.complete || !img.naturalWidth) continue;
