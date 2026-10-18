@@ -1,0 +1,168 @@
+{
+ "npc": "npc_su_gia",
+ "canvas": {
+  "w": 1120,
+  "h": 2240
+ },
+ "convention": "tay_trai/tay_phai, chan_trai/chan_phai theo phia nhan vat (nhan vat nhin ra man hinh). z: so thap = ve sau (sau), so cao = ve truoc. pivot: [x,y] theo toa do canvas goc.",
+ "parts": [
+  {
+   "name": "chan_trai",
+   "file": "npc_su_gia_part_chan_trai.png",
+   "rects": [
+    [
+     560,
+     1850,
+     790,
+     2185
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    675,
+    1890
+   ],
+   "pixels": 26326,
+   "note": "Chan trai NV (phai anh), giay den. Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "chan_phai",
+   "file": "npc_su_gia_part_chan_phai.png",
+   "rects": [
+    [
+     310,
+     1850,
+     570,
+     2185
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    450,
+    1890
+   ],
+   "pixels": 28052,
+   "note": "Chan phai NV (trai anh), giay den. Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "phu_kien_kiem",
+   "file": "npc_su_gia_part_phu_kien_kiem.png",
+   "rects": [
+    [
+     200,
+     200,
+     430,
+     530
+    ],
+    [
+     670,
+     1120,
+     990,
+     1930
+    ]
+   ],
+   "z": 1,
+   "pivot": [
+    330,
+    420
+   ],
+   "pixels": 16151,
+   "note": "Kiem deo cheo sau lung (chuoi + vo). z sau than. Pivot chuoi kiem. Rut kiem: truot kiem ra khoi vo."
+  },
+  {
+   "name": "than",
+   "file": "npc_su_gia_part_than.png",
+   "rects": [
+    [
+     170,
+     420,
+     930,
+     1930
+    ]
+   ],
+   "z": 2,
+   "pivot": [
+    550,
+    540
+   ],
+   "pixels": 581083,
+   "note": "Ao trang tu vai den chan. Pivot giua nguc. Cui chao: xoay nhe."
+  },
+  {
+   "name": "tay_trai",
+   "file": "npc_su_gia_part_tay_trai.png",
+   "rects": [
+    [
+     650,
+     670,
+     950,
+     1220
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    790,
+    700
+   ],
+   "pixels": 138109,
+   "note": "Tay trai NV (phai anh), tay ao rong. Pivot vai. Vay tay: xoay quanh vai."
+  },
+  {
+   "name": "tay_phai",
+   "file": "npc_su_gia_part_tay_phai.png",
+   "rects": [
+    [
+     150,
+     670,
+     430,
+     1220
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    280,
+    700
+   ],
+   "pixels": 109941,
+   "note": "Tay phai NV (trai anh), tay ao rong. Pivot vai. Vay tay: xoay quanh vai."
+  },
+  {
+   "name": "dau",
+   "file": "npc_su_gia_part_dau.png",
+   "rects": [
+    [
+     420,
+     150,
+     700,
+     490
+    ]
+   ],
+   "z": 4,
+   "pivot": [
+    535,
+    450
+   ],
+   "pixels": 34474,
+   "note": "Mat + bui toc. Pivot co. Gat/lac dau: xoay quanh co."
+  },
+  {
+   "name": "phu_kien_tram",
+   "file": "npc_su_gia_part_phu_kien_tram.png",
+   "rects": [
+    [
+     300,
+     70,
+     670,
+     310
+    ]
+   ],
+   "z": 5,
+   "pivot": [
+    505,
+    200
+   ],
+   "pixels": 38357,
+   "note": "Tram cai toc ngoc + tua rua. Pivot chan tram. Lac nhe theo dau."
+  }
+ ]
+}

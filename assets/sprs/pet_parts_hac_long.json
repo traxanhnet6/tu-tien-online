@@ -1,0 +1,101 @@
+{
+  "pet": "hac_long",
+  "canvas": {
+    "width": 1600,
+    "height": 1600
+  },
+  "note": "Rong den PET (khac boss Hac Long): DUNG _down.png (khong co webp). Pose serpentine, chi thay 2 tay truoc. Khong co canh trong art. Bong dat da loai.",
+  "parts": {
+    "duoi": {
+      "file": "pet_hac_long_part_duoi.png",
+      "pivot": [
+        867,
+        1401
+      ],
+      "z": 0,
+      "pixels": 618,
+      "variants": {
+        "combat": "pet_hac_long_part_duoi_combat.png",
+        "tinh_anh": "pet_hac_long_part_duoi_tinh_anh.png"
+      }
+    },
+    "than_2": {
+      "file": "pet_hac_long_part_than_2.png",
+      "pivot": [
+        804,
+        1313
+      ],
+      "z": 1,
+      "pixels": 48149,
+      "variants": {
+        "combat": "pet_hac_long_part_than_2_combat.png",
+        "tinh_anh": "pet_hac_long_part_than_2_tinh_anh.png"
+      }
+    },
+    "than_1": {
+      "file": "pet_hac_long_part_than_1.png",
+      "pivot": [
+        777,
+        1244
+      ],
+      "z": 2,
+      "pixels": 74386,
+      "variants": {
+        "combat": "pet_hac_long_part_than_1_combat.png",
+        "tinh_anh": "pet_hac_long_part_than_1_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_hac_long_part_chan_trai_truoc.png",
+      "pivot": [
+        585,
+        963
+      ],
+      "z": 3,
+      "pixels": 30181,
+      "variants": {
+        "combat": "pet_hac_long_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_hac_long_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_hac_long_part_chan_phai_truoc.png",
+      "pivot": [
+        1026,
+        963
+      ],
+      "z": 4,
+      "pixels": 33836,
+      "variants": {
+        "combat": "pet_hac_long_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_hac_long_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "ham_duoi": {
+      "file": "pet_hac_long_part_ham_duoi.png",
+      "pivot": [
+        816,
+        961
+      ],
+      "z": 5,
+      "pixels": 10220,
+      "variants": {
+        "combat": "pet_hac_long_part_ham_duoi_combat.png",
+        "tinh_anh": "pet_hac_long_part_ham_duoi_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_hac_long_part_dau.png",
+      "pivot": [
+        808,
+        902
+      ],
+      "z": 6,
+      "pixels": 849917,
+      "variants": {
+        "combat": "pet_hac_long_part_dau_combat.png",
+        "tinh_anh": "pet_hac_long_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

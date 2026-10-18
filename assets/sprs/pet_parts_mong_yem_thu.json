@@ -1,0 +1,101 @@
+{
+  "pet": "mong_yem_thu",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Thu ac mong, view truoc. duoi bong ben phai than.",
+  "parts": {
+    "duoi": {
+      "file": "pet_mong_yem_thu_part_duoi.png",
+      "pivot": [
+        726,
+        645
+      ],
+      "z": 0,
+      "pixels": 21875,
+      "variants": {
+        "combat": "pet_mong_yem_thu_part_duoi_combat.png",
+        "tinh_anh": "pet_mong_yem_thu_part_duoi_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_mong_yem_thu_part_than.png",
+      "pivot": [
+        508,
+        691
+      ],
+      "z": 1,
+      "pixels": 86743,
+      "variants": {
+        "combat": "pet_mong_yem_thu_part_than_combat.png",
+        "tinh_anh": "pet_mong_yem_thu_part_than_tinh_anh.png"
+      }
+    },
+    "chan_trai_sau": {
+      "file": "pet_mong_yem_thu_part_chan_trai_sau.png",
+      "pivot": [
+        127,
+        450
+      ],
+      "z": 2,
+      "pixels": 69081,
+      "variants": {
+        "combat": "pet_mong_yem_thu_part_chan_trai_sau_combat.png",
+        "tinh_anh": "pet_mong_yem_thu_part_chan_trai_sau_tinh_anh.png"
+      }
+    },
+    "chan_phai_sau": {
+      "file": "pet_mong_yem_thu_part_chan_phai_sau.png",
+      "pivot": [
+        834,
+        562
+      ],
+      "z": 3,
+      "pixels": 61533,
+      "variants": {
+        "combat": "pet_mong_yem_thu_part_chan_phai_sau_combat.png",
+        "tinh_anh": "pet_mong_yem_thu_part_chan_phai_sau_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_mong_yem_thu_part_chan_trai_truoc.png",
+      "pivot": [
+        354,
+        692
+      ],
+      "z": 4,
+      "pixels": 59720,
+      "variants": {
+        "combat": "pet_mong_yem_thu_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_mong_yem_thu_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_mong_yem_thu_part_chan_phai_truoc.png",
+      "pivot": [
+        665,
+        697
+      ],
+      "z": 5,
+      "pixels": 60263,
+      "variants": {
+        "combat": "pet_mong_yem_thu_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_mong_yem_thu_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_mong_yem_thu_part_dau.png",
+      "pivot": [
+        508,
+        516
+      ],
+      "z": 6,
+      "pixels": 220957,
+      "variants": {
+        "combat": "pet_mong_yem_thu_part_dau_combat.png",
+        "tinh_anh": "pet_mong_yem_thu_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

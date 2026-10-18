@@ -1,0 +1,101 @@
+{
+  "pet": "cuu_vi_yeu_ho",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Cao 9 duoi, view truoc. duoi_9 = toan bo cum 9 duoi (1 part, nam sau than).",
+  "parts": {
+    "duoi_9": {
+      "file": "pet_cuu_vi_yeu_ho_part_duoi_9.png",
+      "pivot": [
+        510,
+        683
+      ],
+      "z": 0,
+      "pixels": 241649,
+      "variants": {
+        "combat": "pet_cuu_vi_yeu_ho_part_duoi_9_combat.png",
+        "tinh_anh": "pet_cuu_vi_yeu_ho_part_duoi_9_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_cuu_vi_yeu_ho_part_than.png",
+      "pivot": [
+        510,
+        639
+      ],
+      "z": 1,
+      "pixels": 70928,
+      "variants": {
+        "combat": "pet_cuu_vi_yeu_ho_part_than_combat.png",
+        "tinh_anh": "pet_cuu_vi_yeu_ho_part_than_tinh_anh.png"
+      }
+    },
+    "chan_trai_sau": {
+      "file": "pet_cuu_vi_yeu_ho_part_chan_trai_sau.png",
+      "pivot": [
+        250,
+        632
+      ],
+      "z": 2,
+      "pixels": 29540,
+      "variants": {
+        "combat": "pet_cuu_vi_yeu_ho_part_chan_trai_sau_combat.png",
+        "tinh_anh": "pet_cuu_vi_yeu_ho_part_chan_trai_sau_tinh_anh.png"
+      }
+    },
+    "chan_phai_sau": {
+      "file": "pet_cuu_vi_yeu_ho_part_chan_phai_sau.png",
+      "pivot": [
+        765,
+        632
+      ],
+      "z": 3,
+      "pixels": 31450,
+      "variants": {
+        "combat": "pet_cuu_vi_yeu_ho_part_chan_phai_sau_combat.png",
+        "tinh_anh": "pet_cuu_vi_yeu_ho_part_chan_phai_sau_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_cuu_vi_yeu_ho_part_chan_trai_truoc.png",
+      "pivot": [
+        350,
+        672
+      ],
+      "z": 4,
+      "pixels": 45670,
+      "variants": {
+        "combat": "pet_cuu_vi_yeu_ho_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_cuu_vi_yeu_ho_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_cuu_vi_yeu_ho_part_chan_phai_truoc.png",
+      "pivot": [
+        660,
+        672
+      ],
+      "z": 5,
+      "pixels": 40312,
+      "variants": {
+        "combat": "pet_cuu_vi_yeu_ho_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_cuu_vi_yeu_ho_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_cuu_vi_yeu_ho_part_dau.png",
+      "pivot": [
+        510,
+        499
+      ],
+      "z": 6,
+      "pixels": 198471,
+      "variants": {
+        "combat": "pet_cuu_vi_yeu_ho_part_dau_combat.png",
+        "tinh_anh": "pet_cuu_vi_yeu_ho_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

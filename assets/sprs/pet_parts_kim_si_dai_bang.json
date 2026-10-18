@@ -1,0 +1,88 @@
+{
+  "pet": "kim_si_dai_bang",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Dai bang vang, view truoc, canh xoe. chan = 1 part gom 2 chan. duoi = cum long duoi nhon giua 2 chan.",
+  "parts": {
+    "duoi": {
+      "file": "pet_kim_si_dai_bang_part_duoi.png",
+      "pivot": [
+        518,
+        705
+      ],
+      "z": 0,
+      "pixels": 13231,
+      "variants": {
+        "combat": "pet_kim_si_dai_bang_part_duoi_combat.png",
+        "tinh_anh": "pet_kim_si_dai_bang_part_duoi_tinh_anh.png"
+      }
+    },
+    "canh_trai": {
+      "file": "pet_kim_si_dai_bang_part_canh_trai.png",
+      "pivot": [
+        309,
+        536
+      ],
+      "z": 1,
+      "pixels": 177999,
+      "variants": {
+        "combat": "pet_kim_si_dai_bang_part_canh_trai_combat.png",
+        "tinh_anh": "pet_kim_si_dai_bang_part_canh_trai_tinh_anh.png"
+      }
+    },
+    "canh_phai": {
+      "file": "pet_kim_si_dai_bang_part_canh_phai.png",
+      "pivot": [
+        718,
+        544
+      ],
+      "z": 2,
+      "pixels": 189710,
+      "variants": {
+        "combat": "pet_kim_si_dai_bang_part_canh_phai_combat.png",
+        "tinh_anh": "pet_kim_si_dai_bang_part_canh_phai_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_kim_si_dai_bang_part_than.png",
+      "pivot": [
+        510,
+        595
+      ],
+      "z": 3,
+      "pixels": 62909,
+      "variants": {
+        "combat": "pet_kim_si_dai_bang_part_than_combat.png",
+        "tinh_anh": "pet_kim_si_dai_bang_part_than_tinh_anh.png"
+      }
+    },
+    "chan": {
+      "file": "pet_kim_si_dai_bang_part_chan.png",
+      "pivot": [
+        515,
+        702
+      ],
+      "z": 4,
+      "pixels": 143940,
+      "variants": {
+        "combat": "pet_kim_si_dai_bang_part_chan_combat.png",
+        "tinh_anh": "pet_kim_si_dai_bang_part_chan_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_kim_si_dai_bang_part_dau.png",
+      "pivot": [
+        515,
+        467
+      ],
+      "z": 5,
+      "pixels": 122469,
+      "variants": {
+        "combat": "pet_kim_si_dai_bang_part_dau_combat.png",
+        "tinh_anh": "pet_kim_si_dai_bang_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

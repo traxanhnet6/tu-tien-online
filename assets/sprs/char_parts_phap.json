@@ -1,0 +1,121 @@
+{
+  "canvas": {
+    "w": 1600,
+    "h": 1600
+  },
+  "source": "media-generation-char-part-phap-tpose-0-7b1e9c0f-e4e4-4c66-a8de-c3d65135d4ed.webp",
+  "parts": {
+    "chantrai_tren": {
+      "file": "char_part_phap_chantrai_tren.png",
+      "pivot": [
+        690,
+        1010
+      ],
+      "z": 0
+    },
+    "chanphai_tren": {
+      "file": "char_part_phap_chanphai_tren.png",
+      "pivot": [
+        890,
+        1010
+      ],
+      "z": 1
+    },
+    "chantrai_duoi": {
+      "file": "char_part_phap_chantrai_duoi.png",
+      "pivot": [
+        690,
+        1230
+      ],
+      "z": 2
+    },
+    "chanphai_duoi": {
+      "file": "char_part_phap_chanphai_duoi.png",
+      "pivot": [
+        890,
+        1230
+      ],
+      "z": 3
+    },
+    "quan": {
+      "file": "char_part_phap_quan.png",
+      "pivot": [
+        800,
+        1010
+      ],
+      "z": 4
+    },
+    "than": {
+      "file": "char_part_phap_than.png",
+      "pivot": [
+        800,
+        1010
+      ],
+      "z": 5
+    },
+    "ao": {
+      "file": "char_part_phap_ao.png",
+      "pivot": [
+        800,
+        1010
+      ],
+      "z": 6
+    },
+    "taytrai_tren": {
+      "file": "char_part_phap_taytrai_tren.png",
+      "pivot": [
+        514,
+        852
+      ],
+      "z": 7
+    },
+    "tayphai_tren": {
+      "file": "char_part_phap_tayphai_tren.png",
+      "pivot": [
+        1090,
+        853
+      ],
+      "z": 8
+    },
+    "taytrai_duoi": {
+      "file": "char_part_phap_taytrai_duoi.png",
+      "pivot": [
+        456,
+        1012
+      ],
+      "z": 9
+    },
+    "tayphai_duoi": {
+      "file": "char_part_phap_tayphai_duoi.png",
+      "pivot": [
+        1148,
+        1013
+      ],
+      "z": 10
+    },
+    "dau": {
+      "file": "char_part_phap_dau.png",
+      "pivot": [
+        800,
+        780
+      ],
+      "z": 11
+    },
+    "toc": {
+      "file": "char_part_phap_toc.png",
+      "pivot": [
+        800,
+        780
+      ],
+      "z": 12
+    },
+    "vukhi": {
+      "file": "char_part_phap_vukhi.png",
+      "pivot": [
+        312,
+        998
+      ],
+      "z": 13
+    }
+  }
+}

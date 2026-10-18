@@ -1,0 +1,101 @@
+{
+  "pet": "thanh_phong_lang",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "soi gio, trai/phai theo goc nhin",
+  "parts": {
+    "duoi": {
+      "file": "pet_thanh_phong_lang_part_duoi.png",
+      "pivot": [
+        731,
+        711
+      ],
+      "z": 0,
+      "pixels": 45374,
+      "variants": {
+        "combat": "pet_thanh_phong_lang_part_duoi_combat.png",
+        "tinh_anh": "pet_thanh_phong_lang_part_duoi_tinh_anh.png"
+      }
+    },
+    "chan_sau_trai": {
+      "file": "pet_thanh_phong_lang_part_chan_sau_trai.png",
+      "pivot": [
+        304,
+        697
+      ],
+      "z": 1,
+      "pixels": 8608,
+      "variants": {
+        "combat": "pet_thanh_phong_lang_part_chan_sau_trai_combat.png",
+        "tinh_anh": "pet_thanh_phong_lang_part_chan_sau_trai_tinh_anh.png"
+      }
+    },
+    "chan_sau_phai": {
+      "file": "pet_thanh_phong_lang_part_chan_sau_phai.png",
+      "pivot": [
+        651,
+        697
+      ],
+      "z": 2,
+      "pixels": 10672,
+      "variants": {
+        "combat": "pet_thanh_phong_lang_part_chan_sau_phai_combat.png",
+        "tinh_anh": "pet_thanh_phong_lang_part_chan_sau_phai_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_thanh_phong_lang_part_than.png",
+      "pivot": [
+        506,
+        578
+      ],
+      "z": 3,
+      "pixels": 87287,
+      "variants": {
+        "combat": "pet_thanh_phong_lang_part_than_combat.png",
+        "tinh_anh": "pet_thanh_phong_lang_part_than_tinh_anh.png"
+      }
+    },
+    "chan_truoc_trai": {
+      "file": "pet_thanh_phong_lang_part_chan_truoc_trai.png",
+      "pivot": [
+        400,
+        677
+      ],
+      "z": 4,
+      "pixels": 32296,
+      "variants": {
+        "combat": "pet_thanh_phong_lang_part_chan_truoc_trai_combat.png",
+        "tinh_anh": "pet_thanh_phong_lang_part_chan_truoc_trai_tinh_anh.png"
+      }
+    },
+    "chan_truoc_phai": {
+      "file": "pet_thanh_phong_lang_part_chan_truoc_phai.png",
+      "pivot": [
+        560,
+        677
+      ],
+      "z": 5,
+      "pixels": 31813,
+      "variants": {
+        "combat": "pet_thanh_phong_lang_part_chan_truoc_phai_combat.png",
+        "tinh_anh": "pet_thanh_phong_lang_part_chan_truoc_phai_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_thanh_phong_lang_part_dau.png",
+      "pivot": [
+        498,
+        536
+      ],
+      "z": 6,
+      "pixels": 248629,
+      "variants": {
+        "combat": "pet_thanh_phong_lang_part_dau_combat.png",
+        "tinh_anh": "pet_thanh_phong_lang_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

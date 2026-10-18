@@ -1,0 +1,122 @@
+{
+  "target": "pet_thanh_long",
+  "canvas": {
+    "width": 1600,
+    "height": 1600
+  },
+  "source": "pet_thanh_long_down.png",
+  "note": "Thanh Long pet (frontal coiled dragon). ham_duoi = mouth/chin area (closed mouth), claimed before dau. Only 2 clawed feet visible in this pose (no chan_sau). duoi = feathered tail fin. than_2 = lower coil + clouds + lightning bolts + leaves (fallback).",
+  "variants_note": "_combat: red overlay 25% + saturation x1.3; _tinh_anh: gold overlay 25% + brightness x1.1. All variants share the same pivot and z-order.",
+  "parts": {
+    "than_2": {
+      "file": "pet_thanh_long_part_than_2.png",
+      "file_combat": "pet_thanh_long_part_than_2_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_than_2_tinh_anh.png",
+      "pivot": [
+        800,
+        1150
+      ],
+      "z": 0,
+      "pixels": 231599
+    },
+    "chan_truoc_trai": {
+      "file": "pet_thanh_long_part_chan_truoc_trai.png",
+      "file_combat": "pet_thanh_long_part_chan_truoc_trai_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_chan_truoc_trai_tinh_anh.png",
+      "pivot": [
+        555,
+        1200
+      ],
+      "z": 1,
+      "pixels": 30986
+    },
+    "chan_truoc_phai": {
+      "file": "pet_thanh_long_part_chan_truoc_phai.png",
+      "file_combat": "pet_thanh_long_part_chan_truoc_phai_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_chan_truoc_phai_tinh_anh.png",
+      "pivot": [
+        1110,
+        1200
+      ],
+      "z": 2,
+      "pixels": 15270
+    },
+    "duoi": {
+      "file": "pet_thanh_long_part_duoi.png",
+      "file_combat": "pet_thanh_long_part_duoi_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_duoi_tinh_anh.png",
+      "pivot": [
+        1050,
+        1150
+      ],
+      "z": 3,
+      "pixels": 35603
+    },
+    "than_1": {
+      "file": "pet_thanh_long_part_than_1.png",
+      "file_combat": "pet_thanh_long_part_than_1_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_than_1_tinh_anh.png",
+      "pivot": [
+        800,
+        750
+      ],
+      "z": 4,
+      "pixels": 319355
+    },
+    "rau_trai": {
+      "file": "pet_thanh_long_part_rau_trai.png",
+      "file_combat": "pet_thanh_long_part_rau_trai_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_rau_trai_tinh_anh.png",
+      "pivot": [
+        660,
+        400
+      ],
+      "z": 5,
+      "pixels": 56113
+    },
+    "rau_phai": {
+      "file": "pet_thanh_long_part_rau_phai.png",
+      "file_combat": "pet_thanh_long_part_rau_phai_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_rau_phai_tinh_anh.png",
+      "pivot": [
+        940,
+        400
+      ],
+      "z": 6,
+      "pixels": 74272
+    },
+    "dau": {
+      "file": "pet_thanh_long_part_dau.png",
+      "file_combat": "pet_thanh_long_part_dau_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_dau_tinh_anh.png",
+      "pivot": [
+        800,
+        620
+      ],
+      "z": 7,
+      "pixels": 71228
+    },
+    "ham_duoi": {
+      "file": "pet_thanh_long_part_ham_duoi.png",
+      "file_combat": "pet_thanh_long_part_ham_duoi_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_ham_duoi_tinh_anh.png",
+      "pivot": [
+        800,
+        640
+      ],
+      "z": 8,
+      "pixels": 50861
+    },
+    "sung": {
+      "file": "pet_thanh_long_part_sung.png",
+      "file_combat": "pet_thanh_long_part_sung_combat.png",
+      "file_tinh_anh": "pet_thanh_long_part_sung_tinh_anh.png",
+      "pivot": [
+        800,
+        280
+      ],
+      "z": 9,
+      "pixels": 84151
+    }
+  }
+}

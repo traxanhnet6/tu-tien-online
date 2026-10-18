@@ -1,0 +1,187 @@
+{
+ "npc": "npc_lao_dan_duong",
+ "canvas": {
+  "w": 1120,
+  "h": 2240
+ },
+ "convention": "tay_trai/tay_phai, chan_trai/chan_phai theo phia nhan vat (nhan vat nhin ra man hinh). z: so thap = ve sau (sau), so cao = ve truoc. pivot: [x,y] theo toa do canvas goc.",
+ "parts": [
+  {
+   "name": "chan_trai",
+   "file": "npc_lao_dan_duong_part_chan_trai.png",
+   "rects": [
+    [
+     600,
+     1900,
+     860,
+     2160
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    720,
+    1900
+   ],
+   "pixels": 479,
+   "note": "Chan trai NV (phai anh). Pivot hong. Dung cho animation di lai: xoay quanh hong."
+  },
+  {
+   "name": "chan_phai",
+   "file": "npc_lao_dan_duong_part_chan_phai.png",
+   "rects": [
+    [
+     280,
+     1900,
+     590,
+     2160
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    445,
+    1900
+   ],
+   "pixels": 1265,
+   "note": "Chan phai NV (trai anh). Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "than",
+   "file": "npc_lao_dan_duong_part_than.png",
+   "rects": [
+    [
+     230,
+     660,
+     870,
+     2000
+    ],
+    [
+     230,
+     2000,
+     620,
+     2130
+    ]
+   ],
+   "z": 1,
+   "pivot": [
+    560,
+    760
+   ],
+   "pixels": 358935,
+   "note": "Ao dai xam tu vai den chan (rect phu bao vat ao trai dai). Pivot giua nguc. Cui chao: xoay nhe quanh hong/than."
+  },
+  {
+   "name": "phu_kien_gay",
+   "file": "npc_lao_dan_duong_part_phu_kien_gay.png",
+   "rects": [
+    [
+     670,
+     660,
+     1090,
+     2160
+    ]
+   ],
+   "z": 2,
+   "pivot": [
+    775,
+    1010
+   ],
+   "pixels": 205081,
+   "note": "Gay tre + ho lo treo. Pivot diem tay nam. Animation: lac nhe quanh diem nam khi di."
+  },
+  {
+   "name": "tay_trai",
+   "file": "npc_lao_dan_duong_part_tay_trai.png",
+   "rects": [
+    [
+     640,
+     750,
+     920,
+     1250
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    740,
+    790
+   ],
+   "pixels": 102888,
+   "note": "Tay trai NV (phai anh) cam gay. Pivot vai. Vay tay/cam gay: xoay quanh vai."
+  },
+  {
+   "name": "tay_phai",
+   "file": "npc_lao_dan_duong_part_tay_phai.png",
+   "rects": [
+    [
+     90,
+     90,
+     420,
+     840
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    350,
+    780
+   ],
+   "pixels": 24615,
+   "note": "Tay phai NV (trai anh) gio cao cam den long. Pivot vai. Vay chao: xoay quanh vai."
+  },
+  {
+   "name": "dau",
+   "file": "npc_lao_dan_duong_part_dau.png",
+   "rects": [
+    [
+     420,
+     420,
+     710,
+     1080
+    ]
+   ],
+   "z": 4,
+   "pivot": [
+    565,
+    700
+   ],
+   "pixels": 123775,
+   "note": "Mat + rau trang dai. Pivot co. Gat/lac dau: xoay quanh co; rau di theo dau."
+  },
+  {
+   "name": "phu_kien_mu",
+   "file": "npc_lao_dan_duong_part_phu_kien_mu.png",
+   "rects": [
+    [
+     300,
+     270,
+     920,
+     650
+    ]
+   ],
+   "z": 5,
+   "pivot": [
+    575,
+    470
+   ],
+   "pixels": 120380,
+   "note": "Non la. Pivot dinh dau. Nghieng theo dau khi gat."
+  },
+  {
+   "name": "phu_kien_den_long",
+   "file": "npc_lao_dan_duong_part_phu_kien_den_long.png",
+   "rects": [
+    [
+     20,
+     90,
+     360,
+     740
+    ]
+   ],
+   "z": 6,
+   "pivot": [
+    195,
+    175
+   ],
+   "pixels": 139727,
+   "note": "Den long do treo tren tay phai. Pivot diem tay cam. Lac nhe nhu treo day khi di/vay tay."
+  }
+ ]
+}

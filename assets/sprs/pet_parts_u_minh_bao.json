@@ -1,0 +1,101 @@
+{
+  "pet": "u_minh_bao",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Bao den, view truoc. duoi cuon ben phai than.",
+  "parts": {
+    "duoi": {
+      "file": "pet_u_minh_bao_part_duoi.png",
+      "pivot": [
+        805,
+        529
+      ],
+      "z": 0,
+      "pixels": 14091,
+      "variants": {
+        "combat": "pet_u_minh_bao_part_duoi_combat.png",
+        "tinh_anh": "pet_u_minh_bao_part_duoi_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_u_minh_bao_part_than.png",
+      "pivot": [
+        488,
+        654
+      ],
+      "z": 1,
+      "pixels": 104464,
+      "variants": {
+        "combat": "pet_u_minh_bao_part_than_combat.png",
+        "tinh_anh": "pet_u_minh_bao_part_than_tinh_anh.png"
+      }
+    },
+    "chan_trai_sau": {
+      "file": "pet_u_minh_bao_part_chan_trai_sau.png",
+      "pivot": [
+        95,
+        441
+      ],
+      "z": 2,
+      "pixels": 28701,
+      "variants": {
+        "combat": "pet_u_minh_bao_part_chan_trai_sau_combat.png",
+        "tinh_anh": "pet_u_minh_bao_part_chan_trai_sau_tinh_anh.png"
+      }
+    },
+    "chan_phai_sau": {
+      "file": "pet_u_minh_bao_part_chan_phai_sau.png",
+      "pivot": [
+        866,
+        537
+      ],
+      "z": 3,
+      "pixels": 64439,
+      "variants": {
+        "combat": "pet_u_minh_bao_part_chan_phai_sau_combat.png",
+        "tinh_anh": "pet_u_minh_bao_part_chan_phai_sau_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_u_minh_bao_part_chan_trai_truoc.png",
+      "pivot": [
+        244,
+        632
+      ],
+      "z": 4,
+      "pixels": 87206,
+      "variants": {
+        "combat": "pet_u_minh_bao_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_u_minh_bao_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_u_minh_bao_part_chan_phai_truoc.png",
+      "pivot": [
+        665,
+        637
+      ],
+      "z": 5,
+      "pixels": 91365,
+      "variants": {
+        "combat": "pet_u_minh_bao_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_u_minh_bao_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_u_minh_bao_part_dau.png",
+      "pivot": [
+        503,
+        485
+      ],
+      "z": 6,
+      "pixels": 178734,
+      "variants": {
+        "combat": "pet_u_minh_bao_part_dau_combat.png",
+        "tinh_anh": "pet_u_minh_bao_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

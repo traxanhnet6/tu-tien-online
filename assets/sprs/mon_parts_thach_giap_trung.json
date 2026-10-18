@@ -1,0 +1,167 @@
+{
+  "monster": "thach_giap_trung",
+  "source": "mon_thach_giap_trung.png",
+  "canvas": [
+    1600,
+    1600
+  ],
+  "note": "trai/phai theo goc nhin cua quai (quai doi dien nguoi choi): trai = nua phai cua anh (x lon), phai = nua trai cua anh (x nho)",
+  "parts": {
+    "chan_phai_1": {
+      "file": "mon_part_thach_giap_trung_chan_phai_1.png",
+      "pivot": [
+        200,
+        930
+      ],
+      "z": 0,
+      "bbox": [
+        67,
+        880,
+        279,
+        1396
+      ]
+    },
+    "chan_phai_2": {
+      "file": "mon_part_thach_giap_trung_chan_phai_2.png",
+      "pivot": [
+        360,
+        935
+      ],
+      "z": 1,
+      "bbox": [
+        258,
+        880,
+        450,
+        1480
+      ]
+    },
+    "chan_phai_3": {
+      "file": "mon_part_thach_giap_trung_chan_phai_3.png",
+      "pivot": [
+        555,
+        1000
+      ],
+      "z": 2,
+      "bbox": [
+        465,
+        897,
+        645,
+        1390
+      ]
+    },
+    "chan_trai_1": {
+      "file": "mon_part_thach_giap_trung_chan_trai_1.png",
+      "pivot": [
+        1400,
+        930
+      ],
+      "z": 3,
+      "bbox": [
+        1321,
+        880,
+        1538,
+        1396
+      ]
+    },
+    "chan_trai_2": {
+      "file": "mon_part_thach_giap_trung_chan_trai_2.png",
+      "pivot": [
+        1240,
+        935
+      ],
+      "z": 4,
+      "bbox": [
+        1150,
+        880,
+        1343,
+        1480
+      ]
+    },
+    "chan_trai_3": {
+      "file": "mon_part_thach_giap_trung_chan_trai_3.png",
+      "pivot": [
+        1045,
+        1000
+      ],
+      "z": 5,
+      "bbox": [
+        955,
+        896,
+        1135,
+        1390
+      ]
+    },
+    "mai_giap": {
+      "file": "mon_part_thach_giap_trung_mai_giap.png",
+      "pivot": [
+        800,
+        700
+      ],
+      "z": 6,
+      "bbox": [
+        52,
+        127,
+        1550,
+        1472
+      ]
+    },
+    "rau": {
+      "file": "mon_part_thach_giap_trung_rau.png",
+      "pivot": [
+        800,
+        350
+      ],
+      "z": 7,
+      "bbox": [
+        633,
+        275,
+        969,
+        362
+      ]
+    },
+    "dau": {
+      "file": "mon_part_thach_giap_trung_dau.png",
+      "pivot": [
+        800,
+        830
+      ],
+      "z": 8,
+      "bbox": [
+        540,
+        319,
+        1060,
+        840
+      ]
+    },
+    "mieng_trong": {
+      "file": "mon_part_thach_giap_trung_mieng_trong.png",
+      "pivot": [
+        800,
+        850
+      ],
+      "z": 9,
+      "bbox": [
+        688,
+        798,
+        913,
+        905
+      ],
+      "note": "khoang mồm há (tối + răng); nằm dưới ham_duoi"
+    },
+    "ham_duoi": {
+      "file": "mon_part_thach_giap_trung_ham_duoi.png",
+      "pivot": [
+        700,
+        800
+      ],
+      "z": 10,
+      "bbox": [
+        688,
+        798,
+        913,
+        905
+      ],
+      "note": "hàm dưới, xoay quanh pivot=khớp hàm (bản lề mép mồm) để há/ngậm"
+    }
+  }
+}
