@@ -11,9 +11,10 @@
 <script>
 /* TT_BUILD: phiên bản build — tăng mỗi lần deploy để tránh cache JS/CSS cũ.
    (Giá trị dùng chung cho toàn trang, khai báo 1 lần duy nhất tại đây.) */
-var TT_BUILD = "20261018-02";
+var TT_BUILD = "20261018-03";
 </script>
 <script>document.write('<link rel="stylesheet" href="css/style.css?v=' + TT_BUILD + '">');</script>
+<script>document.write('<link rel="stylesheet" href="css/hud-tutien2d.css?v=' + TT_BUILD + '">');</script>
 </head>
 <body>
 <div id="app">
@@ -157,20 +158,30 @@ var TT_BUILD = "20261018-02";
       <div id="offline-banner" data-t="hud_offline">Chưa đồng bộ</div>
       <div id="secret-banner" class="hidden"></div>
 
-      <!-- Panel nhân vật trên-trái (chuẩn tutien2d): tên + lực chiến, cảnh giới, 4 thanh + EXP -->
+      <!-- Panel nhân vật trên-trái (chuẩn tutien2d): tên + cảnh giới + kim cương, 4 thanh có nhãn -->
       <div id="char-panel">
         <div class="hud-name"><span id="hud-name">-</span> <span id="hud-power" class="hud-power"></span></div>
         <div class="hud-realm"><span id="hud-realm">-</span></div>
-        <div class="cbar"><div id="hud-hp-fill" class="cfill hp"></div><span id="hud-hp-txt" class="cbar-txt"></span></div>
-        <div class="cbar"><div id="hud-mp-fill" class="cfill mp"></div><span id="hud-mp-txt" class="cbar-txt"></span></div>
-        <div class="cbar"><div id="hud-focus-fill" class="cfill focus"></div><span id="hud-focus-txt" class="cbar-txt"></span></div>
-        <div class="cbar"><div id="hud-shield-fill" class="cfill shield"></div><span id="hud-shield-txt" class="cbar-txt"></span></div>
-        <div class="cbar exp"><div id="hud-exp-fill" class="cfill exp"></div><span id="hud-exp-txt" class="cbar-txt"></span></div>
+        <div class="cbar"><div id="hud-hp-fill" class="cfill hp"></div><span class="cbar-label">Khí Huyết</span><span id="hud-hp-txt" class="cbar-txt"></span></div>
+        <div class="cbar"><div id="hud-mp-fill" class="cfill mp"></div><span class="cbar-label">Linh Lực</span><span id="hud-mp-txt" class="cbar-txt"></span></div>
+        <div class="cbar"><div id="hud-focus-fill" class="cfill focus"></div><span class="cbar-label">Thần Thức</span><span id="hud-focus-txt" class="cbar-txt"></span></div>
+        <div class="cbar"><div id="hud-shield-fill" class="cfill shield"></div><span class="cbar-label">Giáp</span><span id="hud-shield-txt" class="cbar-txt"></span></div>
+        <div class="hud-exp-pct"><span id="hud-exp-txt2">0%</span></div>
         <div class="hud-pills">
           <div class="hud-stones">💎 <span id="hud-stones">0</span></div>
           <div class="hud-kills"><span data-t="hud_kills">Quái hôm nay</span>: <span id="hud-kills">0/10000</span></div>
         </div>
       </div>
+
+      <!-- Hàng nút nhanh dưới panel NV (chuẩn tutien2d): Chiến, Chat, Thư, Tông, Menu + đồng hồ -->
+      <div id="quick-row">
+        <button id="qr-combat" class="qr-btn" title="Kỹ năng">⚔️</button>
+        <button id="qr-chat" class="qr-btn" title="Chat"><img src="assets/ui-icons/hud_chat.png" class="hicon" alt="Chat"><span id="qr-chat-badge" class="badge hidden">0</span></button>
+        <button id="qr-mail" class="qr-btn" title="Thư">✉️</button>
+        <button id="qr-sect" class="qr-btn" title="Tông môn">宗</button>
+        <button id="qr-menu" class="qr-btn" title="Menu">☰</button>
+      </div>
+      <div id="hud-clock"><span id="clock-time">--:--:--</span> <span id="clock-ping">0ms</span></div>
 
       <!-- Thanh boss trên-giữa -->
       <div id="boss-bar" class="hidden">
@@ -179,33 +190,31 @@ var TT_BUILD = "20261018-02";
         <div id="boss-weak" class="boss-weak hidden" data-t="boss_weak">SƠ HỞ +25%</div>
       </div>
 
-      <!-- Trên-phải (chuẩn tutien2d): minimap + tên map + 3 nút tròn nhỏ -->
+      <!-- Trên-phải (chuẩn tutien2d): minimap + tên map -->
       <div class="hud-right">
         <div id="minimap-wrap">
           <canvas id="minimap" width="132" height="132"></canvas>
           <div id="minimap-name">-</div>
         </div>
-        <div id="minimap-btns">
-          <button id="btn-auto" class="rbtn" data-t="btn_auto"><img src="assets/ui-icons/hud_auto.png" class="hicon" alt="Auto"></button>
-          <button id="btn-dash" class="rbtn"><img src="assets/ui-icons/hud_dash.png" class="hicon" alt="Dash"></button>
-          <button id="btn-potion-mp" class="rbtn small"><img src="assets/ui-icons/hud_potion_mp.png" class="hicon" alt="MP"><span class="rbtn-badge" id="badge-mp"></span></button>
-        </div>
       </div>
 
-      <!-- Thanh skill 7 ô cạnh phải (ui.js dựng, CSS xếp 2 cột dọc) -->
+      <!-- Cạnh phải giữa (chuẩn tutien2d): 4 nút tròn dọc Auto / Phi Hành / Đổi / Tọa -->
+      <div id="hud-toggles-right">
+        <button id="btn-auto" class="rbtn tgl-col"><img src="assets/ui-icons/hud_auto.png" class="hicon" alt="Auto"><span class="tgl-label" data-t="btn_auto">Auto</span></button>
+        <button id="btn-fly" class="rbtn tgl-col"><img src="assets/ui-icons/hud_fly.png" class="hicon" alt="Phi Hành"><span class="tgl-label" data-t="btn_fly">Phi Hành</span></button>
+        <button id="btn-dash" class="rbtn tgl-col"><img src="assets/ui-icons/hud_dash.png" class="hicon" alt="Đổi"><span class="tgl-label">Đổi</span></button>
+        <button id="btn-meditate" class="rbtn tgl-col"><span class="meditate-ico">🧘</span><span class="tgl-label">Tọa</span></button>
+      </div>
+
+      <!-- Thanh skill 7 ô giữa-dưới (chuẩn tutien2d, ui.js dựng) -->
       <div id="skillbar"></div>
 
-      <!-- Cụm nút tròn dưới-phải (chuẩn tutien2d): đánh thường to nhất + skill đặc biệt -->
+      <!-- Dưới-phải (chuẩn tutien2d): nút Tương Tác (?) to + nút đánh + đan dược nhanh phía trên -->
       <div id="round-btns">
-        <button id="btn-fly" class="tgl" data-t="btn_fly"><img src="assets/ui-icons/hud_fly.png" class="hicon" alt=""><span data-t="btn_fly">Ngự Kiếm</span></button>
         <button id="btn-potion-hp" class="rbtn small"><img src="assets/ui-icons/hud_potion_hp.png" class="hicon" alt="HP"><span class="rbtn-badge" id="badge-hp"></span></button>
-        <button id="btn-atk" class="rbtn big"><img src="assets/ui-icons/hud_atk.png" class="hicon" alt="Đánh"></button>
-      </div>
-
-      <!-- Cạnh trái giữa (chuẩn tutien2d): ? + chat -->
-      <div id="hud-leftmid">
-        <button id="btn-interact" class="rbtn"><img src="assets/ui-icons/hud_interact.png" class="hicon" alt="?"></button>
-        <button id="btn-chat" class="tgl"><img src="assets/ui-icons/hud_chat.png" class="hicon" alt="Chat"><span id="chat-badge" class="badge hidden">0</span></button>
+        <button id="btn-potion-mp" class="rbtn small"><img src="assets/ui-icons/hud_potion_mp.png" class="hicon" alt="MP"><span class="rbtn-badge" id="badge-mp"></span></button>
+        <button id="btn-atk" class="rbtn"><img src="assets/ui-icons/hud_atk.png" class="hicon" alt="Đánh"></button>
+        <button id="btn-interact" class="rbtn big"><span class="interact-q">?</span><span class="tgl-label" data-t="btn_interact">Tương Tác</span></button>
       </div>
 
       <!-- Joystick dưới-trái + nút Chạy phía trên -->

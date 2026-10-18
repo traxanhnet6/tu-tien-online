@@ -432,6 +432,8 @@ function beginGame() {
   state.char.roots = createSel.element ? [createSel.element] : []; /* linh căn đã khai mở (taycot.js) */
   state.char.cotPham = null; /* phẩm chất căn cốt — định khi uống Tẩy Cốt Đan đầu tiên */
   state.char.realm = 1; state.char.tier = 1; /* bắt đầu Luyện Khí tầng 1 */
+  /* Luồng vào game mới: nhân vật mới → chiếu cốt truyện "Đêm Máu Làng Phong Diệp" 1 lần */
+  state.flags.story_intro_done = false;
   if (typeof Social !== "undefined") { try { Social.ensureCharId(state); } catch (e) {} }
   var bs = baseStats(1, 1, createSel.sect);
   state.char.hp = bs.maxHp; state.char.mp = bs.maxMp;
@@ -634,6 +636,9 @@ function refreshHUD() {
   setBar("hud-focus", curFocus, 100);
   setBar("hud-shield", curShield, maxShield);
   $("hud-stones").textContent = formatTien(state.stones);
+  /* Đồng hồ + ping (kiểu tutien2d) */
+  var _clk = $("clock-time");
+  if (_clk) { var _d = new Date(); _clk.textContent = ("0"+_d.getHours()).slice(-2)+":"+("0"+_d.getMinutes()).slice(-2)+":"+("0"+_d.getSeconds()).slice(-2); }
   var kc = (state.killDate === todayStr()) ? (state.killCount || 0) : 0;
   $("hud-kills").textContent = kc + "/10000";
   updateBossBar();
@@ -647,6 +652,9 @@ function refreshHUD() {
     var _ch = state.char;
     var _eMax = (typeof expMaxFor === "function") ? expMaxFor(_ch.realm, _ch.tier) : 1;
     setBar("hud-exp", _ch.exp || 0, _eMax);
+    /* % EXP kiểu tutien2d (dưới 4 thanh) */
+    var _expPct = $("hud-exp-txt2");
+    if (_expPct) _expPct.textContent = ((_ch.exp || 0) / _eMax * 100).toFixed(1) + "%";
     var _mnEl = $("minimap-name");
     if (_mnEl) { try { var _mDef = mapDef(curMapId); if (_mDef) _mnEl.textContent = t(_mDef.nameKey); } catch (_e2) {} }
   } catch (_e3) {}
@@ -696,6 +704,11 @@ function syncToggles() {
   $("btn-auto").classList.toggle("on", !!state.auto);
   $("btn-fly").classList.toggle("on", !!state.fly);
   $("btn-run").classList.toggle("on", !!state.run);
+  /* Nút Tọa sáng khi đang thiền */
+  try {
+    var med = (typeof BodyCult !== "undefined" && BodyCult.meditateLeft) ? BodyCult.meditateLeft(state) > 0 : false;
+    $("btn-meditate").classList.toggle("on", !!med);
+  } catch (e) {}
 }
 
 /* hồi máu (đan dược): đồng bộ cả Engine.player và state.char */
@@ -994,7 +1007,7 @@ function copyCharId() {
 
 /* ----- Badge tin nhắn + tick giả lập realtime ----- */
 function updateChatBadge() {
-  var b = $("chat-badge");
+  var b = $("qr-chat-badge") || $("chat-badge");
   if (!b) return;
   var n = (hasSocial() && state) ? Social.totalUnread(state) : 0;
   b.textContent = n > 99 ? "99+" : String(n);
@@ -2765,7 +2778,14 @@ function bindStatic() {
   $("btn-new").onclick = function () { sfx("click"); show("create"); initCreate(); };
   $("btn-checkin").onclick = function () { doCheckin(); };
   $("btn-friends").onclick = function () { sfx("click"); openPanel("friends"); };
-  $("btn-chat").onclick = function () { sfx("click"); openPanel("friends", { tab: "list" }); };
+  /* Nút Chat đã chuyển vào hàng nút nhanh (qr-chat) — giữ tương thích nếu còn btn-chat cũ */
+  var _chatBtn = $("qr-chat") || $("btn-chat");
+  if (_chatBtn) _chatBtn.onclick = function () { sfx("click"); openPanel("friends", { tab: "list" }); };
+  /* Hàng nút nhanh kiểu tutien2d */
+  $("qr-combat").onclick = function () { sfx("click"); openPanel("skill"); };
+  $("qr-mail").onclick = function () { sfx("click"); openPanel("gift"); };
+  $("qr-sect").onclick = function () { sfx("click"); openPanel("sect"); };
+  $("qr-menu").onclick = function () { sfx("click"); openPanel("settings"); };
   $("btn-lang-vi").onclick = function () { setLang("vi"); state.lang = "vi"; saveGame(state); applyI18n(); refreshMenu(); };
   $("btn-lang-en").onclick = function () { setLang("en"); state.lang = "en"; saveGame(state); applyI18n(); refreshMenu(); };
 
@@ -2794,6 +2814,16 @@ function bindStatic() {
     state.run = !state.run;
     if (hasEngine() && Engine.setRun) Engine.setRun(state.run);
     saveGame(state); syncToggles(); sfx("click");
+  };
+  /* Nút Tọa (thiền định) — kiểu tutien2d */
+  $("btn-meditate").onclick = function () {
+    sfx("click");
+    try {
+      if (typeof BodyCult === "undefined" || !BodyCult.meditateStart) { toast(t("coming_soon")); return; }
+      var r = BodyCult.meditateStart(state);
+      if (r && r.ok) { toast(t("bc_meditate_start")); saveGame(state); syncToggles(); }
+      else toast(t("bc_meditating"));
+    } catch (e) { toast(t("coming_soon")); }
   };
   $("btn-interact").onclick = function () {
     if (hasEngine() && Engine.tryInteract) Engine.tryInteract();

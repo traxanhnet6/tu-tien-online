@@ -1,21 +1,26 @@
 /* ============================================================
- * js/story.js — Chuỗi cốt truyện mở đầu + điều phối nhiệm vụ tân thủ
- * (Bui duyệt 2026-10-18)
+ * js/story.js — Cốt truyện mở đầu "Đêm Máu Làng Phong Diệp"
+ * (Bui duyệt 2026-10-18 — luồng vào game mới)
  *
- * - Sau khi tạo nhân vật xong (startGame), hiện overlay cốt truyện
- *   5 đoạn (bỏ qua được), chạy đúng 1 lần (flag tutorial_done).
- * - Xong: đánh dấu tutorial_done + tự nhận q_story_01.
- * - Quest.turnIn: toast thông báo khi chuỗi tự nhận quest tiếp theo
- *   (quest có autoAccept trong data.js).
+ * Luồng mới:
+ * 1. Tạo tài khoản → tạo nhân vật (phàm nhân, không chọn tông)
+ * 2. Đăng nhập lần đầu → chiếu 4 ô truyện tranh (có lồng tiếng)
+ * 3. Xong → spawn tại Làng Phong Diệp (map 0) → tự nhận q_story_21
+ * 4. Chuỗi 7 NV (q_story_21 → 27) → NV7 chọn tông môn → rẽ nhánh
  *
- * Tự bọc (wrap) startGame / Quest.turnIn lúc nạp — KHÔNG sửa ui.js.
+ * - Flag story_intro_done: beginGame() set = false cho nhân vật MỚI.
+ *   shouldShow() check nghiêm ngặt === false → tài khoản cũ
+ *   (story_intro_done là undefined) KHÔNG bị ảnh hưởng.
+ * - markDone(): set story_intro_done = true, nhận q_story_21.
+ *
+ * Tự bọc (wrap) startGame lúc nạp — KHÔNG sửa ui.js.
  * Node: chỉ export logic thuần (không chạm DOM).
  * ============================================================ */
 
 var Story = (function () {
   'use strict';
 
-  var FIRST_QUEST = "q_story_01";
+  var FIRST_QUEST = "q_story_21"; /* NV1 "Lễ Trắc Linh" */
 
   /* node: nạp quest.js khi chạy smoke test (browser: global sẵn) */
   var _SQ = null;
@@ -23,13 +28,53 @@ var Story = (function () {
     try { _SQ = require("./quest.js").Quest; } catch (e) {}
   }
 
-  /* 5 đoạn truyện: {sp: key tên người nói, tx: key nội dung} */
-  var SEGMENTS = [
-    { sp: "story_narrator",       tx: "story_intro_1", voice: "assets/voice/story_open_1.mp3" },
-    { sp: "npc_lao_dan_duong",    tx: "story_intro_2", voice: "assets/voice/story_open_2.mp3" },
-    { sp: "npc_lao_dan_duong",    tx: "story_intro_3", voice: "assets/voice/story_open_3.mp3" },
-    { sp: "npc_lao_dan_duong",    tx: "story_intro_4", voice: "assets/voice/story_open_4.mp3" },
-    { sp: "npc_lao_dan_duong",    tx: "story_intro_5", voice: "assets/voice/story_open_5.mp3" },
+  /* 4 ô truyện: {img, fx, voice, lines: [{sp, tx}]} */
+  var PANELS = [
+    {
+      img: "assets/story/panel1_le_hoi.png",
+      fx: "none",
+      kenburns: "zoomin",
+      voice: "assets/story/intro_p1.mp3",
+      lines: [
+        { sp: "story_narrator",  tx: "intro_p1_l1" },
+        { sp: "npc_truong_lang", tx: "intro_p1_l2" },
+        { sp: "story_you",       tx: "intro_p1_l3" },
+      ],
+    },
+    {
+      img: "assets/story/panel_lang_dem.png",
+      fx: "rainbow",
+      kenburns: "zoomout",
+      voice: "assets/story/intro_p2.mp3",
+      lines: [
+        { sp: "story_narrator",  tx: "intro_p2_l1" },
+        { sp: "story_dan_lang",  tx: "intro_p2_l2" },
+        { sp: "npc_co_tran_tu",  tx: "intro_p2_l3" },
+      ],
+    },
+    {
+      img: "assets/story/panel1_le_hoi.png",
+      fx: "fire",
+      kenburns: "panleft",
+      voice: "assets/story/intro_p3.mp3",
+      lines: [
+        { sp: "story_narrator",  tx: "intro_p3_l1" },
+        { sp: "story_trai_chu",  tx: "intro_p3_l2" },
+        { sp: "story_cha_nuoi",   tx: "intro_p3_l3" },
+        { sp: "story_you",       tx: "intro_p3_l4" },
+      ],
+    },
+    {
+      img: "assets/story/panel_lang_dem.png",
+      fx: "jadeglow",
+      kenburns: "panright",
+      voice: "assets/story/intro_p4.mp3",
+      lines: [
+        { sp: "story_narrator",  tx: "intro_p4_l1" },
+        { sp: "story_giong_co",  tx: "intro_p4_l2" },
+        { sp: "npc_co_tran_tu",  tx: "intro_p4_l3" },
+      ],
+    },
   ];
 
   /* ---------- Lồng tiếng ---------- */
@@ -43,14 +88,23 @@ var Story = (function () {
   function stopVoice() {
     try { if (_audio) { _audio.pause(); _audio = null; } } catch (e) {}
   }
-  function _playVoice(seg) {
+  function _playVoice(panel) {
     stopVoice();
-    if (!seg || !seg.voice || !_voiceOn()) return;
+    if (!panel || !panel.voice || !_voiceOn()) return;
     if (typeof Audio === "undefined") return;
     try {
-      _audio = new Audio(seg.voice);
+      _audio = new Audio(panel.voice);
       _audio.play().catch(function () {});
     } catch (e) {}
+  }
+  function toggleVoice() {
+    var st = _state();
+    if (!st) return true;
+    st.settings = st.settings || {};
+    st.settings.voice = !(st.settings.voice !== false);
+    try { if (typeof saveGame === "function") saveGame(st); } catch (e) {}
+    if (!st.settings.voice) stopVoice();
+    return st.settings.voice;
   }
 
   function _t(key, params) {
@@ -69,72 +123,171 @@ var Story = (function () {
     return null;
   }
 
+  /* Chỉ hiện cho nhân vật MỚI (beginGame set story_intro_done = false).
+     Tài khoản cũ: story_intro_done là undefined → false → không ảnh hưởng. */
   function shouldShow(state) {
-    return !!(state && state.flags && !state.flags.tutorial_done);
+    return !!(state && state.flags && state.flags.story_intro_done === false);
   }
 
-  function segments() { return SEGMENTS.slice(); }
+  function panels() { return PANELS.slice(); }
 
-  /* Đánh dấu xong intro + tự nhận quest đầu chuỗi */
+  /* Đánh dấu xong intro + spawn map 0 + tự nhận quest đầu chuỗi mới */
   function markDone(state) {
     if (!state) return;
     state.flags = state.flags || {};
-    state.flags.tutorial_done = true;
+    state.flags.story_intro_done = true;
+    state.flags.tutorial_done = true; /* tương thích luồng cũ */
+    /* Spawn tại Làng Phong Diệp (map 0) */
+    state.map = state.map || {};
+    state.map.id = 0;
     var Q = _quest();
     if (Q && Q.accept) {
       try { Q.accept(state, FIRST_QUEST); } catch (e) {}
     }
   }
 
-  /* ---------- Overlay DOM (browser only) ---------- */
-  var _overlay = null, _segIdx = 0;
+  /* ---------- Overlay DOM: truyện tranh toàn màn hình (browser only) ---------- */
+  var _overlay = null, _panelIdx = 0, _lineIdx = 0, _typeTimer = null;
 
   function _css() {
     return "" +
-    ".st-backdrop{position:fixed;inset:0;background:rgba(5,8,18,.82);z-index:99990;" +
-    "display:flex;align-items:flex-end;justify-content:center;padding:0 12px 8vh;}" +
-    ".st-box{width:min(640px,94vw);background:linear-gradient(180deg,#2a1f14,#1a130c);" +
-    "border:3px solid #c9a227;border-radius:10px;box-shadow:0 0 40px rgba(201,162,39,.35);" +
-    "padding:18px 20px 16px;color:#f3e6c8;font-family:serif;}" +
-    ".st-title{text-align:center;color:#e9c86a;font-size:20px;letter-spacing:4px;margin-bottom:10px;}" +
-    ".st-speaker{color:#ffd76a;font-weight:bold;margin-bottom:6px;font-size:16px;}" +
-    ".st-text{font-size:16px;line-height:1.7;min-height:84px;}" +
-    ".st-btns{display:flex;justify-content:space-between;margin-top:12px;}" +
-    ".st-btn{background:linear-gradient(180deg,#8a6a1f,#5e4512);color:#ffe9a8;border:2px solid #c9a227;" +
-    "border-radius:8px;padding:8px 22px;font-size:15px;cursor:pointer;font-family:serif;}" +
-    ".st-btn.ghost{background:transparent;color:#bfa76a;border-color:#6b5a2e;}" +
-    ".st-dots{text-align:center;color:#8a744a;margin-top:8px;letter-spacing:6px;font-size:12px;}";
+    ".sb-backdrop{position:fixed;inset:0;background:#000;z-index:99990;overflow:hidden;}" +
+    ".sb-stage{position:absolute;inset:0;overflow:hidden;}" +
+    ".sb-img{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;}" +
+    ".sb-img.kb-zoomin{animation:sbZin 9s ease-in-out infinite alternate;}" +
+    ".sb-img.kb-zoomout{animation:sbZout 9s ease-in-out infinite alternate;}" +
+    ".sb-img.kb-panleft{animation:sbPanL 9s ease-in-out infinite alternate;}" +
+    ".sb-img.kb-panright{animation:sbPanR 9s ease-in-out infinite alternate;}" +
+    "@keyframes sbZin{from{transform:scale(1)}to{transform:scale(1.14)}}" +
+    "@keyframes sbZout{from{transform:scale(1.14)}to{transform:scale(1)}}" +
+    "@keyframes sbPanL{from{transform:scale(1.1) translateX(2%)}to{transform:scale(1.1) translateX(-2%)}}" +
+    "@keyframes sbPanR{from{transform:scale(1.1) translateX(-2%)}to{transform:scale(1.1) translateX(2%)}}" +
+    /* FX: cầu vồng chín màu */
+    ".sb-fx-rainbow{position:absolute;left:50%;top:-10%;width:90px;height:120%;" +
+    "transform:translateX(-50%);pointer-events:none;opacity:.85;" +
+    "background:linear-gradient(90deg,#f00,#f80,#ff0,#0f0,#0ff,#00f,#a0f);" +
+    "filter:blur(14px);animation:sbRainbow 2.4s ease-in-out infinite alternate;}" +
+    "@keyframes sbRainbow{from{opacity:.55;transform:translateX(-50%) scaleX(1)}" +
+    "to{opacity:.95;transform:translateX(-50%) scaleX(1.35)}}" +
+    /* FX: lửa cháy */
+    ".sb-fx-fire{position:absolute;inset:0;pointer-events:none;" +
+    "background:radial-gradient(ellipse at 50% 100%,rgba(255,80,0,.55),rgba(180,0,0,.35) 55%,transparent 75%)," +
+    "linear-gradient(180deg,rgba(120,0,0,.25),transparent 40%);" +
+    "animation:sbFlick 0.7s ease-in-out infinite alternate;mix-blend-mode:screen;}" +
+    "@keyframes sbFlick{from{opacity:.7}to{opacity:1}}" +
+    ".sb-fx-fire::after{content:'';position:absolute;inset:0;" +
+    "background:repeating-linear-gradient(0deg,transparent 0 18px,rgba(255,120,0,.06) 18px 26px);" +
+    "animation:sbRise 1.2s linear infinite;}" +
+    "@keyframes sbRise{from{transform:translateY(26px)}to{transform:translateY(-26px)}}" +
+    /* FX: ngọc bội phát sáng */
+    ".sb-fx-jadeglow{position:absolute;inset:0;pointer-events:none;" +
+    "background:radial-gradient(circle at 50% 62%,rgba(60,255,170,.5),rgba(0,120,80,.18) 35%,transparent 60%)," +
+    "linear-gradient(180deg,rgba(0,10,8,.55),transparent 45%,rgba(0,10,8,.65));" +
+    "animation:sbJade 2.2s ease-in-out infinite alternate;}" +
+    "@keyframes sbJade{from{opacity:.65}to{opacity:1}}" +
+    /* Khung truyện tranh */
+    ".sb-frame{position:absolute;inset:0;border:10px solid #0d0a06;pointer-events:none;z-index:5;}" +
+    ".sb-title{position:absolute;top:14px;left:0;right:0;text-align:center;z-index:6;" +
+    "color:#e9c86a;font-size:22px;letter-spacing:5px;text-shadow:0 2px 8px #000;font-family:serif;pointer-events:none;}" +
+    /* Hộp thoại */
+    ".sb-dialog{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:6;" +
+    "width:min(680px,92vw);background:linear-gradient(180deg,rgba(42,31,20,.96),rgba(26,19,12,.96));" +
+    "border:3px solid #c9a227;border-radius:12px;padding:14px 18px;color:#f3e6c8;" +
+    "box-shadow:0 0 30px rgba(0,0,0,.8);cursor:pointer;}" +
+    ".sb-speaker{color:#ffd76a;font-weight:bold;font-size:16px;margin-bottom:6px;font-family:serif;}" +
+    ".sb-text{font-size:16px;line-height:1.7;min-height:56px;font-family:serif;}" +
+    ".sb-hint{text-align:right;color:#8a744a;font-size:12px;margin-top:6px;}" +
+    /* Nút điều khiển */
+    ".sb-ctrl{position:absolute;top:12px;right:12px;z-index:7;display:flex;gap:8px;}" +
+    ".sb-btn{background:rgba(20,14,8,.85);color:#ffe9a8;border:2px solid #c9a227;" +
+    "border-radius:8px;padding:7px 14px;font-size:14px;cursor:pointer;font-family:serif;}" +
+    ".sb-dots{position:absolute;bottom:8px;left:0;right:0;text-align:center;z-index:6;" +
+    "color:#8a744a;letter-spacing:8px;font-size:13px;pointer-events:none;}" +
+    "@media (max-width:600px){.sb-title{font-size:17px;letter-spacing:3px}.sb-text{font-size:15px}}";
   }
 
   function _ensureCss() {
     if (typeof document === "undefined") return;
-    if (document.getElementById("st-css")) return;
+    if (document.getElementById("sb-css")) return;
     var s = document.createElement("style");
-    s.id = "st-css";
+    s.id = "sb-css";
     s.textContent = _css();
     document.head.appendChild(s);
   }
 
+  function _stopType() {
+    if (_typeTimer) { clearInterval(_typeTimer); _typeTimer = null; }
+  }
+
   function _render() {
     if (!_overlay) return;
-    var seg = SEGMENTS[_segIdx];
-    var last = _segIdx >= SEGMENTS.length - 1;
-    _overlay.querySelector(".st-speaker").textContent = _t(seg.sp);
-    _overlay.querySelector(".st-text").textContent = _t(seg.tx);
-    _overlay.querySelector(".st-next").textContent = _t(last ? "story_begin" : "story_next");
+    var panel = PANELS[_panelIdx];
+    var line = panel.lines[_lineIdx];
+    var lastPanel = _panelIdx >= PANELS.length - 1;
+    var lastLine = _lineIdx >= panel.lines.length - 1;
+
+    /* Ảnh + hiệu ứng */
+    var stage = _overlay.querySelector(".sb-stage");
+    stage.innerHTML =
+      '<img class="sb-img kb-' + panel.kenburns + '" src="' + panel.img + '" alt="">' +
+      (panel.fx !== "none" ? '<div class="sb-fx-' + panel.fx + '"></div>' : "");
+    _overlay.querySelector(".sb-title").textContent = _t("story_title");
+
+    /* Thoại */
+    _overlay.querySelector(".sb-speaker").textContent = _t(line.sp);
+    var textEl = _overlay.querySelector(".sb-text");
+    var full = _t(line.tx);
+    _stopType();
+    /* Hiệu ứng gõ chữ */
+    var i = 0;
+    textEl.textContent = "";
+    _typeTimer = setInterval(function () {
+      i += 3;
+      textEl.textContent = full.slice(0, i);
+      if (i >= full.length) _stopType();
+    }, 24);
+
+    /* Nút tiếp / bắt đầu */
+    _overlay.querySelector(".sb-next").textContent =
+      _t((lastPanel && lastLine) ? "story_begin" : "story_next");
     var dots = "";
-    for (var i = 0; i < SEGMENTS.length; i++) dots += (i === _segIdx ? "●" : "○");
-    _overlay.querySelector(".st-dots").textContent = dots;
-    _playVoice(seg);
+    for (var p = 0; p < PANELS.length; p++) dots += (p === _panelIdx ? "●" : "○");
+    _overlay.querySelector(".sb-dots").textContent = dots;
+
+    /* Lồng tiếng: phát khi sang ô mới */
+    if (_lineIdx === 0) _playVoice(panel);
+  }
+
+  function _advance() {
+    var panel = PANELS[_panelIdx];
+    /* Nếu chữ đang gõ dở → hiện hết chữ */
+    if (_typeTimer) {
+      _stopType();
+      _overlay.querySelector(".sb-text").textContent = _t(panel.lines[_lineIdx].tx);
+      return;
+    }
+    if (_lineIdx < panel.lines.length - 1) {
+      _lineIdx++;
+      _render();
+    } else if (_panelIdx < PANELS.length - 1) {
+      _panelIdx++;
+      _lineIdx = 0;
+      _render();
+    } else {
+      _finish();
+    }
   }
 
   function _finish() {
+    _stopType();
     stopVoice();
     var st = _state();
     if (st) {
       markDone(st);
       try { if (typeof saveGame === "function") saveGame(st); } catch (e) {}
-      try { if (typeof toast === "function") toast(_t("story_next_quest", { n: _t("q_story_01") })); } catch (e) {}
+      try {
+        if (typeof toast === "function") toast(_t("story_next_quest", { n: _t("q_story_21") }));
+      } catch (e) {}
       try { if (typeof sfx === "function") sfx("success"); } catch (e) {}
     }
     if (_overlay && _overlay.parentNode) _overlay.parentNode.removeChild(_overlay);
@@ -147,33 +300,63 @@ var Story = (function () {
     if (!st || !shouldShow(st)) return false;
     if (_overlay) return true;
     _ensureCss();
-    _segIdx = 0;
+    _panelIdx = 0;
+    _lineIdx = 0;
     var back = document.createElement("div");
-    back.className = "st-backdrop";
+    back.className = "sb-backdrop";
     back.innerHTML =
-      '<div class="st-box">' +
-        '<div class="st-title">' + _t("story_title") + '</div>' +
-        '<div class="st-speaker"></div>' +
-        '<div class="st-text"></div>' +
-        '<div class="st-btns">' +
-          '<button class="st-btn ghost st-skip">' + _t("story_skip") + '</button>' +
-          '<button class="st-btn st-next"></button>' +
-        '</div>' +
-        '<div class="st-dots"></div>' +
-      '</div>';
-    back.querySelector(".st-next").addEventListener("click", function () {
-      if (typeof sfx === "function") { try { sfx("click"); } catch (e) {} }
-      if (_segIdx < SEGMENTS.length - 1) { _segIdx++; _render(); }
-      else _finish();
+      '<div class="sb-stage"></div>' +
+      '<div class="sb-frame"></div>' +
+      '<div class="sb-title"></div>' +
+      '<div class="sb-ctrl">' +
+        '<button class="sb-btn sb-mute">🔊</button>' +
+        '<button class="sb-btn sb-skip"></button>' +
+      '</div>' +
+      '<div class="sb-dialog">' +
+        '<div class="sb-speaker"></div>' +
+        '<div class="sb-text"></div>' +
+        '<div class="sb-hint"></div>' +
+      '</div>' +
+      '<div class="sb-dots"></div>';
+    back.querySelector(".sb-skip").textContent = _t("story_skip");
+    back.querySelector(".sb-hint").textContent = _t("story_tap_next");
+    var muteBtn = back.querySelector(".sb-mute");
+    function syncMute() { muteBtn.textContent = _voiceOn() ? "🔊" : "🔇"; }
+    syncMute();
+    muteBtn.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      toggleVoice();
+      syncMute();
+      /* Phát lại lồng tiếng ô hiện tại nếu vừa bật */
+      if (_voiceOn() && _lineIdx === 0) _playVoice(PANELS[_panelIdx]);
     });
-    back.querySelector(".st-skip").addEventListener("click", function () { _finish(); });
+    back.querySelector(".sb-skip").addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      _finish();
+    });
+    back.querySelector(".sb-dialog").addEventListener("click", function () {
+      if (typeof sfx === "function") { try { sfx("click"); } catch (e) {} }
+      _advance();
+    });
+    /* Bấm vào nền cũng chuyển thoại (trừ nút điều khiển) */
+    back.querySelector(".sb-stage").addEventListener("click", function () { _advance(); });
     document.body.appendChild(back);
     _overlay = back;
+    /* Nút "Tiếp" nằm trong hint — thêm nút next vào dialog */
+    var nextBtn = document.createElement("button");
+    nextBtn.className = "sb-btn sb-next";
+    nextBtn.style.cssText = "position:absolute;right:14px;bottom:14px;z-index:7;";
+    nextBtn.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      if (typeof sfx === "function") { try { sfx("click"); } catch (e) {} }
+      _advance();
+    });
+    back.appendChild(nextBtn);
     _render();
     return true;
   }
 
-  /* ---------- Tự bọc startGame + Quest.turnIn (browser only) ---------- */
+  /* ---------- Tự bọc startGame (browser only) ---------- */
   function _wrap() {
     if (typeof document === "undefined") return;
     try {
@@ -211,10 +394,11 @@ var Story = (function () {
 
   return {
     shouldShow: shouldShow,
-    segments: segments,
+    panels: panels,
     markDone: markDone,
     maybeShow: maybeShow,
     stopVoice: stopVoice,
+    toggleVoice: toggleVoice,
     FIRST_QUEST: FIRST_QUEST,
   };
 })();
