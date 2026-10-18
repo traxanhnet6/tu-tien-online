@@ -843,6 +843,7 @@ var Engine = (function () {
     if (rc.crit) { mon.hp -= (rc.dmg - dmg); dmg = rc.dmg; }
     _applyLifesteal(dmg);
     _dmgNum(mon.x, mon.y - 26, (rc.crit ? '✦' : '') + '-' + dmg, rc.crit ? '#ff5252' : '#ffd54f');
+    _vibrate(rc.crit ? [25, 30, 45] : 20); /* rung khi đánh trúng */
     _skillFx(mon.x, mon.y);
     mon.hitT = 0.15;
     /* giật lùi nhẹ theo hướng đòn đánh (boss nặng nên ít bị đẩy) + vệt kiếm quang */
@@ -909,6 +910,7 @@ var Engine = (function () {
     }
     player.hp -= dmg;
     _dmgNum(player.x, player.y - 26, '-' + dmg, '#ff6b6b');
+    _vibrate(50); /* rung khi trúng đòn */
     _audio(function (A) { A.sfx('hit'); });
     if (player.hp <= 0) _playerDie(ps);
     return dmg;
@@ -1594,6 +1596,14 @@ var Engine = (function () {
   }
 
   /* ---------- Hiệu ứng ---------- */
+  function _vibrate(pat) {
+    /* Rung điện thoại theo cài đặt (settings.vibrate) */
+    try {
+      var S = _S();
+      if (S && S.settings && S.settings.vibrate === false) return;
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(pat);
+    } catch (e) {}
+  }
   function _dmgNum(x, y, txt, color) {
     _dmgNums.push({ x: x, y: y, txt: txt, color: color, t: 1 });
     if (_dmgNums.length > 40) _dmgNums.shift();

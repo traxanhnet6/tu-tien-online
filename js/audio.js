@@ -18,6 +18,7 @@ var AudioSys = (function () {
   var _state = null;      // state game (bindState)
   var _musicEl = null;    // HTMLAudioElement nhạc nền
   var _musicName = null;
+  var _lastMusicName = null; /* track cuối để resume khi bật nhạc lại */
   var _noiseBuf = null;
 
   function _musicOn() {
@@ -55,6 +56,7 @@ var AudioSys = (function () {
     if (!_musicOn()) return;
     if (_musicName === name && _musicEl && !_musicEl.paused) return;
     stopMusic();
+    _lastMusicName = name; /* nhớ để resume khi bật nhạc lại */
     if (typeof Audio === 'undefined') return; // node / trình duyệt lạ
     try {
       var a = new Audio('assets/music/' + name + '.mp3');
@@ -225,6 +227,7 @@ var AudioSys = (function () {
   function setMusicOn(b) {
     if (_state && _state.settings) _state.settings.music = !!b;
     if (!b) stopMusic();
+    else if (_lastMusicName) playMusic(_lastMusicName); /* bật lại -> phát ngay */
   }
   function setSfxOn(b) {
     if (_state && _state.settings) _state.settings.sound = !!b;
