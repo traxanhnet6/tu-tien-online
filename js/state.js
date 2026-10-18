@@ -98,7 +98,7 @@ function defaultState() {
     pos: { x: 400, y: 300 },
     auto: false, fly: false, run: false,
     settings: { sound: true, music: true, graphics: "tudong", graphicsManual: null, showPlayers: "all", tapMove: true,
-      vibrate: true,
+      vibrate: true, voice: true,
       display: { fullscreen: false, orientation: "auto" },
       gamepad: { enabled: true, map: null } },
     flags: { taycot_done: false, tutorial_done: false, da_donate: false },
@@ -324,6 +324,7 @@ function migrateState(state) {
   if (!state.settings) state.settings = {};
   if (state.settings.tapMove === undefined) state.settings.tapMove = true; /* save cũ: bật tap-to-move */
   if (state.settings.vibrate === undefined) state.settings.vibrate = true; /* save cũ: bật rung */
+  if (state.settings.voice === undefined) state.settings.voice = true; /* save cũ: bật lồng tiếng */
   if (!state.settings.display) state.settings.display = { fullscreen: false, orientation: "auto" };
   if (!state.settings.gamepad) state.settings.gamepad = { enabled: true, map: null };
   if (!state.flags) state.flags = {};

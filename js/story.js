@@ -25,12 +25,33 @@ var Story = (function () {
 
   /* 5 đoạn truyện: {sp: key tên người nói, tx: key nội dung} */
   var SEGMENTS = [
-    { sp: "story_narrator",       tx: "story_intro_1" },
-    { sp: "npc_lao_dan_duong",    tx: "story_intro_2" },
-    { sp: "npc_lao_dan_duong",    tx: "story_intro_3" },
-    { sp: "npc_lao_dan_duong",    tx: "story_intro_4" },
-    { sp: "npc_lao_dan_duong",    tx: "story_intro_5" },
+    { sp: "story_narrator",       tx: "story_intro_1", voice: "assets/voice/story_open_1.mp3" },
+    { sp: "npc_lao_dan_duong",    tx: "story_intro_2", voice: "assets/voice/story_open_2.mp3" },
+    { sp: "npc_lao_dan_duong",    tx: "story_intro_3", voice: "assets/voice/story_open_3.mp3" },
+    { sp: "npc_lao_dan_duong",    tx: "story_intro_4", voice: "assets/voice/story_open_4.mp3" },
+    { sp: "npc_lao_dan_duong",    tx: "story_intro_5", voice: "assets/voice/story_open_5.mp3" },
   ];
+
+  /* ---------- Lồng tiếng ---------- */
+  var _audio = null;
+  function _voiceOn() {
+    try {
+      var st = _state();
+      return !!(st && st.settings && st.settings.voice !== false);
+    } catch (e) { return true; }
+  }
+  function stopVoice() {
+    try { if (_audio) { _audio.pause(); _audio = null; } } catch (e) {}
+  }
+  function _playVoice(seg) {
+    stopVoice();
+    if (!seg || !seg.voice || !_voiceOn()) return;
+    if (typeof Audio === "undefined") return;
+    try {
+      _audio = new Audio(seg.voice);
+      _audio.play().catch(function () {});
+    } catch (e) {}
+  }
 
   function _t(key, params) {
     if (typeof t === "function") { try { return t(key, params); } catch (e) {} }
@@ -104,9 +125,11 @@ var Story = (function () {
     var dots = "";
     for (var i = 0; i < SEGMENTS.length; i++) dots += (i === _segIdx ? "●" : "○");
     _overlay.querySelector(".st-dots").textContent = dots;
+    _playVoice(seg);
   }
 
   function _finish() {
+    stopVoice();
     var st = _state();
     if (st) {
       markDone(st);
@@ -191,6 +214,7 @@ var Story = (function () {
     segments: segments,
     markDone: markDone,
     maybeShow: maybeShow,
+    stopVoice: stopVoice,
     FIRST_QUEST: FIRST_QUEST,
   };
 })();

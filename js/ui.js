@@ -1713,6 +1713,8 @@ function renderSettings() {
     '<button class="mini' + (st.tapMove === false ? " paper" : "") + '" data-act="set-tapmove">' + esc(st.tapMove === false ? t("settings_off") : t("settings_on")) + "</button></div></div>";
   h += '<div class="row"><div class="item-name">' + esc(t("settings_vibrate")) + '</div><div class="row-btns">' +
     '<button class="mini' + (st.vibrate === false ? " paper" : "") + '" data-act="set-vibrate">' + esc(st.vibrate === false ? t("settings_off") : t("settings_on")) + "</button></div></div>";
+  h += '<div class="row"><div class="item-name">' + esc(t("settings_voice")) + '</div><div class="row-btns">' +
+    '<button class="mini' + (st.voice === false ? " paper" : "") + '" data-act="set-voice">' + esc(st.voice === false ? t("settings_off") : t("settings_on")) + "</button></div></div>";
   h += renderDisplayRows();
   h += '<div class="row"><div class="item-name">' + esc(t("settings_lang")) + '</div><div class="row-btns">' +
     '<button class="mini' + (LANG_CUR === "vi" ? " on" : " paper") + '" data-act="set-lang" data-v="vi">VI</button>' +
@@ -2319,6 +2321,10 @@ function onPanelClick(e) {
       saveGame(state); renderPanel(); break;
     case "set-vibrate":
       state.settings.vibrate = !(state.settings.vibrate !== false);
+      saveGame(state); renderPanel(); break;
+    case "set-voice":
+      state.settings.voice = !(state.settings.voice !== false);
+      if (state.settings.voice === false && typeof Story !== "undefined" && Story.stopVoice) Story.stopVoice();
       saveGame(state); renderPanel(); break;
     case "set-fullscreen":
       state.settings.display = state.settings.display || {};
