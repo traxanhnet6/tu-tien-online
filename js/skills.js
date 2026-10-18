@@ -93,6 +93,54 @@ var SECT_SKILLS = {
                      defMult: 1.6, dur: 18, fx: "#ff1744", icon: "🛡️",
                      nameKey: "sk_huyet_ma_ho_the",
                      descKey: "sk_huyet_ma_ho_the_desc" },
+  /* ---- Bí tịch signature đợt 2 (độc quyền tông môn) ---- */
+  ngu_kiem_phi_hanh: { sect: "kiem", kind: "buff", mp: 30, cd: 25,
+                     defMult: 1.4, dur: 20, fx: "#cfe8ff", icon: "🗡️",
+                     nameKey: "sk_ngu_kiem_phi_hanh",
+                     descKey: "sk_ngu_kiem_phi_hanh_desc" },
+  thien_loi_dan:   { sect: "phap", kind: "dmg", mult: 4.5, mp: 45, cd: 16,
+                     fx: "#b388ff", icon: "⚡", nameKey: "sk_thien_loi_dan",
+                     descKey: "sk_thien_loi_dan_desc" },
+  la_han_quyen:    { sect: "the", kind: "dmg", mult: 3.0, mp: 25, cd: 10,
+                     fx: "#ffcc80", icon: "👊", nameKey: "sk_la_han_quyen",
+                     descKey: "sk_la_han_quyen_desc" },
+  su_tu_hong:      { sect: "the", kind: "aoe", mult: 2.2, mp: 35, cd: 14,
+                     fx: "#ffd54f", icon: "🦁", nameKey: "sk_su_tu_hong",
+                     descKey: "sk_su_tu_hong_desc" },
+  doc_kinh:        { sect: "duoc", kind: "dmg", mult: 3.5, mp: 35, cd: 14,
+                     fx: "#76ff03", icon: "☠️", nameKey: "sk_doc_kinh",
+                     descKey: "sk_doc_kinh_desc" },
+  thu_hon_hop_nhat: { sect: "thu", kind: "buff", mp: 35, cd: 25,
+                     defMult: 1.8, dur: 20, fx: "#ffb300", icon: "🐾",
+                     nameKey: "sk_thu_hon_hop_nhat",
+                     descKey: "sk_thu_hon_hop_nhat_desc" },
+  huyet_ma_dai_phap: { sect: "ma", kind: "dmg", mult: 5.0, mp: 50, cd: 18,
+                     dtype: "ma", dao: "ma",
+                     fx: "#ff2d55", icon: "🩸", nameKey: "sk_huyet_ma_dai_phap",
+                     descKey: "sk_huyet_ma_dai_phap_desc" },
+  /* ---- ĐỘC CHIÊU tông môn (Nguyên Anh + 1500 cống hiến) ---- */
+  thien_kiem_vo_song: { sect: "kiem", kind: "dmg", mult: 6.5, mp: 60, cd: 30,
+                     fx: "#ffe082", icon: "⚔️", nameKey: "sk_thien_kiem_vo_song",
+                     descKey: "sk_thien_kiem_vo_song_desc" },
+  cuu_thien_loi_nguc: { sect: "phap", kind: "aoe", mult: 5.5, mp: 70, cd: 35,
+                     fx: "#b388ff", icon: "🌩️", nameKey: "sk_cuu_thien_loi_nguc",
+                     descKey: "sk_cuu_thien_loi_nguc_desc" },
+  kim_cang_hoa_than: { sect: "the", kind: "buff", mp: 60, cd: 40,
+                     defMult: 2.5, dur: 25, fx: "#ffd54f", icon: "💎",
+                     nameKey: "sk_kim_cang_hoa_than",
+                     descKey: "sk_kim_cang_hoa_than_desc" },
+  hoi_thien_tao_hoa: { sect: "duoc", kind: "buff", mp: 60, cd: 45,
+                     defMult: 2.0, dur: 30, fx: "#66bb6a", icon: "💚",
+                     nameKey: "sk_hoi_thien_tao_hoa",
+                     descKey: "sk_hoi_thien_tao_hoa_desc" },
+  thu_than_hang_lam: { sect: "thu", kind: "buff", mp: 60, cd: 40,
+                     atkMult: 2.0, defMult: 1.5, dur: 25, fx: "#ffb300", icon: "🐉",
+                     nameKey: "sk_thu_than_hang_lam",
+                     descKey: "sk_thu_than_hang_lam_desc" },
+  thon_thien_ma_cong: { sect: "ma", kind: "dmg", mult: 7.0, mp: 80, cd: 40,
+                     dtype: "ma", dao: "ma",
+                     fx: "#ff1744", icon: "👹", nameKey: "sk_thon_thien_ma_cong",
+                     descKey: "sk_thon_thien_ma_cong_desc" },
 };
 
 /* Hệ số sức mạnh theo phẩm bí tịch */
@@ -147,6 +195,8 @@ var PASSIVE_DEFS = {
                    icon: "🩸", perLevel: "3% lifesteal" },
   truong_sinh_quyet: { nameKey: "ps_truong_sinh_quyet", descKey: "ps_truong_sinh_quyet_desc",
                    icon: "🍑", perLevel: "+30 năm thọ nguyên" },
+  ngu_hanh_phap_chu: { nameKey: "ps_ngu_hanh_phap_chu", descKey: "ps_ngu_hanh_phap_chu_desc",
+                   icon: "🔮", perLevel: "10% maxMp" },
 };
 var _passiveDefCache = {};
 function passiveDef(id) {
@@ -214,12 +264,12 @@ var _MANUAL_FB = {
   manual_kimdan_phap: { skill: "kimdan_loi_phap", tier: 2, learnCost: 3000, realm: 3 },
   manual_kimdan_the:  { skill: "kimdan_the_quyen", tier: 2, learnCost: 3000, realm: 3 },
   /* Độc quyền Dược Vương Tông / Ngự Thú Tông */
-  manual_duoc_1: { skill: "dan_hoa_ho_the", tier: 1, learnCost: 800, realm: 1, exclusive: true },
-  manual_duoc_2: { passive: "duoc_tam", tier: 1, learnCost: 800, realm: 1, exclusive: true },
-  manual_duoc_3: { passive: "hoi_xuan", tier: 2, learnCost: 1500, realm: 1, exclusive: true },
-  manual_thu_1: { skill: "thu_vuong_trao", tier: 1, learnCost: 800, realm: 1, exclusive: true },
-  manual_thu_2: { passive: "ngu_thu_tam", tier: 1, learnCost: 800, realm: 1, exclusive: true },
-  manual_thu_3: { passive: "linh_thu_khe", tier: 2, learnCost: 1500, realm: 1, exclusive: true },
+  manual_duoc_1: { skill: "dan_hoa_ho_the", tier: 1, learnCost: 800, realm: 1, exclusive: true, dieu_kien_mo: { tong: "duoc_vuong_tong" } },
+  manual_duoc_2: { passive: "duoc_tam", tier: 1, learnCost: 800, realm: 1, exclusive: true, dieu_kien_mo: { tong: "duoc_vuong_tong" } },
+  manual_duoc_3: { passive: "hoi_xuan", tier: 2, learnCost: 1500, realm: 1, exclusive: true, dieu_kien_mo: { tong: "duoc_vuong_tong" } },
+  manual_thu_1: { skill: "thu_vuong_trao", tier: 1, learnCost: 800, realm: 1, exclusive: true, dieu_kien_mo: { tong: "ngu_thu_tong" } },
+  manual_thu_2: { passive: "ngu_thu_tam", tier: 1, learnCost: 800, realm: 1, exclusive: true, dieu_kien_mo: { tong: "ngu_thu_tong" } },
+  manual_thu_3: { passive: "linh_thu_khe", tier: 2, learnCost: 1500, realm: 1, exclusive: true, dieu_kien_mo: { tong: "ngu_thu_tong" } },
   /* Độc quyền Cửu U Ma Tông (Ma Đạo, mở từ Trúc Cơ) */
   manual_ma_1: { skill: "huyet_ma_tram", tier: 1, learnCost: 800, realm: 2, dao: "ma", exclusive: true, dieu_kien_mo: { tong: "cuu_u_ma_tong" } },
   manual_ma_2: { skill: "cuu_u_ma_diem", tier: 1, learnCost: 800, realm: 2, dao: "ma", exclusive: true, dieu_kien_mo: { tong: "cuu_u_ma_tong" } },
@@ -227,6 +277,22 @@ var _MANUAL_FB = {
   manual_ma_4: { skill: "huyet_ma_ho_the", tier: 1, learnCost: 800, realm: 2, dao: "ma", exclusive: true, dieu_kien_mo: { tong: "cuu_u_ma_tong" } },
   manual_ps_ma_1: { passive: "ma_tam", tier: 1, learnCost: 800, realm: 2, dao: "ma", exclusive: true, dieu_kien_mo: { tong: "cuu_u_ma_tong" } },
   manual_ps_ma_2: { passive: "huyet_mach", tier: 2, learnCost: 1500, realm: 2, dao: "ma", exclusive: true, dieu_kien_mo: { tong: "cuu_u_ma_tong" } },
+  /* Đợt 2: bí tịch signature các tông */
+  manual_kiem_4: { skill: "ngu_kiem_phi_hanh", tier: 2, learnCost: 1500, realm: 2, exclusive: true, dieu_kien_mo: { tong: "kiem_tong" } },
+  manual_phap_4: { skill: "thien_loi_dan", tier: 2, learnCost: 1500, realm: 2, exclusive: true, dieu_kien_mo: { tong: "thien_phap_tong" } },
+  manual_phap_5: { passive: "ngu_hanh_phap_chu", tier: 1, learnCost: 800, realm: 1, exclusive: true, dieu_kien_mo: { tong: "thien_phap_tong" } },
+  manual_the_4: { skill: "la_han_quyen", tier: 1, learnCost: 800, realm: 2, exclusive: true, dieu_kien_mo: { tong: "kim_cang_tong" } },
+  manual_the_5: { skill: "su_tu_hong", tier: 1, learnCost: 800, realm: 2, exclusive: true, dieu_kien_mo: { tong: "kim_cang_tong" } },
+  manual_duoc_4: { skill: "doc_kinh", tier: 2, learnCost: 1500, realm: 2, exclusive: true, dieu_kien_mo: { tong: "duoc_vuong_tong" } },
+  manual_thu_4: { skill: "thu_hon_hop_nhat", tier: 2, learnCost: 1500, realm: 2, exclusive: true, dieu_kien_mo: { tong: "ngu_thu_tong" } },
+  manual_ma_5: { skill: "huyet_ma_dai_phap", tier: 2, learnCost: 3000, realm: 3, dao: "ma", exclusive: true, dieu_kien_mo: { tong: "cuu_u_ma_tong" } },
+  /* ĐỘC CHIÊU tông môn: Nguyên Anh + 1500 cống hiến */
+  manual_sig_kiem: { skill: "thien_kiem_vo_song", tier: 2, learnCost: 5000, realm: 4, exclusive: true, dieu_kien_mo: { tong: "kiem_tong", contrib: 1500 } },
+  manual_sig_phap: { skill: "cuu_thien_loi_nguc", tier: 2, learnCost: 5000, realm: 4, exclusive: true, dieu_kien_mo: { tong: "thien_phap_tong", contrib: 1500 } },
+  manual_sig_the: { skill: "kim_cang_hoa_than", tier: 2, learnCost: 5000, realm: 4, exclusive: true, dieu_kien_mo: { tong: "kim_cang_tong", contrib: 1500 } },
+  manual_sig_duoc: { skill: "hoi_thien_tao_hoa", tier: 2, learnCost: 5000, realm: 4, exclusive: true, dieu_kien_mo: { tong: "duoc_vuong_tong", contrib: 1500 } },
+  manual_sig_thu: { skill: "thu_than_hang_lam", tier: 2, learnCost: 5000, realm: 4, exclusive: true, dieu_kien_mo: { tong: "ngu_thu_tong", contrib: 1500 } },
+  manual_sig_ma: { skill: "thon_thien_ma_cong", tier: 2, learnCost: 5000, realm: 4, dao: "ma", exclusive: true, dieu_kien_mo: { tong: "cuu_u_ma_tong", contrib: 1500 } },
 };
 function manualInfo(manualId) {
   if (typeof ITEMS !== "undefined" && ITEMS && ITEMS[manualId] && ITEMS[manualId].kind === "manual") {
@@ -291,9 +357,11 @@ function applyPassives(stats, state) {
   var kt = passiveActive(state, "kiem_tam");
   var tp = passiveActive(state, "the_phach");
   var kc = passiveActive(state, "kim_cang_bat_hoai_the");
+  var nh = passiveActive(state, "ngu_hanh_phap_chu");
   if (kt > 0) out.atk = Math.round(out.atk * (1 + 0.10 * kt));
   if (tp > 0) out.maxHp = Math.round(out.maxHp * (1 + 0.08 * tp));
   if (kc > 0) out.maxHp = Math.round(out.maxHp * (1 + 0.15 * kc));
+  if (nh > 0) out.maxMp = Math.round(out.maxMp * (1 + 0.10 * nh));
   return out;
 }
 /* ---- Hệ thống bị động theo PDF: tốn SP, tối đa 5 cùng lúc, yêu cầu cảnh giới ---- */
@@ -377,6 +445,11 @@ function skillPower(state, skillId) {
     var _lht = passiveActive(state, "loi_hoa_song_tuyet");
     if (_lht > 0 && d.elem && (d.elem === "loi" || d.elem === "hoa"))
       mult *= 1 + 0.15 * _lht;
+  } catch (e) {}
+  /* Linh căn khai mở: skill cùng hệ với linh căn đã mở → +5% mỗi linh căn (taycot.js) */
+  try {
+    if (typeof TayCot !== "undefined" && d.elem && TayCot.rootsOf(state).indexOf(d.elem) >= 0)
+      mult *= 1.05;
   } catch (e) {}
   /* Buff tông môn: +sát thương theo hệ skill (Kiếm/Thiên Pháp Tông + soul bonus) */
   try {
@@ -469,7 +542,8 @@ function _save() { if (typeof saveGame === "function") { try { saveGame(); } cat
 
 /* Nạp bí tịch: học mới / lên cấp bằng bí tịch trùng / đổi mảnh khi max.
  * learnManual: từ túi, tốn phí học. obtainManual: miễn phí (gacha/kỳ ngộ tự học).
- * reason: 'no_manual' | 'realm_lock' | 'thieu_linh_thach' */
+ * reason: 'no_manual' | 'realm_lock' | 'thieu_linh_thach' | 'khong_hop_dao' |
+ *         'sai_tong_mon' | 'thieu_uy_vong' */
 /* Trường Sinh Quyết: mỗi cấp học/lên cấp +30 năm thọ nguyên (lifespan.js) */
 function _grantTruongSinhYears(state, manualId) {
   try {
@@ -496,6 +570,12 @@ function _obtain(state, manualId, payCost) {
     var _j = null;
     try { if (typeof Sect !== "undefined" && Sect.joinedSect) _j = Sect.joinedSect(state); } catch (e) {}
     if (_j !== info.dieu_kien_mo.tong) return { ok: false, reason: "sai_tong_mon" };
+  }
+  /* Độc chiêu tông môn: yêu cầu uy vọng (điểm cống hiến) đủ cao */
+  if (info.dieu_kien_mo && info.dieu_kien_mo.contrib) {
+    var _c = 0;
+    try { if (typeof Sect !== "undefined" && Sect.sectContrib) _c = Sect.sectContrib(state); } catch (e) {}
+    if (_c < info.dieu_kien_mo.contrib) return { ok: false, reason: "thieu_uy_vong", need: info.dieu_kien_mo.contrib };
   }
   var techId = info.skill || info.passive;
   state.skillManual = state.skillManual || {};

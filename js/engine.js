@@ -876,6 +876,7 @@ var Engine = (function () {
     for (var i = _buffs.length - 1; i >= 0; i--) {
       if (now > _buffs[i].until) { _buffs.splice(i, 1); continue; }
       if (_buffs[i].defMult) out.def = Math.round(out.def * _buffs[i].defMult);
+      if (_buffs[i].atkMult) out.atk = Math.round(out.atk * _buffs[i].atkMult);
     }
     /* Aura bài xích khi vào map trái đạo: -30% công/thủ */
     try {
@@ -1025,10 +1026,16 @@ var Engine = (function () {
     } catch (e2) {}
 
     if (def.kind === 'buff') {
-      _buffs.push({ defMult: def.defMult || 1, until: nowMs + (def.dur || 15) * 1000, fx: def.fx });
+      _buffs.push({ defMult: def.defMult || 1, atkMult: def.atkMult || 1, until: nowMs + (def.dur || 15) * 1000, fx: def.fx });
       if (skillId === 'kim_cuong_bat_hoai') {
         player.maxShield = Math.round(ps.maxHp * 0.5);
         player.shield = Math.min(player.maxShield, player.shield + Math.round(ps.maxHp * 0.3));
+      }
+      /* Độc chiêu Dược Vương Tông: hồi ngay 50% HP + khiên 50% HP */
+      if (skillId === 'hoi_thien_tao_hoa') {
+        player.hp = Math.min(ps.maxHp, player.hp + Math.round(ps.maxHp * 0.5));
+        player.maxShield = Math.round(ps.maxHp * 0.8);
+        player.shield = Math.min(player.maxShield, player.shield + Math.round(ps.maxHp * 0.5));
       }
       _playSkillFx(skillId, player.x, player.y, def.fx, chk.power.level);
       _dmgNum(player.x, player.y - 30, 'buff', def.fx || '#fff3b0');

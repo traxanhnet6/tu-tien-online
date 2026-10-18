@@ -83,11 +83,36 @@ function yaodanIconHtml(id, size) {
     ' style="width:' + sz + 'px;height:' + sz + 'px;vertical-align:middle;border-radius:6px;"' +
     ' onerror="this.outerHTML=\'🟣\'"/>';
 }
+/* Icon đan dược Tẩy Cốt / Khai Mạch: <img> + fallback emoji nếu ảnh lỗi */
+function pillIconHtml(id, size) {
+  var map = {
+    pill_taycotdan: "taycotdan_ha.png", pill_taycotdan_trung: "taycotdan_trung.png",
+    pill_taycotdan_thuong: "taycotdan_thuong.png", pill_taycotdan_thien: "taycotdan_thien.png",
+    pill_khaimachdan: "khaimachdan.png", pill_khaimachdan_trung: "khaimachdan_trung.png",
+    pill_khaimachdan_thuong: "khaimachdan_thuong.png",
+  };
+  var f = map[id]; if (!f) return null;
+  var sz = size || 32;
+  var emo = (id.indexOf("taycotdan") >= 0) ? "🟡" : "🔴";
+  return '<img class="pill-icon" src="assets/pills/' + f + '" alt="" draggable="false" width="' + sz +
+    '" height="' + sz + '" style="width:' + sz + 'px;height:' + sz + 'px;vertical-align:middle;border-radius:6px;"' +
+    ' onerror="this.outerHTML=\'' + emo + "'\"/>";
+}
 function itemIcon(id) {
   var d = itemDef(id);
   if (d && d.kind === "yaodan") { var yh = yaodanIconHtml(id); if (yh) return yh; }
+  if (d && d.kind === "pill") { var ph = pillIconHtml(id); if (ph) return ph; }
   if (d && d.icon) return d.icon;
-  if (d && d.kind === "manual") return "📕";
+  /* Bí tịch: dùng icon pixel art của skill/bị động trong bí tịch */
+  if (d && d.kind === "manual") {
+    var techId = d.skill || d.passive;
+    if (techId) {
+      return '<img class="skill-img" src="assets/skills/' + techId + '.png" alt="" draggable="false"' +
+        ' style="width:28px;height:28px;vertical-align:middle;border-radius:6px;"' +
+        ' onerror="this.outerHTML=\'📕\'"/>';
+    }
+    return "📕";
+  }
   if (d && d.kind === "pet_egg") return "🥚";
   if (d && d.kind === "seed") return "🌱";
   if (d && d.kind === "herb") return "🌿";
@@ -389,6 +414,8 @@ function beginGame() {
   state.char.gender = (createSel.gender === "nu") ? "nu" : "nam";
   state.char.element = createSel.element;
   state.char.elementQuality = createSel.quality;
+  state.char.roots = createSel.element ? [createSel.element] : []; /* linh căn đã khai mở (taycot.js) */
+  state.char.cotPham = null; /* phẩm chất căn cốt — định khi uống Tẩy Cốt Đan đầu tiên */
   state.char.realm = 1; state.char.tier = 1; /* bắt đầu Luyện Khí tầng 1 */
   if (typeof Social !== "undefined") { try { Social.ensureCharId(state); } catch (e) {} }
   var bs = baseStats(1, 1, createSel.sect);
@@ -1353,6 +1380,62 @@ function showSectCeremony(c) {
     setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 3500);
   } catch (e) {}
 }
+/* ================= TẨY CỐT + KHAI MẠCH (taycot.js) ================= */
+/* Hiệu ứng toàn màn hình khi tẩy cốt định phẩm / nâng phẩm */
+function showTayCotFx(phamId, upgraded, fromId) {
+  if (typeof TayCot === "undefined") return;
+  try {
+    var fx = "#ffd76a", i;
+    for (i = 0; i < TayCot.DEF.cotPham.length; i++)
+      if (TayCot.DEF.cotPham[i].id === phamId) fx = TayCot.DEF.cotPham[i].fx;
+    sectFlash(fx, t(upgraded ? "tc_fx_upgrade" : "tc_fx_title"));
+    var f = document.createElement("div");
+    f.className = "sect-ceremony taycot-fx";
+    f.innerHTML = '<div class="sect-ceremony-inner taycot-fx-inner" style="border-color:' + fx + '">' +
+      '<div class="sect-ceremony-title">' + esc(t(upgraded ? "tc_fx_upgrade" : "tc_fx_title")) + "</div>" +
+      '<div class="taycot-fx-pham" style="color:' + fx + '">' + esc(t("cot_pham_" + phamId)) + "</div>" +
+      (upgraded && fromId ? '<div class="taycot-fx-from">(' + esc(t("cot_pham_" + fromId)) + " → " +
+        esc(t("cot_pham_" + phamId)) + ")</div>" : "") +
+      '<div class="taycot-fx-bonus">' + esc(t("tc_fx_bonus", {
+        exp: Math.round((TayCot.cotBonus(state).expMult - 1) * 100),
+        bt: (TayCot.cotBonus(state).btBonus * 100).toFixed(1),
+      })) + "</div>" +
+      '<div class="sect-ceremony-sub">✨</div></div>';
+    document.body.appendChild(f);
+    sfx("success");
+    setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 3800);
+  } catch (e) {}
+}
+/* Modal chọn linh căn khi uống Khai Mạch Đan trung phẩm */
+function showKhaiMachChoose(unopened, count) {
+  if (typeof TayCot === "undefined") return;
+  try {
+    var f = document.createElement("div");
+    f.className = "sect-ceremony";
+    var btns = "";
+    for (var i = 0; i < unopened.length; i++) {
+      var el = unopened[i];
+      btns += '<button class="km-choose-btn" data-el="' + el + '">' +
+        lingenIconHtml(el, 40) + "<span>" + esc(t("el_" + el)) + "</span></button>";
+    }
+    f.innerHTML = '<div class="sect-ceremony-inner km-choose" style="border-color:#ff9d5c">' +
+      '<div class="sect-ceremony-title">' + esc(t("km_choose_title")) + "</div>" +
+      '<div class="km-choose-grid">' + btns + "</div></div>";
+    document.body.appendChild(f);
+    sfx("click");
+    var done = function (ev) {
+      var b = ev.target.closest ? ev.target.closest(".km-choose-btn") : null;
+      if (!b) return;
+      var el = b.getAttribute("data-el");
+      var r = TayCot.openRoots(state, count, el);
+      toast(t("km_opened", { n: r.opened.map(function (e) { return t("el_" + e); }).join(" · ") }));
+      sfx("success");
+      saveGame(state); refreshHUD(); renderPanel();
+      if (f.parentNode) f.parentNode.removeChild(f);
+    };
+    f.addEventListener("click", done);
+  } catch (e) {}
+}
 /* Tự tìm đường tới mục tiêu nhiệm vụ */
 function sectQuestNav(tg) {
   if (!tg) return;
@@ -1995,6 +2078,10 @@ function finishBreakthrough() {
   try {
     if (typeof BodyCult !== "undefined") rate = Math.min(1, rate + BodyCult.cancotBonus(BodyCult.lvOf(state, "cancot")).btBonus);
   } catch (e) {}
+  /* Phẩm chất căn cốt: +tỉ lệ đột phá (taycot.js) */
+  try {
+    if (typeof TayCot !== "undefined") rate = Math.min(1, rate + TayCot.cotBonus(state).btBonus);
+  } catch (e) {}
   /* Thiên phú chuyển thế: +tỉ lệ đột phá (lifespan.js) */
   try {
     if (typeof Lifespan !== "undefined") rate = Math.min(1, rate + Lifespan.talentBtPct(state));
@@ -2027,7 +2114,8 @@ var RENDER = {
   map: renderMap, dungeon: renderDungeon, gift: renderGift, settings: renderSettings,
   npc: renderNpc, shop: renderShop, breakthrough: renderBreakthrough, donate: renderDonate,
   friends: renderFriends, chat: renderChat, rename: renderRename, gender: renderGender,
-  dao: renderDao, refine: renderRefine, death: renderDeath, tower: renderTower
+  dao: renderDao, refine: renderRefine, death: renderDeath, tower: renderTower,
+  alchemy: renderAlchemy
 };
 
 /* ================= THÔNG THIÊN THÁP + SỰ KIỆN NGÀY (tower.js) ================= */
@@ -2439,7 +2527,7 @@ function doBagUse(idx) {
     Engine.player.shield = Math.min(Engine.player.maxShield, (Engine.player.shield || 0) + amt);
     Engine.player.shieldT = d.shieldDur || 30;
   }
-  /* Tẩy Cốt Đan: +N cấp Căn Cốt vĩnh viễn (story quest q_story_03) */
+  /* Tẩy Cốt Đan: +N cấp Căn Cốt + roll/tăng PHẨM CHẤT căn cốt (taycot.js) */
   if (d.taycot && typeof BodyCult !== "undefined") {
     try {
       var _ccNl = BodyCult.setLv(state, "cancot", BodyCult.lvOf(state, "cancot") + (d.taycot || 1));
@@ -2449,6 +2537,25 @@ function doBagUse(idx) {
         if (state.bcTitles.indexOf(_ccMs.titleKey) < 0) state.bcTitles.push(_ccMs.titleKey);
       }
       toast(t("taycot_drink", { n: _ccNl }));
+      if (typeof TayCot !== "undefined") {
+        var _tcR = TayCot.drinkTayCot(state, d.taycotGrade || 0);
+        if (_tcR.isNew || _tcR.upgraded) showTayCotFx(_tcR.pham, _tcR.upgraded, _tcR.from);
+        else toast(t("tc_pham_keep", { p: t("cot_pham_" + _tcR.pham) }));
+      }
+    } catch (e) {}
+  }
+  /* Khai Mạch Đan: mở thêm linh căn ngũ hành (taycot.js) */
+  if (d.khaimach && typeof TayCot !== "undefined") {
+    try {
+      var _kmUn = TayCot.unopenedRoots(state);
+      if (_kmUn.length === 0) { toast(t("km_full")); }
+      else if (d.khaimachChoose && _kmUn.length > 0) {
+        showKhaiMachChoose(_kmUn, d.khaimach || 1);
+      } else {
+        var _kmR = TayCot.openRoots(state, d.khaimach || 1);
+        toast(t("km_opened", { n: _kmR.opened.map(function (e) { return t("el_" + e); }).join(" · ") }));
+        sfx("success");
+      }
     } catch (e) {}
   }
   /* Thọ Nguyên Đan: cộng năm thọ nguyên, hiệu quả giảm dần mỗi lần dùng (lifespan.js) */
@@ -2610,6 +2717,8 @@ function doNpcOpt(el) {
   if (opact === "farm") { openPanel("farm"); return; }
   if (opact === "enhance") { openPanel("char", { tab: "equip" }); return; }
   if (opact === "refine") { openPanel("refine"); return; }
+  if (opact === "alchemy") { openPanel("alchemy"); return; }
+  if (opact === "alchemy-craft") { doAlchemyCraft(el.getAttribute("data-recipe")); return; }
   if (opact === "sect-join") { doSectJoin(opt.sect || el.getAttribute("data-sect")); return; }
   if (opact === "assign-skill") { doAssignSkill(el.getAttribute("data-tech")); return; }
   if (opact === "inn-rest") { doInnRest(); return; }
@@ -2800,9 +2909,12 @@ function skillbarSkills() {
       if (anySet) return out.slice(0, 7);
     }
     var cls = (state.char && state.char.sect) || "kiem";
-    var order = ["kiem_xuyen_van", "van_kiem_quy_tong", "kiem_cuong_ho_the", "kimdan_kiem_y"];
-    if (cls === "phap") order = ["ngu_loi_oanh_dinh", "hoa_vu_luu_tinh", "linh_thuan", "kimdan_loi_phap"];
-    if (cls === "the") order = ["ba_vuong_quyen", "chan_dia_chuong", "kim_cuong_bat_hoai", "kimdan_the_quyen"];
+    var order = ["kiem_xuyen_van", "van_kiem_quy_tong", "kiem_cuong_ho_the", "kimdan_kiem_y",
+                 "ngu_kiem_phi_hanh", "thien_kiem_vo_song"];
+    if (cls === "phap") order = ["ngu_loi_oanh_dinh", "hoa_vu_luu_tinh", "linh_thuan", "kimdan_loi_phap",
+                                 "thien_loi_dan", "cuu_thien_loi_nguc"];
+    if (cls === "the") order = ["ba_vuong_quyen", "chan_dia_chuong", "kim_cuong_bat_hoai", "kimdan_the_quyen",
+                                "la_han_quyen", "su_tu_hong", "kim_cang_hoa_than"];
     order.forEach(function (id) { if (Skills.hasLearned(state, id)) out.push(id); });
   } catch (e) {}
   return out.slice(0, 7);
@@ -3044,9 +3156,61 @@ function renderBcDaily() {
   h += "</div></div>";
   return h;
 }
+/* ---- Linh Căn khai mở + Phẩm chất căn cốt (taycot.js) ---- */
+function renderTcRoots() {
+  if (typeof TayCot === "undefined") return "";
+  var roots = TayCot.rootsOf(state), pham = TayCot.cotPhamOf(state);
+  var b = TayCot.cotBonus(state);
+  var h = '<div class="bc-sec"><div class="bc-head">🌟 ' + esc(t("tc_roots_title")) + "</div>";
+  if (pham) {
+    var fx = "#9aa0a8", i;
+    for (i = 0; i < TayCot.DEF.cotPham.length; i++)
+      if (TayCot.DEF.cotPham[i].id === pham) fx = TayCot.DEF.cotPham[i].fx;
+    h += '<div class="tc-pham" style="color:' + fx + '">🏵️ ' + esc(t("cot_pham_" + pham)) +
+      ' <span class="tc-pham-bonus">(' + esc(t("tc_pham_bonus", {
+        exp: Math.round((b.expMult - 1) * 100), bt: (b.btBonus * 100).toFixed(1),
+      })) + ")</span></div>";
+  } else {
+    h += '<div class="tc-nopham">❔ ' + esc(t("tc_no_pham")) + "</div>";
+  }
+  h += '<div class="tc-roots-row">';
+  for (var j = 0; j < roots.length; j++) h += lingenIconHtml(roots[j], 36);
+  for (var k = roots.length; k < TayCot.DEF.maxRoots; k++)
+    h += '<span class="tc-root-locked" title="' + esc(t("tc_root_locked")) + '">🔒</span>';
+  h += '</div><div class="bc-desc">' + esc(t("tc_roots_desc", { n: roots.length })) + "</div></div>";
+  return h;
+}
 function renderCultTab() {
   if (typeof BodyCult === "undefined") return "";
-  return renderBcCancot() + renderBcThanthuc() + renderBcDaily();
+  return renderTcRoots() + renderBcCancot() + renderBcThanthuc() + renderBcDaily();
+}
+/* Luyện Khai Mạch Đan tại Đan Phòng (mở từ Luyện Đan Sư) */
+function renderAlchemy() {
+  var h = '<div class="item-name">⚗️ ' + esc(t("km_alchemy_title")) + "</div>";
+  h += '<div class="bc-desc">' + esc(t("km_alchemy_desc")) + "</div>";
+  TayCot.DEF.recipes.forEach(function (rc) {
+    var c = TayCot.canCraft(state, rc.id);
+    var n = c.need || TayCot.craftNeed(state, rc.id);
+    h += '<div class="bc-method"><div class="bc-mname">' + pillIconHtml(rc.id, 28) + " " +
+      esc(itemName(rc.id)) + "</div>";
+    h += '<div class="bc-desc">' + esc(itemDesc(rc.id)) + "</div>";
+    h += '<div class="bc-need">' +
+      n.mats.map(function (m) { return bcMat(itemName(m.id) + " " + m.have + "/" + m.need, m.have, m.need); }).join(" · ") +
+      " · " + bcMat("💎 " + n.stonesHave + "/" + n.stones, n.stonesHave, n.stones) + "</div>";
+    h += '<button class="mini" data-act="alchemy-craft" data-recipe="' + rc.id + '"' +
+      (c.ok ? "" : " disabled") + ">" + esc(t("km_craft")) + "</button></div>";
+  });
+  return h;
+}
+function doAlchemyCraft(recipeId) {
+  var r = TayCot.doCraft(state, recipeId);
+  if (!r.ok) {
+    toast(t(r.reason === "stones" ? "km_lack_stones" : "km_lack_mats"));
+    sfx("fail"); return;
+  }
+  toast(t("km_crafted", { n: itemName(r.id) }));
+  sfx("success");
+  saveGame(state); renderPanel();
 }
 /* Luyện Yêu Đan (mở từ Lão Rèn) */
 function renderRefine() {
@@ -3561,6 +3725,9 @@ function doManualLearn() {
   if (!r.ok) {
     if (r.reason === "thieu_linh_thach") toast(t("shop_no_stone"));
     else if (r.reason === "realm_lock") toast(t("manual_locked_realm", { realm: stageName(r.need, 0) }));
+    else if (r.reason === "sai_tong_mon") toast(t("manual_wrong_sect"));
+    else if (r.reason === "khong_hop_dao") toast(t("manual_wrong_dao"));
+    else if (r.reason === "thieu_uy_vong") toast(t("manual_low_contrib", { n: r.need }));
     sfx("fail"); return;
   }
   saveGame(state); sfx("success");

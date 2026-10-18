@@ -179,6 +179,8 @@ function countItem(state, id) {
 function gainExp(state, n) {
   /* Thiên phú chuyển thế: +% kinh nghiệm (lifespan.js, guard vì load sau) */
   try { if (typeof Lifespan !== "undefined" && Lifespan.talentExpPct) n = Math.round(n * (1 + Lifespan.talentExpPct(state))); } catch (e) {}
+  /* Phẩm chất căn cốt: +tốc độ tu luyện (taycot.js) */
+  try { if (typeof TayCot !== "undefined") n = Math.round(n * TayCot.cotBonus(state).expMult); } catch (e) {}
   const c = state.char;
   c.exp += n;
   let leveled = false;

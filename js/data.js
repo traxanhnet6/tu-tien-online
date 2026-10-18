@@ -774,8 +774,39 @@ const ITEMS = {
   },
   pill_taycotdan: {
     kind: "pill", nameKey: "it_pill_taycotdan", descKey: "it_pill_taycotdan_desc",
-    taycot: 1, /* uống: +1 cấp Căn Cốt vĩnh viễn (xử lý ở doBagUse) */
+    taycot: 1, taycotGrade: 0, /* uống: +1 cấp Căn Cốt + roll/tăng phẩm chất căn cốt (taycot.js) */
     price: 1500, sell: 450, icon: "🟡",
+  },
+  pill_taycotdan_trung: {
+    kind: "pill", nameKey: "it_pill_taycotdan_trung", descKey: "it_pill_taycotdan_trung_desc",
+    taycot: 2, taycotGrade: 1, /* trung phẩm: +2 cấp Căn Cốt, tỉ lệ phẩm cao hơn */
+    price: 4000, sell: 1200, icon: "🔵",
+  },
+  pill_taycotdan_thuong: {
+    kind: "pill", nameKey: "it_pill_taycotdan_thuong", descKey: "it_pill_taycotdan_thuong_desc",
+    taycot: 3, taycotGrade: 2, /* thượng phẩm: +3 cấp Căn Cốt */
+    price: 10000, sell: 3000, icon: "🟣",
+  },
+  pill_taycotdan_thien: {
+    kind: "pill", nameKey: "it_pill_taycotdan_thien", descKey: "it_pill_taycotdan_thien_desc",
+    taycot: 5, taycotGrade: 3, /* thiên phẩm: +5 cấp Căn Cốt, tỉ lệ phẩm cao nhất */
+    price: 25000, sell: 7500, icon: "🟠",
+  },
+  /* --- Khai Mạch Đan: mở thêm ngũ hành linh căn (luyện tại Đan Phòng, taycot.js) --- */
+  pill_khaimachdan: {
+    kind: "pill", nameKey: "it_pill_khaimachdan", descKey: "it_pill_khaimachdan_desc",
+    khaimach: 1, /* mở 1 linh căn ngẫu nhiên chưa mở */
+    price: 3000, sell: 900, icon: "🔴",
+  },
+  pill_khaimachdan_trung: {
+    kind: "pill", nameKey: "it_pill_khaimachdan_trung", descKey: "it_pill_khaimachdan_trung_desc",
+    khaimach: 1, khaimachChoose: 1, /* mở 1 linh căn DO NGƯỜI CHƠI CHỌN */
+    price: 8000, sell: 2400, icon: "🟥",
+  },
+  pill_khaimachdan_thuong: {
+    kind: "pill", nameKey: "it_pill_khaimachdan_thuong", descKey: "it_pill_khaimachdan_thuong_desc",
+    khaimach: 2, /* mở 2 linh căn ngẫu nhiên cùng lúc */
+    price: 20000, sell: 6000, icon: "❤️‍🔥",
   },
   /* --- Nguyên liệu --- */
   taycothao: {
@@ -1095,18 +1126,44 @@ const ITEMS = {
     exclusive: true,
     nameKey: "it_manual_duoc_1", descKey: "it_manual_duoc_1_desc",
     price: 2000, sell: 300,
+    skillDef: {
+      kind: "buff",
+      mp: 25,
+      cd: 20,
+      dtype: "duoc",
+      elem: "hoa",
+      rng: 0,
+      dao: "chinh",
+      icon: "💊",
+      effect_sheet: "eff_fire_sheet",
+      effect_mau: "#66bb6a",
+      nameKey: "sk_dan_hoa_ho_the",
+      descKey: "sk_dan_hoa_ho_the_desc",
+      mult: 0,
+      defMult: 1.5,
+      dur: 15
+    },
+    dieu_kien_mo: {
+      tong: "duoc_vuong_tong"
+    }
   },
   manual_duoc_2: {
     kind: "manual", tier: 1, passive: "duoc_tam", learnCost: 800, realm: 1,
     exclusive: true,
     nameKey: "it_manual_duoc_2", descKey: "it_manual_duoc_2_desc",
     price: 2000, sell: 300,
+    dieu_kien_mo: {
+      tong: "duoc_vuong_tong"
+    }
   },
   manual_duoc_3: {
     kind: "manual", tier: 2, passive: "hoi_xuan", learnCost: 1500, realm: 1,
     exclusive: true,
     nameKey: "it_manual_duoc_3", descKey: "it_manual_duoc_3_desc",
     price: 4000, sell: 1500,
+    dieu_kien_mo: {
+      tong: "duoc_vuong_tong"
+    }
   },
   /* --- Bí tịch độc quyền Ngự Thú Tông --- */
   manual_thu_1: {
@@ -1114,18 +1171,240 @@ const ITEMS = {
     exclusive: true,
     nameKey: "it_manual_thu_1", descKey: "it_manual_thu_1_desc",
     price: 2000, sell: 300,
+    skillDef: {
+      kind: "dmg",
+      mp: 30,
+      cd: 12,
+      dtype: "thu",
+      elem: "moc",
+      rng: 220,
+      dao: "trung",
+      icon: "🐯",
+      effect_sheet: "eff_slash_sheet",
+      effect_mau: "#ffb300",
+      nameKey: "sk_thu_vuong_trao",
+      descKey: "sk_thu_vuong_trao_desc",
+      mult: 3.0,
+      fxStatus: {
+        fear: 2
+      }
+    },
+    dieu_kien_mo: {
+      tong: "ngu_thu_tong"
+    }
+  },
+  /* --- Bí tịch signature các tông (đợt 2) --- */
+  manual_kiem_4: {
+    kind: "manual", tier: 2, skill: "ngu_kiem_phi_hanh", learnCost: 1500, realm: 2,
+    exclusive: true,
+    nameKey: "it_manual_kiem_4", descKey: "it_manual_kiem_4_desc",
+    price: 4000, sell: 1500,
+    skillDef: {
+      kind: "buff", mp: 30, cd: 25, dtype: "kiem", elem: "kim", rng: 0,
+      dao: "chinh", icon: "🗡️",
+      effect_sheet: "eff_swordshadow_sheet", effect_mau: "#cfe8ff",
+      nameKey: "sk_ngu_kiem_phi_hanh", descKey: "sk_ngu_kiem_phi_hanh_desc",
+      mult: 0, defMult: 1.4, dur: 20
+    },
+    dieu_kien_mo: { tong: "kiem_tong" }
+  },
+  manual_phap_4: {
+    kind: "manual", tier: 2, skill: "thien_loi_dan", learnCost: 1500, realm: 2,
+    exclusive: true,
+    nameKey: "it_manual_phap_4", descKey: "it_manual_phap_4_desc",
+    price: 4000, sell: 1500,
+    skillDef: {
+      kind: "dmg", mp: 45, cd: 16, dtype: "phap", elem: "loi", rng: 240,
+      dao: "chinh", icon: "⚡",
+      effect_sheet: "eff_lightning_sheet", effect_mau: "#b388ff",
+      nameKey: "sk_thien_loi_dan", descKey: "sk_thien_loi_dan_desc",
+      mult: 4.5, fxStatus: { stun: 1 }
+    },
+    dieu_kien_mo: { tong: "thien_phap_tong" }
+  },
+  manual_phap_5: {
+    kind: "manual", tier: 1, passive: "ngu_hanh_phap_chu", learnCost: 800, realm: 1,
+    exclusive: true,
+    nameKey: "it_manual_phap_5", descKey: "it_manual_phap_5_desc",
+    price: 2000, sell: 300,
+    passiveDef: {
+      icon: "🔮", sp: 2, realm: 1, perLevel: "10% maxMp",
+      nameKey: "ps_ngu_hanh_phap_chu", descKey: "ps_ngu_hanh_phap_chu_desc"
+    },
+    dieu_kien_mo: { tong: "thien_phap_tong" }
+  },
+  manual_the_4: {
+    kind: "manual", tier: 1, skill: "la_han_quyen", learnCost: 800, realm: 2,
+    exclusive: true,
+    nameKey: "it_manual_the_4", descKey: "it_manual_the_4_desc",
+    price: 2000, sell: 300,
+    skillDef: {
+      kind: "dmg", mp: 25, cd: 10, dtype: "the", elem: "tho", rng: 200,
+      dao: "chinh", icon: "👊",
+      effect_sheet: "eff_formation_sheet", effect_mau: "#ffcc80",
+      nameKey: "sk_la_han_quyen", descKey: "sk_la_han_quyen_desc",
+      mult: 3.0
+    },
+    dieu_kien_mo: { tong: "kim_cang_tong" }
+  },
+  manual_the_5: {
+    kind: "manual", tier: 1, skill: "su_tu_hong", learnCost: 800, realm: 2,
+    exclusive: true,
+    nameKey: "it_manual_the_5", descKey: "it_manual_the_5_desc",
+    price: 2000, sell: 300,
+    skillDef: {
+      kind: "aoe", mp: 35, cd: 14, dtype: "the", elem: "kim", rng: 220,
+      dao: "chinh", icon: "🦁",
+      effect_sheet: "eff_formation_sheet", effect_mau: "#ffd54f",
+      nameKey: "sk_su_tu_hong", descKey: "sk_su_tu_hong_desc",
+      mult: 2.2, fxStatus: { fear: 2 }
+    },
+    dieu_kien_mo: { tong: "kim_cang_tong" }
+  },
+  manual_duoc_4: {
+    kind: "manual", tier: 2, skill: "doc_kinh", learnCost: 1500, realm: 2,
+    exclusive: true,
+    nameKey: "it_manual_duoc_4", descKey: "it_manual_duoc_4_desc",
+    price: 4000, sell: 1500,
+    skillDef: {
+      kind: "dmg", mp: 35, cd: 14, dtype: "duoc", elem: "moc", rng: 220,
+      dao: "chinh", icon: "☠️",
+      effect_sheet: "eff_fire_sheet", effect_mau: "#76ff03",
+      nameKey: "sk_doc_kinh", descKey: "sk_doc_kinh_desc",
+      mult: 3.5, fxStatus: { wound: 6 }
+    },
+    dieu_kien_mo: { tong: "duoc_vuong_tong" }
+  },
+  manual_thu_4: {
+    kind: "manual", tier: 2, skill: "thu_hon_hop_nhat", learnCost: 1500, realm: 2,
+    exclusive: true,
+    nameKey: "it_manual_thu_4", descKey: "it_manual_thu_4_desc",
+    price: 4000, sell: 1500,
+    skillDef: {
+      kind: "buff", mp: 35, cd: 25, dtype: "thu", elem: "moc", rng: 0,
+      dao: "trung", icon: "🐾",
+      effect_sheet: "eff_dragon_sheet", effect_mau: "#ffb300",
+      nameKey: "sk_thu_hon_hop_nhat", descKey: "sk_thu_hon_hop_nhat_desc",
+      mult: 0, defMult: 1.8, dur: 20
+    },
+    dieu_kien_mo: { tong: "ngu_thu_tong" }
+  },
+  manual_ma_5: {
+    kind: "manual", tier: 2, skill: "huyet_ma_dai_phap", learnCost: 3000, realm: 3,
+    exclusive: true,
+    nameKey: "it_manual_ma_5", descKey: "it_manual_ma_5_desc",
+    price: 6000, sell: 2000,
+    skillDef: {
+      kind: "dmg", mp: 50, cd: 18, dtype: "ma", elem: "ma", rng: 240,
+      dao: "ma", icon: "🩸",
+      effect_sheet: "eff_demon_sheet", effect_mau: "#ff2d55",
+      nameKey: "sk_huyet_ma_dai_phap", descKey: "sk_huyet_ma_dai_phap_desc",
+      mult: 5.0, lifesteal: 0.10, fxStatus: { wound: 3 }
+    },
+    dieu_kien_mo: { tong: "cuu_u_ma_tong" }
+  },
+  /* --- ĐỘC CHIÊU tông môn: chỉ đệ tử chân truyền (Nguyên Anh + 1500 cống hiến) --- */
+  manual_sig_kiem: {
+    kind: "manual", tier: 2, skill: "thien_kiem_vo_song", learnCost: 5000, realm: 4,
+    exclusive: true,
+    nameKey: "it_manual_sig_kiem", descKey: "it_manual_sig_kiem_desc",
+    price: 20000, sell: 5000,
+    skillDef: {
+      kind: "dmg", mp: 60, cd: 30, dtype: "kiem", elem: "kim", rng: 260,
+      dao: "chinh", icon: "⚔️",
+      effect_sheet: "eff_swordshadow_sheet", effect_mau: "#ffe082",
+      nameKey: "sk_thien_kiem_vo_song", descKey: "sk_thien_kiem_vo_song_desc",
+      mult: 6.5, fxStatus: { stun: 2 }
+    },
+    dieu_kien_mo: { tong: "kiem_tong", contrib: 1500 }
+  },
+  manual_sig_phap: {
+    kind: "manual", tier: 2, skill: "cuu_thien_loi_nguc", learnCost: 5000, realm: 4,
+    exclusive: true,
+    nameKey: "it_manual_sig_phap", descKey: "it_manual_sig_phap_desc",
+    price: 20000, sell: 5000,
+    skillDef: {
+      kind: "aoe", mp: 70, cd: 35, dtype: "phap", elem: "loi", rng: 260,
+      dao: "chinh", icon: "🌩️",
+      effect_sheet: "eff_lightning_sheet", effect_mau: "#b388ff",
+      nameKey: "sk_cuu_thien_loi_nguc", descKey: "sk_cuu_thien_loi_nguc_desc",
+      mult: 5.5, fxStatus: { stun: 3 }
+    },
+    dieu_kien_mo: { tong: "thien_phap_tong", contrib: 1500 }
+  },
+  manual_sig_the: {
+    kind: "manual", tier: 2, skill: "kim_cang_hoa_than", learnCost: 5000, realm: 4,
+    exclusive: true,
+    nameKey: "it_manual_sig_the", descKey: "it_manual_sig_the_desc",
+    price: 20000, sell: 5000,
+    skillDef: {
+      kind: "buff", mp: 60, cd: 40, dtype: "the", elem: "kim", rng: 0,
+      dao: "chinh", icon: "💎",
+      effect_sheet: "eff_formation_sheet", effect_mau: "#ffd54f",
+      nameKey: "sk_kim_cang_hoa_than", descKey: "sk_kim_cang_hoa_than_desc",
+      mult: 0, defMult: 2.5, dur: 25
+    },
+    dieu_kien_mo: { tong: "kim_cang_tong", contrib: 1500 }
+  },
+  manual_sig_duoc: {
+    kind: "manual", tier: 2, skill: "hoi_thien_tao_hoa", learnCost: 5000, realm: 4,
+    exclusive: true,
+    nameKey: "it_manual_sig_duoc", descKey: "it_manual_sig_duoc_desc",
+    price: 20000, sell: 5000,
+    skillDef: {
+      kind: "buff", mp: 60, cd: 45, dtype: "duoc", elem: "moc", rng: 0,
+      dao: "chinh", icon: "💚",
+      effect_sheet: "eff_fire_sheet", effect_mau: "#66bb6a",
+      nameKey: "sk_hoi_thien_tao_hoa", descKey: "sk_hoi_thien_tao_hoa_desc",
+      mult: 0, defMult: 2.0, dur: 30
+    },
+    dieu_kien_mo: { tong: "duoc_vuong_tong", contrib: 1500 }
+  },
+  manual_sig_thu: {
+    kind: "manual", tier: 2, skill: "thu_than_hang_lam", learnCost: 5000, realm: 4,
+    exclusive: true,
+    nameKey: "it_manual_sig_thu", descKey: "it_manual_sig_thu_desc",
+    price: 20000, sell: 5000,
+    skillDef: {
+      kind: "buff", mp: 60, cd: 40, dtype: "thu", elem: "moc", rng: 0,
+      dao: "trung", icon: "🐉",
+      effect_sheet: "eff_dragon_sheet", effect_mau: "#ffb300",
+      nameKey: "sk_thu_than_hang_lam", descKey: "sk_thu_than_hang_lam_desc",
+      mult: 0, atkMult: 2.0, defMult: 1.5, dur: 25
+    },
+    dieu_kien_mo: { tong: "ngu_thu_tong", contrib: 1500 }
+  },
+  manual_sig_ma: {
+    kind: "manual", tier: 2, skill: "thon_thien_ma_cong", learnCost: 5000, realm: 4,
+    exclusive: true,
+    nameKey: "it_manual_sig_ma", descKey: "it_manual_sig_ma_desc",
+    price: 20000, sell: 5000,
+    skillDef: {
+      kind: "dmg", mp: 80, cd: 40, dtype: "ma", elem: "ma", rng: 280,
+      dao: "ma", icon: "👹",
+      effect_sheet: "eff_demon_sheet", effect_mau: "#ff1744",
+      nameKey: "sk_thon_thien_ma_cong", descKey: "sk_thon_thien_ma_cong_desc",
+      mult: 7.0, lifesteal: 0.15, fxStatus: { fear: 3, wound: 4 }
+    },
+    dieu_kien_mo: { tong: "cuu_u_ma_tong", contrib: 1500 }
   },
   manual_thu_2: {
     kind: "manual", tier: 1, passive: "ngu_thu_tam", learnCost: 800, realm: 1,
     exclusive: true,
     nameKey: "it_manual_thu_2", descKey: "it_manual_thu_2_desc",
     price: 2000, sell: 300,
+    dieu_kien_mo: {
+      tong: "ngu_thu_tong"
+    }
   },
   manual_thu_3: {
     kind: "manual", tier: 2, passive: "linh_thu_khe", learnCost: 1500, realm: 1,
     exclusive: true,
     nameKey: "it_manual_thu_3", descKey: "it_manual_thu_3_desc",
     price: 4000, sell: 1500,
+    dieu_kien_mo: {
+      tong: "ngu_thu_tong"
+    }
   },
   /* --- Trứng Linh Thú (kind: pet_egg). tier 0=Phàm → 4=Thiên.
      Vỏ trứng hiện màu theo phẩm trước khi ấp. --- */

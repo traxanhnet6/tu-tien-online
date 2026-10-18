@@ -1083,3 +1083,20 @@ body.landscape #hud-leftmid{top:40%}
 /* Tên map to rõ hơn */
 #minimap-name{font-size:14px !important;padding:2px 12px}
 .yd-icon{image-rendering:pixelated;object-fit:contain}
+/* ===== Tẩy Cốt + Khai Mạch (taycot.js) ===== */
+.pill-icon{image-rendering:pixelated;object-fit:contain}
+.tc-pham{font-size:16px;font-weight:bold;margin:6px 0}
+.tc-pham-bonus{font-size:12px;font-weight:normal;color:#cfe3c0}
+.tc-nopham{color:#8a94a0;font-size:13px;margin:6px 0}
+.tc-roots-row{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}
+.tc-root-locked{font-size:28px;opacity:.45;filter:grayscale(1)}
+.taycot-fx-inner{animation:taycot-rise 1.2s ease-out}
+@keyframes taycot-rise{0%{opacity:0;transform:scale(.7) translateY(30px)}60%{opacity:1;transform:scale(1.05)}100%{transform:scale(1)}}
+.taycot-fx-pham{font-size:30px;font-weight:bold;margin:10px 0;text-shadow:0 0 18px currentColor;animation:taycot-glow 1.6s ease-in-out infinite alternate}
+@keyframes taycot-glow{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+.taycot-fx-from{font-size:13px;color:#cfe3c0;margin-bottom:6px}
+.taycot-fx-bonus{font-size:14px;color:#ffe9a8}
+.km-choose{max-width:420px}
+.km-choose-grid{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.km-choose-btn{background:rgba(0,0,0,.5);border:2px solid #ff9d5c;border-radius:10px;padding:10px 14px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px}
+.km-choose-btn:hover{background:rgba(255,157,92,.25)}

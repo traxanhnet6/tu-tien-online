@@ -195,6 +195,7 @@ var NPC = {
     if (!def) return { name: npcId, lines: ["npc_unknown"], options: [{ label: "npc_bye", act: "bye" }] };
 
     if (def.kind === "quest") return _questTalk(npcId, def, state);
+    if (npcId === "luyen_dan_su") return _alchemyTalk(npcId, def);
     if (def.kind === "shop") return _shopTalk(npcId, def, state);
     if (def.kind === "market") return _marketTalk(npcId, def, state);
     if (def.kind === "sect") return _sectTalk(npcId, def, state);
@@ -309,6 +310,19 @@ function _forgeTalk(npcId, def) {
       { label: "npc_shop", act: "shop", stock: def.stock || null },
       { label: "npc_enhance", act: "enhance" },
       { label: "npc_refine_yaodan", act: "refine" },
+      { label: "npc_bye", act: "bye" },
+    ],
+  };
+}
+
+/* Luyện Đan Sư (Đan Phòng Dược Vương Tông) — luyện Khai Mạch Đan */
+function _alchemyTalk(npcId, def) {
+  return {
+    name: def.nameKey,
+    lines: ["npc_" + npcId + "_greet", "npc_alchemy_intro"],
+    options: [
+      { label: "npc_alchemy", act: "alchemy" },
+      { label: "npc_quest", act: "quest" },
       { label: "npc_bye", act: "bye" },
     ],
   };

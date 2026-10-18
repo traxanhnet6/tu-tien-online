@@ -24,6 +24,8 @@ var SECTS = {
       { id: "manual_kiem_1", cost: 40 },
       { id: "manual_kiem_2", cost: 100 },
       { id: "manual_kiem_3", cost: 180 },
+      { id: "manual_kiem_4", cost: 400 },
+      { id: "manual_sig_kiem", cost: 3000 },
     ],
   },
   thien_phap_tong: {
@@ -34,6 +36,9 @@ var SECTS = {
       { id: "manual_phap_1", cost: 40 },
       { id: "manual_phap_2", cost: 100 },
       { id: "manual_phap_3", cost: 180 },
+      { id: "manual_phap_4", cost: 400 },
+      { id: "manual_phap_5", cost: 250 },
+      { id: "manual_sig_phap", cost: 3000 },
     ],
   },
   kim_cang_tong: {
@@ -44,6 +49,9 @@ var SECTS = {
       { id: "manual_the_1", cost: 40 },
       { id: "manual_the_2", cost: 100 },
       { id: "manual_the_3", cost: 180 },
+      { id: "manual_the_4", cost: 250 },
+      { id: "manual_the_5", cost: 250 },
+      { id: "manual_sig_the", cost: 3000 },
     ],
   },
   duoc_vuong_tong: {
@@ -54,6 +62,8 @@ var SECTS = {
       { id: "manual_duoc_1", cost: 120 },
       { id: "manual_duoc_2", cost: 150 },
       { id: "manual_duoc_3", cost: 250 },
+      { id: "manual_duoc_4", cost: 400 },
+      { id: "manual_sig_duoc", cost: 3000 },
     ],
   },
   ngu_thu_tong: {
@@ -64,6 +74,8 @@ var SECTS = {
       { id: "manual_thu_1", cost: 120 },
       { id: "manual_thu_2", cost: 150 },
       { id: "manual_thu_3", cost: 250 },
+      { id: "manual_thu_4", cost: 400 },
+      { id: "manual_sig_thu", cost: 3000 },
     ],
   },
   /* 6. Cửu U Ma Tông — phe TÀ TU: chỉ nhận người chơi đường Ma Đạo */
@@ -76,8 +88,10 @@ var SECTS = {
       { id: "manual_ma_2", cost: 150 },
       { id: "manual_ma_3", cost: 250 },
       { id: "manual_ma_4", cost: 350 },
+      { id: "manual_ma_5", cost: 600 },
       { id: "manual_ps_ma_1", cost: 200 },
       { id: "manual_ps_ma_2", cost: 300 },
+      { id: "manual_sig_ma", cost: 3000 },
     ],
   },
 };
