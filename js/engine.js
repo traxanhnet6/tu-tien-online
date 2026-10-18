@@ -48,9 +48,9 @@ var Engine = (function () {
     truong_lao: 'assets/sprs/sprs_npc_dai_phu.webp',
     truong_tran: 'assets/sprs/sprs_npc_dai_phu.webp',
     lao_nong_dan: 'assets/sprs/sprs_npc_dai_phu.webp', /* Trưởng Lão Linh Điền (tạm) */
-    su_gia_kiem: 'assets/sprs/sprs_player_kiem.png',
-    su_gia_phap: 'assets/sprs/sprs_player_phap.png',
-    su_gia_the: 'assets/sprs/sprs_player_the.png',
+    su_gia_kiem: 'assets/sprs/char_nam_xuong_idle.png',
+    su_gia_phap: 'assets/sprs/char_nu_xuong_idle.png',
+    su_gia_the: 'assets/sprs/char_nam_xuong_idle.png',
   };
   var SPRITE_MON = {
     da_tru:       'assets/sprs/sprs_mon_da_tru.png',
@@ -306,7 +306,7 @@ var Engine = (function () {
     /* Quay mặt như người thật: lật ngang khi hướng di chuyển có cos<0
        (đi sang trái). Thân luôn đứng thẳng — không rotate sprite. */
     var flip = !!opts.flip;
-    if (opts.faceAng != null) flip = Math.cos(opts.faceAng) < 0;
+    if (!opts.noAutoFlip && opts.faceAng != null) flip = Math.cos(opts.faceAng) < 0;
     if (flip) _ctx.scale(-1, 1);
     if (im) _ctx.drawImage(im, -dw / 2, -dh / 2, dw, dh);
     else {
@@ -693,6 +693,7 @@ var Engine = (function () {
     return false;
   }
   function _moveBy(dx, dy, dt) {
+    var _ox = player.x, _oy = player.y;
     var sp = _speed();
     var nx = Math.max(16, Math.min(WORLD_W - 16, player.x + dx * sp * dt));
     var ny = Math.max(16, Math.min(WORLD_H - 16, player.y + dy * sp * dt));
@@ -707,6 +708,11 @@ var Engine = (function () {
       player.ang = _angLerp(player.ang == null ? _ta : player.ang, _ta, Math.min(1, dt * 10));
     }
     if (Math.abs(dx) > 0.01) player.dir = dx >= 0 ? 1 : -1;
+    /* walk cycle cho art nhân vật mới: chỉ tích phase khi thực sự di chuyển */
+    if (player.x !== _ox || player.y !== _oy) {
+      player._walkPhase = (player._walkPhase || 0) + dt;
+      player._lastMove = Date.now();
+    }
   }
   function _moveToward(tx, ty, dt) {
     var dx = tx - player.x, dy = ty - player.y;
@@ -1580,10 +1586,40 @@ var Engine = (function () {
     }
   }
 
-  function _playerSprite() {
+  function _playerSpriteOld() {
     var S = _S();
     var cls = (S && S.char && S.char.sect) || 'kiem';
     return SPRITE_PLAYER[cls] || SPRITE_PLAYER.kiem;
+  }
+  /* Art nhân vật mới (mẫu chibi đã duyệt): char_<gioi>_<huong>_walk<1-4>.png
+   * khi di chuyển, char_<gioi>_<huong>_idle.png khi đứng yên,
+   * char_<gioi>_fly.png khi ngự kiếm bay. Có frame riêng cho cả 4 hướng
+   * (xuong/len/trai/phai) nên không flip sprite — thân luôn đứng thẳng. */
+  var _CHAR_HUONG = { down: 'xuong', up: 'len', left: 'trai', right: 'phai' };
+  function _playerFrame() {
+    var S = _S();
+    var gioi = (S && S.char && S.char.gender === 'nu') ? 'nu' : 'nam';
+    var ang = (typeof player.ang === 'number') ? player.ang : Math.PI / 2;
+    var huong = _CHAR_HUONG[_face4(player, ang)] || 'xuong';
+    var src = null;
+    try {
+      if (typeof Engine !== 'undefined' && Engine.fly)
+        src = 'assets/sprs/char_' + gioi + '_fly.png';
+    } catch (e) {}
+    if (!src) {
+      var moving = false;
+      try { moving = (Date.now() - (player._lastMove || 0)) < 150; } catch (e2) {}
+      if (moving) {
+        var f = 1 + (Math.floor((player._walkPhase || 0) * 8) % 4);
+        src = 'assets/sprs/char_' + gioi + '_' + huong + '_walk' + f + '.png';
+      } else {
+        src = 'assets/sprs/char_' + gioi + '_' + huong + '_idle.png';
+      }
+    }
+    var ce = _imgCache[src];
+    if (ce) return (ce.done && !ce.ok) ? _playerSpriteOld() : src;
+    _img(src); /* warm cache */
+    return src;
   }
   /* Pháp bảo ngự kiếm theo hệ phái: kiếm (Kiếm) / phất trần (Pháp) / đài sen (Thể) */
   function _drawMount(x, y, dir) {
@@ -1658,14 +1694,14 @@ var Engine = (function () {
         _ctx.globalAlpha = 1;
       }
     }
-    _drawCreature(player, player.x + lunge, player.y + lift - blift, 44, 44, _playerSprite(), '#2fa3a0',
-      { lift: (Engine.fly ? 26 : 0) + blift, shadowY: player.y + 18 - blift, faceAng: player.ang });
+    _drawCreature(player, player.x + lunge, player.y + lift - blift, 38, 48, _playerFrame(), '#2fa3a0',
+      { lift: (Engine.fly ? 26 : 0) + blift, shadowY: player.y + 18 - blift, noAutoFlip: true });
     var ps = _getStats();
     _drawHpBar(player.x, player.y + lift - blift - 32, 40, player.hp / ps.maxHp, false);
   }
 
   function _drawOther(o) {
-    _drawCreature(o, o.x, o.y, 40, 40, SPRITE_PLAYER, '#7e9bb5', {});
+    _drawCreature(o, o.x, o.y, 38, 48, 'assets/sprs/char_nam_xuong_idle.png', '#7e9bb5', { noAutoFlip: true });
     if (o.name) {
       _ctx.fillStyle = '#fff';
       _ctx.font = '10px sans-serif';

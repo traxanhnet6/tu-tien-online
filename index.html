@@ -17,6 +17,7 @@
   <section id="screen-loading" class="screen">
     <img class="screen-bg" src="assets/ui/ui_loading.webp" alt="">
     <div class="loading-wrap">
+      <div class="loading-title" data-t="app_title">Tu Tiên Online</div>
       <div class="loading-bar"><div id="loading-fill"></div></div>
       <div class="loading-row">
         <span id="loading-label" data-t="loading_label">Đang tải dữ liệu...</span>
@@ -30,6 +31,8 @@
     <img class="screen-bg" src="../assets-ai/menu-nen-thuy-mac.webp" alt=""
          onerror="this.style.display='none'">
     <div class="menu-wrap">
+      <img class="menu-char menu-char-l" src="assets/sprs/char_nam_xuong_walk1.png" alt="">
+      <img class="menu-char menu-char-r" src="assets/sprs/char_nu_xuong_walk1.png" alt="">
       <h1 class="game-title" data-t="app_title">Tu Tiên Online</h1>
       <p class="game-sub" data-t="menu_sub">Con đường tu tiên vạn dặm bắt đầu từ một bước chân</p>
       <div class="menu-btns">
@@ -51,6 +54,13 @@
          onerror="this.style.display='none'">
     <div class="create-wrap panel-wood">
       <h2 data-t="btn_create_role">Tạo nhân vật</h2>
+      <div class="create-preview">
+        <img id="create-char-img" src="assets/sprs/char_nam_xuong_walk1.png" alt="">
+      </div>
+      <div class="gender-row">
+        <button id="create-gender-nam" class="btn gender-btn sel" type="button">♂ <span data-t="gender_nam">Nam</span></button>
+        <button id="create-gender-nu" class="btn gender-btn" type="button">♀ <span data-t="gender_nu">Nữ</span></button>
+      </div>
       <label class="fld-label" data-t="create_name_label">Tên nhân vật</label>
       <input id="create-name" class="fld-input" maxlength="12"
              data-t-ph="input_name" placeholder="Nhập tên nhân vật">

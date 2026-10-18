@@ -67,7 +67,7 @@ var screen = "menu";
 var panel = null, panelArg = null;
 var tnWarned = false; /* đã cảnh báo thọ nguyên thấp trong phiên này chưa */
 var curMapId = 0;
-var createSel = { sect: "kiem", element: null, quality: null };
+var createSel = { sect: "kiem", element: null, quality: null, gender: "nam" };
 var lastHp = null, bossMusicOn = false, saveTick = 0;
 var btTimer = null, btStep = "needs", btBattle = null;
 var statsCache = null;
@@ -267,6 +267,7 @@ function preloadFxSheets() {
 
 function show(name) {
   screen = name;
+  if (name !== "create") { try { stopCreatePreview(); } catch (e) {} }
   ["loading", "menu", "create", "game"].forEach(function (n) {
     var el = $("screen-" + n);
     if (el) el.classList.toggle("hidden", n !== name);
@@ -303,12 +304,44 @@ function doCheckin() {
 
 /* ---------------- tạo nhân vật ---------------- */
 function initCreate() {
-  createSel = { sect: "kiem", element: null, quality: null };
+  createSel = { sect: "kiem", element: null, quality: null, gender: "nam" };
   var cards = document.querySelectorAll(".sect-card");
   for (var i = 0; i < cards.length; i++) {
     cards[i].classList.toggle("sel", cards[i].getAttribute("data-sect") === "kiem");
   }
   $("lingen-result").textContent = t("lingen_none");
+  syncCreateGender();
+  startCreatePreview();
+}
+
+/* ---- Xem truoc nhan vat o man tao (art moi, 4 khung buoc) ---- */
+var _createPreviewTimer = null;
+var _createPreviewFrame = 0;
+function syncCreateGender() {
+  var g = (createSel.gender === "nu") ? "nu" : "nam";
+  var bn = $("create-gender-nam"), bu = $("create-gender-nu");
+  if (bn) bn.classList.toggle("sel", g === "nam");
+  if (bu) bu.classList.toggle("sel", g === "nu");
+  updateCreatePreview();
+}
+function updateCreatePreview() {
+  var img = $("create-char-img");
+  if (!img) return;
+  var g = (createSel.gender === "nu") ? "nu" : "nam";
+  img.src = "assets/sprs/char_" + g + "_xuong_walk" + ((_createPreviewFrame % 4) + 1) + ".png";
+}
+function startCreatePreview() {
+  stopCreatePreview();
+  _createPreviewFrame = 0;
+  updateCreatePreview();
+  _createPreviewTimer = setInterval(function () {
+    if (typeof screen !== "undefined" && screen !== "create") { stopCreatePreview(); return; }
+    _createPreviewFrame++;
+    updateCreatePreview();
+  }, 280);
+}
+function stopCreatePreview() {
+  if (_createPreviewTimer) { clearInterval(_createPreviewTimer); _createPreviewTimer = null; }
 }
 
 function rollLingen() {
@@ -336,7 +369,7 @@ function beginGame() {
   state = st;
   state.char.name = name;
   state.char.sect = createSel.sect;
-  state.char.gender = createSel.sect === "phap" ? "nu" : "nam";
+  state.char.gender = (createSel.gender === "nu") ? "nu" : "nam";
   state.char.element = createSel.element;
   state.char.elementQuality = createSel.quality;
   state.char.realm = 1; state.char.tier = 1; /* bắt đầu Luyện Khí tầng 1 */
@@ -2501,10 +2534,15 @@ function bindStatic() {
       return function () {
         createSel.sect = c.getAttribute("data-sect");
         for (var j = 0; j < cards.length; j++) cards[j].classList.toggle("sel", cards[j] === c);
+        /* doi he phai -> gioi tinh mac dinh theo phai (user co the doi lai) */
+        createSel.gender = (createSel.sect === "phap") ? "nu" : "nam";
+        syncCreateGender();
         sfx("click");
       };
     })(cards[i]);
   }
+  $("create-gender-nam").onclick = function () { createSel.gender = "nam"; syncCreateGender(); sfx("click"); };
+  $("create-gender-nu").onclick = function () { createSel.gender = "nu"; syncCreateGender(); sfx("click"); };
   $("btn-taycot").onclick = function () { rollLingen(); };
   $("btn-begin").onclick = function () { beginGame(); };
   $("btn-create-back").onclick = function () { sfx("click"); show("menu"); refreshMenu(); };
@@ -2954,9 +2992,9 @@ function renderEquipTab() {
   h += '<div class="equip-col">' + left.map(equipSlot).join("") + "</div>";
   /* nhân vật ở giữa — đổi vũ khí theo trang bị đang đeo, sprite theo giới tính */
   var wpn = state.equip.vukhi ? itemDef(state.equip.vukhi) : null;
-  var sprBase = "assets/sprs/sprs_player_" + (c.sect === "phap" ? "phap" : (c.sect === "the" ? "the" : "kiem"));
-  var sprG = sprBase + "_" + (c.gender || "nam") + ".png";
-  h += '<div class="char-sprite"><img src="' + sprG + '" data-fb="' + sprBase + '.png" alt="" ' +
+  var sprG = "assets/sprs/char_" + (c.gender === "nu" ? "nu" : "nam") + "_xuong_idle.png";
+  var sprFb = "assets/sprs/sprs_player_" + (c.sect === "phap" ? "phap" : (c.sect === "the" ? "the" : "kiem")) + ".png";
+  h += '<div class="char-sprite"><img src="' + sprG + '" data-fb="' + sprFb + '" alt="" ' +
     'onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb=\'\';}else{this.style.display=\'none\'}">' +
     (wpn ? '<div class="char-wpn">' + esc(itemIcon(state.equip.vukhi)) + "</div>" : "") +
     '<div class="char-name">' + esc(c.name) + "</div>" +
