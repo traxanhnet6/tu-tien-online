@@ -230,6 +230,34 @@ var SectQuest = {
     });
   },
 
+  /* Thiền định xong → tính cho nhiệm vụ meditate hằng ngày */
+  onMeditate: function (state) {
+    var joined = _joined(state);
+    if (!joined) return;
+    var d = this._daily(_si(state));
+    this._dailyDefs(joined).forEach(function (dq) {
+      if (dq.need.type === "meditate") d.progress[dq.id] = (d.progress[dq.id] || 0) + 1;
+    });
+  },
+  /* Cho linh thú ăn → tính cho nhiệm vụ feedpet hằng ngày */
+  onFeedPet: function (state) {
+    var joined = _joined(state);
+    if (!joined) return;
+    var d = this._daily(_si(state));
+    this._dailyDefs(joined).forEach(function (dq) {
+      if (dq.need.type === "feedpet") d.progress[dq.id] = (d.progress[dq.id] || 0) + 1;
+    });
+  },
+  /* Luyện đan xong → tính cho nhiệm vụ craftpill hằng ngày */
+  onCraftPill: function (state) {
+    var joined = _joined(state);
+    if (!joined) return;
+    var d = this._daily(_si(state));
+    this._dailyDefs(joined).forEach(function (dq) {
+      if (dq.need.type === "craftpill") d.progress[dq.id] = (d.progress[dq.id] || 0) + 1;
+    });
+  },
+
   /* Rời/đổi tông: hủy nhiệm vụ đang làm dở, reset rank */
   onLeaveSect: function (state) {
     var sqs = _sqs(state);
@@ -333,12 +361,23 @@ var SectQuest = {
     if (!joined) return [];
     var si = _si(state);
     var d = this._daily(si);
+    var self = this;
     return this._dailyDefs(joined).map(function (q) {
-      var prog = d.progress[q.id] || 0;
+      var rw = q.reward || { contrib: q.contrib || 0, stones: 0, exp: 0 };
+      var prog, need;
+      if (q.need.type === "item") {
+        /* thu thập: kiểm tra trực tiếp túi đồ */
+        prog = Math.min(_fn("countItem")(state, q.need.item), q.need.count);
+        need = q.need.count;
+      } else {
+        prog = Math.min(d.progress[q.id] || 0, q.need.count);
+        need = q.need.count;
+      }
       return {
         id: q.id, tname: q.tname, tdesc: q.tdesc, sect: joined,
-        prog: Math.min(prog, q.need.count), need: q.need.count, contrib: q.contrib,
-        done: prog >= q.need.count, claimed: d.claimed.indexOf(q.id) >= 0,
+        prog: prog, need: need,
+        contrib: rw.contrib, stones: rw.stones, exp: rw.exp,
+        done: prog >= need, claimed: d.claimed.indexOf(q.id) >= 0,
       };
     });
   },
@@ -351,10 +390,50 @@ var SectQuest = {
     this._dailyDefs(joined).forEach(function (x) { if (x.id === id) q = x; });
     if (!q) return { ok: false, reason: "no_quest" };
     if (d.claimed.indexOf(id) >= 0) return { ok: false, reason: "da_nhan" };
-    if ((d.progress[id] || 0) < q.need.count) return { ok: false, reason: "chua_xong" };
+    var done = false;
+    if (q.need.type === "item") {
+      done = _fn("countItem")(state, q.need.item) >= q.need.count;
+      if (done) _fn("removeItem")(state, q.need.item, q.need.count); /* nộp vật phẩm */
+    } else {
+      done = (d.progress[id] || 0) >= q.need.count;
+    }
+    if (!done) return { ok: false, reason: "chua_xong" };
     d.claimed.push(id);
-    si.contrib = (si.contrib || 0) + q.contrib;
-    return { ok: true, contrib: q.contrib };
+    var rw = q.reward || { contrib: q.contrib || 0, stones: 0, exp: 0 };
+    si.contrib = (si.contrib || 0) + (rw.contrib || 0);
+    if (rw.stones) state.stones = (state.stones || 0) + rw.stones;
+    if (rw.exp) _fn("gainExp")(state, rw.exp);
+    return { ok: true, reward: rw };
+  },
+  /* Thưởng thêm khi làm đủ 5/5 nhiệm vụ ngày của tông */
+  dailyBonus: function (state) {
+    var joined = _joined(state);
+    if (!joined) return { total: 0, claimed: 0, bonusClaimed: false, bonus: null };
+    var defs = this._dailyDefs(joined);
+    var si = _si(state);
+    var d = this._daily(si);
+    var claimed = 0;
+    defs.forEach(function (q) { if (d.claimed.indexOf(q.id) >= 0) claimed++; });
+    return {
+      total: defs.length, claimed: claimed,
+      bonusClaimed: d.bonusClaimed || false,
+      bonus: { contrib: 50, stones: 1000, exp: 2000 },
+      ready: claimed >= defs.length && defs.length > 0,
+    };
+  },
+  claimDailyBonus: function (state) {
+    var joined = _joined(state);
+    if (!joined) return { ok: false, reason: "khong_phai_tong" };
+    var si = _si(state);
+    var d = this._daily(si);
+    var b = this.dailyBonus(state);
+    if (!b.ready) return { ok: false, reason: "chua_xong" };
+    if (d.bonusClaimed) return { ok: false, reason: "da_nhan" };
+    d.bonusClaimed = true;
+    si.contrib = (si.contrib || 0) + b.bonus.contrib;
+    state.stones = (state.stones || 0) + b.bonus.stones;
+    _fn("gainExp")(state, b.bonus.exp);
+    return { ok: true, bonus: b.bonus };
   },
   weeklyList: function (state) {
     var joined = _joined(state);

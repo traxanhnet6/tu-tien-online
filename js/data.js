@@ -707,6 +707,31 @@ function genRandomDungeon(def, seed) {
  * reqRealm: null = mặc được ngay; {realm, tier} = cảnh giới tối thiểu
  * locked: true = đồ bị khóa (cần Khai Phong Phù để mở)
  * ============================================================ */
+/* ============================================================
+ * ĐỘ HIẾM (7 cấp) & ĐỘ KHÓ (5 cấp) vật phẩm — Bui DUYỆT 2026-10-18
+ * doHiem: 0 Phàm(trắng) → 6 Tiên Phẩm(vàng kim)
+ * doKho: 0 Dễ → 4 Không thể
+ * ============================================================ */
+const RARITY = [
+  { ten: "Phàm",         mau: "#e0e0e0", en: "Common" },
+  { ten: "Lương",        mau: "#4caf50", en: "Fine" },
+  { ten: "Ưu",           mau: "#2196f3", en: "Superior" },
+  { ten: "Hiếm",         mau: "#9c27b0", en: "Rare" },
+  { ten: "Sử Thi",       mau: "#ff9800", en: "Epic" },
+  { ten: "Truyền Thuyết", mau: "#f44336", en: "Legendary" },
+  { ten: "Tiên Phẩm",    mau: "#ffd700", en: "Immortal" },
+];
+const DOKHO = [
+  { ten: "Dễ", en: "Easy" },
+  { ten: "Trung bình", en: "Medium" },
+  { ten: "Khó", en: "Hard" },
+  { ten: "Cực khó", en: "Extreme" },
+  { ten: "Không thể", en: "Unobtainable" },
+];
+/* Ánh xạ nguyên tố yêu đan → chỉ số cộng thêm khi luyện hóa:
+ * hoa(Hỏa)=bạo kích, loi(Lôi)=công, bang(Băng)=thủ, phong(Phong)=HP, tho(Thổ)=giáp */
+const YD_ELEM_STAT = { hoa: "crit", loi: "atk", bang: "def", phong: "hp", tho: "armor" };
+
 const ITEMS = {
   /* --- Đan dược --- */
   pill_hx: {
@@ -768,65 +793,127 @@ const ITEMS = {
     price: 300, sell: 90, icon: "🌱" },
   hat_dia_linh_qua: { kind: "seed", nameKey: "it_hat_dia_linh_qua", descKey: "it_hat_dia_linh_qua_desc",
     price: 800, sell: 240, icon: "🌱" },
-  thao_linh_chi: { kind: "herb", nameKey: "it_thao_linh_chi", descKey: "it_thao_linh_chi_desc",
-    price: 80, sell: 40, icon: "🌿" },
-  that_diep_chi: { kind: "herb", nameKey: "it_that_diep_chi", descKey: "it_that_diep_chi_desc",
-    price: 600, sell: 300, icon: "🌿" },
+  thao_linh_chi: {
+    kind: "herb", nameKey: "it_thao_linh_chi", descKey: "it_thao_linh_chi_desc",
+    price: 80, sell: 40, icon: "🌿",
+    herbTier: 1, gatherMap: "Thảo Dược Cốc",
+    useFor: ["dan_tu_khi", "dan_hoi_khi_tan"],
+    doHiem: 1, doKho: 0,
+  },
+  that_diep_chi: {
+    kind: "herb", nameKey: "it_that_diep_chi", descKey: "it_that_diep_chi_desc",
+    price: 600, sell: 300, icon: "🌿",
+    herbTier: 3, gatherMap: "U Minh Cốc",
+    useFor: ["dan_cuu_chuyen", "dan_duong_anh", "dan_ho_mach", "dan_tu_than", "dan_co_ban"],
+    doHiem: 3, doKho: 1,
+  },
   huyen_thiet: { kind: "ore", nameKey: "it_huyen_thiet", descKey: "it_huyen_thiet_desc",
     price: 800, sell: 400, icon: "⛏️" },
-  truc_co_thao: { kind: "herb", nameKey: "it_truc_co_thao", descKey: "it_truc_co_thao_desc",
-    price: 250, sell: 125, icon: "🌿" },
-  dia_linh_qua: { kind: "herb", nameKey: "it_dia_linh_qua", descKey: "it_dia_linh_qua_desc",
-    price: 600, sell: 300, icon: "🍈" },
+  truc_co_thao: {
+    kind: "herb", nameKey: "it_truc_co_thao", descKey: "it_truc_co_thao_desc",
+    price: 250, sell: 125, icon: "🌿",
+    herbTier: 2, gatherMap: "Rừng Trúc",
+    useFor: ["pill_truccodan", "dan_boi_nguyen"],
+    doHiem: 2, doKho: 0,
+  },
+  dia_linh_qua: {
+    kind: "herb", nameKey: "it_dia_linh_qua", descKey: "it_dia_linh_qua_desc",
+    price: 600, sell: 300, icon: "🍈",
+    herbTier: 2, gatherMap: "Hắc Phong Lâm",
+    useFor: ["dan_boi_nguyen", "dan_ngung_dan", "dan_cuu_chuyen"],
+    doHiem: 2, doKho: 1,
+  },
   pill_truccodan: {
     kind: "pill", nameKey: "it_pill_truccodan", descKey: "it_pill_truccodan_desc",
     price: 2000, sell: 600,
+    doHiem: 3, doKho: 2,
+    reqRealm: 2,
+    congThuc: [["truc_co_thao",5], ["dia_linh_qua",3], ["yaodan1",1]],
+    dotPhaBonus: 0.15, dotPhaRealm: 2,
+  },
+  /* --- Đan đột phá đại cảnh giới (Bui chốt: đột phá đại cảnh giới cần đan) --- */
+  pill_kimdan: {
+    kind: "pill", nameKey: "it_pill_kimdan", descKey: "it_pill_kimdan_desc",
+    price: 8000, sell: 2400, icon: "🟡",
+  },
+  pill_nguyenanh: {
+    kind: "pill", nameKey: "it_pill_nguyenanh", descKey: "it_pill_nguyenanh_desc",
+    price: 20000, sell: 6000, icon: "🟠",
+  },
+  pill_hoathan: {
+    kind: "pill", nameKey: "it_pill_hoathan", descKey: "it_pill_hoathan_desc",
+    price: 50000, sell: 15000, icon: "🔴",
+  },
+  pill_luyenhu: {
+    kind: "pill", nameKey: "it_pill_luyenhu", descKey: "it_pill_luyenhu_desc",
+    price: 120000, sell: 36000, icon: "🟣",
+  },
+  pill_hopdao: {
+    kind: "pill", nameKey: "it_pill_hopdao", descKey: "it_pill_hopdao_desc",
+    price: 300000, sell: 90000, icon: "💜",
+  },
+  pill_dokiep: {
+    kind: "pill", nameKey: "it_pill_dokiep", descKey: "it_pill_dokiep_desc",
+    price: 800000, sell: 240000, icon: "⚡",
   },
   pill_taycotdan: {
     kind: "pill", nameKey: "it_pill_taycotdan", descKey: "it_pill_taycotdan_desc",
     taycot: 1, taycotGrade: 0, /* uống: +1 cấp Căn Cốt + roll/tăng phẩm chất căn cốt (taycot.js) */
     price: 1500, sell: 450, icon: "🟡",
+    doHiem: 2, doKho: 1,
   },
   pill_taycotdan_trung: {
     kind: "pill", nameKey: "it_pill_taycotdan_trung", descKey: "it_pill_taycotdan_trung_desc",
     taycot: 2, taycotGrade: 1, /* trung phẩm: +2 cấp Căn Cốt, tỉ lệ phẩm cao hơn */
     price: 4000, sell: 1200, icon: "🔵",
+    doHiem: 3, doKho: 1,
   },
   pill_taycotdan_thuong: {
     kind: "pill", nameKey: "it_pill_taycotdan_thuong", descKey: "it_pill_taycotdan_thuong_desc",
     taycot: 3, taycotGrade: 2, /* thượng phẩm: +3 cấp Căn Cốt */
     price: 10000, sell: 3000, icon: "🟣",
+    doHiem: 4, doKho: 2,
   },
   pill_taycotdan_thien: {
     kind: "pill", nameKey: "it_pill_taycotdan_thien", descKey: "it_pill_taycotdan_thien_desc",
     taycot: 5, taycotGrade: 3, /* thiên phẩm: +5 cấp Căn Cốt, tỉ lệ phẩm cao nhất */
     price: 25000, sell: 7500, icon: "🟠",
+    doHiem: 5, doKho: 3,
   },
   /* --- Khai Mạch Đan: mở thêm ngũ hành linh căn (luyện tại Đan Phòng, taycot.js) --- */
   pill_khaimachdan: {
     kind: "pill", nameKey: "it_pill_khaimachdan", descKey: "it_pill_khaimachdan_desc",
     khaimach: 1, /* mở 1 linh căn ngẫu nhiên chưa mở */
     price: 3000, sell: 900, icon: "🔴",
+    doHiem: 3, doKho: 2,
   },
   pill_khaimachdan_trung: {
     kind: "pill", nameKey: "it_pill_khaimachdan_trung", descKey: "it_pill_khaimachdan_trung_desc",
     khaimach: 1, khaimachChoose: 1, /* mở 1 linh căn DO NGƯỜI CHƠI CHỌN */
     price: 8000, sell: 2400, icon: "🟥",
+    doHiem: 4, doKho: 2,
   },
   pill_khaimachdan_thuong: {
     kind: "pill", nameKey: "it_pill_khaimachdan_thuong", descKey: "it_pill_khaimachdan_thuong_desc",
     khaimach: 2, /* mở 2 linh căn ngẫu nhiên cùng lúc */
     price: 20000, sell: 6000, icon: "❤️‍🔥",
+    doHiem: 5, doKho: 3,
   },
   /* --- Nguyên liệu --- */
   taycothao: {
     kind: "material", nameKey: "it_taycothao", descKey: "it_taycothao_desc",
     price: 150, sell: 45,
+    herbTier: 1, gatherMap: "Thảo Dược Cốc",
+    useFor: ["pill_taycotdan", "pill_taycotdan_trung", "dan_tu_khi"],
+    doHiem: 1, doKho: 0,
   },
   /* Nguyên liệu Huyết Ma Vực / Thái Hư Tiên Cảnh */
   huyet_tinh: {
     kind: "material", nameKey: "it_huyet_tinh", descKey: "it_huyet_tinh_desc",
     price: 300, sell: 90,
+    herbTier: 4, gatherMap: "Huyết Ma Vực",
+    useFor: ["dan_hu_linh", "dan_co_ban", "dan_hop_the", "dan_tien_linh"],
+    doHiem: 4, doKho: 2,
   },
   oan_hon_thach: {
     kind: "material", nameKey: "it_oan_hon_thach", descKey: "it_oan_hon_thach_desc",
@@ -835,10 +922,16 @@ const ITEMS = {
   tien_thao: {
     kind: "material", nameKey: "it_tien_thao", descKey: "it_tien_thao_desc",
     price: 350, sell: 100,
+    herbTier: 4, gatherMap: "Thái Hư Tiên Cảnh",
+    useFor: ["dan_ho_mach", "dan_than_du", "dan_tu_than", "dan_hu_linh", "dan_quy_nhat"],
+    doHiem: 4, doKho: 2,
   },
   yaodan1: {
     kind: "yaodan", nameKey: "it_yaodan1", descKey: "it_yaodan1_desc",
     price: 500, sell: 150,
+    ydTier: 1,
+    doHiem: 2, doKho: 1,
+    ydAtk: 50,
   },
   ttd_ha: {
     kind: "material", nameKey: "it_ttd_ha", descKey: "it_ttd_ha_desc",
@@ -887,118 +980,201 @@ const ITEMS = {
   yaodan2: {
     kind: "yaodan", nameKey: "it_yaodan2", descKey: "it_yaodan2_desc",
     price: 1500, sell: 500, icon: "\U0001f7e3", ydTier: 2,
+    doHiem: 3, doKho: 1,
+    ydAtk: 120,
   },
   yaodan3: {
     kind: "yaodan", nameKey: "it_yaodan3", descKey: "it_yaodan3_desc",
     price: 3000, sell: 1000, icon: "\U0001f7e3", ydTier: 3,
+    doHiem: 4, doKho: 2,
+    ydAtk: 250,
   },
   yaodan4: {
     kind: "yaodan", nameKey: "it_yaodan4", descKey: "it_yaodan4_desc",
     price: 6000, sell: 2000, icon: "\U0001f7e3", ydTier: 4,
+    doHiem: 5, doKho: 2,
+    ydAtk: 500,
   },
   yaodan5: {
     kind: "yaodan", nameKey: "it_yaodan5", descKey: "it_yaodan5_desc",
     price: 12000, sell: 4000, icon: "\U0001f7e3", ydTier: 5,
+    doHiem: 6, doKho: 3,
+    ydAtk: 1000,
   },
   yaodan1_hoa: {
     kind: "yaodan", nameKey: "it_yaodan1_hoa", descKey: "it_yaodan1_hoa_desc",
     price: 750, sell: 250, icon: "\U0001f7e3", ydTier: 1, ydElem: "hoa",
+    doHiem: 2, doKho: 1,
+    ydAtk: 50,
+    ydBonusStat: "crit", ydBonusVal: 2,
   },
   yaodan1_loi: {
     kind: "yaodan", nameKey: "it_yaodan1_loi", descKey: "it_yaodan1_loi_desc",
     price: 750, sell: 250, icon: "\U0001f7e3", ydTier: 1, ydElem: "loi",
+    doHiem: 2, doKho: 1,
+    ydAtk: 50,
+    ydBonusStat: "atk", ydBonusVal: 15,
   },
   yaodan1_bang: {
     kind: "yaodan", nameKey: "it_yaodan1_bang", descKey: "it_yaodan1_bang_desc",
     price: 750, sell: 250, icon: "\U0001f7e3", ydTier: 1, ydElem: "bang",
+    doHiem: 2, doKho: 1,
+    ydAtk: 50,
+    ydBonusStat: "def", ydBonusVal: 15,
   },
   yaodan1_phong: {
     kind: "yaodan", nameKey: "it_yaodan1_phong", descKey: "it_yaodan1_phong_desc",
     price: 750, sell: 250, icon: "\U0001f7e3", ydTier: 1, ydElem: "phong",
+    doHiem: 2, doKho: 1,
+    ydAtk: 50,
+    ydBonusStat: "hp", ydBonusVal: 150,
   },
   yaodan1_tho: {
     kind: "yaodan", nameKey: "it_yaodan1_tho", descKey: "it_yaodan1_tho_desc",
     price: 750, sell: 250, icon: "\U0001f7e3", ydTier: 1, ydElem: "tho",
+    doHiem: 2, doKho: 1,
+    ydAtk: 50,
+    ydBonusStat: "armor", ydBonusVal: 15,
   },
   yaodan2_hoa: {
     kind: "yaodan", nameKey: "it_yaodan2_hoa", descKey: "it_yaodan2_hoa_desc",
     price: 2250, sell: 750, icon: "\U0001f7e3", ydTier: 2, ydElem: "hoa",
+    doHiem: 3, doKho: 1,
+    ydAtk: 120,
+    ydBonusStat: "crit", ydBonusVal: 4,
   },
   yaodan2_loi: {
     kind: "yaodan", nameKey: "it_yaodan2_loi", descKey: "it_yaodan2_loi_desc",
     price: 2250, sell: 750, icon: "\U0001f7e3", ydTier: 2, ydElem: "loi",
+    doHiem: 3, doKho: 1,
+    ydAtk: 120,
+    ydBonusStat: "atk", ydBonusVal: 35,
   },
   yaodan2_bang: {
     kind: "yaodan", nameKey: "it_yaodan2_bang", descKey: "it_yaodan2_bang_desc",
     price: 2250, sell: 750, icon: "\U0001f7e3", ydTier: 2, ydElem: "bang",
+    doHiem: 3, doKho: 1,
+    ydAtk: 120,
+    ydBonusStat: "def", ydBonusVal: 35,
   },
   yaodan2_phong: {
     kind: "yaodan", nameKey: "it_yaodan2_phong", descKey: "it_yaodan2_phong_desc",
     price: 2250, sell: 750, icon: "\U0001f7e3", ydTier: 2, ydElem: "phong",
+    doHiem: 3, doKho: 1,
+    ydAtk: 120,
+    ydBonusStat: "hp", ydBonusVal: 400,
   },
   yaodan2_tho: {
     kind: "yaodan", nameKey: "it_yaodan2_tho", descKey: "it_yaodan2_tho_desc",
     price: 2250, sell: 750, icon: "\U0001f7e3", ydTier: 2, ydElem: "tho",
+    doHiem: 3, doKho: 1,
+    ydAtk: 120,
+    ydBonusStat: "armor", ydBonusVal: 35,
   },
   yaodan3_hoa: {
     kind: "yaodan", nameKey: "it_yaodan3_hoa", descKey: "it_yaodan3_hoa_desc",
     price: 4500, sell: 1500, icon: "\U0001f7e3", ydTier: 3, ydElem: "hoa",
+    doHiem: 4, doKho: 2,
+    ydAtk: 250,
+    ydBonusStat: "crit", ydBonusVal: 6,
   },
   yaodan3_loi: {
     kind: "yaodan", nameKey: "it_yaodan3_loi", descKey: "it_yaodan3_loi_desc",
     price: 4500, sell: 1500, icon: "\U0001f7e3", ydTier: 3, ydElem: "loi",
+    doHiem: 4, doKho: 2,
+    ydAtk: 250,
+    ydBonusStat: "atk", ydBonusVal: 75,
   },
   yaodan3_bang: {
     kind: "yaodan", nameKey: "it_yaodan3_bang", descKey: "it_yaodan3_bang_desc",
     price: 4500, sell: 1500, icon: "\U0001f7e3", ydTier: 3, ydElem: "bang",
+    doHiem: 4, doKho: 2,
+    ydAtk: 250,
+    ydBonusStat: "def", ydBonusVal: 75,
   },
   yaodan3_phong: {
     kind: "yaodan", nameKey: "it_yaodan3_phong", descKey: "it_yaodan3_phong_desc",
     price: 4500, sell: 1500, icon: "\U0001f7e3", ydTier: 3, ydElem: "phong",
+    doHiem: 4, doKho: 2,
+    ydAtk: 250,
+    ydBonusStat: "hp", ydBonusVal: 900,
   },
   yaodan3_tho: {
     kind: "yaodan", nameKey: "it_yaodan3_tho", descKey: "it_yaodan3_tho_desc",
     price: 4500, sell: 1500, icon: "\U0001f7e3", ydTier: 3, ydElem: "tho",
+    doHiem: 4, doKho: 2,
+    ydAtk: 250,
+    ydBonusStat: "armor", ydBonusVal: 75,
   },
   yaodan4_hoa: {
     kind: "yaodan", nameKey: "it_yaodan4_hoa", descKey: "it_yaodan4_hoa_desc",
     price: 9000, sell: 3000, icon: "\U0001f7e3", ydTier: 4, ydElem: "hoa",
+    doHiem: 5, doKho: 2,
+    ydAtk: 500,
+    ydBonusStat: "crit", ydBonusVal: 8,
   },
   yaodan4_loi: {
     kind: "yaodan", nameKey: "it_yaodan4_loi", descKey: "it_yaodan4_loi_desc",
     price: 9000, sell: 3000, icon: "\U0001f7e3", ydTier: 4, ydElem: "loi",
+    doHiem: 5, doKho: 2,
+    ydAtk: 500,
+    ydBonusStat: "atk", ydBonusVal: 150,
   },
   yaodan4_bang: {
     kind: "yaodan", nameKey: "it_yaodan4_bang", descKey: "it_yaodan4_bang_desc",
     price: 9000, sell: 3000, icon: "\U0001f7e3", ydTier: 4, ydElem: "bang",
+    doHiem: 5, doKho: 2,
+    ydAtk: 500,
+    ydBonusStat: "def", ydBonusVal: 150,
   },
   yaodan4_phong: {
     kind: "yaodan", nameKey: "it_yaodan4_phong", descKey: "it_yaodan4_phong_desc",
     price: 9000, sell: 3000, icon: "\U0001f7e3", ydTier: 4, ydElem: "phong",
+    doHiem: 5, doKho: 2,
+    ydAtk: 500,
+    ydBonusStat: "hp", ydBonusVal: 2000,
   },
   yaodan4_tho: {
     kind: "yaodan", nameKey: "it_yaodan4_tho", descKey: "it_yaodan4_tho_desc",
     price: 9000, sell: 3000, icon: "\U0001f7e3", ydTier: 4, ydElem: "tho",
+    doHiem: 5, doKho: 2,
+    ydAtk: 500,
+    ydBonusStat: "armor", ydBonusVal: 150,
   },
   yaodan5_hoa: {
     kind: "yaodan", nameKey: "it_yaodan5_hoa", descKey: "it_yaodan5_hoa_desc",
     price: 18000, sell: 6000, icon: "\U0001f7e3", ydTier: 5, ydElem: "hoa",
+    doHiem: 6, doKho: 3,
+    ydAtk: 1000,
+    ydBonusStat: "crit", ydBonusVal: 12,
   },
   yaodan5_loi: {
     kind: "yaodan", nameKey: "it_yaodan5_loi", descKey: "it_yaodan5_loi_desc",
     price: 18000, sell: 6000, icon: "\U0001f7e3", ydTier: 5, ydElem: "loi",
+    doHiem: 6, doKho: 3,
+    ydAtk: 1000,
+    ydBonusStat: "atk", ydBonusVal: 300,
   },
   yaodan5_bang: {
     kind: "yaodan", nameKey: "it_yaodan5_bang", descKey: "it_yaodan5_bang_desc",
     price: 18000, sell: 6000, icon: "\U0001f7e3", ydTier: 5, ydElem: "bang",
+    doHiem: 6, doKho: 3,
+    ydAtk: 1000,
+    ydBonusStat: "def", ydBonusVal: 300,
   },
   yaodan5_phong: {
     kind: "yaodan", nameKey: "it_yaodan5_phong", descKey: "it_yaodan5_phong_desc",
     price: 18000, sell: 6000, icon: "\U0001f7e3", ydTier: 5, ydElem: "phong",
+    doHiem: 6, doKho: 3,
+    ydAtk: 1000,
+    ydBonusStat: "hp", ydBonusVal: 4500,
   },
   yaodan5_tho: {
     kind: "yaodan", nameKey: "it_yaodan5_tho", descKey: "it_yaodan5_tho_desc",
     price: 18000, sell: 6000, icon: "\U0001f7e3", ydTier: 5, ydElem: "tho",
+    doHiem: 6, doKho: 3,
+    ydAtk: 1000,
+    ydBonusStat: "armor", ydBonusVal: 300,
   },
   khaiphongphu: {
     kind: "material", nameKey: "it_khaiphongphu", descKey: "it_khaiphongphu_desc",
@@ -1688,6 +1864,96 @@ const QUESTS = [
 /* Node.js export (cho smoke test) */
 
 /* ---- Pháp khí (thiếu = skill tương ứng chỉ 50% damage) ---- */
+/* ---- Linh dược mới: Cửu Diệp Linh Chi ---- */
+Object.assign(ITEMS, {
+  cuu_diep_linh_chi: { kind: "herb", nameKey: "it_cuu_diep_linh_chi", descKey: "it_cuu_diep_linh_chi_desc",
+    price: 5000, sell: 2500, icon: "🌿",
+    herbTier: 5, gatherMap: "Huyết Hải", useFor: ["dan_hop_the","dan_quy_nhat","dan_dai_thua","dan_tien_linh","dan_do_kiep","dan_cuu_kiep"],
+    doHiem: 5, doKho: 3,
+  },
+});
+/* ---- Đan dược riêng từng cảnh giới (Bui DUYỆT 2026-10-18) ----
+ * reqRealm: 1 Luyện Khí → 7 Độ Kiếp. tuVi: +tu vi khi uống. hoiChieu: giây.
+ * congThuc: công thức luyện đan. dotPhaBonus: +tỉ lệ đột phá cảnh giới tương ứng. */
+Object.assign(ITEMS, {
+  /* Luyện Khí */
+  dan_tu_khi: { kind: "pill", nameKey: "it_dan_tu_khi", descKey: "it_dan_tu_khi_desc",
+    tuVi: 500, reqRealm: 1, hoiChieu: 300,
+    congThuc: [["taycothao",3],["thao_linh_chi",2]],
+    price: 300, sell: 90, icon: "🟢", doHiem: 1, doKho: 0 },
+  dan_hoi_khi_tan: { kind: "pill", nameKey: "it_dan_hoi_khi_tan", descKey: "it_dan_hoi_khi_tan_desc",
+    healMp: 0.5, reqRealm: 1, hoiChieu: 60,
+    congThuc: [["thao_linh_chi",2]],
+    price: 150, sell: 45, icon: "🔵", doHiem: 0, doKho: 0 },
+  /* Trúc Cơ */
+  dan_boi_nguyen: { kind: "pill", nameKey: "it_dan_boi_nguyen", descKey: "it_dan_boi_nguyen_desc",
+    tuVi: 2000, reqRealm: 2, hoiChieu: 600,
+    congThuc: [["truc_co_thao",5],["dia_linh_qua",3]],
+    price: 1500, sell: 450, icon: "🟢", doHiem: 2, doKho: 1 },
+  /* Kim Đan */
+  dan_ngung_dan: { kind: "pill", nameKey: "it_dan_ngung_dan", descKey: "it_dan_ngung_dan_desc",
+    dotPhaBonus: 0.15, dotPhaRealm: 3, reqRealm: 3,
+    congThuc: [["dia_linh_qua",5],["yaodan2",1]],
+    price: 5000, sell: 1500, icon: "🟡", doHiem: 3, doKho: 2 },
+  dan_cuu_chuyen: { kind: "pill", nameKey: "it_dan_cuu_chuyen", descKey: "it_dan_cuu_chuyen_desc",
+    tuVi: 8000, reqRealm: 3, hoiChieu: 900,
+    congThuc: [["that_diep_chi",3],["dia_linh_qua",2]],
+    price: 4000, sell: 1200, icon: "🟠", doHiem: 3, doKho: 2 },
+  /* Nguyên Anh */
+  dan_duong_anh: { kind: "pill", nameKey: "it_dan_duong_anh", descKey: "it_dan_duong_anh_desc",
+    tuVi: 20000, reqRealm: 4, hoiChieu: 1200,
+    congThuc: [["that_diep_chi",5],["yaodan3",1]],
+    price: 12000, sell: 3600, icon: "🟣", doHiem: 4, doKho: 2 },
+  dan_ho_mach: { kind: "pill", nameKey: "it_dan_ho_mach", descKey: "it_dan_ho_mach_desc",
+    dotPhaBonus: 0.2, dotPhaRealm: 4, reqRealm: 4,
+    congThuc: [["that_diep_chi",3],["tien_thao",2]],
+    price: 10000, sell: 3000, icon: "💠", doHiem: 4, doKho: 2 },
+  /* Hóa Thần */
+  dan_than_du: { kind: "pill", nameKey: "it_dan_than_du", descKey: "it_dan_than_du_desc",
+    tuVi: 50000, reqRealm: 5, hoiChieu: 1800,
+    congThuc: [["tien_thao",5],["yaodan4",1]],
+    price: 30000, sell: 9000, icon: "🔮", doHiem: 5, doKho: 3 },
+  dan_tu_than: { kind: "pill", nameKey: "it_dan_tu_than", descKey: "it_dan_tu_than_desc",
+    healFocus: 100, reqRealm: 5, hoiChieu: 1800,
+    congThuc: [["tien_thao",3],["that_diep_chi",3]],
+    price: 25000, sell: 7500, icon: "🌀", doHiem: 5, doKho: 3 },
+  /* Luyện Hư */
+  dan_hu_linh: { kind: "pill", nameKey: "it_dan_hu_linh", descKey: "it_dan_hu_linh_desc",
+    tuVi: 120000, reqRealm: 6, hoiChieu: 3600,
+    congThuc: [["tien_thao",5],["huyet_tinh",2],["yaodan4",1]],
+    price: 80000, sell: 24000, icon: "🌫️", doHiem: 5, doKho: 3 },
+  dan_co_ban: { kind: "pill", nameKey: "it_dan_co_ban", descKey: "it_dan_co_ban_desc",
+    coBan: 1, reqRealm: 6,
+    congThuc: [["huyet_tinh",3],["that_diep_chi",5]],
+    price: 60000, sell: 18000, icon: "🛡️", doHiem: 5, doKho: 3 },
+  /* Hợp Thể */
+  dan_hop_the: { kind: "pill", nameKey: "it_dan_hop_the", descKey: "it_dan_hop_the_desc",
+    dotPhaBonus: 0.2, dotPhaRealm: 6, reqRealm: 6,
+    congThuc: [["cuu_diep_linh_chi",1],["huyet_tinh",3],["yaodan5",1]],
+    price: 150000, sell: 45000, icon: "☯️", doHiem: 6, doKho: 3 },
+  dan_quy_nhat: { kind: "pill", nameKey: "it_dan_quy_nhat", descKey: "it_dan_quy_nhat_desc",
+    tuVi: 300000, reqRealm: 6, hoiChieu: 3600,
+    congThuc: [["cuu_diep_linh_chi",1],["tien_thao",5]],
+    price: 120000, sell: 36000, icon: "🌟", doHiem: 6, doKho: 3 },
+  /* Đại Thừa */
+  dan_dai_thua: { kind: "pill", nameKey: "it_dan_dai_thua", descKey: "it_dan_dai_thua_desc",
+    dotPhaBonus: 0.25, dotPhaRealm: 6, reqRealm: 6,
+    congThuc: [["cuu_diep_linh_chi",2],["yaodan5",1]],
+    price: 300000, sell: 90000, icon: "✨", doHiem: 6, doKho: 3 },
+  dan_tien_linh: { kind: "pill", nameKey: "it_dan_tien_linh", descKey: "it_dan_tien_linh_desc",
+    tuVi: 800000, reqRealm: 6, hoiChieu: 7200,
+    congThuc: [["cuu_diep_linh_chi",2],["huyet_tinh",3]],
+    price: 250000, sell: 75000, icon: "💫", doHiem: 6, doKho: 3 },
+  /* Độ Kiếp */
+  dan_do_kiep: { kind: "pill", nameKey: "it_dan_do_kiep", descKey: "it_dan_do_kiep_desc",
+    giamLoiKiep: 0.3, reqRealm: 7,
+    congThuc: [["cuu_diep_linh_chi",3],["yaodan5",2]],
+    price: 500000, sell: 150000, icon: "⚡", doHiem: 6, doKho: 4 },
+  dan_cuu_kiep: { kind: "pill", nameKey: "it_dan_cuu_kiep", descKey: "it_dan_cuu_kiep_desc",
+    tuVi: 2000000, reqRealm: 7, hoiChieu: 7200,
+    congThuc: [["cuu_diep_linh_chi",5]],
+    price: 800000, sell: 240000, icon: "🌩️", doHiem: 6, doKho: 4 },
+});
 Object.assign(ITEMS, {
   kiem_hap: {
     kind: "phap_khi",
@@ -3170,13 +3436,80 @@ Object.assign(ITEMS, {
  * ============================================================ */
 const SECT_QUESTS = [{"id": "sq_kiem_01", "sect": "kiem_tong", "rank": "ngoai_mon", "nameKey": "sq_kiem_01", "descKey": "sq_kiem_01_desc", "npc": "su_gia_kiem", "req": null, "need": {"type": "talk"}, "reward": {"stones": 50, "exp": 60, "contrib": 10}, "target": {"kind": "npc", "id": "su_gia_kiem"}}, {"id": "sq_kiem_02", "sect": "kiem_tong", "rank": "ngoai_mon", "nameKey": "sq_kiem_02", "descKey": "sq_kiem_02_desc", "npc": "su_gia_kiem", "req": "sq_kiem_01", "need": {"type": "kill", "monster": "da_tru", "count": 10}, "reward": {"stones": 100, "exp": 150, "contrib": 20, "items": [{"id": "pill_hx", "qty": 2}]}, "target": {"kind": "map", "map": 0}}, {"id": "sq_kiem_03", "sect": "kiem_tong", "rank": "ngoai_mon", "nameKey": "sq_kiem_03", "descKey": "sq_kiem_03_desc", "npc": "su_gia_kiem", "req": "sq_kiem_02", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_kiem_03", "hp": 400, "atk": 30, "def": 10}}, "reward": {"stones": 200, "exp": 300, "contrib": 50}, "target": {"kind": "npc", "id": "truong_lao_kiem"}, "minRealm": [1, 5], "eventKey": "sq_event_kiem_03", "fx": "#9fd8ff", "promote": "noi_mon"}, {"id": "sq_kiem_04", "sect": "kiem_tong", "rank": "noi_mon", "nameKey": "sq_kiem_04", "descKey": "sq_kiem_04_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_03", "need": {"type": "kill", "monster": "phong_lang", "count": 15}, "reward": {"stones": 150, "exp": 250, "contrib": 30}, "target": {"kind": "map", "map": 1}}, {"id": "sq_kiem_05", "sect": "kiem_tong", "rank": "noi_mon", "nameKey": "sq_kiem_05", "descKey": "sq_kiem_05_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_04", "need": {"type": "killboss", "monster": "lang_vuong", "count": 1}, "reward": {"stones": 300, "exp": 400, "contrib": 50, "items": [{"id": "dan_hx_tieu", "qty": 2}]}, "target": {"kind": "map", "map": 1}}, {"id": "sq_kiem_06", "sect": "kiem_tong", "rank": "noi_mon", "nameKey": "sq_kiem_06", "descKey": "sq_kiem_06_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_05", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_kiem_06", "hp": 1000, "atk": 55, "def": 20}}, "reward": {"stones": 500, "exp": 800, "contrib": 100, "items": [{"id": "truc_co_thao", "qty": 3}]}, "target": {"kind": "npc", "id": "truong_lao_kiem"}, "minRealm": [1, 12], "eventKey": "sq_event_kiem_06", "fx": "#9fd8ff", "promote": "ho_phap", "gatesBreakthrough": 2}, {"id": "sq_kiem_07", "sect": "kiem_tong", "rank": "ho_phap", "nameKey": "sq_kiem_07", "descKey": "sq_kiem_07_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_06", "need": {"type": "kill", "monster": "u_hon", "count": 20}, "reward": {"stones": 400, "exp": 700, "contrib": 60}, "target": {"kind": "map", "map": 2}}, {"id": "sq_kiem_08", "sect": "kiem_tong", "rank": "ho_phap", "nameKey": "sq_kiem_08", "descKey": "sq_kiem_08_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_07", "need": {"type": "killboss", "monster": "cot_tuong", "count": 1}, "reward": {"stones": 600, "exp": 1000, "contrib": 100, "items": [{"id": "dan_hx_trung", "qty": 2}]}, "target": {"kind": "map", "map": 2}}, {"id": "sq_kiem_09", "sect": "kiem_tong", "rank": "ho_phap", "nameKey": "sq_kiem_09", "descKey": "sq_kiem_09_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_08", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_kiem_09", "hp": 2500, "atk": 95, "def": 35}}, "reward": {"stones": 1000, "exp": 1500, "contrib": 200}, "target": {"kind": "npc", "id": "truong_lao_kiem"}, "minRealm": [2, 0], "eventKey": "sq_event_kiem_09", "fx": "#9fd8ff", "promote": "truong_lao", "gatesBreakthrough": 3}, {"id": "sq_kiem_10", "sect": "kiem_tong", "rank": "truong_lao", "nameKey": "sq_kiem_10", "descKey": "sq_kiem_10_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_09", "need": {"type": "kill", "monster": "ma_lang", "count": 30}, "reward": {"stones": 800, "exp": 1300, "contrib": 120}, "target": {"kind": "map", "map": 4}}, {"id": "sq_kiem_11", "sect": "kiem_tong", "rank": "truong_lao", "nameKey": "sq_kiem_11", "descKey": "sq_kiem_11_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_10", "need": {"type": "killboss", "monster": "huyet_ma_vuong", "count": 1}, "reward": {"stones": 1200, "exp": 2000, "contrib": 200, "items": [{"id": "dan_hx_dai", "qty": 2}]}, "target": {"kind": "map", "map": 4}}, {"id": "sq_kiem_12", "sect": "kiem_tong", "rank": "truong_lao", "nameKey": "sq_kiem_12", "descKey": "sq_kiem_12_desc", "npc": "truong_lao_kiem", "req": "sq_kiem_11", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_kiem_12", "hp": 6000, "atk": 160, "def": 60}}, "reward": {"stones": 3000, "exp": 5000, "contrib": 500, "items": [{"id": "manual_kiemdan_kiem", "qty": 1}]}, "target": {"kind": "npc", "id": "truong_lao_kiem"}, "minRealm": [3, 0], "eventKey": "sq_event_kiem_12", "fx": "#9fd8ff", "gatesBreakthrough": 4, "grandTitle": "sq_title_kiem_grand"}, {"id": "sq_thien_phap_01", "sect": "thien_phap_tong", "rank": "ngoai_mon", "nameKey": "sq_thien_phap_01", "descKey": "sq_thien_phap_01_desc", "npc": "su_gia_phap", "req": null, "need": {"type": "talk"}, "reward": {"stones": 50, "exp": 60, "contrib": 10}, "target": {"kind": "npc", "id": "su_gia_phap"}}, {"id": "sq_thien_phap_02", "sect": "thien_phap_tong", "rank": "ngoai_mon", "nameKey": "sq_thien_phap_02", "descKey": "sq_thien_phap_02_desc", "npc": "su_gia_phap", "req": "sq_thien_phap_01", "need": {"type": "kill", "monster": "son_ke", "count": 10}, "reward": {"stones": 100, "exp": 150, "contrib": 20, "items": [{"id": "pill_hl", "qty": 2}]}, "target": {"kind": "map", "map": 0}}, {"id": "sq_thien_phap_03", "sect": "thien_phap_tong", "rank": "ngoai_mon", "nameKey": "sq_thien_phap_03", "descKey": "sq_thien_phap_03_desc", "npc": "su_gia_phap", "req": "sq_thien_phap_02", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_thien_phap_03", "hp": 400, "atk": 30, "def": 10}}, "reward": {"stones": 200, "exp": 300, "contrib": 50}, "target": {"kind": "npc", "id": "truong_lao_phap"}, "minRealm": [1, 5], "eventKey": "sq_event_thien_phap_03", "fx": "#c9a7ff", "promote": "noi_mon"}, {"id": "sq_thien_phap_04", "sect": "thien_phap_tong", "rank": "noi_mon", "nameKey": "sq_thien_phap_04", "descKey": "sq_thien_phap_04_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_03", "need": {"type": "kill", "monster": "hu_thi", "count": 15}, "reward": {"stones": 150, "exp": 250, "contrib": 30}, "target": {"kind": "map", "map": 1}}, {"id": "sq_thien_phap_05", "sect": "thien_phap_tong", "rank": "noi_mon", "nameKey": "sq_thien_phap_05", "descKey": "sq_thien_phap_05_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_04", "need": {"type": "killboss", "monster": "lang_vuong", "count": 1}, "reward": {"stones": 300, "exp": 400, "contrib": 50, "items": [{"id": "dan_hl_tieu", "qty": 2}]}, "target": {"kind": "map", "map": 1}}, {"id": "sq_thien_phap_06", "sect": "thien_phap_tong", "rank": "noi_mon", "nameKey": "sq_thien_phap_06", "descKey": "sq_thien_phap_06_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_05", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_thien_phap_06", "hp": 1000, "atk": 55, "def": 20}}, "reward": {"stones": 500, "exp": 800, "contrib": 100, "items": [{"id": "truc_co_thao", "qty": 3}]}, "target": {"kind": "npc", "id": "truong_lao_phap"}, "minRealm": [1, 12], "eventKey": "sq_event_thien_phap_06", "fx": "#c9a7ff", "promote": "ho_phap", "gatesBreakthrough": 2}, {"id": "sq_thien_phap_07", "sect": "thien_phap_tong", "rank": "ho_phap", "nameKey": "sq_thien_phap_07", "descKey": "sq_thien_phap_07_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_06", "need": {"type": "kill", "monster": "thi_ma", "count": 20}, "reward": {"stones": 400, "exp": 700, "contrib": 60}, "target": {"kind": "map", "map": 2}}, {"id": "sq_thien_phap_08", "sect": "thien_phap_tong", "rank": "ho_phap", "nameKey": "sq_thien_phap_08", "descKey": "sq_thien_phap_08_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_07", "need": {"type": "killboss", "monster": "cot_tuong", "count": 1}, "reward": {"stones": 600, "exp": 1000, "contrib": 100, "items": [{"id": "dan_hl_trung", "qty": 2}]}, "target": {"kind": "map", "map": 2}}, {"id": "sq_thien_phap_09", "sect": "thien_phap_tong", "rank": "ho_phap", "nameKey": "sq_thien_phap_09", "descKey": "sq_thien_phap_09_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_08", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_thien_phap_09", "hp": 2500, "atk": 95, "def": 35}}, "reward": {"stones": 1000, "exp": 1500, "contrib": 200}, "target": {"kind": "npc", "id": "truong_lao_phap"}, "minRealm": [2, 0], "eventKey": "sq_event_thien_phap_09", "fx": "#c9a7ff", "promote": "truong_lao", "gatesBreakthrough": 3}, {"id": "sq_thien_phap_10", "sect": "thien_phap_tong", "rank": "truong_lao", "nameKey": "sq_thien_phap_10", "descKey": "sq_thien_phap_10_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_09", "need": {"type": "kill", "monster": "oan_linh", "count": 30}, "reward": {"stones": 800, "exp": 1300, "contrib": 120}, "target": {"kind": "map", "map": 4}}, {"id": "sq_thien_phap_11", "sect": "thien_phap_tong", "rank": "truong_lao", "nameKey": "sq_thien_phap_11", "descKey": "sq_thien_phap_11_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_10", "need": {"type": "killboss", "monster": "huyet_ma_vuong", "count": 1}, "reward": {"stones": 1200, "exp": 2000, "contrib": 200, "items": [{"id": "dan_hl_dai", "qty": 2}]}, "target": {"kind": "map", "map": 4}}, {"id": "sq_thien_phap_12", "sect": "thien_phap_tong", "rank": "truong_lao", "nameKey": "sq_thien_phap_12", "descKey": "sq_thien_phap_12_desc", "npc": "truong_lao_phap", "req": "sq_thien_phap_11", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_thien_phap_12", "hp": 6000, "atk": 160, "def": 60}}, "reward": {"stones": 3000, "exp": 5000, "contrib": 500, "items": [{"id": "manual_kimdan_phap", "qty": 1}]}, "target": {"kind": "npc", "id": "truong_lao_phap"}, "minRealm": [3, 0], "eventKey": "sq_event_thien_phap_12", "fx": "#c9a7ff", "gatesBreakthrough": 4, "grandTitle": "sq_title_thien_phap_grand"}, {"id": "sq_kim_cang_01", "sect": "kim_cang_tong", "rank": "ngoai_mon", "nameKey": "sq_kim_cang_01", "descKey": "sq_kim_cang_01_desc", "npc": "su_gia_the", "req": null, "need": {"type": "talk"}, "reward": {"stones": 50, "exp": 60, "contrib": 10}, "target": {"kind": "npc", "id": "su_gia_the"}}, {"id": "sq_kim_cang_02", "sect": "kim_cang_tong", "rank": "ngoai_mon", "nameKey": "sq_kim_cang_02", "descKey": "sq_kim_cang_02_desc", "npc": "su_gia_the", "req": "sq_kim_cang_01", "need": {"type": "kill", "monster": "da_tru", "count": 10}, "reward": {"stones": 100, "exp": 150, "contrib": 20, "items": [{"id": "pill_hx", "qty": 2}]}, "target": {"kind": "map", "map": 0}}, {"id": "sq_kim_cang_03", "sect": "kim_cang_tong", "rank": "ngoai_mon", "nameKey": "sq_kim_cang_03", "descKey": "sq_kim_cang_03_desc", "npc": "su_gia_the", "req": "sq_kim_cang_02", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_kim_cang_03", "hp": 400, "atk": 30, "def": 10}}, "reward": {"stones": 200, "exp": 300, "contrib": 50}, "target": {"kind": "npc", "id": "truong_lao_the"}, "minRealm": [1, 5], "eventKey": "sq_event_kim_cang_03", "fx": "#ffd76a", "promote": "noi_mon"}, {"id": "sq_kim_cang_04", "sect": "kim_cang_tong", "rank": "noi_mon", "nameKey": "sq_kim_cang_04", "descKey": "sq_kim_cang_04_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_03", "need": {"type": "kill", "monster": "phong_lang", "count": 15}, "reward": {"stones": 150, "exp": 250, "contrib": 30}, "target": {"kind": "map", "map": 1}}, {"id": "sq_kim_cang_05", "sect": "kim_cang_tong", "rank": "noi_mon", "nameKey": "sq_kim_cang_05", "descKey": "sq_kim_cang_05_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_04", "need": {"type": "killboss", "monster": "lang_vuong", "count": 1}, "reward": {"stones": 300, "exp": 400, "contrib": 50, "items": [{"id": "kim_cang_dan", "qty": 2}]}, "target": {"kind": "map", "map": 1}}, {"id": "sq_kim_cang_06", "sect": "kim_cang_tong", "rank": "noi_mon", "nameKey": "sq_kim_cang_06", "descKey": "sq_kim_cang_06_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_05", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_kim_cang_06", "hp": 1000, "atk": 55, "def": 20}}, "reward": {"stones": 500, "exp": 800, "contrib": 100, "items": [{"id": "truc_co_thao", "qty": 3}]}, "target": {"kind": "npc", "id": "truong_lao_the"}, "minRealm": [1, 12], "eventKey": "sq_event_kim_cang_06", "fx": "#ffd76a", "promote": "ho_phap", "gatesBreakthrough": 2}, {"id": "sq_kim_cang_07", "sect": "kim_cang_tong", "rank": "ho_phap", "nameKey": "sq_kim_cang_07", "descKey": "sq_kim_cang_07_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_06", "need": {"type": "kill", "monster": "u_hon", "count": 20}, "reward": {"stones": 400, "exp": 700, "contrib": 60}, "target": {"kind": "map", "map": 2}}, {"id": "sq_kim_cang_08", "sect": "kim_cang_tong", "rank": "ho_phap", "nameKey": "sq_kim_cang_08", "descKey": "sq_kim_cang_08_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_07", "need": {"type": "killboss", "monster": "cot_tuong", "count": 1}, "reward": {"stones": 600, "exp": 1000, "contrib": 100, "items": [{"id": "dan_hx_trung", "qty": 2}]}, "target": {"kind": "map", "map": 2}}, {"id": "sq_kim_cang_09", "sect": "kim_cang_tong", "rank": "ho_phap", "nameKey": "sq_kim_cang_09", "descKey": "sq_kim_cang_09_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_08", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_kim_cang_09", "hp": 2500, "atk": 95, "def": 35}}, "reward": {"stones": 1000, "exp": 1500, "contrib": 200}, "target": {"kind": "npc", "id": "truong_lao_the"}, "minRealm": [2, 0], "eventKey": "sq_event_kim_cang_09", "fx": "#ffd76a", "promote": "truong_lao", "gatesBreakthrough": 3}, {"id": "sq_kim_cang_10", "sect": "kim_cang_tong", "rank": "truong_lao", "nameKey": "sq_kim_cang_10", "descKey": "sq_kim_cang_10_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_09", "need": {"type": "kill", "monster": "ma_binh", "count": 30}, "reward": {"stones": 800, "exp": 1300, "contrib": 120}, "target": {"kind": "map", "map": 4}}, {"id": "sq_kim_cang_11", "sect": "kim_cang_tong", "rank": "truong_lao", "nameKey": "sq_kim_cang_11", "descKey": "sq_kim_cang_11_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_10", "need": {"type": "killboss", "monster": "huyet_ma_vuong", "count": 1}, "reward": {"stones": 1200, "exp": 2000, "contrib": 200, "items": [{"id": "dan_hx_dai", "qty": 2}]}, "target": {"kind": "map", "map": 4}}, {"id": "sq_kim_cang_12", "sect": "kim_cang_tong", "rank": "truong_lao", "nameKey": "sq_kim_cang_12", "descKey": "sq_kim_cang_12_desc", "npc": "truong_lao_the", "req": "sq_kim_cang_11", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_kim_cang_12", "hp": 6000, "atk": 160, "def": 60}}, "reward": {"stones": 3000, "exp": 5000, "contrib": 500, "items": [{"id": "manual_kimdan_the", "qty": 1}]}, "target": {"kind": "npc", "id": "truong_lao_the"}, "minRealm": [3, 0], "eventKey": "sq_event_kim_cang_12", "fx": "#ffd76a", "gatesBreakthrough": 4, "grandTitle": "sq_title_kim_cang_grand"}, {"id": "sq_duoc_vuong_01", "sect": "duoc_vuong_tong", "rank": "ngoai_mon", "nameKey": "sq_duoc_vuong_01", "descKey": "sq_duoc_vuong_01_desc", "npc": "su_gia_duoc", "req": null, "need": {"type": "talk"}, "reward": {"stones": 50, "exp": 60, "contrib": 10}, "target": {"kind": "npc", "id": "su_gia_duoc"}}, {"id": "sq_duoc_vuong_02", "sect": "duoc_vuong_tong", "rank": "ngoai_mon", "nameKey": "sq_duoc_vuong_02", "descKey": "sq_duoc_vuong_02_desc", "npc": "su_gia_duoc", "req": "sq_duoc_vuong_01", "need": {"type": "item", "item": "taycothao", "count": 5}, "reward": {"stones": 100, "exp": 150, "contrib": 20, "items": [{"id": "dan_hx_tieu", "qty": 2}]}, "target": {"kind": "npc", "id": "su_gia_duoc"}}, {"id": "sq_duoc_vuong_03", "sect": "duoc_vuong_tong", "rank": "ngoai_mon", "nameKey": "sq_duoc_vuong_03", "descKey": "sq_duoc_vuong_03_desc", "npc": "su_gia_duoc", "req": "sq_duoc_vuong_02", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_duoc_vuong_03", "hp": 400, "atk": 30, "def": 10}}, "reward": {"stones": 200, "exp": 300, "contrib": 50}, "target": {"kind": "npc", "id": "truong_lao_duoc"}, "minRealm": [1, 5], "eventKey": "sq_event_duoc_vuong_03", "fx": "#7fe08a", "promote": "noi_mon"}, {"id": "sq_duoc_vuong_04", "sect": "duoc_vuong_tong", "rank": "noi_mon", "nameKey": "sq_duoc_vuong_04", "descKey": "sq_duoc_vuong_04_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_03", "need": {"type": "item", "item": "truc_co_thao", "count": 8}, "reward": {"stones": 150, "exp": 250, "contrib": 30}, "target": {"kind": "npc", "id": "truong_lao_duoc"}}, {"id": "sq_duoc_vuong_05", "sect": "duoc_vuong_tong", "rank": "noi_mon", "nameKey": "sq_duoc_vuong_05", "descKey": "sq_duoc_vuong_05_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_04", "need": {"type": "kill", "monster": "son_ke", "count": 15}, "reward": {"stones": 300, "exp": 400, "contrib": 50, "items": [{"id": "dan_hl_tieu", "qty": 2}]}, "target": {"kind": "map", "map": 0}}, {"id": "sq_duoc_vuong_06", "sect": "duoc_vuong_tong", "rank": "noi_mon", "nameKey": "sq_duoc_vuong_06", "descKey": "sq_duoc_vuong_06_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_05", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_duoc_vuong_06", "hp": 1000, "atk": 55, "def": 20}}, "reward": {"stones": 500, "exp": 800, "contrib": 100, "items": [{"id": "pill_truccodan", "qty": 1}]}, "target": {"kind": "npc", "id": "truong_lao_duoc"}, "minRealm": [1, 12], "eventKey": "sq_event_duoc_vuong_06", "fx": "#7fe08a", "promote": "ho_phap", "gatesBreakthrough": 2}, {"id": "sq_duoc_vuong_07", "sect": "duoc_vuong_tong", "rank": "ho_phap", "nameKey": "sq_duoc_vuong_07", "descKey": "sq_duoc_vuong_07_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_06", "need": {"type": "item", "item": "dia_linh_qua", "count": 8}, "reward": {"stones": 400, "exp": 700, "contrib": 60}, "target": {"kind": "npc", "id": "truong_lao_duoc"}}, {"id": "sq_duoc_vuong_08", "sect": "duoc_vuong_tong", "rank": "ho_phap", "nameKey": "sq_duoc_vuong_08", "descKey": "sq_duoc_vuong_08_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_07", "need": {"type": "killboss", "monster": "da_tru_vuong", "count": 1}, "reward": {"stones": 600, "exp": 1000, "contrib": 100, "items": [{"id": "dan_hx_trung", "qty": 2}]}, "target": {"kind": "map", "map": 0}}, {"id": "sq_duoc_vuong_09", "sect": "duoc_vuong_tong", "rank": "ho_phap", "nameKey": "sq_duoc_vuong_09", "descKey": "sq_duoc_vuong_09_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_08", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_duoc_vuong_09", "hp": 2500, "atk": 95, "def": 35}}, "reward": {"stones": 1000, "exp": 1500, "contrib": 200}, "target": {"kind": "npc", "id": "truong_lao_duoc"}, "minRealm": [2, 0], "eventKey": "sq_event_duoc_vuong_09", "fx": "#7fe08a", "promote": "truong_lao", "gatesBreakthrough": 3}, {"id": "sq_duoc_vuong_10", "sect": "duoc_vuong_tong", "rank": "truong_lao", "nameKey": "sq_duoc_vuong_10", "descKey": "sq_duoc_vuong_10_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_09", "need": {"type": "item", "item": "linh_chi_ngan_nam", "count": 3}, "reward": {"stones": 800, "exp": 1300, "contrib": 120}, "target": {"kind": "npc", "id": "truong_lao_duoc"}}, {"id": "sq_duoc_vuong_11", "sect": "duoc_vuong_tong", "rank": "truong_lao", "nameKey": "sq_duoc_vuong_11", "descKey": "sq_duoc_vuong_11_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_10", "need": {"type": "killboss", "monster": "cot_tuong", "count": 1}, "reward": {"stones": 1200, "exp": 2000, "contrib": 200, "items": [{"id": "dan_hl_dai", "qty": 2}]}, "target": {"kind": "map", "map": 2}}, {"id": "sq_duoc_vuong_12", "sect": "duoc_vuong_tong", "rank": "truong_lao", "nameKey": "sq_duoc_vuong_12", "descKey": "sq_duoc_vuong_12_desc", "npc": "truong_lao_duoc", "req": "sq_duoc_vuong_11", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_duoc_vuong_12", "hp": 6000, "atk": 160, "def": 60}}, "reward": {"stones": 3000, "exp": 5000, "contrib": 500, "items": [{"id": "yaodan1", "qty": 1}]}, "target": {"kind": "npc", "id": "truong_lao_duoc"}, "minRealm": [3, 0], "eventKey": "sq_event_duoc_vuong_12", "fx": "#7fe08a", "gatesBreakthrough": 4, "grandTitle": "sq_title_duoc_vuong_grand"}, {"id": "sq_ngu_thu_01", "sect": "ngu_thu_tong", "rank": "ngoai_mon", "nameKey": "sq_ngu_thu_01", "descKey": "sq_ngu_thu_01_desc", "npc": "su_gia_thu", "req": null, "need": {"type": "talk"}, "reward": {"stones": 50, "exp": 60, "contrib": 10}, "target": {"kind": "npc", "id": "su_gia_thu"}}, {"id": "sq_ngu_thu_02", "sect": "ngu_thu_tong", "rank": "ngoai_mon", "nameKey": "sq_ngu_thu_02", "descKey": "sq_ngu_thu_02_desc", "npc": "su_gia_thu", "req": "sq_ngu_thu_01", "need": {"type": "kill", "monster": "phong_lang", "count": 10}, "reward": {"stones": 100, "exp": 150, "contrib": 20, "items": [{"id": "thit_yeu_thu", "qty": 3}]}, "target": {"kind": "map", "map": 1}}, {"id": "sq_ngu_thu_03", "sect": "ngu_thu_tong", "rank": "ngoai_mon", "nameKey": "sq_ngu_thu_03", "descKey": "sq_ngu_thu_03_desc", "npc": "su_gia_thu", "req": "sq_ngu_thu_02", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_ngu_thu_03", "hp": 400, "atk": 30, "def": 10}}, "reward": {"stones": 200, "exp": 300, "contrib": 50}, "target": {"kind": "npc", "id": "truong_lao_thu"}, "minRealm": [1, 5], "eventKey": "sq_event_ngu_thu_03", "fx": "#ff9d5c", "promote": "noi_mon"}, {"id": "sq_ngu_thu_04", "sect": "ngu_thu_tong", "rank": "noi_mon", "nameKey": "sq_ngu_thu_04", "descKey": "sq_ngu_thu_04_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_03", "need": {"type": "item", "item": "trung_pham", "count": 2}, "reward": {"stones": 150, "exp": 250, "contrib": 30}, "target": {"kind": "npc", "id": "truong_lao_thu"}}, {"id": "sq_ngu_thu_05", "sect": "ngu_thu_tong", "rank": "noi_mon", "nameKey": "sq_ngu_thu_05", "descKey": "sq_ngu_thu_05_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_04", "need": {"type": "kill", "monster": "hu_thi", "count": 15}, "reward": {"stones": 300, "exp": 400, "contrib": 50, "items": [{"id": "dan_hx_tieu", "qty": 2}]}, "target": {"kind": "map", "map": 1}}, {"id": "sq_ngu_thu_06", "sect": "ngu_thu_tong", "rank": "noi_mon", "nameKey": "sq_ngu_thu_06", "descKey": "sq_ngu_thu_06_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_05", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_ngu_thu_06", "hp": 1000, "atk": 55, "def": 20}}, "reward": {"stones": 500, "exp": 800, "contrib": 100, "items": [{"id": "trung_linh", "qty": 1}]}, "target": {"kind": "npc", "id": "truong_lao_thu"}, "minRealm": [1, 12], "eventKey": "sq_event_ngu_thu_06", "fx": "#ff9d5c", "promote": "ho_phap", "gatesBreakthrough": 2}, {"id": "sq_ngu_thu_07", "sect": "ngu_thu_tong", "rank": "ho_phap", "nameKey": "sq_ngu_thu_07", "descKey": "sq_ngu_thu_07_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_06", "need": {"type": "kill", "monster": "thi_ma", "count": 20}, "reward": {"stones": 400, "exp": 700, "contrib": 60}, "target": {"kind": "map", "map": 2}}, {"id": "sq_ngu_thu_08", "sect": "ngu_thu_tong", "rank": "ho_phap", "nameKey": "sq_ngu_thu_08", "descKey": "sq_ngu_thu_08_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_07", "need": {"type": "killboss", "monster": "lang_vuong", "count": 1}, "reward": {"stones": 600, "exp": 1000, "contrib": 100, "items": [{"id": "trung_linh", "qty": 1}]}, "target": {"kind": "map", "map": 1}}, {"id": "sq_ngu_thu_09", "sect": "ngu_thu_tong", "rank": "ho_phap", "nameKey": "sq_ngu_thu_09", "descKey": "sq_ngu_thu_09_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_08", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_ngu_thu_09", "hp": 2500, "atk": 95, "def": 35}}, "reward": {"stones": 1000, "exp": 1500, "contrib": 200}, "target": {"kind": "npc", "id": "truong_lao_thu"}, "minRealm": [2, 0], "eventKey": "sq_event_ngu_thu_09", "fx": "#ff9d5c", "promote": "truong_lao", "gatesBreakthrough": 3}, {"id": "sq_ngu_thu_10", "sect": "ngu_thu_tong", "rank": "truong_lao", "nameKey": "sq_ngu_thu_10", "descKey": "sq_ngu_thu_10_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_09", "need": {"type": "item", "item": "trung_linh", "count": 2}, "reward": {"stones": 800, "exp": 1300, "contrib": 120}, "target": {"kind": "npc", "id": "truong_lao_thu"}}, {"id": "sq_ngu_thu_11", "sect": "ngu_thu_tong", "rank": "truong_lao", "nameKey": "sq_ngu_thu_11", "descKey": "sq_ngu_thu_11_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_10", "need": {"type": "killboss", "monster": "thien_tuong", "count": 1}, "reward": {"stones": 1200, "exp": 2000, "contrib": 200, "items": [{"id": "trung_huyen", "qty": 1}]}, "target": {"kind": "map", "map": 5}}, {"id": "sq_ngu_thu_12", "sect": "ngu_thu_tong", "rank": "truong_lao", "nameKey": "sq_ngu_thu_12", "descKey": "sq_ngu_thu_12_desc", "npc": "truong_lao_thu", "req": "sq_ngu_thu_11", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_ngu_thu_12", "hp": 6000, "atk": 160, "def": 60}}, "reward": {"stones": 3000, "exp": 5000, "contrib": 500, "items": [{"id": "trung_dia", "qty": 1}]}, "target": {"kind": "npc", "id": "truong_lao_thu"}, "minRealm": [3, 0], "eventKey": "sq_event_ngu_thu_12", "fx": "#ff9d5c", "gatesBreakthrough": 4, "grandTitle": "sq_title_ngu_thu_grand"}, {"id": "sq_cuu_u_ma_01", "sect": "cuu_u_ma_tong", "rank": "ngoai_mon", "nameKey": "sq_cuu_u_ma_01", "descKey": "sq_cuu_u_ma_01_desc", "npc": "su_gia_ma", "req": null, "need": {"type": "talk"}, "reward": {"stones": 50, "exp": 60, "contrib": 10}, "target": {"kind": "npc", "id": "su_gia_ma"}}, {"id": "sq_cuu_u_ma_02", "sect": "cuu_u_ma_tong", "rank": "ngoai_mon", "nameKey": "sq_cuu_u_ma_02", "descKey": "sq_cuu_u_ma_02_desc", "npc": "su_gia_ma", "req": "sq_cuu_u_ma_01", "need": {"type": "kill", "monster": "ngoc_tho", "count": 10}, "reward": {"stones": 100, "exp": 150, "contrib": 20, "items": [{"id": "thit_yeu_thu", "qty": 3}]}, "target": {"kind": "map", "map": 5}}, {"id": "sq_cuu_u_ma_03", "sect": "cuu_u_ma_tong", "rank": "ngoai_mon", "nameKey": "sq_cuu_u_ma_03", "descKey": "sq_cuu_u_ma_03_desc", "npc": "su_gia_ma", "req": "sq_cuu_u_ma_02", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_cuu_u_ma_03", "hp": 400, "atk": 30, "def": 10}}, "reward": {"stones": 200, "exp": 300, "contrib": 50}, "target": {"kind": "npc", "id": "truong_lao_ma"}, "minRealm": [1, 5], "eventKey": "sq_event_cuu_u_ma_03", "fx": "#ff3d5a", "promote": "noi_mon"}, {"id": "sq_cuu_u_ma_04", "sect": "cuu_u_ma_tong", "rank": "noi_mon", "nameKey": "sq_cuu_u_ma_04", "descKey": "sq_cuu_u_ma_04_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_03", "need": {"type": "stones", "count": 500}, "reward": {"stones": 0, "exp": 250, "contrib": 40}, "target": {"kind": "npc", "id": "truong_lao_ma"}}, {"id": "sq_cuu_u_ma_05", "sect": "cuu_u_ma_tong", "rank": "noi_mon", "nameKey": "sq_cuu_u_ma_05", "descKey": "sq_cuu_u_ma_05_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_04", "need": {"type": "kill", "monster": "thien_hac", "count": 15}, "reward": {"stones": 300, "exp": 400, "contrib": 50, "items": [{"id": "dan_hx_tieu", "qty": 2}]}, "target": {"kind": "map", "map": 5}}, {"id": "sq_cuu_u_ma_06", "sect": "cuu_u_ma_tong", "rank": "noi_mon", "nameKey": "sq_cuu_u_ma_06", "descKey": "sq_cuu_u_ma_06_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_05", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_cuu_u_ma_06", "hp": 1000, "atk": 55, "def": 20}}, "reward": {"stones": 500, "exp": 800, "contrib": 100, "items": [{"id": "truc_co_thao", "qty": 3}]}, "target": {"kind": "npc", "id": "truong_lao_ma"}, "minRealm": [1, 12], "eventKey": "sq_event_cuu_u_ma_06", "fx": "#ff3d5a", "promote": "ho_phap", "gatesBreakthrough": 2}, {"id": "sq_cuu_u_ma_07", "sect": "cuu_u_ma_tong", "rank": "ho_phap", "nameKey": "sq_cuu_u_ma_07", "descKey": "sq_cuu_u_ma_07_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_06", "need": {"type": "kill", "monster": "oan_linh", "count": 20}, "reward": {"stones": 400, "exp": 700, "contrib": 60}, "target": {"kind": "map", "map": 4}}, {"id": "sq_cuu_u_ma_08", "sect": "cuu_u_ma_tong", "rank": "ho_phap", "nameKey": "sq_cuu_u_ma_08", "descKey": "sq_cuu_u_ma_08_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_07", "need": {"type": "killboss", "monster": "thien_tuong", "count": 1}, "reward": {"stones": 600, "exp": 1000, "contrib": 100, "items": [{"id": "dan_hx_trung", "qty": 2}]}, "target": {"kind": "map", "map": 5}}, {"id": "sq_cuu_u_ma_09", "sect": "cuu_u_ma_tong", "rank": "ho_phap", "nameKey": "sq_cuu_u_ma_09", "descKey": "sq_cuu_u_ma_09_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_08", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_cuu_u_ma_09", "hp": 2500, "atk": 95, "def": 35}}, "reward": {"stones": 1000, "exp": 1500, "contrib": 200}, "target": {"kind": "npc", "id": "truong_lao_ma"}, "minRealm": [2, 0], "eventKey": "sq_event_cuu_u_ma_09", "fx": "#ff3d5a", "promote": "truong_lao", "gatesBreakthrough": 3}, {"id": "sq_cuu_u_ma_10", "sect": "cuu_u_ma_tong", "rank": "truong_lao", "nameKey": "sq_cuu_u_ma_10", "descKey": "sq_cuu_u_ma_10_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_09", "need": {"type": "kill", "monster": "ma_lang", "count": 30}, "reward": {"stones": 800, "exp": 1300, "contrib": 120}, "target": {"kind": "map", "map": 4}}, {"id": "sq_cuu_u_ma_11", "sect": "cuu_u_ma_tong", "rank": "truong_lao", "nameKey": "sq_cuu_u_ma_11", "descKey": "sq_cuu_u_ma_11_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_10", "need": {"type": "killboss", "monster": "huyet_ma_vuong", "count": 1}, "reward": {"stones": 1200, "exp": 2000, "contrib": 200, "items": [{"id": "dan_hx_dai", "qty": 2}]}, "target": {"kind": "map", "map": 4}}, {"id": "sq_cuu_u_ma_12", "sect": "cuu_u_ma_tong", "rank": "truong_lao", "nameKey": "sq_cuu_u_ma_12", "descKey": "sq_cuu_u_ma_12_desc", "npc": "truong_lao_ma", "req": "sq_cuu_u_ma_11", "need": {"type": "trial", "boss": {"nameKey": "sq_trial_cuu_u_ma_12", "hp": 6000, "atk": 160, "def": 60}}, "reward": {"stones": 3000, "exp": 5000, "contrib": 500, "items": [{"id": "yaodan1", "qty": 1}]}, "target": {"kind": "npc", "id": "truong_lao_ma"}, "minRealm": [3, 0], "eventKey": "sq_event_cuu_u_ma_12", "fx": "#ff3d5a", "gatesBreakthrough": 4, "grandTitle": "sq_title_cuu_u_ma_grand"}];
 const SECT_QUEST_CUNGCO = [{"id": "sq_kiem_cungco", "sect": "kiem_tong", "special": "cung_co", "rank": "noi_mon", "nameKey": "sq_kiem_cungco", "descKey": "sq_kiem_cungco_desc", "npc": "truong_lao_kiem", "need": {"type": "item", "item": "truc_co_thao", "count": 5}, "reward": {"exp": 300, "contrib": 30, "btBonus": 0.1}, "target": {"kind": "npc", "id": "truong_lao_kiem"}}, {"id": "sq_thien_phap_cungco", "sect": "thien_phap_tong", "special": "cung_co", "rank": "noi_mon", "nameKey": "sq_thien_phap_cungco", "descKey": "sq_thien_phap_cungco_desc", "npc": "truong_lao_phap", "need": {"type": "item", "item": "truc_co_thao", "count": 5}, "reward": {"exp": 300, "contrib": 30, "btBonus": 0.1}, "target": {"kind": "npc", "id": "truong_lao_phap"}}, {"id": "sq_kim_cang_cungco", "sect": "kim_cang_tong", "special": "cung_co", "rank": "noi_mon", "nameKey": "sq_kim_cang_cungco", "descKey": "sq_kim_cang_cungco_desc", "npc": "truong_lao_the", "need": {"type": "item", "item": "truc_co_thao", "count": 5}, "reward": {"exp": 300, "contrib": 30, "btBonus": 0.1}, "target": {"kind": "npc", "id": "truong_lao_the"}}, {"id": "sq_duoc_vuong_cungco", "sect": "duoc_vuong_tong", "special": "cung_co", "rank": "noi_mon", "nameKey": "sq_duoc_vuong_cungco", "descKey": "sq_duoc_vuong_cungco_desc", "npc": "truong_lao_duoc", "need": {"type": "item", "item": "truc_co_thao", "count": 5}, "reward": {"exp": 300, "contrib": 30, "btBonus": 0.1}, "target": {"kind": "npc", "id": "truong_lao_duoc"}}, {"id": "sq_ngu_thu_cungco", "sect": "ngu_thu_tong", "special": "cung_co", "rank": "noi_mon", "nameKey": "sq_ngu_thu_cungco", "descKey": "sq_ngu_thu_cungco_desc", "npc": "truong_lao_thu", "need": {"type": "item", "item": "truc_co_thao", "count": 5}, "reward": {"exp": 300, "contrib": 30, "btBonus": 0.1}, "target": {"kind": "npc", "id": "truong_lao_thu"}}, {"id": "sq_cuu_u_ma_cungco", "sect": "cuu_u_ma_tong", "special": "cung_co", "rank": "noi_mon", "nameKey": "sq_cuu_u_ma_cungco", "descKey": "sq_cuu_u_ma_cungco_desc", "npc": "truong_lao_ma", "need": {"type": "item", "item": "truc_co_thao", "count": 5}, "reward": {"exp": 300, "contrib": 30, "btBonus": 0.1}, "target": {"kind": "npc", "id": "truong_lao_ma"}}];
-const SECT_QUEST_DAILY = [{"id": "sqd_kiem_kill", "sect": "kiem_tong", "tname": "sq_daily_kill", "tdesc": "sq_daily_kill_desc", "need": {"type": "kill", "count": 15}, "contrib": 15}, {"id": "sqd_kiem_donate", "sect": "kiem_tong", "tname": "sq_daily_donate", "tdesc": "sq_daily_donate_desc", "need": {"type": "stones", "count": 500}, "contrib": 10}, {"id": "sqd_kiem_boss", "sect": "kiem_tong", "tname": "sq_daily_boss", "tdesc": "sq_daily_boss_desc", "need": {"type": "killboss", "count": 1}, "contrib": 30}, {"id": "sqd_thien_phap_kill", "sect": "thien_phap_tong", "tname": "sq_daily_kill", "tdesc": "sq_daily_kill_desc", "need": {"type": "kill", "count": 15}, "contrib": 15}, {"id": "sqd_thien_phap_donate", "sect": "thien_phap_tong", "tname": "sq_daily_donate", "tdesc": "sq_daily_donate_desc", "need": {"type": "stones", "count": 500}, "contrib": 10}, {"id": "sqd_thien_phap_boss", "sect": "thien_phap_tong", "tname": "sq_daily_boss", "tdesc": "sq_daily_boss_desc", "need": {"type": "killboss", "count": 1}, "contrib": 30}, {"id": "sqd_kim_cang_kill", "sect": "kim_cang_tong", "tname": "sq_daily_kill", "tdesc": "sq_daily_kill_desc", "need": {"type": "kill", "count": 15}, "contrib": 15}, {"id": "sqd_kim_cang_donate", "sect": "kim_cang_tong", "tname": "sq_daily_donate", "tdesc": "sq_daily_donate_desc", "need": {"type": "stones", "count": 500}, "contrib": 10}, {"id": "sqd_kim_cang_boss", "sect": "kim_cang_tong", "tname": "sq_daily_boss", "tdesc": "sq_daily_boss_desc", "need": {"type": "killboss", "count": 1}, "contrib": 30}, {"id": "sqd_duoc_vuong_kill", "sect": "duoc_vuong_tong", "tname": "sq_daily_kill", "tdesc": "sq_daily_kill_desc", "need": {"type": "kill", "count": 15}, "contrib": 15}, {"id": "sqd_duoc_vuong_donate", "sect": "duoc_vuong_tong", "tname": "sq_daily_donate", "tdesc": "sq_daily_donate_desc", "need": {"type": "stones", "count": 500}, "contrib": 10}, {"id": "sqd_duoc_vuong_boss", "sect": "duoc_vuong_tong", "tname": "sq_daily_boss", "tdesc": "sq_daily_boss_desc", "need": {"type": "killboss", "count": 1}, "contrib": 30}, {"id": "sqd_ngu_thu_kill", "sect": "ngu_thu_tong", "tname": "sq_daily_kill", "tdesc": "sq_daily_kill_desc", "need": {"type": "kill", "count": 15}, "contrib": 15}, {"id": "sqd_ngu_thu_donate", "sect": "ngu_thu_tong", "tname": "sq_daily_donate", "tdesc": "sq_daily_donate_desc", "need": {"type": "stones", "count": 500}, "contrib": 10}, {"id": "sqd_ngu_thu_boss", "sect": "ngu_thu_tong", "tname": "sq_daily_boss", "tdesc": "sq_daily_boss_desc", "need": {"type": "killboss", "count": 1}, "contrib": 30}, {"id": "sqd_cuu_u_ma_kill", "sect": "cuu_u_ma_tong", "tname": "sq_daily_kill", "tdesc": "sq_daily_kill_desc", "need": {"type": "kill", "count": 15}, "contrib": 15}, {"id": "sqd_cuu_u_ma_donate", "sect": "cuu_u_ma_tong", "tname": "sq_daily_donate", "tdesc": "sq_daily_donate_desc", "need": {"type": "stones", "count": 500}, "contrib": 10}, {"id": "sqd_cuu_u_ma_boss", "sect": "cuu_u_ma_tong", "tname": "sq_daily_boss", "tdesc": "sq_daily_boss_desc", "need": {"type": "killboss", "count": 1}, "contrib": 30}];
+const SECT_QUEST_DAILY = [
+  /* ===== Kiếm Tông: 5 nhiệm vụ ngày ===== */
+  {id:"sqd_kiem_luyenkiem", sect:"kiem_tong", tname:"sqd_kiem_luyenkiem", tdesc:"sqd_kiem_luyenkiem_desc",
+   need:{type:"kill", count:20}, reward:{contrib:20, stones:200, exp:500}},
+  {id:"sqd_kiem_thachdau", sect:"kiem_tong", tname:"sqd_kiem_thachdau", tdesc:"sqd_kiem_thachdau_desc",
+   need:{type:"killboss", count:1}, reward:{contrib:40, stones:500, exp:1200}},
+  {id:"sqd_kiem_tuantran", sect:"kiem_tong", tname:"sqd_kiem_tuantran", tdesc:"sqd_kiem_tuantran_desc",
+   need:{type:"kill", count:10}, reward:{contrib:15, stones:150, exp:300}},
+  {id:"sqd_kiem_ngokiem", sect:"kiem_tong", tname:"sqd_kiem_ngokiem", tdesc:"sqd_kiem_ngokiem_desc",
+   need:{type:"meditate", count:1}, reward:{contrib:25, stones:300, exp:800}},
+  {id:"sqd_kiem_donate", sect:"kiem_tong", tname:"sqd_kiem_donate", tdesc:"sqd_kiem_donate_desc",
+   need:{type:"stones", count:500}, reward:{contrib:15, stones:0, exp:200}},
+  /* ===== Thiên Pháp Tông: 5 nhiệm vụ ngày ===== */
+  {id:"sqd_phap_tuluyen", sect:"thien_phap_tong", tname:"sqd_phap_tuluyen", tdesc:"sqd_phap_tuluyen_desc",
+   need:{type:"meditate", count:1}, reward:{contrib:25, stones:300, exp:800}},
+  {id:"sqd_phap_thulinhkhi", sect:"thien_phap_tong", tname:"sqd_phap_thulinhkhi", tdesc:"sqd_phap_thulinhkhi_desc",
+   need:{type:"kill", count:15}, reward:{contrib:20, stones:200, exp:500}},
+  {id:"sqd_phap_giaidophu", sect:"thien_phap_tong", tname:"sqd_phap_giaidophu", tdesc:"sqd_phap_giaidophu_desc",
+   need:{type:"killboss", count:1}, reward:{contrib:40, stones:500, exp:1200}},
+  {id:"sqd_phap_truyquet", sect:"thien_phap_tong", tname:"sqd_phap_truyquet", tdesc:"sqd_phap_truyquet_desc",
+   need:{type:"kill", count:25}, reward:{contrib:25, stones:250, exp:700}},
+  {id:"sqd_phap_donate", sect:"thien_phap_tong", tname:"sqd_phap_donate", tdesc:"sqd_phap_donate_desc",
+   need:{type:"stones", count:500}, reward:{contrib:15, stones:0, exp:200}},
+  /* ===== Kim Cang Tông: 5 nhiệm vụ ngày ===== */
+  {id:"sqd_cang_luyenthe", sect:"kim_cang_tong", tname:"sqd_cang_luyenthe", tdesc:"sqd_cang_luyenthe_desc",
+   need:{type:"meditate", count:2}, reward:{contrib:30, stones:350, exp:900}},
+  {id:"sqd_cang_ganhnuoc", sect:"kim_cang_tong", tname:"sqd_cang_ganhnuoc", tdesc:"sqd_cang_ganhnuoc_desc",
+   need:{type:"kill", count:15}, reward:{contrib:20, stones:200, exp:500}},
+  {id:"sqd_cang_tungking", sect:"kim_cang_tong", tname:"sqd_cang_tungking", tdesc:"sqd_cang_tungking_desc",
+   need:{type:"meditate", count:1}, reward:{contrib:20, stones:250, exp:600}},
+  {id:"sqd_cang_hophap", sect:"kim_cang_tong", tname:"sqd_cang_hophap", tdesc:"sqd_cang_hophap_desc",
+   need:{type:"killboss", count:1}, reward:{contrib:40, stones:500, exp:1200}},
+  {id:"sqd_cang_donate", sect:"kim_cang_tong", tname:"sqd_cang_donate", tdesc:"sqd_cang_donate_desc",
+   need:{type:"stones", count:500}, reward:{contrib:15, stones:0, exp:200}},
+  /* ===== Dược Vương Tông: 5 nhiệm vụ ngày ===== */
+  {id:"sqd_duoc_haiduoc", sect:"duoc_vuong_tong", tname:"sqd_duoc_haiduoc", tdesc:"sqd_duoc_haiduoc_desc",
+   need:{type:"item", item:"truc_co_thao", count:10}, reward:{contrib:20, stones:200, exp:500}},
+  {id:"sqd_duoc_luyendan", sect:"duoc_vuong_tong", tname:"sqd_duoc_luyendan", tdesc:"sqd_duoc_luyendan_desc",
+   need:{type:"craftpill", count:2}, reward:{contrib:30, stones:350, exp:900}},
+  {id:"sqd_duoc_trusau", sect:"duoc_vuong_tong", tname:"sqd_duoc_trusau", tdesc:"sqd_duoc_trusau_desc",
+   need:{type:"kill", count:15}, reward:{contrib:20, stones:200, exp:500}},
+  {id:"sqd_duoc_nghiencuu", sect:"duoc_vuong_tong", tname:"sqd_duoc_nghiencuu", tdesc:"sqd_duoc_nghiencuu_desc",
+   need:{type:"meditate", count:1}, reward:{contrib:20, stones:250, exp:600}},
+  {id:"sqd_duoc_donate", sect:"duoc_vuong_tong", tname:"sqd_duoc_donate", tdesc:"sqd_duoc_donate_desc",
+   need:{type:"stones", count:500}, reward:{contrib:15, stones:0, exp:200}},
+  /* ===== Ngự Thú Tông: 5 nhiệm vụ ngày ===== */
+  {id:"sqd_thu_choan", sect:"ngu_thu_tong", tname:"sqd_thu_choan", tdesc:"sqd_thu_choan_desc",
+   need:{type:"feedpet", count:2}, reward:{contrib:25, stones:300, exp:700}},
+  {id:"sqd_thu_tuantran", sect:"ngu_thu_tong", tname:"sqd_thu_tuantran", tdesc:"sqd_thu_tuantran_desc",
+   need:{type:"kill", count:10}, reward:{contrib:15, stones:150, exp:300}},
+  {id:"sqd_thu_thuanphuc", sect:"ngu_thu_tong", tname:"sqd_thu_thuanphuc", tdesc:"sqd_thu_thuanphuc_desc",
+   need:{type:"killboss", count:1}, reward:{contrib:40, stones:500, exp:1200}},
+  {id:"sqd_thu_sanmoi", sect:"ngu_thu_tong", tname:"sqd_thu_sanmoi", tdesc:"sqd_thu_sanmoi_desc",
+   need:{type:"kill", count:20}, reward:{contrib:20, stones:200, exp:500}},
+  {id:"sqd_thu_donate", sect:"ngu_thu_tong", tname:"sqd_thu_donate", tdesc:"sqd_thu_donate_desc",
+   need:{type:"stones", count:500}, reward:{contrib:15, stones:0, exp:200}},
+  /* ===== Cửu U Ma Tông: 5 nhiệm vụ ngày ===== */
+  {id:"sqd_ma_huyetluyen", sect:"cuu_u_ma_tong", tname:"sqd_ma_huyetluyen", tdesc:"sqd_ma_huyetluyen_desc",
+   need:{type:"kill", count:20}, reward:{contrib:20, stones:200, exp:500}},
+  {id:"sqd_ma_amsat", sect:"cuu_u_ma_tong", tname:"sqd_ma_amsat", tdesc:"sqd_ma_amsat_desc",
+   need:{type:"killboss", count:1}, reward:{contrib:40, stones:500, exp:1200}},
+  {id:"sqd_ma_huyettinh", sect:"cuu_u_ma_tong", tname:"sqd_ma_huyettinh", tdesc:"sqd_ma_huyettinh_desc",
+   need:{type:"item", item:"huyet_tinh", count:5}, reward:{contrib:30, stones:350, exp:900}},
+  {id:"sqd_ma_tuluyen", sect:"cuu_u_ma_tong", tname:"sqd_ma_tuluyen", tdesc:"sqd_ma_tuluyen_desc",
+   need:{type:"meditate", count:1}, reward:{contrib:20, stones:250, exp:600}},
+  {id:"sqd_ma_donate", sect:"cuu_u_ma_tong", tname:"sqd_ma_donate", tdesc:"sqd_ma_donate_desc",
+   need:{type:"stones", count:500}, reward:{contrib:15, stones:0, exp:200}},
+];
 const SECT_QUEST_WEEKLY = [{"id": "sqw_kiem_grand", "sect": "kiem_tong", "tname": "sq_weekly_grand", "tdesc": "sq_weekly_grand_desc", "need": {"type": "kill", "count": 80}, "need2": {"type": "killboss", "count": 3}, "reward": {"contrib": 100, "stones": 500}}, {"id": "sqw_thien_phap_grand", "sect": "thien_phap_tong", "tname": "sq_weekly_grand", "tdesc": "sq_weekly_grand_desc", "need": {"type": "kill", "count": 80}, "need2": {"type": "killboss", "count": 3}, "reward": {"contrib": 100, "stones": 500}}, {"id": "sqw_kim_cang_grand", "sect": "kim_cang_tong", "tname": "sq_weekly_grand", "tdesc": "sq_weekly_grand_desc", "need": {"type": "kill", "count": 80}, "need2": {"type": "killboss", "count": 3}, "reward": {"contrib": 100, "stones": 500}}, {"id": "sqw_duoc_vuong_grand", "sect": "duoc_vuong_tong", "tname": "sq_weekly_grand", "tdesc": "sq_weekly_grand_desc", "need": {"type": "kill", "count": 80}, "need2": {"type": "killboss", "count": 3}, "reward": {"contrib": 100, "stones": 500}}, {"id": "sqw_ngu_thu_grand", "sect": "ngu_thu_tong", "tname": "sq_weekly_grand", "tdesc": "sq_weekly_grand_desc", "need": {"type": "kill", "count": 80}, "need2": {"type": "killboss", "count": 3}, "reward": {"contrib": 100, "stones": 500}}, {"id": "sqw_cuu_u_ma_grand", "sect": "cuu_u_ma_tong", "tname": "sq_weekly_grand", "tdesc": "sq_weekly_grand_desc", "need": {"type": "kill", "count": 80}, "need2": {"type": "killboss", "count": 3}, "reward": {"contrib": 100, "stones": 500}}];
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     ELEMENTS, LINGEN_RATES,
     MONSTERS, MAPS, DUNGEONS, SECRET_REALMS, genRandomDungeon,
-    ITEMS, SKILLS, SHOP_STOCK, GIFT_CODES,
+    ITEMS, SKILLS, SHOP_STOCK, GIFT_CODES, RARITY, DOKHO, YD_ELEM_STAT,
     NPCS, QUESTS,
     SECT_QUESTS, SECT_QUEST_CUNGCO, SECT_QUEST_DAILY, SECT_QUEST_WEEKLY,
   };

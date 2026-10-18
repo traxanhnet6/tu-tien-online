@@ -1298,12 +1298,27 @@ function renderSectQuests() {
   h += '<div class="item-name" style="margin-top:8px">📅 ' + esc(t("sq_daily_title")) + "</div>";
   h += SectQuest.dailyList(state).map(function (dq) {
     var nm = t(dq.tname, { sect: t((SECTS[joined] || {}).nameKey || joined) });
+    var rwTxt = "+" + dq.contrib + " " + esc(t("sect_contrib"));
+    if (dq.stones) rwTxt += " · +" + dq.stones + " 💎";
+    if (dq.exp) rwTxt += " · +" + dq.exp + " EXP";
     return '<div class="row"><div><div class="item-name">' + esc(nm) + "</div>" +
-      '<div class="item-desc">' + dq.prog + "/" + dq.need + " · +" + dq.contrib + " " + esc(t("sect_contrib")) + "</div></div>" +
+      '<div class="item-desc">' + dq.prog + "/" + dq.need + " · " + rwTxt + "</div></div>" +
       '<div class="row-btns">' + (dq.claimed ? esc(t("sq_claimed")) :
         (dq.done ? '<button class="mini" data-act="sect-daily-claim" data-id="' + esc(dq.id) + '">' + esc(t("sq_claim")) + "</button>"
                  : esc(t("q_incomplete")))) + "</div></div>";
   }).join("");
+  /* Thưởng đủ 5/5 nhiệm vụ ngày */
+  try {
+    var _db = SectQuest.dailyBonus(state);
+    if (_db.total > 0) {
+      h += '<div class="row"><div><div class="item-name">🎁 ' + esc(t("sq_daily_bonus", { n: _db.claimed, m: _db.total })) + "</div>" +
+        '<div class="item-desc">+' + _db.bonus.contrib + " " + esc(t("sect_contrib")) +
+        " · +" + _db.bonus.stones + " 💎 · +" + _db.bonus.exp + " EXP</div></div>" +
+        '<div class="row-btns">' + (_db.bonusClaimed ? esc(t("sq_claimed")) :
+          (_db.ready ? '<button class="mini" data-act="sect-daily-bonus">' + esc(t("sq_claim")) + "</button>"
+                     : esc(t("q_incomplete")))) + "</div></div>";
+    }
+  } catch (e) {}
   /* Nhiệm vụ tuần */
   h += '<div class="item-name" style="margin-top:8px">🗓️ ' + esc(t("sq_weekly_title")) + "</div>";
   h += SectQuest.weeklyList(state).map(function (wq) {
@@ -1525,9 +1540,10 @@ function dungeonTab() { return (panelArg && panelArg.dtab) || "pb"; }
 function renderDungeon() {
   if (typeof DUNGEONS === "undefined") return "";
   var h = tabBtns([
-    ["pb", t("panel_dungeon")], ["bc", t("panel_secret")],
+    ["pb", t("panel_dungeon")], ["bc", t("panel_secret")], ["sb", t("sb_tab")],
   ], dungeonTab(), "dg-tab");
   if (dungeonTab() === "bc") return h + renderSecretList();
+  if (dungeonTab() === "sb") return h + renderSecretBook();
   return h + DUNGEONS.map(function (d, i) {
     var tp = dungeonType(d.typeId) || { phi: 0 };
     var left = dungeonLeft(state, d.id, d.typeId);
@@ -1651,6 +1667,7 @@ function secretTick() {
     }
   }
   updateSecretActions(now);
+  try { secretBookTick(); } catch (e) {}
 }
 /* Nút Thu thập + Quà an ủi khi đang trong bí cảnh */
 function updateSecretActions(now) {
@@ -1696,6 +1713,8 @@ function doSecretEnter(realmId) {
   }
   var def = Secret.realm(realmId);
   curSecretRealm = realmId;
+  var _sbPriority = false;
+  try { if (typeof SecretBook !== "undefined") _sbPriority = SecretBook.checkin(state, realmId, Date.now()).priority; } catch (e) {}
   if (panel) closePanel();
   if (hasEngine() && Engine.enterSecretRealm) {
     Engine.enterSecretRealm({ id: realmId, nameKey: def.nameKey, bg: def.bg, fb: def.fb,
@@ -1703,6 +1722,7 @@ function doSecretEnter(realmId) {
   }
   curMapId = "secret:" + realmId;
   toast(def.icon + " " + t(def.nameKey)); sfx("success");
+  if (_sbPriority) { try { toast(t("sb_priority", { n: SecretBook.DEF.priorityExpPct })); } catch (e2) {} }
   saveGame(state); refreshHUD();
 }
 function doSecretGather() {
@@ -1982,13 +2002,19 @@ function doDonateDone(from) {
 }
 
 /* ----- Đột phá (flow 5 bước) ----- */
-/* Nguyên liệu theo STAGES[realm+1].dot_pha (cảnh giới đột phá TỚI) */
+/* Nguyên liệu theo STAGES[realm+1].dot_pha (cảnh giới đột phá TỚI).
+ * Bui chốt: đột phá đại cảnh giới cần đan đột phá; từ Nguyên Anh trở lên độ lôi kiếp. */
+var BT_PILL_BY_REALM = {
+  2: [{ id: "pill_truccodan", qty: 1 }, { id: "yaodan1", qty: 1 }], /* → Trúc Cơ */
+  3: [{ id: "pill_kimdan", qty: 1 }],                              /* → Kim Đan */
+  4: [{ id: "pill_nguyenanh", qty: 1 }, { id: "yaodan1", qty: 2 }],/* → Nguyên Anh */
+  5: [{ id: "pill_hoathan", qty: 1 }, { id: "yaodan1", qty: 3 }],  /* → Hóa Thần */
+  6: [{ id: "pill_luyenhu", qty: 1 }, { id: "yaodan1", qty: 5 }],  /* → Luyện Hư/Hợp Thể/Đại Thừa */
+  7: [{ id: "pill_hopdao", qty: 1 }, { id: "yaodan1", qty: 8 }],   /* → Độ Kiếp */
+};
 function btNeeds() {
-  var target = (typeof STAGES !== "undefined") ? STAGES[state.char.realm + 1] : null;
-  if (target && target.ten === "Trúc Cơ") {
-    return [{ id: "pill_truccodan", qty: 1 }, { id: "yaodan1", qty: 1 }];
-  }
-  return [];
+  var target = state.char.realm + 1;
+  return BT_PILL_BY_REALM[target] || [];
 }
 function renderBreakthrough() {
   var c = state.char;
@@ -2339,6 +2365,7 @@ function onPanelClick(e) {
   var v = el.getAttribute("data-v");
   switch (act) {
     case "bag-use": doBagUse(+i); break;
+    case "pet-feed": doPetFeed(); break;
     case "bag-equip": doBagEquip(+i); break;
     case "bag-unlock": doBagUnlock(+i); break;
     case "bag-info": toast(t("bag_slots", { n: state.bag.length })); break;
@@ -2399,7 +2426,23 @@ function onPanelClick(e) {
     case "sect-trial-start": startSectTrial(el.getAttribute("data-id")); break;
     case "sect-daily-claim": {
       var dc = (typeof SectQuest !== "undefined") ? SectQuest.claimDaily(state, el.getAttribute("data-id")) : null;
-      if (dc && dc.ok) { saveGame(state); sfx("success"); toast("+" + dc.contrib + " " + t("sect_contrib")); renderPanel(); }
+      if (dc && dc.ok) {
+        saveGame(state); sfx("success");
+        var _rw = dc.reward || {};
+        toast("+" + (_rw.contrib || dc.contrib || 0) + " " + t("sect_contrib") +
+          ((_rw.stones ? " · +" + _rw.stones + " 💎" : "")) + ((_rw.exp ? " · +" + _rw.exp + " EXP" : "")));
+        renderPanel();
+      }
+      else { toast(t("q_incomplete")); sfx("fail"); }
+      break;
+    }
+    case "sect-daily-bonus": {
+      var db = (typeof SectQuest !== "undefined") ? SectQuest.claimDailyBonus(state) : null;
+      if (db && db.ok) {
+        saveGame(state); sfx("success");
+        toast("🎁 +" + db.bonus.contrib + " " + t("sect_contrib") + " · +" + db.bonus.stones + " 💎 · +" + db.bonus.exp + " EXP");
+        renderPanel();
+      }
       else { toast(t("q_incomplete")); sfx("fail"); }
       break;
     }
@@ -3271,6 +3314,7 @@ function doAlchemyCraft(recipeId) {
   }
   toast(t("km_crafted", { n: itemName(r.id) }));
   sfx("success");
+  try { if (typeof SectQuest !== "undefined" && SectQuest.onCraftPill) SectQuest.onCraftPill(state); } catch (e) {}
   saveGame(state); renderPanel();
 }
 /* Luyện Yêu Đan (mở từ Lão Rèn) */
@@ -3325,6 +3369,7 @@ function doBcMeditateClaim() {
   var r = BodyCult.meditateClaim(state);
   if (!r.ok) { sfx("fail"); return; }
   try { BodyCult.dailyClaimMed(state); } catch (e) {} /* tính luôn nv thiền ngày */
+  try { if (typeof SectQuest !== "undefined" && SectQuest.onMeditate) SectQuest.onMeditate(state); } catch (e) {}
   saveGame(state); sfx("success"); refreshHUD();
   toast(t("bc_upgraded", { t: t("bc_thanthuc"), n: r.lv }));
   if (r.milestone) showBcMilestone("thanthuc", r.milestone);
@@ -3932,6 +3977,20 @@ function renderPet() {
   h += "</div>";
   return h;
 }
+function doPetFeed() {
+  if (typeof Pet === "undefined" || !Pet.feedPet) { toast(t("coming_soon")); return; }
+  var r = Pet.feedPet(state);
+  if (!r.ok) {
+    if (r.reason === "no_pet") toast(t("pet_no_pet"));
+    else if (r.reason === "max_level") toast(t("pet_max_level"));
+    else toast(t("shop_no_stone"));
+    sfx("fail"); return;
+  }
+  try { if (typeof SectQuest !== "undefined" && SectQuest.onFeedPet) SectQuest.onFeedPet(state); } catch (e) {}
+  saveGame(state); sfx("success");
+  toast(t("pet_fed"));
+  refreshHUD(); renderPanel();
+}
 function doEggHatch(idx, instant) {
   var it = state.bag[idx];
   if (!it) return;
@@ -4416,4 +4475,176 @@ function markSkillActive(skillId) {
     for (var i = 0; i < slots.length; i++)
       slots[i].classList.toggle("active-skill", slots[i].getAttribute("data-skill") === skillId);
   } catch (e) {}
+}
+
+/* ================= LỊCH LUYỆN BÍ CẢNH (secretbook.js) ================= */
+function hasSecretBook() { return typeof SecretBook !== "undefined"; }
+function sbTab() { return (panelArg && panelArg.sbtab) || "sched"; }
+/* ms → "20:05" (giờ địa phương) */
+function _sbHM(ms) {
+  var d = new Date(ms);
+  function p2(n) { return (n < 10 ? "0" : "") + n; }
+  return p2(d.getHours()) + ":" + p2(d.getMinutes());
+}
+function _sbRealmTitle(id) {
+  var icon = "🌀", nm = id;
+  try {
+    if (hasSecret()) { var r = Secret.realm(id); if (r) { icon = r.icon || icon; if (r.nameKey) nm = t(r.nameKey); } }
+  } catch (e) {}
+  return icon + " " + nm;
+}
+function _sbDayLabel(dayMs) {
+  var d = new Date(dayMs);
+  function p2(n) { return (n < 10 ? "0" : "") + n; }
+  return p2(d.getDate()) + "/" + p2(d.getMonth() + 1);
+}
+function _sbWinStatus(s) {
+  if (s.phase === "open") return '<span class="sr-open-tag">🔥 ' + esc(t("sb_open")) + " — " + esc(t("sb_time_left", { t: fmtDur(s.msLeft) })) + "</span>";
+  if (s.phase === "soon") return '<span class="sr-time">⏳ ' + esc(t("sb_soon")) + " — " + esc(t("sb_opens_in", { t: fmtDur(s.msUntil) })) + "</span>";
+  if (s.phase === "done") return '<span class="sr-time">🔒 ' + esc(t("sb_done")) + "</span>";
+  return '<span class="sr-time">📅 ' + esc(t("sb_opens_in", { t: fmtDur(s.msUntil) })) + "</span>";
+}
+function _sbIsBooked(state, realmId, dateStr, win) {
+  SecretBook.ensure(state);
+  return state.secretBook.bookings.some(function (b) {
+    return !b.used && b.realmId === realmId && b.date === dateStr && b.win === win;
+  });
+}
+function _sbDateStr(ms) {
+  var d = new Date(ms);
+  function p2(n) { return (n < 10 ? "0" : "") + n; }
+  return d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate());
+}
+
+function renderSecretBook() {
+  if (!hasSecretBook()) return "";
+  var h = tabBtns([
+    ["sched", t("sb_tab_sched")], ["my", t("sb_tab_my")], ["hist", t("sb_tab_hist")],
+  ], sbTab(), "sb-tab");
+  var tb = sbTab();
+  if (tb === "my") h += renderSecretBookMy(Date.now());
+  else if (tb === "hist") h += renderSecretBookHist();
+  else h += renderSecretBookSched(Date.now());
+  return h;
+}
+
+/* Tab Lịch mở: khung giờ hôm nay + ngày mai, nút đặt lịch */
+function renderSecretBookSched(now) {
+  SecretBook.ensure(state);
+  var h = '<p class="sect-note">⚡ ' + esc(t("sb_note")) + "</p>";
+  [0, 1].forEach(function (dayOff) {
+    var dayMs = now + dayOff * 86400000;
+    var d0 = new Date(dayMs); d0.setHours(0, 0, 0, 0);
+    h += '<div class="item-name" style="margin-top:8px">📅 ' +
+      esc((dayOff === 0 ? t("sb_today") : t("sb_tomorrow")) + " " + _sbDayLabel(dayMs)) + "</div>";
+    SecretBook.realmIds().forEach(function (id) {
+      var ce = hasSecret() ? Secret.canEnter(state, id) : { ok: true };
+      var dstr = _sbDateStr(d0.getTime());
+      var wins = SecretBook.daySchedule(d0.getTime(), dayOff === 0 ? now : d0.getTime())
+        .filter(function (s) { return s.realmId === id; });
+      var rows = wins.map(function (s) {
+        var booked = _sbIsBooked(state, id, dstr, s.win);
+        var canBook = ce.ok && !booked && s.phase !== "open" && s.phase !== "done" &&
+          (dayOff === 1 || s.start > now + 60000);
+        var btn = booked ? '<span class="sr-time">' + esc(t("sb_booked")) + "</span>"
+          : !ce.ok ? '<button class="mini" disabled>' + esc(t("sr_locked", { realm: stageName(ce.need || 2, 0) })) + "</button>"
+          : canBook ? '<button class="mini" data-act="sb-book" data-id="' + esc(id) + '" data-date="' + dayOff + '" data-win="' + s.win + '">' + esc(t("sb_book")) + "</button>"
+          : '<button class="mini" disabled>' + esc(t("sb_book")) + "</button>";
+        return '<div class="row"><div><div class="item-name">' + esc(_sbHM(s.start) + " – " + _sbHM(s.end)) +
+          '</div><div class="item-desc">' + _sbWinStatus(s) + "</div></div>" +
+          '<div class="row-btns">' + btn + "</div></div>";
+      }).join("");
+      h += '<div class="sr-row"><div class="item-name">' + esc(_sbRealmTitle(id)) + "</div>" + rows + "</div>";
+    });
+  });
+  return h;
+}
+
+/* Tab Đã đặt: các lịch sắp tới + đếm ngược + hủy */
+function renderSecretBookMy(now) {
+  SecretBook.ensure(state);
+  var list = SecretBook.upcomingBookings(state, now);
+  if (!list.length) return '<p class="sect-note">' + esc(t("sb_no_book")) + "</p>";
+  return list.map(function (b) {
+    var live = now >= b.start && now < b.end;
+    var cd = live ? '<span class="sr-open-tag">🔥 ' + esc(t("sb_open")) + " — " + esc(t("sb_time_left", { t: fmtDur(b.end - now) })) + "</span>"
+                  : '<span class="sr-time">⏳ ' + esc(t("sb_opens_in", { t: fmtDur(b.start - now) })) + "</span>";
+    var d = new Date(b.start);
+    var dayLbl = _sbDateStr(b.start) === _sbDateStr(now) ? t("sb_today") : t("sb_tomorrow");
+    return '<div class="sr-row"><div class="sr-head"><div class="item-name">' + esc(_sbRealmTitle(b.realmId)) + "</div>" +
+      '<div class="row-btns"><button class="mini red" data-act="sb-cancel" data-id="' + esc(b.id) + '">' + esc(t("sb_cancel")) + "</button></div></div>" +
+      '<div class="item-desc">📅 ' + esc(dayLbl + " " + _sbDayLabel(b.start) + " · " + _sbHM(b.start) + " – " + _sbHM(b.end)) + "</div>" +
+      '<div style="margin-top:4px">' + cd + ' <span class="sr-time">· ' + esc(t("sb_priority", { n: SecretBook.DEF.priorityExpPct })) + "</span></div></div>";
+  }).join("");
+}
+
+/* Tab Lịch sử: số lần đi, số lần ưu tiên, boss đã hạ */
+function renderSecretBookHist() {
+  SecretBook.ensure(state);
+  var stats = SecretBook.stats(state);
+  var ids = Object.keys(stats);
+  var any = ids.some(function (id) { return stats[id].entries > 0; });
+  if (!any) return '<p class="sect-note">' + esc(t("sb_no_hist")) + "</p>";
+  return ids.map(function (id) {
+    var s = stats[id];
+    if (!s.entries) return "";
+    return '<div class="sr-row"><div class="item-name">' + esc(_sbRealmTitle(id)) + "</div>" +
+      '<div class="item-desc">⚔️ ' + esc(t("sb_entries", { n: s.entries })) +
+      " · ⚡ " + esc(t("sb_priority_n", { n: s.priority })) + "</div>" +
+      '<div class="item-desc">👹 ' + esc(t("sb_bosses", { s: s.bosses.length ? s.bosses.join(", ") : t("sb_no_boss") })) + "</div></div>";
+  }).join("");
+}
+
+function onSecretBookClick(act, el) {
+  if (!hasSecretBook()) return;
+  var now = Date.now();
+  if (act === "sb-tab") {
+    panelArg = { dtab: (panelArg && panelArg.dtab) || "sb", sbtab: el.getAttribute("data-v") };
+    renderPanel(); sfx("click"); return;
+  }
+  if (act === "sb-book") {
+    var dayMs = now + (+el.getAttribute("data-date")) * 86400000;
+    var r = SecretBook.book(state, el.getAttribute("data-id"), dayMs, +(el.getAttribute("data-win")), now);
+    if (!r.ok) {
+      var msg = r.reason === "dup" ? t("sb_book_dup") :
+        r.reason === "full" ? t("sb_book_full", { n: r.max || SecretBook.DEF.maxBookingsPerDay }) :
+        r.reason === "locked" ? t("sr_locked", { realm: stageName(r.need || 2, 0) }) :
+        (r.reason === "past" || r.reason === "bad_day" || r.reason === "bad_window") ? t("sb_book_past") : t("sb_book_fail");
+      toast(msg); sfx("fail"); return;
+    }
+    toast(t("sb_book_ok", { name: _sbRealmTitle(r.booking.realmId), t: _sbHM(r.booking.start) }));
+    sfx("success"); saveGame(state); renderPanel(); return;
+  }
+  if (act === "sb-cancel") {
+    var c = SecretBook.cancelBook(state, el.getAttribute("data-id"));
+    toast(t(c.ok ? "sb_cancel_ok" : "sb_cancel_fail")); sfx(c.ok ? "click" : "fail");
+    if (c.ok) saveGame(state);
+    renderPanel(); return;
+  }
+}
+
+/* Nhắc lịch hẹn trước giờ mở (gọi từ secretTick mỗi tick game) */
+function secretBookTick() {
+  if (typeof screen === "undefined" || screen !== "game" || !state || !hasSecretBook()) return;
+  var due = SecretBook.tick(state, Date.now());
+  if (!due.length) return;
+  var now = Date.now();
+  due.forEach(function (b) {
+    toast("⏰ " + t("sb_remind", { name: _sbRealmTitle(b.realmId), t: fmtDur(Math.max(0, b.start - now)) }));
+  });
+  sfx("success");
+  saveGame(state);
+  try { if (panel === "dungeon") renderPanel(); } catch (e) {}
+}
+
+/* Click riêng cho Lịch Bí Cảnh (không động vào switch onPanelClick để tránh xung đột) */
+if (typeof document !== "undefined") {
+  document.addEventListener("click", function (e) {
+    var el = e.target && e.target.closest ? e.target.closest("[data-act]") : null;
+    if (!el) return;
+    var act = el.getAttribute("data-act") || "";
+    if (act === "sb-tab" || act === "sb-book" || act === "sb-cancel") {
+      try { onSecretBookClick(act, el); } catch (err) {}
+    }
+  });
 }

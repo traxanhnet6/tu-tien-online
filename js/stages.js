@@ -12,27 +12,29 @@ const STAGES = [
   { id: 1, ten: "Luyện Khí", tang: 12,
     maps: ["Thanh Vân Trấn", "Hắc Phong Lâm", "U Minh Cốc"], boss_moi_map: 1,
     mo_tinh_nang: ["van_tien_cac_tang12", "giftcode", "diem_danh", "bi_canh_1"] },
-  { id: 2, ten: "Trúc Cơ", ky: ["Sơ kỳ", "Trung kỳ", "Hậu kỳ"],
+  { id: 2, ten: "Trúc Cơ", ky: ["Sơ Kỳ", "Trung Kỳ", "Hậu Kỳ", "Đỉnh Phong"],
     maps: ["Xích Hỏa Sơn"],
     dot_pha: { dan: "Trúc Cơ Đan", tam_ma: true, loi_kiep: 0.90 },
     mo_tinh_nang: ["phi_hanh", "nghe_luyen_dan", "nghe_ve_phu", "linh_thu"] },
-  { id: 3, ten: "Kim Đan", ky: ["Sơ kỳ", "Trung kỳ", "Hậu kỳ"],
+  { id: 3, ten: "Kim Đan", ky: ["Sơ Kỳ", "Trung Kỳ", "Hậu Kỳ", "Đỉnh Phong"],
     maps: ["Băng Phong Nguyên"],
-    dot_pha: { loi_kiep: 0.80 },
+    dot_pha: { dan: "Kim Đan", loi_kiep: 0.80 },
     mo_tinh_nang: ["dong_phu_offline", "tong_mon", "to_doi"] },
-  { id: 4, ten: "Nguyên Anh", ky: ["Sơ kỳ", "Trung kỳ", "Hậu kỳ"],
+  { id: 4, ten: "Nguyên Anh", ky: ["Sơ Kỳ", "Trung Kỳ", "Hậu Kỳ", "Đỉnh Phong"],
     maps: ["Vạn Độc Chiểu"],
-    dot_pha: { loi_kiep: 0.70 },
+    dot_pha: { dan: "Nguyên Anh Đan", loi_kiep: 0.70 },
     mo_tinh_nang: ["xuat_khieu_2map", "pvp_dau_truong", "thap_thi_luyen"] },
-  { id: 5, ten: "Hóa Thần/Phân Thần", ky: ["Sơ kỳ", "Trung kỳ", "Hậu kỳ"],
+  { id: 5, ten: "Hóa Thần/Phân Thần", ky: ["Sơ Kỳ", "Trung Kỳ", "Hậu Kỳ", "Đỉnh Phong"],
     maps: ["Cửu U Minh Hải", "Thiên Ma Vực"],
-    dot_pha: { loi_kiep: 0.60 },
+    dot_pha: { dan: "Hóa Thần Đan", loi_kiep: 0.60 },
     mo_tinh_nang: ["than_thuc_quet_map", "dao_lu", "dau_gia"] },
-  { id: 6, ten: "Luyện Hư/Hợp Thể/Đại Thừa", ky: ["Sơ kỳ", "Trung kỳ", "Hậu kỳ"],
+  { id: 6, ten: "Luyện Hư/Hợp Thể/Đại Thừa", ky: ["Sơ Kỳ", "Trung Kỳ", "Hậu Kỳ", "Đỉnh Phong"],
     maps: ["Hỗn Độn Chiến Trường"],
-    dot_pha: { loi_kiep: 0.45 },
+    dot_pha: { dan: "Hợp Đạo Đan", loi_kiep: 0.45 },
     mo_tinh_nang: ["tong_chien", "tien_phu_giang_lam"] },
-  { id: 7, ten: "Độ Kiếp", maps: ["Cửu Trọng Thiên"], loi_kiep_9_dao: 0.30,
+  { id: 7, ten: "Độ Kiếp", ky: ["Sơ Kỳ", "Trung Kỳ", "Hậu Kỳ", "Đỉnh Phong"],
+    maps: ["Cửu Trọng Thiên"], loi_kiep_9_dao: 0.30,
+    dot_pha: { dan: "Độ Kiếp Đan" },
     mo_tinh_nang: ["phi_thang"] },
 ];
 
@@ -53,13 +55,13 @@ function dungeonBuyCost(typeId, bought) {
 }
 
 /* ---------- Helpers cảnh giới ---------- */
-/* tier: Luyện Khí dùng tầng 1..12; các cảnh giới sau dùng stageIdx 0..2 */
+/* tier: Luyện Khí dùng tầng 1..12; các cảnh giới sau dùng tier 0..3
+ * (Sơ Kỳ / Trung Kỳ / Hậu Kỳ / Đỉnh Phong) */
 function stageName(realm, tier) {
   const s = STAGES[realm];
   if (!s) return "?";
   if (realm === 0) return s.ten;
   if (realm === 1) return s.ten + " tầng " + tier;
-  if (realm === 7) return s.ten;
   return s.ten + " " + s.ky[tier];
 }
 
@@ -67,9 +69,9 @@ function stageName(realm, tier) {
 function expMaxFor(realm, tier) {
   if (realm === 0) return 30;
   if (realm === 1) return Math.round(40 * Math.pow(1.5, tier - 1));
-  // Trúc Cơ Sơ kỳ nối tiếp Luyện Khí 12 (40*1.5^11), rồi nhân 1.5 mỗi kỳ
+  // Trúc Cơ Sơ Kỳ nối tiếp Luyện Khí 12 (40*1.5^11), rồi nhân 1.5 mỗi tiểu cảnh giới
   const lk12 = 40 * Math.pow(1.5, 11);
-  const steps = (realm - 2) * 3 + tier; // tier 0..2
+  const steps = (realm - 2) * 4 + tier; // tier 0..3
   return Math.round(lk12 * Math.pow(1.5, steps + 1));
 }
 
@@ -104,8 +106,10 @@ function hasFeature(realm, f) {
 /* Tỷ lệ đột phá đại cảnh giới (lôi kiếp). Trả về null nếu không cần đột phá kiểu này */
 function breakthroughRate(realm) {
   const s = STAGES[realm];
-  if (!s || !s.dot_pha) return null;
-  return s.dot_pha.loi_kiep;
+  if (!s) return null;
+  if (s.dot_pha && s.dot_pha.loi_kiep != null) return s.dot_pha.loi_kiep;
+  if (s.loi_kiep_9_dao != null) return s.loi_kiep_9_dao;
+  return null;
 }
 
 /* ---------- Cường hóa trang bị (+0..+15) ---------- */
@@ -122,7 +126,7 @@ function enhanceMult(plus) {
 function powerLevel(realm, tier) {
   if (realm === 0) return 0;
   if (realm === 1) return 100 + tier;
-  return 200 + (realm - 2) * 30 + tier * 10;
+  return 200 + (realm - 2) * 40 + tier * 10;
 }
 
 /* ---------- Random có seed (bí cảnh ngẫu nhiên) ---------- */

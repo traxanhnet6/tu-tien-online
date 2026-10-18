@@ -46,7 +46,7 @@ function defaultState() {
     char: {
       name: "", sect: "kiem",          // kiem | phap | the
       element: null, elementQuality: null, // linh căn: kim/moc/... + pham/dia/thien
-      realm: 0, tier: 1, exp: 0,       // realm 0=Phàm Nhân; realm1: tier 1..12; realm>=2: tier 0..2 (Sơ/Trung/Hậu)
+      realm: 0, tier: 1, exp: 0,       // realm 0=Phàm Nhân; realm1: tier 1..12; realm>=2: tier 0..3 (Sơ/Trung/Hậu/Đỉnh Phong)
       hp: 100, mp: 50,
       charId: null,                    // ID duy nhất "TT-XXXXXX" — sinh 1 lần, không đổi
       gender: "nam",                   // nam | nu — đổi bằng Thẻ Đổi Giới Tính
@@ -181,6 +181,8 @@ function gainExp(state, n) {
   try { if (typeof Lifespan !== "undefined" && Lifespan.talentExpPct) n = Math.round(n * (1 + Lifespan.talentExpPct(state))); } catch (e) {}
   /* Phẩm chất căn cốt: +tốc độ tu luyện (taycot.js) */
   try { if (typeof TayCot !== "undefined") n = Math.round(n * TayCot.cotBonus(state).expMult); } catch (e) {}
+  /* Ưu tiên đặt lịch bí cảnh: +EXP (secretbook.js) */
+  try { if (typeof SecretBook !== "undefined") n = Math.round(n * SecretBook.expMult(state)); } catch (e) {}
   const c = state.char;
   c.exp += n;
   let leveled = false;
@@ -189,7 +191,7 @@ function gainExp(state, n) {
     if (c.exp < max) break;
     // Đang ở max tiểu cảnh giới của đại cảnh giới → chờ đột phá, không tự lên
     if (c.realm === 1 && c.tier >= 12) { c.exp = max; break; }
-    if (c.realm >= 2 && c.tier >= 2) { c.exp = max; break; }
+    if (c.realm >= 2 && c.tier >= 3) { c.exp = max; break; }
     c.exp -= max;
     c.tier++;
     leveled = true;
@@ -201,7 +203,7 @@ function gainExp(state, n) {
 /* Có đủ điều kiện đột phá đại cảnh giới không (đủ cấp, chưa cần check đan) */
 function canBreakthrough(state) {
   const c = state.char;
-  return (c.realm === 1 && c.tier >= 12) || (c.realm >= 2 && c.realm < 7 && c.tier >= 2);
+  return (c.realm === 1 && c.tier >= 12) || (c.realm >= 2 && c.realm < 7 && c.tier >= 3);
 }
 /* Thực hiện đột phá: rate từ stages.js; fail → rớt 1 tiểu cảnh giới */
 function doBreakthrough(state, rate) {
