@@ -169,6 +169,31 @@
     return SPEEDS[name] || SPEEDS.idle;
   }
 
+  /* ---------- Auto-load manifest in browser ---------- */
+  function autoInit() {
+    if (typeof fetch === "undefined" || MANIFEST) return;
+    // try common base paths
+    var paths = ["assets/parts_manifest.json", "./assets/parts_manifest.json"];
+    (function tryNext(i) {
+      if (i >= paths.length || MANIFEST) return;
+      fetch(paths[i]).then(function (r) {
+        if (!r.ok) throw 0;
+        return r.json();
+      }).then(function (m) {
+        loadManifest(m);
+      }).catch(function () { tryNext(i + 1); });
+    })(0);
+  }
+
+  // auto-init on load in browser
+  if (typeof window !== "undefined") {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", autoInit);
+    } else {
+      setTimeout(autoInit, 100);
+    }
+  }
+
   /* ---------- Public API ---------- */
   var CharAnim = {
     loadManifest: loadManifest,
@@ -176,6 +201,7 @@
     evalPose: evalPose,
     draw: draw,
     animDuration: animDuration,
+    autoInit: autoInit,
     SPEEDS: SPEEDS,
     // for tests
     _interpTrack: _interpTrack

@@ -689,10 +689,19 @@ var Engine = (function () {
     if (!_canvas || !_running || !_tapMove) return;
     var r = _canvas.getBoundingClientRect();
     var cam = _camera();
-    _moveTarget = {
-      x: e.clientX - r.left + cam.x,
-      y: e.clientY - r.top + cam.y,
-    };
+    var wx = e.clientX - r.left + cam.x;
+    var wy = e.clientY - r.top + cam.y;
+    /* Chạm trực tiếp vào NPC → nói chuyện ngay (Bui 2026-10-18) */
+    try {
+      for (var i = 0; i < _npcs.length; i++) {
+        var n = _npcs[i];
+        if (Math.hypot(n.x - wx, n.y - wy) < 60) {
+          if (Engine.onNpc) Engine.onNpc(n.npcId);
+          return;
+        }
+      }
+    } catch (err) {}
+    _moveTarget = { x: wx, y: wy };
   }
   function _inputVec() {
     var dx = 0, dy = 0;

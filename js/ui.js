@@ -1680,6 +1680,100 @@ function showCuuSacFx() {
   } catch (e) {}
 }
 
+/* Hiệu ứng ĐỘT PHÁ (NV c08/m08 Sinh Tử Đột Phá): cột sáng vàng + chữ đột phá */
+function showDotPhaFx(label) {
+  try {
+    var wrap = document.createElement("div");
+    wrap.className = "dotpha-fx";
+    wrap.innerHTML = '<div class="dotpha-pillar"></div>' +
+      '<div class="dotpha-ring"></div>' +
+      '<div class="dotpha-label">' + esc(label || "") + "</div>";
+    var css = document.createElement("style");
+    css.textContent = ".dotpha-fx{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden}" +
+      ".dotpha-pillar{position:absolute;left:42%;right:42%;bottom:-10%;height:120%;opacity:0;" +
+      "background:linear-gradient(to top,rgba(255,215,0,.9),rgba(255,240,180,.45) 60%,transparent);" +
+      "filter:blur(3px);animation:dotphaRise 2.6s ease-out forwards}" +
+      "@keyframes dotphaRise{0%{opacity:0;transform:scaleY(.2)}25%{opacity:1}100%{opacity:0;transform:scaleY(1)}}" +
+      ".dotpha-ring{position:absolute;left:50%;top:55%;width:40px;height:40px;margin:-20px 0 0 -20px;" +
+      "border:4px solid #ffd700;border-radius:50%;opacity:0;animation:dotphaRing 2.6s ease-out forwards}" +
+      "@keyframes dotphaRing{0%{opacity:0;transform:scale(.3)}30%{opacity:1}100%{opacity:0;transform:scale(9)}}" +
+      ".dotpha-label{position:absolute;top:36%;left:0;right:0;text-align:center;font-size:24px;font-weight:bold;" +
+      "color:#fff200;text-shadow:0 0 20px #ff9d00,0 2px 4px #000;animation:dotphaLbl 3.2s ease forwards}" +
+      "@keyframes dotphaLbl{0%{opacity:0;transform:scale(.7)}20%{opacity:1;transform:scale(1.05)}80%{opacity:1}100%{opacity:0}}";
+    document.head.appendChild(css);
+    $("app").appendChild(wrap);
+    sfx("success");
+    setTimeout(function () {
+      if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+      if (css.parentNode) css.parentNode.removeChild(css);
+    }, 3400);
+  } catch (e) {}
+}
+
+/* Hiệu ứng CỬU CHUYỂN ĐAN (NV c10/m10): 9 vòng đan văn xoay + chữ */
+function showCuuChuyenFx(label) {
+  try {
+    var wrap = document.createElement("div");
+    wrap.className = "cuuchuyen-fx";
+    var html = '<div class="cuuchuyen-core"></div>';
+    for (var i = 1; i <= 9; i++) {
+      html += '<div class="cuuchuyen-ring" style="width:' + (i * 34) + "px;height:" + (i * 34) +
+        "px;animation-delay:" + (i * 0.1) + 's"></div>';
+    }
+    html += '<div class="cuuchuyen-label">' + esc(label || "") + "</div>";
+    wrap.innerHTML = html;
+    var css = document.createElement("style");
+    css.textContent = ".cuuchuyen-fx{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden}" +
+      ".cuuchuyen-core{position:absolute;left:50%;top:52%;width:26px;height:26px;margin:-13px 0 0 -13px;" +
+      "border-radius:50%;background:radial-gradient(circle,#fff 20%,#ffd700 60%,transparent);" +
+      "box-shadow:0 0 30px #ffd700;animation:cuuchuyenPulse 1.2s ease-in-out infinite}" +
+      "@keyframes cuuchuyenPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}" +
+      ".cuuchuyen-ring{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);" +
+      "border:2px solid rgba(255,215,0,.85);border-radius:50%;opacity:0;animation:cuuchuyenSpin 2.8s linear forwards}" +
+      "@keyframes cuuchuyenSpin{0%{opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(0)}" +
+      "25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.15) rotate(300deg)}}" +
+      ".cuuchuyen-label{position:absolute;top:34%;left:0;right:0;text-align:center;font-size:24px;font-weight:bold;" +
+      "color:#ffe93c;text-shadow:0 0 20px #ff8c1a,0 2px 4px #000;animation:cuuchuyenLbl 3.4s ease forwards}" +
+      "@keyframes cuuchuyenLbl{0%{opacity:0;transform:scale(.7)}20%{opacity:1;transform:scale(1.05)}80%{opacity:1}100%{opacity:0}}";
+    document.head.appendChild(css);
+    $("app").appendChild(wrap);
+    sfx("success");
+    setTimeout(function () {
+      if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+      if (css.parentNode) css.parentNode.removeChild(css);
+    }, 3600);
+  } catch (e) {}
+}
+
+/* Hiệu ứng TÂM MA KIẾP (NV m07): ma khí tím đen cuộn + chữ */
+function showTamMaFx(label) {
+  try {
+    var wrap = document.createElement("div");
+    wrap.className = "tamma-fx";
+    wrap.innerHTML = '<div class="tamma-fog"></div>' +
+      '<div class="tamma-label">' + esc(label || "") + "</div>";
+    var css = document.createElement("style");
+    css.textContent = ".tamma-fx{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;" +
+      "background:radial-gradient(circle,rgba(60,0,90,.25) 0%,rgba(20,0,40,.6) 100%);animation:tammaFog 3.4s ease forwards}" +
+      "@keyframes tammaFog{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}" +
+      ".tamma-fog{position:absolute;inset:-20%;opacity:.7;" +
+      "background:radial-gradient(ellipse at 30% 60%,rgba(150,0,200,.35),transparent 55%)," +
+      "radial-gradient(ellipse at 70% 40%,rgba(90,0,150,.4),transparent 55%);" +
+      "animation:tammaSwirl 2s linear infinite}" +
+      "@keyframes tammaSwirl{from{transform:rotate(0) scale(1)}to{transform:rotate(8deg) scale(1.12)}}" +
+      ".tamma-label{position:absolute;top:38%;left:0;right:0;text-align:center;font-size:24px;font-weight:bold;" +
+      "color:#d98cff;text-shadow:0 0 20px #7a00c8,0 2px 4px #000;animation:tammaLbl 3.4s ease forwards}" +
+      "@keyframes tammaLbl{0%{opacity:0;transform:scale(.7)}20%{opacity:1;transform:scale(1.05)}80%{opacity:1}100%{opacity:0}}";
+    document.head.appendChild(css);
+    $("app").appendChild(wrap);
+    sfx("fail");
+    setTimeout(function () {
+      if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+      if (css.parentNode) css.parentNode.removeChild(css);
+    }, 3600);
+  } catch (e) {}
+}
+
 /* Sự kiện Hắc Phong Trại tấn công làng (NV3): cảnh báo đỏ + lửa cháy + spawn sơn tặc */
 function showBanditAttackFx() {
   try {
@@ -2304,6 +2398,25 @@ function renderNpc() {
     h += '<button class="btn btn-paper" style="width:100%;margin-bottom:8px" data-act="npc-opt" data-i="' + i +
       '" data-opact="' + esc(act) + '"' + extra + ">" + esc(label) + "</button>";
   });
+  /* Nhiệm vụ từ NPC: chạm để nhận/trả trực tiếp (Bui 2026-10-18) */
+  try {
+    if (typeof Quest !== "undefined" && Quest.available) {
+      var qsAvail = Quest.available(state) || [];
+      qsAvail.forEach(function (q) {
+        if (q.npc !== npcId) return;
+        h += '<button class="btn btn-jade" style="width:100%;margin-bottom:8px" data-act="quest-accept" data-id="' + esc(q.id) + '">📜 ' + esc(Quest.name ? Quest.name(q.id) : (q.nameKey || q.id)) + "</button>";
+      });
+      /* NV đang làm có thể trả */
+      var qsDone = (state.quests || {});
+      Object.keys(qsDone).forEach(function (qid) {
+        var s = qsDone[qid];
+        if (!s || s.status !== "active") return;
+        var qd = Quest.def(qid);
+        if (!qd || qd.npc !== npcId) return;
+        h += '<button class="btn btn-jade" style="width:100%;margin-bottom:8px" data-act="quest-turnin" data-id="' + esc(qid) + '">✅ ' + esc(Quest.name ? Quest.name(qid) : (qd.nameKey || qid)) + "</button>";
+      });
+    }
+  } catch (e) {}
   if (panelArg.lockedShop) h = '<div class="sect-note">' + esc(t("shop_locked")) + "</div>" + h;
   return h;
 }
@@ -2807,6 +2920,14 @@ function onPanelClick(e) {
           } else toast(t("quest_done"));
           /* NV2 Dị Tượng Cửu Sắc: cột sáng 9 màu (Bui 2026-10-18) */
           if (qr.fx === "cuusac") showCuuSacFx();
+          /* NV chính tuyến 2 nhánh: đột phá / cửu chuyển đan / tâm ma kiếp (Bui 2026-10-18) */
+          if (qr.fx === "dotpha" || qr.fx === "cuuchuyen" || qr.fx === "tamma") {
+            var _fxLbl = "";
+            try { _fxLbl = t(qd2.id + "_fx"); } catch (e) {}
+            if (qr.fx === "dotpha") showDotPhaFx(_fxLbl);
+            else if (qr.fx === "cuuchuyen") showCuuChuyenFx(_fxLbl);
+            else if (qr.fx === "tamma") showTamMaFx(_fxLbl);
+          }
           /* NV5 Rời Làng: thông báo nhập đội */
           if (qr.party && qr.party.length) toast(t("q_story_25_party"));
           /* NV7 Ngã Ba Định Mệnh: storyboard */
