@@ -1,0 +1,140 @@
+[
+ {
+  "id": "pb_tanthu_1",
+  "nameKey": "dg_pb_tanthu_1",
+  "typeId": "tanthu",
+  "mapBg": "assets/map/map_thanh_van_tran.webp",
+  "monsters": [
+   "da_tru",
+   "son_ke"
+  ],
+  "boss": "da_tru_vuong",
+  "rewardNote": "dg_note_tanthu"
+ },
+ {
+  "id": "pb_tinhanh_1",
+  "nameKey": "dg_pb_tinhanh_1",
+  "typeId": "tinhanh",
+  "mapBg": "assets/map/map_hac_phong_lam.webp",
+  "monsters": [
+   "phong_lang",
+   "hu_thi"
+  ],
+  "boss": "lang_vuong",
+  "rewardNote": "dg_note_tinhanh"
+ },
+ {
+  "id": "pb_dotpha_lk",
+  "nameKey": "dg_pb_dotpha_lk",
+  "typeId": "dotpha",
+  "mapBg": null,
+  "monsters": [
+   "u_hon",
+   "thi_ma"
+  ],
+  "boss": "cot_tuong",
+  "rewardNote": "dg_note_dotpha"
+ },
+ {
+  "id": "pb_ngau_nhien_1",
+  "nameKey": "dg_pb_ngau_nhien_1",
+  "typeId": "tinhanh",
+  "ngau_nhien": true,
+  "mapBg": null,
+  "monsters": [],
+  "boss": null,
+  "realmPool": {
+   "monsters": [
+    "phong_lang",
+    "hu_thi",
+    "u_hon",
+    "thi_ma"
+   ],
+   "bosses": [
+    "lang_vuong",
+    "cot_tuong"
+   ]
+  },
+  "rewardTables": {
+   "common": [
+    {
+     "stones": [
+      20,
+      60
+     ],
+     "items": [
+      {
+       "id": "pill_hx",
+       "qty": 2
+      }
+     ]
+    },
+    {
+     "stones": [
+      30,
+      70
+     ],
+     "items": [
+      {
+       "id": "pill_hl",
+       "qty": 2
+      }
+     ]
+    }
+   ],
+   "rare": [
+    {
+     "stones": [
+      80,
+      150
+     ],
+     "items": [
+      {
+       "id": "wpn_linh",
+       "qty": 1
+      }
+     ]
+    },
+    {
+     "stones": [
+      80,
+      150
+     ],
+     "items": [
+      {
+       "id": "arm_linh",
+       "qty": 1
+      }
+     ]
+    }
+   ],
+   "breakthrough": [
+    {
+     "stones": [
+      150,
+      300
+     ],
+     "items": [
+      {
+       "id": "yaodan1",
+       "qty": 1
+      }
+     ]
+    },
+    {
+     "stones": [
+      150,
+      300
+     ],
+     "items": [
+      {
+       "id": "taycothao",
+       "qty": 2
+      }
+     ]
+    }
+   ]
+  },
+  "rewardNote": "dg_note_random"
+ }
+]

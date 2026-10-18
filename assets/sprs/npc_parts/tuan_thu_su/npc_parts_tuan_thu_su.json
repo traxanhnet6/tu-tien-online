@@ -1,0 +1,208 @@
+{
+  "npc": "tuan_thu_su",
+  "source": "npc_tuan_thu_su.png",
+  "canvas": {
+    "width": 1120,
+    "height": 2240
+  },
+  "parts": [
+    {
+      "name": "phu_kien_ong_ten",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_ong_ten.png",
+      "offset": [
+        739,
+        302
+      ],
+      "size": [
+        191,
+        303
+      ],
+      "pivot": [
+        829,
+        493
+      ],
+      "z": 0,
+      "note": "Ống tên sau vai: gắn vai -> rút tên (tay_trai với lên)."
+    },
+    {
+      "name": "phu_kien_cung",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_cung.png",
+      "offset": [
+        176,
+        124
+      ],
+      "size": [
+        149,
+        480
+      ],
+      "pivot": [
+        202,
+        358
+      ],
+      "z": 0,
+      "note": "Cung đeo sau lưng: gắn lưng -> tháo xuống giương bắn (anim riêng)."
+    },
+    {
+      "name": "chan_trai",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_chan_trai.png",
+      "offset": [
+        560,
+        1344
+      ],
+      "size": [
+        275,
+        773
+      ],
+      "pivot": [
+        683,
+        1389
+      ],
+      "z": 1,
+      "note": "Chân trái (ủng): hông (pivot) -> bước đi, thế đứng bắn cung."
+    },
+    {
+      "name": "chan_phai",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_chan_phai.png",
+      "offset": [
+        313,
+        1344
+      ],
+      "size": [
+        269,
+        773
+      ],
+      "pivot": [
+        459,
+        1389
+      ],
+      "z": 1,
+      "note": "Chân phải (ủng): hông (pivot) -> bước đi, thế đứng bắn cung."
+    },
+    {
+      "name": "than",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_than.png",
+      "offset": [
+        51,
+        118
+      ],
+      "size": [
+        1032,
+        2051
+      ],
+      "pivot": [
+        560,
+        1232
+      ],
+      "z": 2,
+      "note": "Thân giáp da (catch-all): trung tâm -> nghiêng ngắm bắn, đi lại."
+    },
+    {
+      "name": "tay_trai",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_tay_trai.png",
+      "offset": [
+        772,
+        604
+      ],
+      "size": [
+        193,
+        741
+      ],
+      "pivot": [
+        851,
+        672
+      ],
+      "z": 4,
+      "note": "Tay trái: vai (pivot) -> giương cung (kết hợp phu_kien_cung), vẫy tay."
+    },
+    {
+      "name": "tay_phai",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_tay_phai.png",
+      "offset": [
+        164,
+        604
+      ],
+      "size": [
+        206,
+        741
+      ],
+      "pivot": [
+        269,
+        672
+      ],
+      "z": 4,
+      "note": "Tay phải: vai (pivot) -> cầm cung, vẫy tay."
+    },
+    {
+      "name": "dau",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_dau.png",
+      "offset": [
+        408,
+        213
+      ],
+      "size": [
+        301,
+        516
+      ],
+      "pivot": [
+        560,
+        504
+      ],
+      "z": 5,
+      "note": "Đầu + râu: cổ (pivot) -> gật/lắc đầu, ngắm bắn."
+    },
+    {
+      "name": "phu_kien_mu",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_mu.png",
+      "offset": [
+        455,
+        145
+      ],
+      "size": [
+        179,
+        68
+      ],
+      "pivot": [
+        560,
+        179
+      ],
+      "z": 6,
+      "note": "Mũ nhỏ đen: gắn đỉnh đầu, đi theo dau."
+    },
+    {
+      "name": "phu_kien_dao",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_dao.png",
+      "offset": [
+        660,
+        985
+      ],
+      "size": [
+        252,
+        523
+      ],
+      "pivot": [
+        717,
+        1053
+      ],
+      "z": 7,
+      "note": "Dao găm đeo hông: gắn hông -> rút ra khi chiến đấu (anim riêng)."
+    },
+    {
+      "name": "phu_kien_cho",
+      "file": "npc_parts/tuan_thu_su/npc_tuan_thu_su_part_phu_kien_cho.png",
+      "offset": [
+        683,
+        1702
+      ],
+      "size": [
+        420,
+        449
+      ],
+      "pivot": [
+        874,
+        1904
+      ],
+      "z": 8,
+      "note": "Chó săn: độc lập hoàn toàn -> ngồi, đứng, chạy theo chủ, sủa (lắc đầu)."
+    }
+  ]
+}

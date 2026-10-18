@@ -1,0 +1,88 @@
+{
+  "pet": "phong_duc_ung",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "ung gio: 1 chan gom ca 2 mong vuot, duoi la chum long duoi giua 2 chan",
+  "parts": {
+    "duoi": {
+      "file": "pet_phong_duc_ung_part_duoi.png",
+      "pivot": [
+        513,
+        974
+      ],
+      "z": 0,
+      "pixels": 28086,
+      "variants": {
+        "combat": "pet_phong_duc_ung_part_duoi_combat.png",
+        "tinh_anh": "pet_phong_duc_ung_part_duoi_tinh_anh.png"
+      }
+    },
+    "canh_trai": {
+      "file": "pet_phong_duc_ung_part_canh_trai.png",
+      "pivot": [
+        363,
+        685
+      ],
+      "z": 1,
+      "pixels": 112340,
+      "variants": {
+        "combat": "pet_phong_duc_ung_part_canh_trai_combat.png",
+        "tinh_anh": "pet_phong_duc_ung_part_canh_trai_tinh_anh.png"
+      }
+    },
+    "canh_phai": {
+      "file": "pet_phong_duc_ung_part_canh_phai.png",
+      "pivot": [
+        663,
+        685
+      ],
+      "z": 2,
+      "pixels": 114734,
+      "variants": {
+        "combat": "pet_phong_duc_ung_part_canh_phai_combat.png",
+        "tinh_anh": "pet_phong_duc_ung_part_canh_phai_tinh_anh.png"
+      }
+    },
+    "chan": {
+      "file": "pet_phong_duc_ung_part_chan.png",
+      "pivot": [
+        510,
+        807
+      ],
+      "z": 3,
+      "pixels": 37400,
+      "variants": {
+        "combat": "pet_phong_duc_ung_part_chan_combat.png",
+        "tinh_anh": "pet_phong_duc_ung_part_chan_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_phong_duc_ung_part_than.png",
+      "pivot": [
+        516,
+        661
+      ],
+      "z": 4,
+      "pixels": 182656,
+      "variants": {
+        "combat": "pet_phong_duc_ung_part_than_combat.png",
+        "tinh_anh": "pet_phong_duc_ung_part_than_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_phong_duc_ung_part_dau.png",
+      "pivot": [
+        515,
+        547
+      ],
+      "z": 5,
+      "pixels": 237517,
+      "variants": {
+        "combat": "pet_phong_duc_ung_part_dau_combat.png",
+        "tinh_anh": "pet_phong_duc_ung_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

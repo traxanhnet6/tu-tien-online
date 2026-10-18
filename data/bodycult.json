@@ -1,0 +1,245 @@
+{
+ "_comment": "Cấu hình hệ thống Căn Cốt + Thần Thức. Mirror trong js/bodycult.js (BODYCULT_DEF) — sửa 2 nơi đồng bộ.",
+ "bandSize": 20,
+ "bathHerbs": [
+  {
+   "id": "thao_linh_chi",
+   "qty": 3
+  },
+  {
+   "id": "truc_co_thao",
+   "qty": 3
+  },
+  {
+   "id": "dia_linh_qua",
+   "qty": 3
+  },
+  {
+   "id": "dia_linh_qua",
+   "qty": 5
+  },
+  {
+   "id": "dia_linh_qua",
+   "qty": 8
+  }
+ ],
+ "bonusPerLv": {
+  "cancot": {
+   "btBonus": 0.001,
+   "defFlat": 0.3,
+   "hpPct": 0.5
+  },
+  "thanthuc": {
+   "critPct": 0.15,
+   "rangePct": 0.4,
+   "resistPct": 0.3
+  }
+ },
+ "bonusPerMilestone": {
+  "cancot": {
+   "btBonus": 0.005,
+   "defFlat": 2,
+   "hpPct": 2
+  },
+  "thanthuc": {
+   "critPct": 0.5,
+   "rangePct": 1,
+   "resistPct": 1
+  }
+ },
+ "daily": {
+  "killNeed": 50,
+  "killRewardLv": 2
+ },
+ "elite": {
+  "atkMult": 2.2,
+  "bossYaodanRate": 0.6,
+  "chance": 0.05,
+  "defMult": 1.5,
+  "expMult": 3,
+  "hpMult": 2.5,
+  "scale": 1.3,
+  "yaodanRate": 0.5
+ },
+ "gradeRealm": {
+  "cuc": "nguyen_anh",
+  "ha": "luyen_khi",
+  "thuong": "kim_dan",
+  "tien": "hoa_than",
+  "trung": "truc_co"
+ },
+ "grades": [
+  "ha",
+  "trung",
+  "thuong",
+  "cuc",
+  "tien"
+ ],
+ "maxLv": 100,
+ "meditateMs": 180000,
+ "milestones": {
+  "cancot": [
+   {
+    "fx": "#cd7f32",
+    "lv": 10,
+    "titleKey": "bc_ms_cc10"
+   },
+   {
+    "fx": "#9aa0a8",
+    "lv": 20,
+    "titleKey": "bc_ms_cc20"
+   },
+   {
+    "fx": "#c9d2dd",
+    "lv": 30,
+    "titleKey": "bc_ms_cc30"
+   },
+   {
+    "fx": "#ffd76a",
+    "lv": 40,
+    "titleKey": "bc_ms_cc40"
+   },
+   {
+    "fx": "#7fe8c8",
+    "lv": 50,
+    "titleKey": "bc_ms_cc50"
+   },
+   {
+    "fx": "#9fd8ff",
+    "lv": 60,
+    "titleKey": "bc_ms_cc60"
+   },
+   {
+    "fx": "#c9a7ff",
+    "lv": 70,
+    "titleKey": "bc_ms_cc70"
+   },
+   {
+    "fx": "#fff3b0",
+    "lv": 80,
+    "titleKey": "bc_ms_cc80"
+   },
+   {
+    "fx": "#ffe9a8",
+    "lv": 90,
+    "titleKey": "bc_ms_cc90"
+   },
+   {
+    "fx": "#ffd700",
+    "lv": 100,
+    "titleKey": "bc_ms_cc100"
+   }
+  ],
+  "thanthuc": [
+   {
+    "fx": "#9fd8ff",
+    "lv": 10,
+    "titleKey": "bc_ms_tt10"
+   },
+   {
+    "fx": "#7fc4ff",
+    "lv": 20,
+    "titleKey": "bc_ms_tt20"
+   },
+   {
+    "fx": "#6fb3ff",
+    "lv": 30,
+    "titleKey": "bc_ms_tt30"
+   },
+   {
+    "fx": "#5fa8ff",
+    "lv": 40,
+    "titleKey": "bc_ms_tt40"
+   },
+   {
+    "fx": "#8f9dff",
+    "lv": 50,
+    "titleKey": "bc_ms_tt50"
+   },
+   {
+    "fx": "#a78fff",
+    "lv": 60,
+    "titleKey": "bc_ms_tt60"
+   },
+   {
+    "fx": "#c9a7ff",
+    "lv": 70,
+    "titleKey": "bc_ms_tt70"
+   },
+   {
+    "fx": "#e0c3ff",
+    "lv": 80,
+    "titleKey": "bc_ms_tt80"
+   },
+   {
+    "fx": "#f0ddff",
+    "lv": 90,
+    "titleKey": "bc_ms_tt90"
+   },
+   {
+    "fx": "#ffffff",
+    "lv": 100,
+    "titleKey": "bc_ms_tt100"
+   }
+  ]
+ },
+ "petSlotsPerLv": 25,
+ "stoneCost": {
+  "base": 45,
+  "growth": 1.06,
+  "stonesOnlyMult": 3
+ },
+ "yaodan": {
+  "elemBonus": {
+   "bang": {
+    "cap": 20,
+    "per": 0.3,
+    "stat": "defFlat"
+   },
+   "hoa": {
+    "cap": 20,
+    "per": 0.3,
+    "stat": "atkPct"
+   },
+   "loi": {
+    "cap": 20,
+    "per": 0.2,
+    "stat": "critPct"
+   },
+   "phong": {
+    "cap": 20,
+    "per": 0.2,
+    "stat": "rangePct"
+   },
+   "tho": {
+    "cap": 20,
+    "per": 0.4,
+    "stat": "hpPct"
+   }
+  },
+  "elements": [
+   "hoa",
+   "loi",
+   "bang",
+   "phong",
+   "tho"
+  ],
+  "failRate": [
+   0,
+   0,
+   0.1,
+   0.2,
+   0.35,
+   0.5
+  ],
+  "lvGain": [
+   0,
+   1,
+   2,
+   4,
+   7,
+   12
+  ],
+  "stoneCostMult": 100
+ }
+}

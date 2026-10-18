@@ -1,0 +1,62 @@
+{
+  "pet": "cuu_dau_xa",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Ran 9 dau, view truoc. dau = cum 9 dau + co (1 part). 2 tay nho gom vao than_1. duoi = doan cuoi cuon duoi.",
+  "parts": {
+    "duoi": {
+      "file": "pet_cuu_dau_xa_part_duoi.png",
+      "pivot": [
+        552,
+        951
+      ],
+      "z": 0,
+      "pixels": 20563,
+      "variants": {
+        "combat": "pet_cuu_dau_xa_part_duoi_combat.png",
+        "tinh_anh": "pet_cuu_dau_xa_part_duoi_tinh_anh.png"
+      }
+    },
+    "than_2": {
+      "file": "pet_cuu_dau_xa_part_than_2.png",
+      "pivot": [
+        518,
+        870
+      ],
+      "z": 1,
+      "pixels": 117069,
+      "variants": {
+        "combat": "pet_cuu_dau_xa_part_than_2_combat.png",
+        "tinh_anh": "pet_cuu_dau_xa_part_than_2_tinh_anh.png"
+      }
+    },
+    "than_1": {
+      "file": "pet_cuu_dau_xa_part_than_1.png",
+      "pivot": [
+        530,
+        789
+      ],
+      "z": 2,
+      "pixels": 106257,
+      "variants": {
+        "combat": "pet_cuu_dau_xa_part_than_1_combat.png",
+        "tinh_anh": "pet_cuu_dau_xa_part_than_1_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_cuu_dau_xa_part_dau.png",
+      "pivot": [
+        511,
+        598
+      ],
+      "z": 3,
+      "pixels": 432625,
+      "variants": {
+        "combat": "pet_cuu_dau_xa_part_dau_combat.png",
+        "tinh_anh": "pet_cuu_dau_xa_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

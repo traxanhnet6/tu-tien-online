@@ -1,0 +1,893 @@
+{
+ "da_tru": {
+  "nameKey": "mon_da_tru",
+  "hp": 90,
+  "atk": 18,
+  "def": 6,
+  "exp": 12,
+  "img": "assets/sprs/sprs_mon_da_tru.png",
+  "fb": "#8a6f4d",
+  "loai": "thu",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "taycothao",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_pham",
+    "rate": 0.005,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.002,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hx_tieu",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "thit_yeu_thu",
+    "rate": 0.03,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "son_ke": {
+  "nameKey": "mon_son_ke",
+  "hp": 120,
+  "atk": 26,
+  "def": 9,
+  "exp": 18,
+  "img": "assets/sprs/sprs_mon_son_ke.png",
+  "fb": "#c47b3a",
+  "loai": "thu",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "taycothao",
+    "rate": 0.07,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_pham",
+    "rate": 0.005,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.002,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hx_tieu",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "thit_yeu_thu",
+    "rate": 0.03,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "hat_linh_chi",
+    "rate": 0.03,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "da_tru_vuong": {
+  "nameKey": "mon_da_tru_vuong",
+  "hp": 600,
+  "atk": 45,
+  "def": 15,
+  "exp": 150,
+  "img": "assets/sprs/sprs_mon_da_tru_vuong.png",
+  "fb": "#6e4a2f",
+  "loai": "thu",
+  "boss": true,
+  "drops": [
+   {
+    "id": "taycothao",
+    "rate": 0.5,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.2,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "wpn_phan",
+    "rate": 0.25,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_huyen",
+    "rate": 0.03,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hx_trung",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hl_trung",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "kim_cang_dan",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "manual_boss_datru",
+    "rate": 0.08,
+    "eliteRate": 0.15,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "phong_lang": {
+  "nameKey": "mon_phong_lang",
+  "hp": 150,
+  "atk": 34,
+  "def": 12,
+  "exp": 26,
+  "img": "assets/sprs/sprs_mon_phong_lang.png",
+  "fb": "#7d9aa8",
+  "loai": "thu",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.07,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "taycothao",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_pham",
+    "rate": 0.005,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.002,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hl_tieu",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "linh_tra",
+    "rate": 0.02,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "hu_thi": {
+  "nameKey": "mon_hu_thi",
+  "hp": 180,
+  "atk": 42,
+  "def": 14,
+  "exp": 32,
+  "img": null,
+  "fb": "#9aa87d",
+  "loai": "thu",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_pham",
+    "rate": 0.005,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.002,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hl_tieu",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "linh_tra",
+    "rate": 0.02,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "hat_truc_co_thao",
+    "rate": 0.02,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "lang_vuong": {
+  "nameKey": "mon_lang_vuong",
+  "hp": 900,
+  "atk": 70,
+  "def": 22,
+  "exp": 220,
+  "img": "assets/sprs/sprs_mon_lang_vuong.png",
+  "fb": "#4f6b7d",
+  "loai": "thu",
+  "boss": true,
+  "drops": [
+   {
+    "id": "yaodan1",
+    "rate": 0.35,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "taycothao",
+    "rate": 0.4,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "wpn_linh",
+    "rate": 0.25,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_huyen",
+    "rate": 0.03,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hx_trung",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hl_trung",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "kim_cang_dan",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "manual_boss_langvuong",
+    "rate": 0.08,
+    "eliteRate": 0.15,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "u_hon": {
+  "nameKey": "mon_u_hon",
+  "hp": 220,
+  "atk": 52,
+  "def": 17,
+  "exp": 40,
+  "img": "assets/sprs/sprs_mon_u_hon.png",
+  "fb": "#8b7bb8",
+  "loai": "ma",
+  "drops": [
+   {
+    "id": "pill_hl",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "taycothao",
+    "rate": 0.09,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_pham",
+    "rate": 0.005,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.002,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "duong_than_dan",
+    "rate": 0.04,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "thanh_tam_qua",
+    "rate": 0.02,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "thi_ma": {
+  "nameKey": "mon_thi_ma",
+  "hp": 260,
+  "atk": 62,
+  "def": 20,
+  "exp": 48,
+  "img": "assets/sprs/sprs_mon_thi_ma.png",
+  "fb": "#5d7a5d",
+  "loai": "ma",
+  "drops": [
+   {
+    "id": "pill_hl",
+    "rate": 0.09,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.07,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_pham",
+    "rate": 0.005,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.002,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "duong_than_dan",
+    "rate": 0.04,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "thanh_tam_qua",
+    "rate": 0.02,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "hat_dia_linh_qua",
+    "rate": 0.015,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "cot_tuong": {
+  "nameKey": "mon_cot_tuong",
+  "hp": 1300,
+  "atk": 95,
+  "def": 28,
+  "exp": 320,
+  "img": "assets/sprs/sprs_mon_cot_tuong.png",
+  "fb": "#3d4a5d",
+  "loai": "ma",
+  "boss": true,
+  "drops": [
+   {
+    "id": "yaodan1",
+    "rate": 0.4,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "taycothao",
+    "rate": 0.6,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "arm_linh",
+    "rate": 0.25,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_huyen",
+    "rate": 0.03,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hx_trung",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hl_trung",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "kim_cang_dan",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "manual_boss_cottuong",
+    "rate": 0.08,
+    "eliteRate": 0.15,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "ma_binh": {
+  "nameKey": "mon_ma_binh",
+  "hp": 420,
+  "atk": 95,
+  "def": 30,
+  "exp": 120,
+  "img": "assets/sprs/mon_ma_binh.png",
+  "fb": "#8a1a1a",
+  "loai": "ma",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.005,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hx_trung",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "oan_linh": {
+  "nameKey": "mon_oan_linh",
+  "hp": 360,
+  "atk": 110,
+  "def": 22,
+  "exp": 130,
+  "img": "assets/sprs/mon_oan_linh.png",
+  "fb": "#3a6a5a",
+  "loai": "ma",
+  "drops": [
+   {
+    "id": "pill_hl",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "duong_than_dan",
+    "rate": 0.04,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "ma_lang": {
+  "nameKey": "mon_ma_lang",
+  "hp": 480,
+  "atk": 105,
+  "def": 34,
+  "exp": 140,
+  "img": "assets/sprs/mon_ma_lang.png",
+  "fb": "#4a2a6a",
+  "loai": "ma",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.07,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "thit_yeu_thu",
+    "rate": 0.05,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_huyen",
+    "rate": 0.003,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "huyet_ma_vuong": {
+  "nameKey": "mon_huyet_ma_vuong",
+  "hp": 3200,
+  "atk": 220,
+  "def": 70,
+  "exp": 900,
+  "img": "assets/sprs/mon_huyet_ma_vuong.png",
+  "fb": "#6a0f0f",
+  "loai": "ma",
+  "boss": true,
+  "drops": [
+   {
+    "id": "yaodan1",
+    "rate": 0.5,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "wpn_linh",
+    "rate": 0.25,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "manual_boss_huyetma",
+    "rate": 0.08,
+    "eliteRate": 0.15,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "ngoc_tho": {
+  "nameKey": "mon_ngoc_tho",
+  "hp": 400,
+  "atk": 90,
+  "def": 32,
+  "exp": 120,
+  "img": "assets/sprs/mon_ngoc_tho.png",
+  "fb": "#bfe3f5",
+  "loai": "tien",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_linh",
+    "rate": 0.005,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "thien_hac": {
+  "nameKey": "mon_thien_hac",
+  "hp": 440,
+  "atk": 100,
+  "def": 28,
+  "exp": 135,
+  "img": "assets/sprs/mon_thien_hac.png",
+  "fb": "#dceef7",
+  "loai": "tien",
+  "drops": [
+   {
+    "id": "pill_hl",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "linh_tra",
+    "rate": 0.04,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "thien_tuong": {
+  "nameKey": "mon_thien_tuong",
+  "hp": 3000,
+  "atk": 210,
+  "def": 66,
+  "exp": 850,
+  "img": "assets/sprs/mon_thien_tuong.png",
+  "fb": "#c9a227",
+  "loai": "tien",
+  "boss": true,
+  "drops": [
+   {
+    "id": "yaodan1",
+    "rate": 0.5,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "arm_linh",
+    "rate": 0.25,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_huyen",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "kim_cang_dan",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "manual_boss_thientuong",
+    "rate": 0.08,
+    "eliteRate": 0.15,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "thach_giap_trung": {
+  "nameKey": "mon_thach_giap_trung",
+  "hp": 380,
+  "atk": 85,
+  "def": 40,
+  "exp": 110,
+  "img": "assets/sprs/mon_thach_giap_trung.png",
+  "fb": "#7a6a5a",
+  "loai": "thu",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "tinh_thach_quai": {
+  "nameKey": "mon_tinh_thach_quai",
+  "hp": 420,
+  "atk": 95,
+  "def": 35,
+  "exp": 125,
+  "img": "assets/sprs/mon_tinh_thach_quai.png",
+  "fb": "#5aa8d8",
+  "loai": "thu",
+  "drops": [
+   {
+    "id": "pill_hl",
+    "rate": 0.08,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "yaodan1",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "u_hon_lang": {
+  "nameKey": "mon_u_hon_lang",
+  "hp": 170,
+  "atk": 38,
+  "def": 14,
+  "exp": 30,
+  "img": null,
+  "fb": "#5a4a6a",
+  "loai": "ma",
+  "drops": [
+   {
+    "id": "pill_hx",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "u_minh_cu_mang": {
+  "nameKey": "mon_u_minh_cu_mang",
+  "hp": 2200,
+  "atk": 150,
+  "def": 55,
+  "exp": 650,
+  "img": "assets/sprs/boss_u_minh_cu_mang.png",
+  "fb": "#1a5c3a",
+  "loai": "ma",
+  "boss": true,
+  "drops": [
+   {
+    "id": "yaodan1",
+    "rate": 0.5,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "manual_boss_uminh",
+    "rate": 0.08,
+    "eliteRate": 0.15,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hx_trung",
+    "rate": 0.3,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "trung_huyen",
+    "rate": 0.06,
+    "min": 1,
+    "max": 1
+   }
+  ]
+ },
+ "hac_long": {
+  "nameKey": "mon_hac_long",
+  "hp": 2600,
+  "atk": 180,
+  "def": 60,
+  "exp": 750,
+  "img": "assets/sprs/pixel_thu_hac_long.webp",
+  "fb": "#3a1a5c",
+  "loai": "ma",
+  "boss": true,
+  "bay": true,
+  "drops": [
+   {
+    "id": "yaodan1",
+    "rate": 0.5,
+    "min": 1,
+    "max": 2
+   },
+   {
+    "id": "manual_boss_haclong",
+    "rate": 0.08,
+    "eliteRate": 0.15,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "trung_huyen",
+    "rate": 0.08,
+    "min": 1,
+    "max": 1
+   },
+   {
+    "id": "dan_hl_trung",
+    "rate": 0.3,
+    "min": 1,
+    "max": 2
+   }
+  ]
+ }
+}

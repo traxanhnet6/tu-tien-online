@@ -1,0 +1,181 @@
+{
+ "npc": "npc_minh_chu",
+ "canvas": {
+  "w": 1120,
+  "h": 2240
+ },
+ "convention": "tay_trai/tay_phai, chan_trai/chan_phai theo phia nhan vat (nhan vat nhin ra man hinh). z: so thap = ve sau (sau), so cao = ve truoc. pivot: [x,y] theo toa do canvas goc.",
+ "parts": [
+  {
+   "name": "phu_kien_hieu_ung",
+   "file": "npc_minh_chu_part_phu_kien_hieu_ung.png",
+   "rects": [
+    [
+     80,
+     1990,
+     900,
+     2230
+    ]
+   ],
+   "z": -1,
+   "pivot": [
+    520,
+    2110
+   ],
+   "pixels": 17558,
+   "note": "Vet sang trang duoi chan (hieu ung nen). z thap nhat, co dinh theo vi tri dung."
+  },
+  {
+   "name": "chan_trai",
+   "file": "npc_minh_chu_part_chan_trai.png",
+   "rects": [
+    [
+     590,
+     1930,
+     860,
+     2180
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    725,
+    1960
+   ],
+   "pixels": 10895,
+   "note": "Chan trai NV (phai anh), giay den. Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "chan_phai",
+   "file": "npc_minh_chu_part_chan_phai.png",
+   "rects": [
+    [
+     250,
+     1930,
+     530,
+     2180
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    390,
+    1960
+   ],
+   "pixels": 41584,
+   "note": "Chan phai NV (trai anh), giay den. Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "than",
+   "file": "npc_minh_chu_part_than.png",
+   "rects": [
+    [
+     100,
+     420,
+     930,
+     2010
+    ]
+   ],
+   "z": 1,
+   "pivot": [
+    525,
+    540
+   ],
+   "pixels": 547580,
+   "note": "Long bao vang tu vai den chan. Pivot giua nguc. Cui chao: xoay nhe quanh than."
+  },
+  {
+   "name": "phu_kien_gay",
+   "file": "npc_minh_chu_part_phu_kien_gay.png",
+   "rects": [
+    [
+     660,
+     500,
+     1090,
+     2170
+    ]
+   ],
+   "z": 2,
+   "pivot": [
+    790,
+    990
+   ],
+   "pixels": 276470,
+   "note": "Gay tre + ho lo. Pivot diem tay nam. Lac nhe khi di."
+  },
+  {
+   "name": "tay_trai",
+   "file": "npc_minh_chu_part_tay_trai.png",
+   "rects": [
+    [
+     670,
+     720,
+     930,
+     1200
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    790,
+    720
+   ],
+   "pixels": 123543,
+   "note": "Tay trai NV (phai anh) cam gay. Pivot vai."
+  },
+  {
+   "name": "tay_phai",
+   "file": "npc_minh_chu_part_tay_phai.png",
+   "rects": [
+    [
+     100,
+     670,
+     380,
+     1200
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    250,
+    700
+   ],
+   "pixels": 118333,
+   "note": "Tay phai NV (trai anh) trong tay ao rong. Pivot vai. Vay chao: xoay quanh vai."
+  },
+  {
+   "name": "dau",
+   "file": "npc_minh_chu_part_dau.png",
+   "rects": [
+    [
+     420,
+     150,
+     680,
+     550
+    ]
+   ],
+   "z": 4,
+   "pivot": [
+    550,
+    470
+   ],
+   "pixels": 70622,
+   "note": "Mat + rau de. Pivot co. Gat/lac dau: xoay quanh co."
+  },
+  {
+   "name": "phu_kien_mu",
+   "file": "npc_minh_chu_part_phu_kien_mu.png",
+   "rects": [
+    [
+     420,
+     60,
+     650,
+     230
+    ]
+   ],
+   "z": 5,
+   "pivot": [
+    545,
+    180
+   ],
+   "pixels": 20849,
+   "note": "Mu quan den. Pivot dinh dau. Nghieng theo dau."
+  }
+ ]
+}

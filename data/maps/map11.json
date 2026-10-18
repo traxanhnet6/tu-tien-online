@@ -1,0 +1,40 @@
+{
+ "id": 10,
+ "nameKey": "map_cuu_u_ma_tong",
+ "bg": "assets/maps/media-generation-map-cuu-u-ma-tong-0-b7696611-b1f0-47f0-8667-acf3baf2653f.webp",
+ "fb": "#3a2a4a",
+ "monsters": [
+  "hac_long"
+ ],
+ "boss": null,
+ "npcs": [
+  "truong_lao_ma",
+  "de_tu_ma_1",
+  "de_tu_ma_2",
+  "ma_luyen_su"
+ ],
+ "quests": [],
+ "gates": [
+  {
+   "to": 0,
+   "x": 1500,
+   "y": 600
+  }
+ ],
+ "stoneDrop": [
+  0,
+  0
+ ],
+ "unlock": {
+  "realm": 2
+ },
+ "dao": "ma",
+ "assets": {
+  "bg": "assets/maps/media-generation-map-cuu-u-ma-tong-0-b7696611-b1f0-47f0-8667-acf3baf2653f.webp",
+  "sprites": [
+   "assets/sprs/npc_truong_tran.png",
+   "assets/sprs/npc_su_gia.png",
+   "assets/sprs/npc_lao_ren.png"
+  ]
+ }
+}

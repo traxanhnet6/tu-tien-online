@@ -1,0 +1,45 @@
+{
+ "id": 2,
+ "nameKey": "map_u_minh_coc",
+ "bg": null,
+ "fb": "#3a3f5c",
+ "monsters": [
+  "u_hon",
+  "thi_ma"
+ ],
+ "boss": "cot_tuong",
+ "npcs": [],
+ "quests": [],
+ "gates": [
+  {
+   "to": 1,
+   "x": 80,
+   "y": 540
+  },
+  {
+   "to": 11,
+   "x": 1500,
+   "y": 540
+  }
+ ],
+ "stoneDrop": [
+  7,
+  14
+ ],
+ "unlock": {
+  "realm": 1,
+  "tier": 5
+ },
+ "assets": {
+  "bg": null,
+  "sprites": [
+   "assets/sprs/sprs_mon_u_hon.png",
+   "assets/sprs/sprs_mon_thi_ma.png",
+   "assets/sprs/sprs_mon_cot_tuong.png",
+   "assets/sprs/sprs_player_kiem.png",
+   "assets/sprs/sprs_player_phap.png",
+   "assets/sprs/sprs_player_the.png"
+  ]
+ },
+ "dao": "chinh"
+}

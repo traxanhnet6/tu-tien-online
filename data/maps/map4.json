@@ -1,0 +1,35 @@
+{
+ "id": 3,
+ "nameKey": "map_linh_dien",
+ "bg": null,
+ "fb": "#7a9a5a",
+ "monsters": [],
+ "boss": null,
+ "npcs": [
+  "lao_nong_dan"
+ ],
+ "quests": [
+  "q_pet_intro"
+ ],
+ "gates": [
+  {
+   "to": 0,
+   "x": 720,
+   "y": 500
+  }
+ ],
+ "stoneDrop": [
+  0,
+  0
+ ],
+ "unlock": null,
+ "assets": {
+  "bg": null,
+  "sprites": [
+   "assets/sprs/sprs_player_kiem.png",
+   "assets/sprs/sprs_player_phap.png",
+   "assets/sprs/sprs_player_the.png"
+  ]
+ },
+ "dao": "chinh"
+}

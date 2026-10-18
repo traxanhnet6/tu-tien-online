@@ -1,0 +1,66 @@
+{
+ "tiers": [
+  {
+   "nameKey": "pet_tier_0",
+   "color": "#e8e8e8",
+   "statMult": 1,
+   "lvlSpd": 1,
+   "skillMult": 1
+  },
+  {
+   "nameKey": "pet_tier_1",
+   "color": "#4da3ff",
+   "statMult": 1.5,
+   "lvlSpd": 1.2,
+   "skillMult": 1.3
+  },
+  {
+   "nameKey": "pet_tier_2",
+   "color": "#b388ff",
+   "statMult": 2.2,
+   "lvlSpd": 1.5,
+   "skillMult": 1.7
+  },
+  {
+   "nameKey": "pet_tier_3",
+   "color": "#ff9e40",
+   "statMult": 3.2,
+   "lvlSpd": 1.8,
+   "skillMult": 2.2
+  },
+  {
+   "nameKey": "pet_tier_4",
+   "color": "#ff5252",
+   "statMult": 5,
+   "lvlSpd": 2.2,
+   "skillMult": 3
+  }
+ ],
+ "eggs": {
+  "trung_pham": {
+   "tier": 0,
+   "hatchCost": 500,
+   "waitMin": 30
+  },
+  "trung_linh": {
+   "tier": 1,
+   "hatchCost": 1500,
+   "waitMin": 30
+  },
+  "trung_huyen": {
+   "tier": 2,
+   "hatchCost": 4000,
+   "waitMin": 30
+  },
+  "trung_dia": {
+   "tier": 3,
+   "hatchCost": 10000,
+   "waitMin": 30
+  },
+  "trung_thien": {
+   "tier": 4,
+   "hatchCost": 30000,
+   "waitMin": 30
+  }
+ }
+}

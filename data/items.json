@@ -1,0 +1,1146 @@
+{
+ "pill_hx": {
+  "kind": "pill",
+  "nameKey": "it_pill_hx",
+  "descKey": "it_pill_hx_desc",
+  "healHp": 0.3,
+  "price": 50,
+  "sell": 15,
+  "icon": "🔴"
+ },
+ "pill_hl": {
+  "kind": "pill",
+  "nameKey": "it_pill_hl",
+  "descKey": "it_pill_hl_desc",
+  "healMp": 0.5,
+  "price": 80,
+  "sell": 24,
+  "icon": "🔵"
+ },
+ "dan_hx_tieu": {
+  "kind": "pill",
+  "nameKey": "it_dan_hx_tieu",
+  "descKey": "it_dan_hx_tieu_desc",
+  "healHp": 0.3,
+  "price": 60,
+  "sell": 18,
+  "icon": "🔴"
+ },
+ "dan_hx_trung": {
+  "kind": "pill",
+  "nameKey": "it_dan_hx_trung",
+  "descKey": "it_dan_hx_trung_desc",
+  "healHp": 0.6,
+  "price": 180,
+  "sell": 54,
+  "icon": "🟠"
+ },
+ "dan_hx_dai": {
+  "kind": "pill",
+  "nameKey": "it_dan_hx_dai",
+  "descKey": "it_dan_hx_dai_desc",
+  "healHp": 1,
+  "price": 450,
+  "sell": 135,
+  "icon": "❤️"
+ },
+ "linh_chi_ngan_nam": {
+  "kind": "pill",
+  "nameKey": "it_linh_chi",
+  "descKey": "it_linh_chi_desc",
+  "healHp": 0.8,
+  "price": 600,
+  "sell": 180,
+  "icon": "🍄"
+ },
+ "thit_yeu_thu": {
+  "kind": "pill",
+  "nameKey": "it_thit_yeu_thu",
+  "descKey": "it_thit_yeu_thu_desc",
+  "healHp": 0.4,
+  "price": 120,
+  "sell": 36,
+  "icon": "🍖"
+ },
+ "dan_hl_tieu": {
+  "kind": "pill",
+  "nameKey": "it_dan_hl_tieu",
+  "descKey": "it_dan_hl_tieu_desc",
+  "healMp": 0.3,
+  "price": 60,
+  "sell": 18,
+  "icon": "🔵"
+ },
+ "dan_hl_trung": {
+  "kind": "pill",
+  "nameKey": "it_dan_hl_trung",
+  "descKey": "it_dan_hl_trung_desc",
+  "healMp": 0.6,
+  "price": 180,
+  "sell": 54,
+  "icon": "🟣"
+ },
+ "dan_hl_dai": {
+  "kind": "pill",
+  "nameKey": "it_dan_hl_dai",
+  "descKey": "it_dan_hl_dai_desc",
+  "healMp": 1,
+  "price": 450,
+  "sell": 135,
+  "icon": "💧"
+ },
+ "linh_tra": {
+  "kind": "pill",
+  "nameKey": "it_linh_tra",
+  "descKey": "it_linh_tra_desc",
+  "healMp": 0.5,
+  "price": 150,
+  "sell": 45,
+  "icon": "🫖"
+ },
+ "linh_tuu": {
+  "kind": "pill",
+  "nameKey": "it_linh_tuu",
+  "descKey": "it_linh_tuu_desc",
+  "healMp": 0.7,
+  "price": 300,
+  "sell": 90,
+  "icon": "🍶"
+ },
+ "duong_than_dan": {
+  "kind": "pill",
+  "nameKey": "it_duong_than_dan",
+  "descKey": "it_duong_than_dan_desc",
+  "healFocus": 50,
+  "price": 200,
+  "sell": 60,
+  "icon": "🧘"
+ },
+ "thanh_tam_qua": {
+  "kind": "pill",
+  "nameKey": "it_thanh_tam_qua",
+  "descKey": "it_thanh_tam_qua_desc",
+  "healFocus": 100,
+  "price": 400,
+  "sell": 120,
+  "icon": "🍇"
+ },
+ "kim_cang_dan": {
+  "kind": "pill",
+  "nameKey": "it_kim_cang_dan",
+  "descKey": "it_kim_cang_dan_desc",
+  "shieldPct": 0.3,
+  "shieldDur": 30,
+  "price": 500,
+  "sell": 150,
+  "icon": "🛡️"
+ },
+ "ho_the_phu": {
+  "kind": "pill",
+  "nameKey": "it_ho_the_phu",
+  "descKey": "it_ho_the_phu_desc",
+  "shieldPct": 0.15,
+  "shieldDur": 30,
+  "price": 250,
+  "sell": 75,
+  "icon": "🧿"
+ },
+ "hat_linh_chi": {
+  "kind": "seed",
+  "nameKey": "it_hat_linh_chi",
+  "descKey": "it_hat_linh_chi_desc",
+  "price": 100,
+  "sell": 30,
+  "icon": "🌱"
+ },
+ "hat_truc_co_thao": {
+  "kind": "seed",
+  "nameKey": "it_hat_truc_co_thao",
+  "descKey": "it_hat_truc_co_thao_desc",
+  "price": 300,
+  "sell": 90,
+  "icon": "🌱"
+ },
+ "hat_dia_linh_qua": {
+  "kind": "seed",
+  "nameKey": "it_hat_dia_linh_qua",
+  "descKey": "it_hat_dia_linh_qua_desc",
+  "price": 800,
+  "sell": 240,
+  "icon": "🌱"
+ },
+ "thao_linh_chi": {
+  "kind": "herb",
+  "nameKey": "it_thao_linh_chi",
+  "descKey": "it_thao_linh_chi_desc",
+  "price": 80,
+  "sell": 40,
+  "icon": "🌿"
+ },
+ "truc_co_thao": {
+  "kind": "herb",
+  "nameKey": "it_truc_co_thao",
+  "descKey": "it_truc_co_thao_desc",
+  "price": 250,
+  "sell": 125,
+  "icon": "🌿"
+ },
+ "dia_linh_qua": {
+  "kind": "herb",
+  "nameKey": "it_dia_linh_qua",
+  "descKey": "it_dia_linh_qua_desc",
+  "price": 600,
+  "sell": 300,
+  "icon": "🍈"
+ },
+ "pill_truccodan": {
+  "kind": "pill",
+  "nameKey": "it_pill_truccodan",
+  "descKey": "it_pill_truccodan_desc",
+  "price": 2000,
+  "sell": 600
+ },
+ "taycothao": {
+  "kind": "material",
+  "nameKey": "it_taycothao",
+  "descKey": "it_taycothao_desc",
+  "price": 150,
+  "sell": 45
+ },
+ "yaodan1": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan1",
+  "descKey": "it_yaodan1_desc",
+  "price": 500,
+  "sell": 150
+ },
+ "khaiphongphu": {
+  "kind": "material",
+  "nameKey": "it_khaiphongphu",
+  "descKey": "it_khaiphongphu_desc",
+  "price": 300,
+  "sell": 90
+ },
+ "wpn_phan": {
+  "kind": "equip",
+  "nameKey": "it_wpn_phan",
+  "slot": "vukhi",
+  "tier": 0,
+  "atk": 10,
+  "price": 200,
+  "sell": 60,
+  "reqRealm": null
+ },
+ "arm_phan": {
+  "kind": "equip",
+  "nameKey": "it_arm_phan",
+  "slot": "giap",
+  "tier": 0,
+  "def": 8,
+  "hp": 50,
+  "price": 180,
+  "sell": 54,
+  "reqRealm": null
+ },
+ "acc_phan": {
+  "kind": "equip",
+  "nameKey": "it_acc_phan",
+  "slot": "phapboi",
+  "tier": 0,
+  "atk": 4,
+  "def": 4,
+  "hp": 30,
+  "price": 150,
+  "sell": 45,
+  "reqRealm": null
+ },
+ "wpn_linh": {
+  "kind": "equip",
+  "nameKey": "it_wpn_linh",
+  "slot": "vukhi",
+  "tier": 1,
+  "atk": 35,
+  "price": 1200,
+  "sell": 360,
+  "reqRealm": {
+   "realm": 1,
+   "tier": 3
+  }
+ },
+ "arm_linh": {
+  "kind": "equip",
+  "nameKey": "it_arm_linh",
+  "slot": "giap",
+  "tier": 1,
+  "def": 25,
+  "hp": 150,
+  "price": 1000,
+  "sell": 300,
+  "reqRealm": {
+   "realm": 1,
+   "tier": 3
+  }
+ },
+ "acc_linh": {
+  "kind": "equip",
+  "nameKey": "it_acc_linh",
+  "slot": "phapboi",
+  "tier": 1,
+  "atk": 12,
+  "def": 12,
+  "hp": 80,
+  "price": 800,
+  "sell": 240,
+  "reqRealm": {
+   "realm": 1,
+   "tier": 3
+  }
+ },
+ "manual_kiem_1": {
+  "kind": "manual",
+  "tier": 0,
+  "skill": "kiem_xuyen_van",
+  "learnCost": 0,
+  "realm": 1,
+  "nameKey": "it_manual_kiem_1",
+  "descKey": "it_manual_kiem_1_desc",
+  "price": 300,
+  "sell": 50
+ },
+ "manual_kiem_2": {
+  "kind": "manual",
+  "tier": 1,
+  "skill": "van_kiem_quy_tong",
+  "learnCost": 500,
+  "realm": 1,
+  "nameKey": "it_manual_kiem_2",
+  "descKey": "it_manual_kiem_2_desc",
+  "price": 1200,
+  "sell": 300
+ },
+ "manual_kiem_3": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "kiem_cuong_ho_the",
+  "learnCost": 1500,
+  "realm": 1,
+  "nameKey": "it_manual_kiem_3",
+  "descKey": "it_manual_kiem_3_desc",
+  "price": 3000,
+  "sell": 1500
+ },
+ "manual_phap_1": {
+  "kind": "manual",
+  "tier": 0,
+  "skill": "ngu_loi_oanh_dinh",
+  "learnCost": 0,
+  "realm": 1,
+  "nameKey": "it_manual_phap_1",
+  "descKey": "it_manual_phap_1_desc",
+  "price": 300,
+  "sell": 50
+ },
+ "manual_phap_2": {
+  "kind": "manual",
+  "tier": 1,
+  "skill": "hoa_vu_luu_tinh",
+  "learnCost": 500,
+  "realm": 1,
+  "nameKey": "it_manual_phap_2",
+  "descKey": "it_manual_phap_2_desc",
+  "price": 1200,
+  "sell": 300
+ },
+ "manual_phap_3": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "linh_thuan",
+  "learnCost": 1500,
+  "realm": 1,
+  "nameKey": "it_manual_phap_3",
+  "descKey": "it_manual_phap_3_desc",
+  "price": 3000,
+  "sell": 1500
+ },
+ "manual_the_1": {
+  "kind": "manual",
+  "tier": 0,
+  "skill": "ba_vuong_quyen",
+  "learnCost": 0,
+  "realm": 1,
+  "nameKey": "it_manual_the_1",
+  "descKey": "it_manual_the_1_desc",
+  "price": 300,
+  "sell": 50
+ },
+ "manual_the_2": {
+  "kind": "manual",
+  "tier": 1,
+  "skill": "chan_dia_chuong",
+  "learnCost": 500,
+  "realm": 1,
+  "nameKey": "it_manual_the_2",
+  "descKey": "it_manual_the_2_desc",
+  "price": 1200,
+  "sell": 300
+ },
+ "manual_the_3": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "kim_cuong_bat_hoai",
+  "learnCost": 1500,
+  "realm": 1,
+  "nameKey": "it_manual_the_3",
+  "descKey": "it_manual_the_3_desc",
+  "price": 3000,
+  "sell": 1500
+ },
+ "manual_ps_kiem_tam": {
+  "kind": "manual",
+  "tier": 1,
+  "passive": "kiem_tam",
+  "learnCost": 800,
+  "realm": 1,
+  "nameKey": "it_manual_ps_kiem_tam",
+  "descKey": "it_manual_ps_kiem_tam_desc",
+  "price": 1500,
+  "sell": 300
+ },
+ "manual_ps_linh_mach": {
+  "kind": "manual",
+  "tier": 1,
+  "passive": "linh_mach",
+  "learnCost": 800,
+  "realm": 1,
+  "nameKey": "it_manual_ps_linh_mach",
+  "descKey": "it_manual_ps_linh_mach_desc",
+  "price": 1500,
+  "sell": 300
+ },
+ "manual_ps_the_phach": {
+  "kind": "manual",
+  "tier": 0,
+  "passive": "the_phach",
+  "learnCost": 300,
+  "realm": 1,
+  "nameKey": "it_manual_ps_the_phach",
+  "descKey": "it_manual_ps_the_phach_desc",
+  "price": 600,
+  "sell": 50
+ },
+ "manual_ps_than_phap": {
+  "kind": "manual",
+  "tier": 0,
+  "passive": "than_phap",
+  "learnCost": 300,
+  "realm": 1,
+  "nameKey": "it_manual_ps_than_phap",
+  "descKey": "it_manual_ps_than_phap_desc",
+  "price": 600,
+  "sell": 50
+ },
+ "manual_kimdan_kiem": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "kimdan_kiem_y",
+  "learnCost": 3000,
+  "realm": 3,
+  "nameKey": "it_manual_kimdan_kiem",
+  "descKey": "it_manual_kimdan_kiem_desc",
+  "price": 8000,
+  "sell": 1500
+ },
+ "manual_kimdan_phap": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "kimdan_loi_phap",
+  "learnCost": 3000,
+  "realm": 3,
+  "nameKey": "it_manual_kimdan_phap",
+  "descKey": "it_manual_kimdan_phap_desc",
+  "price": 8000,
+  "sell": 1500
+ },
+ "manual_kimdan_the": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "kimdan_the_quyen",
+  "learnCost": 3000,
+  "realm": 3,
+  "nameKey": "it_manual_kimdan_the",
+  "descKey": "it_manual_kimdan_the_desc",
+  "price": 8000,
+  "sell": 1500
+ },
+ "trung_pham": {
+  "kind": "pet_egg",
+  "tier": 0,
+  "nameKey": "it_egg_0",
+  "descKey": "it_egg_0_desc",
+  "price": 500,
+  "sell": 100
+ },
+ "trung_linh": {
+  "kind": "pet_egg",
+  "tier": 1,
+  "nameKey": "it_egg_1",
+  "descKey": "it_egg_1_desc",
+  "price": 2000,
+  "sell": 400
+ },
+ "trung_huyen": {
+  "kind": "pet_egg",
+  "tier": 2,
+  "nameKey": "it_egg_2",
+  "descKey": "it_egg_2_desc",
+  "price": 6000,
+  "sell": 1200
+ },
+ "trung_dia": {
+  "kind": "pet_egg",
+  "tier": 3,
+  "nameKey": "it_egg_3",
+  "descKey": "it_egg_3_desc",
+  "price": 15000,
+  "sell": 3000
+ },
+ "trung_thien": {
+  "kind": "pet_egg",
+  "tier": 4,
+  "nameKey": "it_egg_4",
+  "descKey": "it_egg_4_desc",
+  "price": 50000,
+  "sell": 10000
+ },
+ "ttd_ha": {
+  "kind": "material",
+  "nameKey": "it_ttd_ha",
+  "descKey": "it_ttd_ha_desc",
+  "price": 200,
+  "sell": 66,
+  "icon": "🟤",
+  "bcGrade": "ha"
+ },
+ "dtd_ha": {
+  "kind": "material",
+  "nameKey": "it_dtd_ha",
+  "descKey": "it_dtd_ha_desc",
+  "price": 200,
+  "sell": 66,
+  "icon": "🔮",
+  "bcGrade": "ha"
+ },
+ "ttd_trung": {
+  "kind": "material",
+  "nameKey": "it_ttd_trung",
+  "descKey": "it_ttd_trung_desc",
+  "price": 800,
+  "sell": 266,
+  "icon": "🟤",
+  "bcGrade": "trung"
+ },
+ "dtd_trung": {
+  "kind": "material",
+  "nameKey": "it_dtd_trung",
+  "descKey": "it_dtd_trung_desc",
+  "price": 800,
+  "sell": 266,
+  "icon": "🔮",
+  "bcGrade": "trung"
+ },
+ "ttd_thuong": {
+  "kind": "material",
+  "nameKey": "it_ttd_thuong",
+  "descKey": "it_ttd_thuong_desc",
+  "price": 2500,
+  "sell": 833,
+  "icon": "🟤",
+  "bcGrade": "thuong"
+ },
+ "dtd_thuong": {
+  "kind": "material",
+  "nameKey": "it_dtd_thuong",
+  "descKey": "it_dtd_thuong_desc",
+  "price": 2500,
+  "sell": 833,
+  "icon": "🔮",
+  "bcGrade": "thuong"
+ },
+ "ttd_cuc": {
+  "kind": "material",
+  "nameKey": "it_ttd_cuc",
+  "descKey": "it_ttd_cuc_desc",
+  "price": 6000,
+  "sell": 2000,
+  "icon": "🟤",
+  "bcGrade": "cuc"
+ },
+ "dtd_cuc": {
+  "kind": "material",
+  "nameKey": "it_dtd_cuc",
+  "descKey": "it_dtd_cuc_desc",
+  "price": 6000,
+  "sell": 2000,
+  "icon": "🔮",
+  "bcGrade": "cuc"
+ },
+ "ttd_tien": {
+  "kind": "material",
+  "nameKey": "it_ttd_tien",
+  "descKey": "it_ttd_tien_desc",
+  "price": 15000,
+  "sell": 5000,
+  "icon": "🟤",
+  "bcGrade": "tien"
+ },
+ "dtd_tien": {
+  "kind": "material",
+  "nameKey": "it_dtd_tien",
+  "descKey": "it_dtd_tien_desc",
+  "price": 15000,
+  "sell": 5000,
+  "icon": "🔮",
+  "bcGrade": "tien"
+ },
+ "ho_mach_dan": {
+  "kind": "material",
+  "nameKey": "it_ho_mach_dan",
+  "descKey": "it_ho_mach_dan_desc",
+  "price": 1200,
+  "sell": 360,
+  "icon": "💠"
+ },
+ "yaodan2": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan2",
+  "descKey": "it_yaodan2_desc",
+  "price": 1500,
+  "sell": 500,
+  "icon": "🟣",
+  "ydTier": 2
+ },
+ "yaodan3": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan3",
+  "descKey": "it_yaodan3_desc",
+  "price": 3000,
+  "sell": 1000,
+  "icon": "🟣",
+  "ydTier": 3
+ },
+ "yaodan4": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan4",
+  "descKey": "it_yaodan4_desc",
+  "price": 6000,
+  "sell": 2000,
+  "icon": "🟣",
+  "ydTier": 4
+ },
+ "yaodan5": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan5",
+  "descKey": "it_yaodan5_desc",
+  "price": 12000,
+  "sell": 4000,
+  "icon": "🟣",
+  "ydTier": 5
+ },
+ "yaodan1_hoa": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan1_hoa",
+  "descKey": "it_yaodan1_hoa_desc",
+  "price": 750,
+  "sell": 250,
+  "icon": "🟣",
+  "ydTier": 1,
+  "ydElem": "hoa"
+ },
+ "yaodan1_loi": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan1_loi",
+  "descKey": "it_yaodan1_loi_desc",
+  "price": 750,
+  "sell": 250,
+  "icon": "🟣",
+  "ydTier": 1,
+  "ydElem": "loi"
+ },
+ "yaodan1_bang": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan1_bang",
+  "descKey": "it_yaodan1_bang_desc",
+  "price": 750,
+  "sell": 250,
+  "icon": "🟣",
+  "ydTier": 1,
+  "ydElem": "bang"
+ },
+ "yaodan1_phong": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan1_phong",
+  "descKey": "it_yaodan1_phong_desc",
+  "price": 750,
+  "sell": 250,
+  "icon": "🟣",
+  "ydTier": 1,
+  "ydElem": "phong"
+ },
+ "yaodan1_tho": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan1_tho",
+  "descKey": "it_yaodan1_tho_desc",
+  "price": 750,
+  "sell": 250,
+  "icon": "🟣",
+  "ydTier": 1,
+  "ydElem": "tho"
+ },
+ "yaodan2_hoa": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan2_hoa",
+  "descKey": "it_yaodan2_hoa_desc",
+  "price": 2250,
+  "sell": 750,
+  "icon": "🟣",
+  "ydTier": 2,
+  "ydElem": "hoa"
+ },
+ "yaodan2_loi": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan2_loi",
+  "descKey": "it_yaodan2_loi_desc",
+  "price": 2250,
+  "sell": 750,
+  "icon": "🟣",
+  "ydTier": 2,
+  "ydElem": "loi"
+ },
+ "yaodan2_bang": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan2_bang",
+  "descKey": "it_yaodan2_bang_desc",
+  "price": 2250,
+  "sell": 750,
+  "icon": "🟣",
+  "ydTier": 2,
+  "ydElem": "bang"
+ },
+ "yaodan2_phong": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan2_phong",
+  "descKey": "it_yaodan2_phong_desc",
+  "price": 2250,
+  "sell": 750,
+  "icon": "🟣",
+  "ydTier": 2,
+  "ydElem": "phong"
+ },
+ "yaodan2_tho": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan2_tho",
+  "descKey": "it_yaodan2_tho_desc",
+  "price": 2250,
+  "sell": 750,
+  "icon": "🟣",
+  "ydTier": 2,
+  "ydElem": "tho"
+ },
+ "yaodan3_hoa": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan3_hoa",
+  "descKey": "it_yaodan3_hoa_desc",
+  "price": 4500,
+  "sell": 1500,
+  "icon": "🟣",
+  "ydTier": 3,
+  "ydElem": "hoa"
+ },
+ "yaodan3_loi": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan3_loi",
+  "descKey": "it_yaodan3_loi_desc",
+  "price": 4500,
+  "sell": 1500,
+  "icon": "🟣",
+  "ydTier": 3,
+  "ydElem": "loi"
+ },
+ "yaodan3_bang": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan3_bang",
+  "descKey": "it_yaodan3_bang_desc",
+  "price": 4500,
+  "sell": 1500,
+  "icon": "🟣",
+  "ydTier": 3,
+  "ydElem": "bang"
+ },
+ "yaodan3_phong": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan3_phong",
+  "descKey": "it_yaodan3_phong_desc",
+  "price": 4500,
+  "sell": 1500,
+  "icon": "🟣",
+  "ydTier": 3,
+  "ydElem": "phong"
+ },
+ "yaodan3_tho": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan3_tho",
+  "descKey": "it_yaodan3_tho_desc",
+  "price": 4500,
+  "sell": 1500,
+  "icon": "🟣",
+  "ydTier": 3,
+  "ydElem": "tho"
+ },
+ "yaodan4_hoa": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan4_hoa",
+  "descKey": "it_yaodan4_hoa_desc",
+  "price": 9000,
+  "sell": 3000,
+  "icon": "🟣",
+  "ydTier": 4,
+  "ydElem": "hoa"
+ },
+ "yaodan4_loi": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan4_loi",
+  "descKey": "it_yaodan4_loi_desc",
+  "price": 9000,
+  "sell": 3000,
+  "icon": "🟣",
+  "ydTier": 4,
+  "ydElem": "loi"
+ },
+ "yaodan4_bang": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan4_bang",
+  "descKey": "it_yaodan4_bang_desc",
+  "price": 9000,
+  "sell": 3000,
+  "icon": "🟣",
+  "ydTier": 4,
+  "ydElem": "bang"
+ },
+ "yaodan4_phong": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan4_phong",
+  "descKey": "it_yaodan4_phong_desc",
+  "price": 9000,
+  "sell": 3000,
+  "icon": "🟣",
+  "ydTier": 4,
+  "ydElem": "phong"
+ },
+ "yaodan4_tho": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan4_tho",
+  "descKey": "it_yaodan4_tho_desc",
+  "price": 9000,
+  "sell": 3000,
+  "icon": "🟣",
+  "ydTier": 4,
+  "ydElem": "tho"
+ },
+ "yaodan5_hoa": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan5_hoa",
+  "descKey": "it_yaodan5_hoa_desc",
+  "price": 18000,
+  "sell": 6000,
+  "icon": "🟣",
+  "ydTier": 5,
+  "ydElem": "hoa"
+ },
+ "yaodan5_loi": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan5_loi",
+  "descKey": "it_yaodan5_loi_desc",
+  "price": 18000,
+  "sell": 6000,
+  "icon": "🟣",
+  "ydTier": 5,
+  "ydElem": "loi"
+ },
+ "yaodan5_bang": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan5_bang",
+  "descKey": "it_yaodan5_bang_desc",
+  "price": 18000,
+  "sell": 6000,
+  "icon": "🟣",
+  "ydTier": 5,
+  "ydElem": "bang"
+ },
+ "yaodan5_phong": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan5_phong",
+  "descKey": "it_yaodan5_phong_desc",
+  "price": 18000,
+  "sell": 6000,
+  "icon": "🟣",
+  "ydTier": 5,
+  "ydElem": "phong"
+ },
+ "yaodan5_tho": {
+  "kind": "yaodan",
+  "nameKey": "it_yaodan5_tho",
+  "descKey": "it_yaodan5_tho_desc",
+  "price": 18000,
+  "sell": 6000,
+  "icon": "🟣",
+  "ydTier": 5,
+  "ydElem": "tho"
+ },
+ "manual_boss_datru": {
+  "kind": "manual",
+  "tier": 1,
+  "skill": "man_hoang_chan_dia",
+  "learnCost": 500,
+  "realm": 1,
+  "dao": "trung",
+  "bossDrop": true,
+  "nameKey": "it_manual_boss_datru",
+  "descKey": "it_manual_boss_datru_desc",
+  "price": 3000,
+  "sell": 300,
+  "skillDef": {
+   "kind": "aoe",
+   "mult": 3.0,
+   "mp": 35,
+   "cd": 14,
+   "fx": "#c9a86a",
+   "icon": "🌋",
+   "nameKey": "sk_man_hoang_chan_dia",
+   "descKey": "sk_man_hoang_chan_dia_desc"
+  }
+ },
+ "manual_boss_langvuong": {
+  "kind": "manual",
+  "tier": 1,
+  "skill": "lang_vuong_khieu_nguyet",
+  "learnCost": 500,
+  "realm": 1,
+  "dao": "trung",
+  "bossDrop": true,
+  "nameKey": "it_manual_boss_langvuong",
+  "descKey": "it_manual_boss_langvuong_desc",
+  "price": 3000,
+  "sell": 300,
+  "skillDef": {
+   "kind": "dmg",
+   "mult": 3.4,
+   "mp": 35,
+   "cd": 12,
+   "fx": "#9fd8ff",
+   "icon": "🐺",
+   "nameKey": "sk_lang_vuong_khieu_nguyet",
+   "descKey": "sk_lang_vuong_khieu_nguyet_desc",
+   "fxStatus": {
+    "fear": 2
+   }
+  }
+ },
+ "manual_boss_cottuong": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "bach_cot_ma_trao",
+  "learnCost": 1500,
+  "realm": 2,
+  "dao": "trung",
+  "bossDrop": true,
+  "nameKey": "it_manual_boss_cottuong",
+  "descKey": "it_manual_boss_cottuong_desc",
+  "price": 8000,
+  "sell": 1500,
+  "skillDef": {
+   "kind": "dmg",
+   "mult": 4.0,
+   "mp": 45,
+   "cd": 14,
+   "fx": "#e8e8e8",
+   "icon": "💀",
+   "nameKey": "sk_bach_cot_ma_trao",
+   "descKey": "sk_bach_cot_ma_trao_desc",
+   "fxStatus": {
+    "wound": 4
+   }
+  }
+ },
+ "manual_boss_uminh": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "doc_vu_cuong_trieu",
+  "learnCost": 1500,
+  "realm": 2,
+  "dao": "trung",
+  "bossDrop": true,
+  "nameKey": "it_manual_boss_uminh",
+  "descKey": "it_manual_boss_uminh_desc",
+  "price": 8000,
+  "sell": 1500,
+  "skillDef": {
+   "kind": "aoe",
+   "mult": 4.2,
+   "mp": 50,
+   "cd": 16,
+   "fx": "#7CFC00",
+   "icon": "☠️",
+   "nameKey": "sk_doc_vu_cuong_trieu",
+   "descKey": "sk_doc_vu_cuong_trieu_desc",
+   "fxStatus": {
+    "poison": 5
+   }
+  }
+ },
+ "manual_boss_haclong": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "ma_long_phe_hon",
+  "learnCost": 1500,
+  "realm": 2,
+  "dao": "trung",
+  "bossDrop": true,
+  "nameKey": "it_manual_boss_haclong",
+  "descKey": "it_manual_boss_haclong_desc",
+  "price": 8000,
+  "sell": 1500,
+  "skillDef": {
+   "kind": "dmg",
+   "mult": 5.0,
+   "mp": 60,
+   "cd": 20,
+   "fx": "#b388ff",
+   "icon": "🐉",
+   "nameKey": "sk_ma_long_phe_hon",
+   "descKey": "sk_ma_long_phe_hon_desc",
+   "fxStatus": {
+    "fear": 3
+   }
+  }
+ },
+ "manual_boss_huyetma": {
+  "kind": "manual",
+  "tier": 1,
+  "skill": "huyet_ma_tram",
+  "learnCost": 800,
+  "realm": 2,
+  "dao": "ma",
+  "bossDrop": true,
+  "nameKey": "it_manual_boss_huyetma",
+  "descKey": "it_manual_boss_huyetma_desc",
+  "price": 3000,
+  "sell": 300,
+  "skillDef": {
+   "kind": "dmg",
+   "mult": 3.2,
+   "mp": 25,
+   "cd": 9,
+   "fx": "#ff2d55",
+   "icon": "🩸",
+   "nameKey": "sk_huyet_ma_tram",
+   "descKey": "sk_huyet_ma_tram_desc",
+   "fxStatus": {
+    "wound": 4
+   },
+   "dtype": "ma",
+   "dao": "ma"
+  }
+ },
+ "manual_boss_thientuong": {
+  "kind": "manual",
+  "tier": 2,
+  "skill": "thien_loi_pha",
+  "learnCost": 1500,
+  "realm": 2,
+  "dao": "trung",
+  "bossDrop": true,
+  "nameKey": "it_manual_boss_thientuong",
+  "descKey": "it_manual_boss_thientuong_desc",
+  "price": 8000,
+  "sell": 1500,
+  "skillDef": {
+   "kind": "aoe",
+   "mult": 4.5,
+   "mp": 55,
+   "cd": 18,
+   "fx": "#ffee58",
+   "icon": "⛈️",
+   "nameKey": "sk_thien_loi_pha",
+   "descKey": "sk_thien_loi_pha_desc",
+   "fxStatus": {
+    "stun": 2
+   }
+  }
+ },
+ "dan_tho_tieu": {
+  "kind": "pill",
+  "nameKey": "it_dan_tho_tieu",
+  "descKey": "it_dan_tho_tieu_desc",
+  "tnYears": 10,
+  "price": 500,
+  "sell": 150,
+  "icon": "🌱"
+ },
+ "dan_dien_tho": {
+  "kind": "pill",
+  "nameKey": "it_dan_dien_tho",
+  "descKey": "it_dan_dien_tho_desc",
+  "tnYears": 50,
+  "price": 2000,
+  "sell": 600,
+  "icon": "🍑"
+ },
+ "dan_truong_sinh": {
+  "kind": "pill",
+  "nameKey": "it_dan_truong_sinh",
+  "descKey": "it_dan_truong_sinh_desc",
+  "tnYears": 200,
+  "price": 8000,
+  "sell": 2400,
+  "icon": "✨"
+ },
+ "manual_truong_sinh": {
+  "kind": "manual",
+  "tier": 1,
+  "passive": "truong_sinh_quyet",
+  "learnCost": 800,
+  "realm": 1,
+  "nameKey": "it_manual_truong_sinh",
+  "descKey": "it_manual_truong_sinh_desc",
+  "price": 1500,
+  "sell": 300
+ },
+ "ngoc_boi_truong_sinh": {
+  "kind": "equip",
+  "nameKey": "it_ngoc_boi_truong_sinh",
+  "descKey": "it_ngoc_boi_truong_sinh_desc",
+  "slot": "phapbao",
+  "tier": 1,
+  "tnDrainRed": 0.15,
+  "price": 5000,
+  "sell": 1500,
+  "reqRealm": 1,
+  "icon": "🧧"
+ },
+ "that_diep_chi": {
+  "kind": "herb",
+  "nameKey": "it_that_diep_chi",
+  "descKey": "it_that_diep_chi_desc",
+  "price": 600,
+  "sell": 300,
+  "icon": "🌿"
+ },
+ "huyen_thiet": {
+  "kind": "ore",
+  "nameKey": "it_huyen_thiet",
+  "descKey": "it_huyen_thiet_desc",
+  "price": 800,
+  "sell": 400,
+  "icon": "⛏️"
+ }
+}

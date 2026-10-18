@@ -1,0 +1,101 @@
+{
+  "pet": "tu_dien_dieu",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "chon dien, trai/phai theo goc nhin",
+  "parts": {
+    "duoi": {
+      "file": "pet_tu_dien_dieu_part_duoi.png",
+      "pivot": [
+        823,
+        495
+      ],
+      "z": 0,
+      "pixels": 116241,
+      "variants": {
+        "combat": "pet_tu_dien_dieu_part_duoi_combat.png",
+        "tinh_anh": "pet_tu_dien_dieu_part_duoi_tinh_anh.png"
+      }
+    },
+    "chan_sau_trai": {
+      "file": "pet_tu_dien_dieu_part_chan_sau_trai.png",
+      "pivot": [
+        235,
+        692
+      ],
+      "z": 1,
+      "pixels": 7455,
+      "variants": {
+        "combat": "pet_tu_dien_dieu_part_chan_sau_trai_combat.png",
+        "tinh_anh": "pet_tu_dien_dieu_part_chan_sau_trai_tinh_anh.png"
+      }
+    },
+    "chan_sau_phai": {
+      "file": "pet_tu_dien_dieu_part_chan_sau_phai.png",
+      "pivot": [
+        635,
+        692
+      ],
+      "z": 2,
+      "pixels": 20344,
+      "variants": {
+        "combat": "pet_tu_dien_dieu_part_chan_sau_phai_combat.png",
+        "tinh_anh": "pet_tu_dien_dieu_part_chan_sau_phai_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_tu_dien_dieu_part_than.png",
+      "pivot": [
+        460,
+        522
+      ],
+      "z": 3,
+      "pixels": 72893,
+      "variants": {
+        "combat": "pet_tu_dien_dieu_part_than_combat.png",
+        "tinh_anh": "pet_tu_dien_dieu_part_than_tinh_anh.png"
+      }
+    },
+    "chan_truoc_trai": {
+      "file": "pet_tu_dien_dieu_part_chan_truoc_trai.png",
+      "pivot": [
+        355,
+        692
+      ],
+      "z": 4,
+      "pixels": 35054,
+      "variants": {
+        "combat": "pet_tu_dien_dieu_part_chan_truoc_trai_combat.png",
+        "tinh_anh": "pet_tu_dien_dieu_part_chan_truoc_trai_tinh_anh.png"
+      }
+    },
+    "chan_truoc_phai": {
+      "file": "pet_tu_dien_dieu_part_chan_truoc_phai.png",
+      "pivot": [
+        510,
+        692
+      ],
+      "z": 5,
+      "pixels": 38047,
+      "variants": {
+        "combat": "pet_tu_dien_dieu_part_chan_truoc_phai_combat.png",
+        "tinh_anh": "pet_tu_dien_dieu_part_chan_truoc_phai_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_tu_dien_dieu_part_dau.png",
+      "pivot": [
+        439,
+        572
+      ],
+      "z": 6,
+      "pixels": 280413,
+      "variants": {
+        "combat": "pet_tu_dien_dieu_part_dau_combat.png",
+        "tinh_anh": "pet_tu_dien_dieu_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

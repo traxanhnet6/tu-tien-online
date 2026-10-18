@@ -1,0 +1,122 @@
+{
+  "target": "boss_hac_long",
+  "canvas": {
+    "width": 1600,
+    "height": 1600
+  },
+  "source": "hac_long_combat.png",
+  "note": "Hac Long frontal boss. ham_duoi reused from mouth-task cut (boss_part_hac_long_ham_duoi.png, RGB-identical). lua_phun = fire breath, segmented by color (bright purple R>110&B>110 within central zone), claimed after ham_duoi so the jaw keeps the flame base. than_2 = smoke/wisps/lower flames (fallback).",
+  "variants_note": "_combat: red overlay 25% + saturation x1.3; _tinh_anh: gold overlay 25% + brightness x1.1. All variants share the same pivot and z-order.",
+  "parts": {
+    "canh_trai": {
+      "file": "boss_hac_long_part_canh_trai.png",
+      "file_combat": "boss_hac_long_part_canh_trai_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_canh_trai_tinh_anh.png",
+      "pivot": [
+        620,
+        420
+      ],
+      "z": 0,
+      "pixels": 172557
+    },
+    "canh_phai": {
+      "file": "boss_hac_long_part_canh_phai.png",
+      "file_combat": "boss_hac_long_part_canh_phai_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_canh_phai_tinh_anh.png",
+      "pivot": [
+        980,
+        420
+      ],
+      "z": 1,
+      "pixels": 153808
+    },
+    "than_2": {
+      "file": "boss_hac_long_part_than_2.png",
+      "file_combat": "boss_hac_long_part_than_2_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_than_2_tinh_anh.png",
+      "pivot": [
+        800,
+        1150
+      ],
+      "z": 2,
+      "pixels": 708608
+    },
+    "chan_truoc_trai": {
+      "file": "boss_hac_long_part_chan_truoc_trai.png",
+      "file_combat": "boss_hac_long_part_chan_truoc_trai_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_chan_truoc_trai_tinh_anh.png",
+      "pivot": [
+        510,
+        900
+      ],
+      "z": 3,
+      "pixels": 104661
+    },
+    "chan_truoc_phai": {
+      "file": "boss_hac_long_part_chan_truoc_phai.png",
+      "file_combat": "boss_hac_long_part_chan_truoc_phai_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_chan_truoc_phai_tinh_anh.png",
+      "pivot": [
+        1090,
+        900
+      ],
+      "z": 4,
+      "pixels": 75002
+    },
+    "sung": {
+      "file": "boss_hac_long_part_sung.png",
+      "file_combat": "boss_hac_long_part_sung_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_sung_tinh_anh.png",
+      "pivot": [
+        800,
+        300
+      ],
+      "z": 5,
+      "pixels": 16284
+    },
+    "than_1": {
+      "file": "boss_hac_long_part_than_1.png",
+      "file_combat": "boss_hac_long_part_than_1_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_than_1_tinh_anh.png",
+      "pivot": [
+        800,
+        800
+      ],
+      "z": 6,
+      "pixels": 38009
+    },
+    "dau": {
+      "file": "boss_hac_long_part_dau.png",
+      "file_combat": "boss_hac_long_part_dau_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_dau_tinh_anh.png",
+      "pivot": [
+        800,
+        600
+      ],
+      "z": 7,
+      "pixels": 85996
+    },
+    "ham_duoi": {
+      "file": "boss_hac_long_part_ham_duoi.png",
+      "file_combat": "boss_hac_long_part_ham_duoi_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_ham_duoi_tinh_anh.png",
+      "pivot": [
+        800,
+        700
+      ],
+      "z": 8,
+      "pixels": 77467
+    },
+    "lua_phun": {
+      "file": "boss_hac_long_part_lua_phun.png",
+      "file_combat": "boss_hac_long_part_lua_phun_combat.png",
+      "file_tinh_anh": "boss_hac_long_part_lua_phun_tinh_anh.png",
+      "pivot": [
+        800,
+        700
+      ],
+      "z": 9,
+      "pixels": 65469
+    }
+  }
+}

@@ -1,0 +1,329 @@
+{
+ "kiem": [
+  {
+   "id": "kngo_lao_kiem_khach",
+   "rarity": "thuong",
+   "map": 0,
+   "nameKey": "kngo_lao_kiem_khach",
+   "descKey": "kngo_lao_kiem_khach_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_nhan",
+     "reward": {
+      "manual": "manual_kiem_1",
+      "stones": 50
+     },
+     "daotam": 5
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_tu_choi",
+     "reward": {
+      "exp": 30
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_kiem_1",
+      "stones": 100
+     },
+     "daotam": -15,
+     "risk": 0.3
+    }
+   ]
+  },
+  {
+   "id": "kngo_hang_dong_kiem_y",
+   "rarity": "hiem",
+   "map": 1,
+   "nameKey": "kngo_hang_dong_kiem_y",
+   "descKey": "kngo_hang_dong_kiem_y_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_linh_ngo",
+     "reward": {
+      "manual": "manual_kiem_2"
+     },
+     "daotam": 5
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_roi_di",
+     "reward": {
+      "exp": 80
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_kiem_2",
+      "stones": 200
+     },
+     "daotam": -20,
+     "risk": 0.4
+    }
+   ]
+  },
+  {
+   "id": "kngo_kiem_thanh_di_tich",
+   "rarity": "cuc_hiem",
+   "map": 2,
+   "nameKey": "kngo_kiem_thanh_di_tich",
+   "descKey": "kngo_kiem_thanh_di_tich_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_tiep_nhan",
+     "reward": {
+      "manual": "manual_kiem_3",
+      "stones": 500
+     },
+     "daotam": 10
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_tu_choi",
+     "reward": {
+      "exp": 150
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_kiem_3",
+      "stones": 800
+     },
+     "daotam": -30,
+     "risk": 0.5
+    }
+   ]
+  }
+ ],
+ "phap": [
+  {
+   "id": "kngo_lao_thuat_si",
+   "rarity": "thuong",
+   "map": 0,
+   "nameKey": "kngo_lao_thuat_si",
+   "descKey": "kngo_lao_thuat_si_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_nhan",
+     "reward": {
+      "manual": "manual_phap_1",
+      "stones": 50
+     },
+     "daotam": 5
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_tu_choi",
+     "reward": {
+      "exp": 30
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_phap_1",
+      "stones": 100
+     },
+     "daotam": -15,
+     "risk": 0.3
+    }
+   ]
+  },
+  {
+   "id": "kngo_thap_linh_co",
+   "rarity": "hiem",
+   "map": 1,
+   "nameKey": "kngo_thap_linh_co",
+   "descKey": "kngo_thap_linh_co_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_linh_ngo",
+     "reward": {
+      "manual": "manual_phap_2"
+     },
+     "daotam": 5
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_roi_di",
+     "reward": {
+      "exp": 80
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_phap_2",
+      "stones": 200
+     },
+     "daotam": -20,
+     "risk": 0.4
+    }
+   ]
+  },
+  {
+   "id": "kngo_loi_tri_truyen_thua",
+   "rarity": "cuc_hiem",
+   "map": 2,
+   "nameKey": "kngo_loi_tri_truyen_thua",
+   "descKey": "kngo_loi_tri_truyen_thua_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_tiep_nhan",
+     "reward": {
+      "manual": "manual_phap_3",
+      "stones": 500
+     },
+     "daotam": 10
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_tu_choi",
+     "reward": {
+      "exp": 150
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_phap_3",
+      "stones": 800
+     },
+     "daotam": -30,
+     "risk": 0.5
+    }
+   ]
+  }
+ ],
+ "the": [
+  {
+   "id": "kngo_lao_vo_su",
+   "rarity": "thuong",
+   "map": 0,
+   "nameKey": "kngo_lao_vo_su",
+   "descKey": "kngo_lao_vo_su_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_nhan",
+     "reward": {
+      "manual": "manual_the_1",
+      "stones": 50
+     },
+     "daotam": 5
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_tu_choi",
+     "reward": {
+      "exp": 30
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_the_1",
+      "stones": 100
+     },
+     "daotam": -15,
+     "risk": 0.3
+    }
+   ]
+  },
+  {
+   "id": "kngo_huyet_tri_luyen_the",
+   "rarity": "hiem",
+   "map": 1,
+   "nameKey": "kngo_huyet_tri_luyen_the",
+   "descKey": "kngo_huyet_tri_luyen_the_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_linh_ngo",
+     "reward": {
+      "manual": "manual_the_2"
+     },
+     "daotam": 5
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_roi_di",
+     "reward": {
+      "exp": 80
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_the_2",
+      "stones": 200
+     },
+     "daotam": -20,
+     "risk": 0.4
+    }
+   ]
+  },
+  {
+   "id": "kngo_kim_cuong_dong",
+   "rarity": "cuc_hiem",
+   "map": 2,
+   "nameKey": "kngo_kim_cuong_dong",
+   "descKey": "kngo_kim_cuong_dong_desc",
+   "choices": [
+    {
+     "id": "nhan",
+     "labelKey": "kngo_c_tiep_nhan",
+     "reward": {
+      "manual": "manual_the_3",
+      "stones": 500
+     },
+     "daotam": 10
+    },
+    {
+     "id": "tu_choi",
+     "labelKey": "kngo_c_tu_choi",
+     "reward": {
+      "exp": 150
+     },
+     "daotam": 0
+    },
+    {
+     "id": "cuop",
+     "labelKey": "kngo_c_cuop",
+     "reward": {
+      "manual": "manual_the_3",
+      "stones": 800
+     },
+     "daotam": -30,
+     "risk": 0.5
+    }
+   ]
+  }
+ ]
+}

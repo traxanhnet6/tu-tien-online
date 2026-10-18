@@ -1,0 +1,101 @@
+{
+  "pet": "thach_giap_long_quy",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Rua rong, view truoc. dau gom ria mep dai (lien net). duoi = vay duoi ben phai.",
+  "parts": {
+    "duoi": {
+      "file": "pet_thach_giap_long_quy_part_duoi.png",
+      "pivot": [
+        851,
+        713
+      ],
+      "z": 0,
+      "pixels": 7885,
+      "variants": {
+        "combat": "pet_thach_giap_long_quy_part_duoi_combat.png",
+        "tinh_anh": "pet_thach_giap_long_quy_part_duoi_tinh_anh.png"
+      }
+    },
+    "mai": {
+      "file": "pet_thach_giap_long_quy_part_mai.png",
+      "pivot": [
+        516,
+        748
+      ],
+      "z": 1,
+      "pixels": 128838,
+      "variants": {
+        "combat": "pet_thach_giap_long_quy_part_mai_combat.png",
+        "tinh_anh": "pet_thach_giap_long_quy_part_mai_tinh_anh.png"
+      }
+    },
+    "chan_trai_sau": {
+      "file": "pet_thach_giap_long_quy_part_chan_trai_sau.png",
+      "pivot": [
+        328,
+        782
+      ],
+      "z": 2,
+      "pixels": 40765,
+      "variants": {
+        "combat": "pet_thach_giap_long_quy_part_chan_trai_sau_combat.png",
+        "tinh_anh": "pet_thach_giap_long_quy_part_chan_trai_sau_tinh_anh.png"
+      }
+    },
+    "chan_phai_sau": {
+      "file": "pet_thach_giap_long_quy_part_chan_phai_sau.png",
+      "pivot": [
+        720,
+        782
+      ],
+      "z": 3,
+      "pixels": 45744,
+      "variants": {
+        "combat": "pet_thach_giap_long_quy_part_chan_phai_sau_combat.png",
+        "tinh_anh": "pet_thach_giap_long_quy_part_chan_phai_sau_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_thach_giap_long_quy_part_chan_trai_truoc.png",
+      "pivot": [
+        240,
+        563
+      ],
+      "z": 4,
+      "pixels": 20094,
+      "variants": {
+        "combat": "pet_thach_giap_long_quy_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_thach_giap_long_quy_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_thach_giap_long_quy_part_chan_phai_truoc.png",
+      "pivot": [
+        743,
+        563
+      ],
+      "z": 5,
+      "pixels": 27383,
+      "variants": {
+        "combat": "pet_thach_giap_long_quy_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_thach_giap_long_quy_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_thach_giap_long_quy_part_dau.png",
+      "pivot": [
+        505,
+        527
+      ],
+      "z": 6,
+      "pixels": 229258,
+      "variants": {
+        "combat": "pet_thach_giap_long_quy_part_dau_combat.png",
+        "tinh_anh": "pet_thach_giap_long_quy_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

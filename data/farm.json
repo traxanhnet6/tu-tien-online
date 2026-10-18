@@ -1,0 +1,44 @@
+{
+ "max_plots": 18,
+ "plants": {
+  "hat_linh_chi": {
+   "timeMin": 30,
+   "herb": "thao_linh_chi",
+   "qty": [
+    2,
+    3
+   ],
+   "mutate": {
+    "chance": 0.05,
+    "herb": "linh_chi_ngan_nam",
+    "qty": 1
+   }
+  },
+  "hat_truc_co_thao": {
+   "timeMin": 120,
+   "herb": "truc_co_thao",
+   "qty": [
+    1,
+    2
+   ],
+   "mutate": {
+    "chance": 0.05,
+    "herb": "truc_co_thao",
+    "qty": 3
+   }
+  },
+  "hat_dia_linh_qua": {
+   "timeMin": 480,
+   "herb": "dia_linh_qua",
+   "qty": [
+    1,
+    2
+   ],
+   "mutate": {
+    "chance": 0.08,
+    "herb": "dia_linh_qua",
+    "qty": 3
+   }
+  }
+ }
+}

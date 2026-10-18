@@ -1,0 +1,86 @@
+[
+ {
+  "id": "q_taycot",
+  "nameKey": "q_taycot",
+  "descKey": "q_taycot_desc",
+  "npc": "dai_phu",
+  "need": {
+   "type": "item",
+   "item": "taycothao",
+   "count": 3
+  },
+  "reward": {
+   "stones": 100,
+   "exp": 50,
+   "items": [
+    {
+     "id": "pill_hx",
+     "qty": 2
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_pet_intro",
+  "nameKey": "q_pet_intro",
+  "descKey": "q_pet_intro_desc",
+  "npc": "tuan_thu_su",
+  "need": {
+   "type": "talk"
+  },
+  "reward": {
+   "stones": 0,
+   "exp": 100,
+   "items": [
+    {
+     "id": "trung_pham",
+     "qty": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_kill5",
+  "nameKey": "q_kill5",
+  "descKey": "q_kill5_desc",
+  "npc": "dai_phu",
+  "need": {
+   "type": "kill",
+   "monster": "da_tru",
+   "count": 5
+  },
+  "reward": {
+   "stones": 80,
+   "exp": 60,
+   "items": [
+    {
+     "id": "pill_hx",
+     "qty": 2
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_boss1",
+  "nameKey": "q_boss1",
+  "descKey": "q_boss1_desc",
+  "npc": "dai_phu",
+  "req": "q_kill5",
+  "need": {
+   "type": "kill",
+   "monster": "da_tru_vuong",
+   "count": 1
+  },
+  "reward": {
+   "stones": 300,
+   "exp": 150,
+   "items": [
+    {
+     "id": "wpn_linh",
+     "qty": 1,
+     "locked": true
+    }
+   ]
+  }
+ }
+]

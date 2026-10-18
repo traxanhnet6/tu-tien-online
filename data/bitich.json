@@ -1,0 +1,904 @@
+{
+ "phien_ban": 1,
+ "bi_tich": [
+  {
+   "id": "manual_kiem_1",
+   "ten": {
+    "vi": "Bí Tịch Xuyên Vân Kiếm",
+    "en": "Manual: Cloud Sword"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Kiếm Xuyên Vân (chủ động · Phàm phẩm).",
+    "en": "Learn to unlock Cloud-Piercing Sword (active · Mortal tier)."
+   },
+   "pham": 0,
+   "loai": "chu_dong",
+   "he_phai": "kiem",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "kiem_xuyen_van",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 2.5,
+    "mp": 20,
+    "hoi_chieu": 8,
+    "tang_cap_moi_cap": 0.06,
+    "cap_toi_da": 5,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 0,
+   "gia_ban": 50
+  },
+  {
+   "id": "manual_kiem_2",
+   "ten": {
+    "vi": "Bí Tịch Vạn Kiếm Quy Tông",
+    "en": "Manual: Myriad Swords"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Vạn Kiếm Quy Tông (chủ động · Địa phẩm).",
+    "en": "Learn to unlock Myriad Swords Return (active · Earth tier)."
+   },
+   "pham": 1,
+   "loai": "chu_dong",
+   "he_phai": "kiem",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "van_kiem_quy_tong",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "aoe",
+    "he_so_goc": 2,
+    "mp": 30,
+    "hoi_chieu": 12,
+    "tang_cap_moi_cap": 0.08,
+    "cap_toi_da": 7,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 4,
+     "hieu_ung": "ms_bonus15"
+    },
+    {
+     "cap": 7,
+     "hieu_ung": "ms_splash30"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 500,
+   "gia_ban": 300
+  },
+  {
+   "id": "manual_kiem_3",
+   "ten": {
+    "vi": "Bí Tịch Kiếm Cương Hộ Thể",
+    "en": "Manual: Sword Aura Guard"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Kiếm Cương Hộ Thể (chủ động · Thiên phẩm).",
+    "en": "Learn to unlock Sword Aura Guard (active · Heaven tier)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "kiem",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "kiem_cuong_ho_the",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "buff",
+    "he_so_goc": 0,
+    "mp": 25,
+    "hoi_chieu": 20,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 1.5,
+    "thoi_gian_buff": 15
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 5,
+     "hieu_ung": "ms_pierce25"
+    },
+    {
+     "cap": 10,
+     "hieu_ung": "ms_splash50_pierce50"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 1500,
+   "gia_ban": 1500
+  },
+  {
+   "id": "manual_phap_1",
+   "ten": {
+    "vi": "Bí Tịch Ngũ Lôi",
+    "en": "Manual: Five Thunders"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Ngũ Lôi Oanh Đỉnh (chủ động · Phàm phẩm).",
+    "en": "Learn to unlock Five Thunderbolts (active · Mortal tier)."
+   },
+   "pham": 0,
+   "loai": "chu_dong",
+   "he_phai": "phap",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "ngu_loi_oanh_dinh",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 2.8,
+    "mp": 25,
+    "hoi_chieu": 10,
+    "tang_cap_moi_cap": 0.06,
+    "cap_toi_da": 5,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 0,
+   "gia_ban": 50
+  },
+  {
+   "id": "manual_phap_2",
+   "ten": {
+    "vi": "Bí Tịch Hỏa Vũ",
+    "en": "Manual: Fire Rain"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Hỏa Vũ Lưu Tinh (chủ động · Địa phẩm).",
+    "en": "Learn to unlock Meteor Fire Rain (active · Earth tier)."
+   },
+   "pham": 1,
+   "loai": "chu_dong",
+   "he_phai": "phap",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "hoa_vu_luu_tinh",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "aoe",
+    "he_so_goc": 1.8,
+    "mp": 30,
+    "hoi_chieu": 12,
+    "tang_cap_moi_cap": 0.08,
+    "cap_toi_da": 7,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 4,
+     "hieu_ung": "ms_bonus15"
+    },
+    {
+     "cap": 7,
+     "hieu_ung": "ms_splash30"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 500,
+   "gia_ban": 300
+  },
+  {
+   "id": "manual_phap_3",
+   "ten": {
+    "vi": "Bí Tịch Linh Thuẫn",
+    "en": "Manual: Spirit Shield"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Linh Thuẫn (chủ động · Thiên phẩm).",
+    "en": "Learn to unlock Spirit Shield (active · Heaven tier)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "phap",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "linh_thuan",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "buff",
+    "he_so_goc": 0,
+    "mp": 20,
+    "hoi_chieu": 18,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 1.4,
+    "thoi_gian_buff": 15
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 5,
+     "hieu_ung": "ms_pierce25"
+    },
+    {
+     "cap": 10,
+     "hieu_ung": "ms_splash50_pierce50"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 1500,
+   "gia_ban": 1500
+  },
+  {
+   "id": "manual_the_1",
+   "ten": {
+    "vi": "Bí Tịch Bá Vương Quyền",
+    "en": "Manual: Overlord Fist"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Bá Vương Quyền (chủ động · Phàm phẩm).",
+    "en": "Learn to unlock Overlord Fist (active · Mortal tier)."
+   },
+   "pham": 0,
+   "loai": "chu_dong",
+   "he_phai": "the",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "ba_vuong_quyen",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 2.2,
+    "mp": 15,
+    "hoi_chieu": 8,
+    "tang_cap_moi_cap": 0.06,
+    "cap_toi_da": 5,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 0,
+   "gia_ban": 50
+  },
+  {
+   "id": "manual_the_2",
+   "ten": {
+    "vi": "Bí Tịch Chấn Địa Chưởng",
+    "en": "Manual: Earth Palm"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Chấn Địa Chưởng (chủ động · Địa phẩm).",
+    "en": "Learn to unlock Earth-Shaking Palm (active · Earth tier)."
+   },
+   "pham": 1,
+   "loai": "chu_dong",
+   "he_phai": "the",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "chan_dia_chuong",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "aoe",
+    "he_so_goc": 1.6,
+    "mp": 20,
+    "hoi_chieu": 10,
+    "tang_cap_moi_cap": 0.08,
+    "cap_toi_da": 7,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 4,
+     "hieu_ung": "ms_bonus15"
+    },
+    {
+     "cap": 7,
+     "hieu_ung": "ms_splash30"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 500,
+   "gia_ban": 300
+  },
+  {
+   "id": "manual_the_3",
+   "ten": {
+    "vi": "Bí Tịch Kim Cang",
+    "en": "Manual: Diamond Body"
+   },
+   "mo_ta": {
+    "vi": "Học để mở Kim Cang Bất Hoại (chủ động · Thiên phẩm).",
+    "en": "Learn to unlock Diamond Body (active · Heaven tier)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "the",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "kim_cuong_bat_hoai",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "buff",
+    "he_so_goc": 0,
+    "mp": 30,
+    "hoi_chieu": 25,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 1.8,
+    "thoi_gian_buff": 15
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 5,
+     "hieu_ung": "ms_pierce25"
+    },
+    {
+     "cap": 10,
+     "hieu_ung": "ms_splash50_pierce50"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 1500,
+   "gia_ban": 1500
+  },
+  {
+   "id": "manual_ps_kiem_tam",
+   "ten": {
+    "vi": "Bí Tịch Kiếm Tâm",
+    "en": "Manual: Sword Heart"
+   },
+   "mo_ta": {
+    "vi": "Học để mở bị động Kiếm Tâm (+10% công mỗi cấp).",
+    "en": "Learn passive Sword Heart (+10% ATK per level)."
+   },
+   "pham": 1,
+   "loai": "bi_dong",
+   "he_phai": "all",
+   "canh_gioi_yeu_cau": 1,
+   "skill": null,
+   "passive": "kiem_tam",
+   "cong_thuc": {
+    "loai_hieu_ung": "bi_dong",
+    "mo_ta_cap": "10% atk"
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 4,
+     "hieu_ung": "ms_bonus15"
+    },
+    {
+     "cap": 7,
+     "hieu_ung": "ms_splash30"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 800,
+   "gia_ban": 300
+  },
+  {
+   "id": "manual_ps_linh_mach",
+   "ten": {
+    "vi": "Bí Tịch Linh Mạch",
+    "en": "Manual: Spirit Vein"
+   },
+   "mo_ta": {
+    "vi": "Học để mở bị động Linh Mạch (hồi 2% linh lực/5s mỗi cấp).",
+    "en": "Learn passive Spirit Vein (regen 2% MP per 5s per level)."
+   },
+   "pham": 1,
+   "loai": "bi_dong",
+   "he_phai": "all",
+   "canh_gioi_yeu_cau": 1,
+   "skill": null,
+   "passive": "linh_mach",
+   "cong_thuc": {
+    "loai_hieu_ung": "bi_dong",
+    "mo_ta_cap": "2% mp/5s"
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 4,
+     "hieu_ung": "ms_bonus15"
+    },
+    {
+     "cap": 7,
+     "hieu_ung": "ms_splash30"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 800,
+   "gia_ban": 300
+  },
+  {
+   "id": "manual_ps_the_phach",
+   "ten": {
+    "vi": "Bí Tịch Thể Phách",
+    "en": "Manual: Physique"
+   },
+   "mo_ta": {
+    "vi": "Học để mở bị động Thể Phách (+8% HP tối đa mỗi cấp).",
+    "en": "Learn passive Physique (+8% max HP per level)."
+   },
+   "pham": 0,
+   "loai": "bi_dong",
+   "he_phai": "all",
+   "canh_gioi_yeu_cau": 1,
+   "skill": null,
+   "passive": "the_phach",
+   "cong_thuc": {
+    "loai_hieu_ung": "bi_dong",
+    "mo_ta_cap": "8% maxHp"
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 300,
+   "gia_ban": 50
+  },
+  {
+   "id": "manual_ps_than_phap",
+   "ten": {
+    "vi": "Bí Tịch Thân Pháp",
+    "en": "Manual: Footwork"
+   },
+   "mo_ta": {
+    "vi": "Học để mở bị động Thân Pháp (+5% tốc chạy mỗi cấp).",
+    "en": "Learn passive Footwork (+5% move speed per level)."
+   },
+   "pham": 0,
+   "loai": "bi_dong",
+   "he_phai": "all",
+   "canh_gioi_yeu_cau": 1,
+   "skill": null,
+   "passive": "than_phap",
+   "cong_thuc": {
+    "loai_hieu_ung": "bi_dong",
+    "mo_ta_cap": "5% speed"
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 300,
+   "gia_ban": 50
+  },
+  {
+   "id": "manual_kimdan_kiem",
+   "ten": {
+    "vi": "Bí Tịch Kim Đan Kiếm Ý",
+    "en": "Manual: Golden Core Sword"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch Kim Đan (cần cảnh giới Kim Đan).",
+    "en": "Golden Core manual (requires Golden Core realm)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "kiem",
+   "canh_gioi_yeu_cau": 3,
+   "skill": "kimdan_kiem_y",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 4,
+    "mp": 40,
+    "hoi_chieu": 12,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 5,
+     "hieu_ung": "ms_pierce25"
+    },
+    {
+     "cap": 10,
+     "hieu_ung": "ms_splash50_pierce50"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 3,
+    "tong_mon": null
+   },
+   "hoc_phi": 3000,
+   "gia_ban": 1500
+  },
+  {
+   "id": "manual_kimdan_phap",
+   "ten": {
+    "vi": "Bí Tịch Kim Đan Lôi Pháp",
+    "en": "Manual: Golden Core Thunder"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch Kim Đan (cần cảnh giới Kim Đan).",
+    "en": "Golden Core manual (requires Golden Core realm)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "phap",
+   "canh_gioi_yeu_cau": 3,
+   "skill": "kimdan_loi_phap",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "aoe",
+    "he_so_goc": 3.2,
+    "mp": 45,
+    "hoi_chieu": 14,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 5,
+     "hieu_ung": "ms_pierce25"
+    },
+    {
+     "cap": 10,
+     "hieu_ung": "ms_splash50_pierce50"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 3,
+    "tong_mon": null
+   },
+   "hoc_phi": 3000,
+   "gia_ban": 1500
+  },
+  {
+   "id": "manual_kimdan_the",
+   "ten": {
+    "vi": "Bí Tịch Kim Đan Thể Quyền",
+    "en": "Manual: Golden Core Fist"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch Kim Đan (cần cảnh giới Kim Đan).",
+    "en": "Golden Core manual (requires Golden Core realm)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "the",
+   "canh_gioi_yeu_cau": 3,
+   "skill": "kimdan_the_quyen",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 3.6,
+    "mp": 35,
+    "hoi_chieu": 12,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [
+    {
+     "cap": 5,
+     "hieu_ung": "ms_pierce25"
+    },
+    {
+     "cap": 10,
+     "hieu_ung": "ms_splash50_pierce50"
+    }
+   ],
+   "dieu_kien_mo": {
+    "canh_gioi": 3,
+    "tong_mon": null
+   },
+   "hoc_phi": 3000,
+   "gia_ban": 1500
+  },
+  {
+   "id": "manual_boss_datru",
+   "ten": {
+    "vi": "Bí Tịch Man Hoang Chấn Địa",
+    "en": "Manual: Savage Quake"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch boss Đá Trụ Vương (Địa phẩm).",
+    "en": "Boss manual: Da Tru Vuong (Earth tier)."
+   },
+   "pham": 1,
+   "loai": "chu_dong",
+   "he_phai": "boss",
+   "dao": "trung",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "man_hoang_chan_dia",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "aoe",
+    "he_so_goc": 3.0,
+    "mp": 35,
+    "hoi_chieu": 14,
+    "tang_cap_moi_cap": 0.08,
+    "cap_toi_da": 7,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 500,
+   "gia_ban": 300,
+   "nguon": "boss"
+  },
+  {
+   "id": "manual_boss_langvuong",
+   "ten": {
+    "vi": "Bí Tịch Lang Vương Khiếu Nguyệt",
+    "en": "Manual: Wolf King's Howl"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch boss Lang Vương (Địa phẩm).",
+    "en": "Boss manual: Lang Vuong (Earth tier)."
+   },
+   "pham": 1,
+   "loai": "chu_dong",
+   "he_phai": "boss",
+   "dao": "trung",
+   "canh_gioi_yeu_cau": 1,
+   "skill": "lang_vuong_khieu_nguyet",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 3.4,
+    "mp": 35,
+    "hoi_chieu": 12,
+    "tang_cap_moi_cap": 0.08,
+    "cap_toi_da": 7,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 500,
+   "gia_ban": 300,
+   "nguon": "boss"
+  },
+  {
+   "id": "manual_boss_cottuong",
+   "ten": {
+    "vi": "Bí Tịch Bạch Cốt Ma Trảo",
+    "en": "Manual: Bone Claw"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch boss Cốt Tướng (Thiên phẩm).",
+    "en": "Boss manual: Cot Tuong (Heaven tier)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "boss",
+   "dao": "trung",
+   "canh_gioi_yeu_cau": 2,
+   "skill": "bach_cot_ma_trao",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 4.0,
+    "mp": 45,
+    "hoi_chieu": 14,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 2,
+    "tong_mon": null
+   },
+   "hoc_phi": 1500,
+   "gia_ban": 1500,
+   "nguon": "boss"
+  },
+  {
+   "id": "manual_boss_uminh",
+   "ten": {
+    "vi": "Bí Tịch Độc Vụ Cuồng Triều",
+    "en": "Manual: Venom Tide"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch boss U Minh Cự Mãng (Thiên phẩm).",
+    "en": "Boss manual: U Minh Cu Mang (Heaven tier)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "boss",
+   "dao": "trung",
+   "canh_gioi_yeu_cau": 2,
+   "skill": "doc_vu_cuong_trieu",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "aoe",
+    "he_so_goc": 4.2,
+    "mp": 50,
+    "hoi_chieu": 16,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 2,
+    "tong_mon": null
+   },
+   "hoc_phi": 1500,
+   "gia_ban": 1500,
+   "nguon": "boss"
+  },
+  {
+   "id": "manual_boss_haclong",
+   "ten": {
+    "vi": "Bí Tịch Ma Long Phệ Hồn",
+    "en": "Manual: Soul Devour"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch boss Hắc Long (Thiên phẩm).",
+    "en": "Boss manual: Hac Long (Heaven tier)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "boss",
+   "dao": "trung",
+   "canh_gioi_yeu_cau": 2,
+   "skill": "ma_long_phe_hon",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 5.0,
+    "mp": 60,
+    "hoi_chieu": 20,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 2,
+    "tong_mon": null
+   },
+   "hoc_phi": 1500,
+   "gia_ban": 1500,
+   "nguon": "boss"
+  },
+  {
+   "id": "manual_boss_huyetma",
+   "ten": {
+    "vi": "Bí Tịch Huyết Ma Trảm",
+    "en": "Manual: Blood Demon Slash"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch boss Huyết Ma Vương (Địa phẩm, Ma Đạo).",
+    "en": "Boss manual: Huyet Ma Vuong (Earth tier, Demonic)."
+   },
+   "pham": 1,
+   "loai": "chu_dong",
+   "he_phai": "boss",
+   "dao": "ma",
+   "canh_gioi_yeu_cau": 2,
+   "skill": "huyet_ma_tram",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "dmg",
+    "he_so_goc": 3.2,
+    "mp": 25,
+    "hoi_chieu": 9,
+    "tang_cap_moi_cap": 0.08,
+    "cap_toi_da": 7,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 2,
+    "tong_mon": null
+   },
+   "hoc_phi": 500,
+   "gia_ban": 300,
+   "nguon": "boss"
+  },
+  {
+   "id": "manual_boss_thientuong",
+   "ten": {
+    "vi": "Bí Tịch Thiên Lôi Phá",
+    "en": "Manual: Heaven Thunder"
+   },
+   "mo_ta": {
+    "vi": "Bí tịch boss Thiên Tướng (Thiên phẩm).",
+    "en": "Boss manual: Thien Tuong (Heaven tier)."
+   },
+   "pham": 2,
+   "loai": "chu_dong",
+   "he_phai": "boss",
+   "dao": "trung",
+   "canh_gioi_yeu_cau": 2,
+   "skill": "thien_loi_pha",
+   "passive": null,
+   "cong_thuc": {
+    "loai_hieu_ung": "aoe",
+    "he_so_goc": 4.5,
+    "mp": 55,
+    "hoi_chieu": 18,
+    "tang_cap_moi_cap": 0.1,
+    "cap_toi_da": 10,
+    "defMult": 0,
+    "thoi_gian_buff": 0
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 2,
+    "tong_mon": null
+   },
+   "hoc_phi": 1500,
+   "gia_ban": 1500,
+   "nguon": "boss"
+  },
+  {
+   "id": "manual_truong_sinh",
+   "ten": {
+    "vi": "Bí Tịch Trường Sinh Quyết",
+    "en": "Manual: Longevity Art"
+   },
+   "mo_ta": {
+    "vi": "Học để mở bị động Trường Sinh Quyết (+30 năm thọ nguyên mỗi cấp).",
+    "en": "Learn passive Longevity Art (+30 years of lifespan per level)."
+   },
+   "pham": 1,
+   "loai": "bi_dong",
+   "he_phai": "all",
+   "canh_gioi_yeu_cau": 1,
+   "skill": null,
+   "passive": "truong_sinh_quyet",
+   "cong_thuc": {
+    "loai_hieu_ung": "bi_dong",
+    "mo_ta_cap": "+30 năm thọ nguyên"
+   },
+   "hieu_ung_dac_biet": [],
+   "dieu_kien_mo": {
+    "canh_gioi": 1,
+    "tong_mon": null
+   },
+   "hoc_phi": 800,
+   "gia_ban": 300
+  }
+ ]
+}

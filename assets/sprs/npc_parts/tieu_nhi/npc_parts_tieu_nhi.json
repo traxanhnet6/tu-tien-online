@@ -1,0 +1,154 @@
+{
+  "npc": "tieu_nhi",
+  "source": "npc_tieu_nhi.png",
+  "canvas": {
+    "width": 1120,
+    "height": 2240
+  },
+  "parts": [
+    {
+      "name": "chan_trai",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_chan_trai.png",
+      "offset": [
+        560,
+        1254
+      ],
+      "size": [
+        247,
+        907
+      ],
+      "pivot": [
+        672,
+        1299
+      ],
+      "z": 0,
+      "note": "Chân trái: hông (pivot) -> bước đi phục vụ."
+    },
+    {
+      "name": "chan_phai",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_chan_phai.png",
+      "offset": [
+        313,
+        1254
+      ],
+      "size": [
+        247,
+        903
+      ],
+      "pivot": [
+        448,
+        1299
+      ],
+      "z": 0,
+      "note": "Chân phải: hông (pivot) -> bước đi phục vụ."
+    },
+    {
+      "name": "than",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_than.png",
+      "offset": [
+        298,
+        93
+      ],
+      "size": [
+        521,
+        2057
+      ],
+      "pivot": [
+        560,
+        1232
+      ],
+      "z": 1,
+      "note": "Thân áo xanh (catch-all): trung tâm -> nghiêng cúi chào, đi lại."
+    },
+    {
+      "name": "dau",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_dau.png",
+      "offset": [
+        394,
+        112
+      ],
+      "size": [
+        331,
+        449
+      ],
+      "pivot": [
+        560,
+        526
+      ],
+      "z": 2,
+      "note": "Đầu: cổ (pivot) -> gật/lắc đầu, cúi chào khách."
+    },
+    {
+      "name": "phu_kien_khan",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_phu_kien_khan.png",
+      "offset": [
+        672,
+        537
+      ],
+      "size": [
+        165,
+        606
+      ],
+      "pivot": [
+        750,
+        582
+      ],
+      "z": 3,
+      "note": "Khăn trắng vắt vai: gắn vai trái, đung đưa nhẹ khi đi."
+    },
+    {
+      "name": "tay_trai",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_tay_trai.png",
+      "offset": [
+        715,
+        627
+      ],
+      "size": [
+        196,
+        449
+      ],
+      "pivot": [
+        818,
+        694
+      ],
+      "z": 4,
+      "note": "Tay trái đỡ khay: vai (pivot) -> nâng/hạ khay, vẫy tay khi không bưng."
+    },
+    {
+      "name": "tay_phai",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_tay_phai.png",
+      "offset": [
+        220,
+        627
+      ],
+      "size": [
+        185,
+        449
+      ],
+      "pivot": [
+        302,
+        694
+      ],
+      "z": 4,
+      "note": "Tay phải đỡ khay: vai (pivot) -> nâng/hạ khay, vẫy tay khi không bưng."
+    },
+    {
+      "name": "phu_kien_khay_tra",
+      "file": "npc_parts/tieu_nhi/npc_tieu_nhi_part_phu_kien_khay_tra.png",
+      "offset": [
+        313,
+        828
+      ],
+      "size": [
+        528,
+        237
+      ],
+      "pivot": [
+        571,
+        963
+      ],
+      "z": 6,
+      "note": "Khay trà (ấm+chén): gắn 2 tay, giữ thăng bằng khi đi/cúi chào; tách ấm/chén riêng nếu cần anim rót trà."
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+{
+ "id": 0,
+ "nameKey": "map_thanh_van_tran",
+ "bg": "assets/map/map_thanh_van_tran.webp",
+ "fb": "#b9d3a0",
+ "monsters": [
+  "da_tru",
+  "son_ke"
+ ],
+ "boss": "da_tru_vuong",
+ "npcs": [
+  "dai_phu",
+  "van_tien_cac",
+  "truong_lao",
+  "tam_tien_bi_tich",
+  "truong_tran",
+  "lao_ren",
+  "thuong_nhan",
+  "tieu_nhi",
+  "su_gia_kiem",
+  "su_gia_phap",
+  "su_gia_the",
+  "tuan_thu_su",
+  "lao_dan_duong",
+  "su_gia_duoc",
+  "su_gia_thu",
+  "minh_chu",
+  "thuong_nhan_du_hanh",
+  "su_gia_ma"
+ ],
+ "quests": [
+  "q_taycot",
+  "q_kill5",
+  "q_boss1"
+ ],
+ "gates": [
+  {
+   "to": 1,
+   "x": 720,
+   "y": 80
+  },
+  {
+   "to": 3,
+   "x": 80,
+   "y": 500
+  },
+  {
+   "to": 4,
+   "x": 1500,
+   "y": 80
+  },
+  {
+   "to": 5,
+   "x": 80,
+   "y": 1000
+  },
+  {
+   "to": 6,
+   "x": 400,
+   "y": 1120
+  },
+  {
+   "to": 7,
+   "x": 800,
+   "y": 1120
+  },
+  {
+   "to": 8,
+   "x": 1200,
+   "y": 1120
+  },
+  {
+   "to": 9,
+   "x": 1500,
+   "y": 1000
+  },
+  {
+   "to": 10,
+   "x": 1500,
+   "y": 600
+  },
+  {
+   "to": 11,
+   "x": 1500,
+   "y": 450
+  },
+  {
+   "to": 12,
+   "x": 1500,
+   "y": 300
+  }
+ ],
+ "stoneDrop": [
+  2,
+  5
+ ],
+ "unlock": null,
+ "assets": {
+  "bg": "assets/map/map_thanh_van_tran.webp",
+  "sprites": [
+   "assets/sprs/sprs_mon_da_tru.png",
+   "assets/sprs/sprs_mon_son_ke.png",
+   "assets/sprs/sprs_mon_da_tru_vuong.png",
+   "assets/sprs/sprs_player_kiem.png",
+   "assets/sprs/sprs_player_phap.png",
+   "assets/sprs/sprs_player_the.png",
+   "assets/sprs/sprs_npc_dai_phu.webp"
+  ]
+ },
+ "dao": "chinh",
+ "ground": "assets/map/tile_thanh_van_tran.webp",
+ "objects": [
+  {
+   "x": 950,
+   "y": 220,
+   "sprite": "assets/map/obj_nha_go.png",
+   "w": 170,
+   "h": 150,
+   "solid": true,
+   "sw": 120,
+   "sh": 40
+  },
+  {
+   "x": 1250,
+   "y": 260,
+   "sprite": "assets/map/obj_nha_go.png",
+   "w": 170,
+   "h": 150,
+   "solid": true,
+   "sw": 120,
+   "sh": 40
+  },
+  {
+   "x": 200,
+   "y": 900,
+   "sprite": "assets/map/obj_nha_go.png",
+   "w": 170,
+   "h": 150,
+   "solid": true,
+   "sw": 120,
+   "sh": 40
+  },
+  {
+   "x": 850,
+   "y": 760,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 110,
+   "h": 130,
+   "solid": true,
+   "sw": 40,
+   "sh": 24
+  },
+  {
+   "x": 130,
+   "y": 1080,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 110,
+   "h": 130,
+   "solid": true,
+   "sw": 40,
+   "sh": 24
+  },
+  {
+   "x": 1450,
+   "y": 900,
+   "sprite": "assets/map/obj_cay_dao.png",
+   "w": 110,
+   "h": 130,
+   "solid": true,
+   "sw": 40,
+   "sh": 24
+  },
+  {
+   "x": 500,
+   "y": 720,
+   "sprite": "assets/map/obj_den_long.png",
+   "w": 50,
+   "h": 90,
+   "solid": true,
+   "sw": 24,
+   "sh": 16
+  },
+  {
+   "x": 900,
+   "y": 520,
+   "sprite": "assets/map/obj_den_long.png",
+   "w": 50,
+   "h": 90,
+   "solid": true,
+   "sw": 24,
+   "sh": 16
+  },
+  {
+   "x": 1400,
+   "y": 170,
+   "sprite": "assets/map/obj_tang_da.png",
+   "w": 80,
+   "h": 60,
+   "solid": true,
+   "sw": 60,
+   "sh": 30
+  },
+  {
+   "x": 110,
+   "y": 320,
+   "sprite": "assets/map/obj_tang_da.png",
+   "w": 80,
+   "h": 60,
+   "solid": true,
+   "sw": 60,
+   "sh": 30
+  }
+ ]
+}

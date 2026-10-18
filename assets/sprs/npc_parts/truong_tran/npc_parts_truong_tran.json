@@ -1,0 +1,154 @@
+{
+  "npc": "truong_tran",
+  "source": "npc_truong_tran.png",
+  "canvas": {
+    "width": 1120,
+    "height": 2240
+  },
+  "parts": [
+    {
+      "name": "chan_trai",
+      "file": "npc_parts/truong_tran/npc_truong_tran_part_chan_trai.png",
+      "offset": [
+        570,
+        2004
+      ],
+      "size": [
+        255,
+        128
+      ],
+      "pivot": [
+        706,
+        2016
+      ],
+      "z": 0,
+      "note": "Chân trái (giày dưới áo): hông (pivot) -> bước đi."
+    },
+    {
+      "name": "chan_phai",
+      "file": "npc_parts/truong_tran/npc_truong_tran_part_chan_phai.png",
+      "offset": [
+        338,
+        2004
+      ],
+      "size": [
+        233,
+        132
+      ],
+      "pivot": [
+        459,
+        2016
+      ],
+      "z": 0,
+      "note": "Chân phải (giày dưới áo): hông (pivot) -> bước đi."
+    },
+    {
+      "name": "than",
+      "file": "npc_parts/truong_tran/npc_truong_tran_part_than.png",
+      "offset": [
+        237,
+        116
+      ],
+      "size": [
+        713,
+        2019
+      ],
+      "pivot": [
+        560,
+        1344
+      ],
+      "z": 1,
+      "note": "Thân áo lam (catch-all): trung tâm -> cúi chào, đi lại."
+    },
+    {
+      "name": "tay_trai",
+      "file": "npc_parts/truong_tran/npc_truong_tran_part_tay_trai.png",
+      "offset": [
+        772,
+        739
+      ],
+      "size": [
+        161,
+        538
+      ],
+      "pivot": [
+        885,
+        806
+      ],
+      "z": 2,
+      "note": "Tay trái (tay áo, chắp sau lưng): vai (pivot) -> ít cử động, vẫy khi cần."
+    },
+    {
+      "name": "tay_phai",
+      "file": "npc_parts/truong_tran/npc_truong_tran_part_tay_phai.png",
+      "offset": [
+        185,
+        739
+      ],
+      "size": [
+        185,
+        369
+      ],
+      "pivot": [
+        258,
+        806
+      ],
+      "z": 2,
+      "note": "Tay phải (tay áo, chắp sau lưng): vai (pivot) -> ít cử động, vẫy khi cần."
+    },
+    {
+      "name": "dau",
+      "file": "npc_parts/truong_tran/npc_truong_tran_part_dau.png",
+      "offset": [
+        416,
+        213
+      ],
+      "size": [
+        309,
+        560
+      ],
+      "pivot": [
+        571,
+        526
+      ],
+      "z": 3,
+      "note": "Đầu + râu dài: cổ (pivot) -> gật/lắc đầu, cúi chào trang trọng."
+    },
+    {
+      "name": "phu_kien_mu",
+      "file": "npc_parts/truong_tran/npc_truong_tran_part_phu_kien_mu.png",
+      "offset": [
+        469,
+        145
+      ],
+      "size": [
+        182,
+        68
+      ],
+      "pivot": [
+        571,
+        179
+      ],
+      "z": 4,
+      "note": "Mũ nhỏ đen: gắn đỉnh đầu, đi theo dau."
+    },
+    {
+      "name": "phu_kien_ho_lo",
+      "file": "npc_parts/truong_tran/npc_truong_tran_part_phu_kien_ho_lo.png",
+      "offset": [
+        243,
+        1108
+      ],
+      "size": [
+        239,
+        293
+      ],
+      "pivot": [
+        358,
+        1142
+      ],
+      "z": 5,
+      "note": "Bầu hồ lô đeo hông: gắn hông, lắc lư khi đi."
+    }
+  ]
+}

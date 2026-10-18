@@ -1,0 +1,49 @@
+{
+ "id": 1,
+ "nameKey": "map_hac_phong_lam",
+ "bg": "assets/map/map_hac_phong_lam.webp",
+ "fb": "#5f7d5a",
+ "monsters": [
+  "phong_lang",
+  "hu_thi",
+  "u_hon_lang",
+  "u_minh_cu_mang"
+ ],
+ "boss": "lang_vuong",
+ "npcs": [
+  "tho_san",
+  "an_sy"
+ ],
+ "quests": [],
+ "gates": [
+  {
+   "to": 0,
+   "x": 80,
+   "y": 80
+  },
+  {
+   "to": 2,
+   "x": 720,
+   "y": 540
+  }
+ ],
+ "stoneDrop": [
+  4,
+  9
+ ],
+ "unlock": {
+  "realm": 1,
+  "tier": 3
+ },
+ "assets": {
+  "bg": "assets/map/map_hac_phong_lam.webp",
+  "sprites": [
+   "assets/sprs/sprs_mon_phong_lang.png",
+   "assets/sprs/sprs_mon_lang_vuong.png",
+   "assets/sprs/sprs_player_kiem.png",
+   "assets/sprs/sprs_player_phap.png",
+   "assets/sprs/sprs_player_the.png"
+  ]
+ },
+ "dao": "chinh"
+}

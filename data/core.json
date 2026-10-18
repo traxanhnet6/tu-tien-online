@@ -1,0 +1,127 @@
+{
+ "elements": {
+  "kim": {
+   "fx": "gold",
+   "nameKey": "el_kim"
+  },
+  "moc": {
+   "fx": "wood",
+   "nameKey": "el_moc"
+  },
+  "thuy": {
+   "fx": "water",
+   "nameKey": "el_thuy"
+  },
+  "hoa": {
+   "fx": "fire",
+   "nameKey": "el_hoa"
+  },
+  "tho": {
+   "fx": "earth",
+   "nameKey": "el_tho"
+  },
+  "bang": {
+   "fx": "ice",
+   "nameKey": "el_bang"
+  },
+  "loi": {
+   "fx": "thunder",
+   "nameKey": "el_loi"
+  },
+  "phong": {
+   "fx": "wind",
+   "nameKey": "el_phong"
+  },
+  "hondon": {
+   "fx": "chaos",
+   "nameKey": "el_hondon"
+  }
+ },
+ "lingen_rates": [
+  [
+   "kim",
+   18
+  ],
+  [
+   "moc",
+   18
+  ],
+  [
+   "thuy",
+   18
+  ],
+  [
+   "hoa",
+   18
+  ],
+  [
+   "tho",
+   18
+  ],
+  [
+   "bang",
+   3
+  ],
+  [
+   "loi",
+   3
+  ],
+  [
+   "phong",
+   3
+  ],
+  [
+   "hondon",
+   1
+  ]
+ ],
+ "shop_stock": [
+  "pill_hx",
+  "pill_hl",
+  "pill_truccodan",
+  "wpn_phan",
+  "arm_phan",
+  "acc_phan"
+ ],
+ "gift_codes": {
+  "TUTIEN2D": {
+   "stones": 300,
+   "items": []
+  },
+  "MANHSHOPT1": {
+   "stones": 360,
+   "items": []
+  },
+  "VIP999": {
+   "stones": 999,
+   "items": [
+    {
+     "id": "pill_hx",
+     "qty": 3
+    }
+   ]
+  },
+  "BITHU999": {
+   "stones": 0,
+   "items": [
+    {
+     "id": "manual_random_t1",
+     "qty": 1
+    }
+   ]
+  }
+ },
+ "base_skills": {
+  "sword_qi": {
+   "nameKey": "sk_sword_qi",
+   "mp": 10,
+   "mult": 1.3,
+   "fx": "kiem_khi"
+  },
+  "elemental": {
+   "nameKey": "sk_elemental",
+   "mp": 15,
+   "mult": 1.6
+  }
+ }
+}

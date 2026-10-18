@@ -1,0 +1,154 @@
+{
+  "npc": "thuong_nhan",
+  "source": "npc_thuong_nhan.png",
+  "canvas": {
+    "width": 1120,
+    "height": 2240
+  },
+  "parts": [
+    {
+      "name": "chan_trai",
+      "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_chan_trai.png",
+      "offset": [
+        672,
+        1892
+      ],
+      "size": [
+        238,
+        217
+      ],
+      "pivot": [
+        829,
+        1904
+      ],
+      "z": 0,
+      "note": "Chân trái (ủng): hông (pivot) -> bước đi, đứng."
+    },
+    {
+      "name": "chan_phai",
+      "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_chan_phai.png",
+      "offset": [
+        202,
+        1892
+      ],
+      "size": [
+        269,
+        243
+      ],
+      "pivot": [
+        291,
+        1904
+      ],
+      "z": 0,
+      "note": "Chân phải (ủng): hông (pivot) -> bước đi, đứng."
+    },
+    {
+      "name": "than",
+      "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_than.png",
+      "offset": [
+        104,
+        133
+      ],
+      "size": [
+        992,
+        1948
+      ],
+      "pivot": [
+        560,
+        1344
+      ],
+      "z": 1,
+      "note": "Thân áo bào tím (catch-all): trung tâm -> nghiêng người cúi chào, thở (scale nhẹ)."
+    },
+    {
+      "name": "dau",
+      "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_dau.png",
+      "offset": [
+        347,
+        359
+      ],
+      "size": [
+        395,
+        370
+      ],
+      "pivot": [
+        560,
+        650
+      ],
+      "z": 3,
+      "note": "Đầu + râu: cổ (pivot) -> gật đầu, lắc đầu, cúi chào."
+    },
+    {
+      "name": "tay_trai",
+      "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_tay_trai.png",
+      "offset": [
+        761,
+        672
+      ],
+      "size": [
+        315,
+        673
+      ],
+      "pivot": [
+        874,
+        762
+      ],
+      "z": 4,
+      "note": "Tay trái cầm bàn tính: vai (pivot) -> vẫy tay, gảy bàn tính, cúi chào."
+    },
+    {
+      "name": "tay_phai",
+      "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_tay_phai.png",
+      "offset": [
+        39,
+        627
+      ],
+      "size": [
+        499,
+        599
+      ],
+      "pivot": [
+        246,
+        739
+      ],
+      "z": 4,
+      "note": "Tay phải vuốt râu: vai (pivot) -> vẫy tay chào, vuốt râu, chỉ trỏ."
+    },
+    {
+      "name": "phu_kien_mu",
+      "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_phu_kien_mu.png",
+      "offset": [
+        268,
+        168
+      ],
+      "size": [
+        465,
+        197
+      ],
+      "pivot": [
+        560,
+        246
+      ],
+      "z": 5,
+      "note": "Mũ đen: gắn đỉnh đầu, đi theo dau (gật/lắc đầu)."
+    },
+    {
+      "name": "phu_kien_ban_tinh",
+      "file": "npc_parts/thuong_nhan/npc_thuong_nhan_part_phu_kien_ban_tinh.png",
+      "offset": [
+        795,
+        683
+      ],
+      "size": [
+        213,
+        538
+      ],
+      "pivot": [
+        874,
+        1165
+      ],
+      "z": 6,
+      "note": "Bàn tính gỗ: gắn vào tay_trai (điểm cầm). Vẫy tay/gảy bàn tính: xoay quanh pivot tay_trai, bàn tính đi theo."
+    }
+  ]
+}

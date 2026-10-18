@@ -1,0 +1,84 @@
+{
+ "banners": {
+  "pham": {
+   "nameKey": "gacha_banner_pham",
+   "cost1": 50,
+   "cost10": 450,
+   "rates": [
+    [
+     0.85,
+     0
+    ],
+    [
+     0.14,
+     1
+    ],
+    [
+     0.01,
+     2
+    ]
+   ],
+   "guarantee10": 1,
+   "pity": null
+  },
+  "dia": {
+   "nameKey": "gacha_banner_dia",
+   "cost1": 200,
+   "cost10": 1800,
+   "rates": [
+    [
+     0.55,
+     0
+    ],
+    [
+     0.4,
+     1
+    ],
+    [
+     0.05,
+     2
+    ]
+   ],
+   "guarantee10": 1,
+   "pity": null
+  },
+  "thien": {
+   "nameKey": "gacha_banner_thien",
+   "cost1": 500,
+   "cost10": 4500,
+   "rates": [
+    [
+     0.3,
+     0
+    ],
+    [
+     0.55,
+     1
+    ],
+    [
+     0.15,
+     2
+    ]
+   ],
+   "guarantee10": 2,
+   "pity": {
+    "count": 30,
+    "tier": 2
+   }
+  }
+ },
+ "merge": [
+  {
+   "frags": 10,
+   "tier": 0
+  },
+  {
+   "frags": 25,
+   "tier": 1
+  },
+  {
+   "frags": 60,
+   "tier": 2
+  }
+ ]
+}

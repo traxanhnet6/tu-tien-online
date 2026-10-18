@@ -1,0 +1,124 @@
+{
+ "sects": {
+  "kiem_tong": {
+   "class": "kiem",
+   "nameKey": "sect_kiem_tong",
+   "descKey": "sect_kiem_tong_desc",
+   "manuals": [
+    {
+     "id": "manual_kiem_1",
+     "cost": 40
+    },
+    {
+     "id": "manual_kiem_2",
+     "cost": 100
+    },
+    {
+     "id": "manual_kiem_3",
+     "cost": 180
+    }
+   ]
+  },
+  "phap_tong": {
+   "class": "phap",
+   "nameKey": "sect_phap_tong",
+   "descKey": "sect_phap_tong_desc",
+   "manuals": [
+    {
+     "id": "manual_phap_1",
+     "cost": 40
+    },
+    {
+     "id": "manual_phap_2",
+     "cost": 100
+    },
+    {
+     "id": "manual_phap_3",
+     "cost": 180
+    }
+   ]
+  },
+  "the_tong": {
+   "class": "the",
+   "nameKey": "sect_the_tong",
+   "descKey": "sect_the_tong_desc",
+   "manuals": [
+    {
+     "id": "manual_the_1",
+     "cost": 40
+    },
+    {
+     "id": "manual_the_2",
+     "cost": 100
+    },
+    {
+     "id": "manual_the_3",
+     "cost": 180
+    }
+   ]
+  },
+  "cuu_u_ma_tong": {
+   "dao": "ma",
+   "nameKey": "sect_cuu_u_ma_tong",
+   "descKey": "sect_cuu_u_ma_tong_desc",
+   "manuals": [
+    {
+     "id": "manual_ma_1",
+     "cost": 120
+    },
+    {
+     "id": "manual_ma_2",
+     "cost": 150
+    },
+    {
+     "id": "manual_ma_3",
+     "cost": 250
+    },
+    {
+     "id": "manual_ma_4",
+     "cost": 350
+    },
+    {
+     "id": "manual_ps_ma_1",
+     "cost": 200
+    },
+    {
+     "id": "manual_ps_ma_2",
+     "cost": 300
+    }
+   ]
+  }
+ },
+ "daily": [
+  {
+   "id": "giet10",
+   "nameKey": "sect_dq_giet10",
+   "descKey": "sect_dq_giet10_desc",
+   "need": {
+    "type": "kill",
+    "count": 10
+   },
+   "contrib": 20
+  },
+  {
+   "id": "gietboss",
+   "nameKey": "sect_dq_gietboss",
+   "descKey": "sect_dq_gietboss_desc",
+   "need": {
+    "type": "killboss",
+    "count": 1
+   },
+   "contrib": 40
+  },
+  {
+   "id": "donate500",
+   "nameKey": "sect_dq_donate500",
+   "descKey": "sect_dq_donate500_desc",
+   "need": {
+    "type": "stones",
+    "count": 500
+   },
+   "contrib": 15
+  }
+ ]
+}

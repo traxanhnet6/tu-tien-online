@@ -1,0 +1,11 @@
+{
+ "menu_bg": "assets/ui/ui_menu_nen.webp",
+ "create_bg": "assets/ui/ui_taonhanvat_nen.webp",
+ "qr_donate": "assets/ui/ui_qr_donate.png",
+ "bgm": {
+  "menu": "assets/bgm/bgm_menu.mp3",
+  "map": "assets/bgm/bgm_map.mp3",
+  "boss": "assets/bgm/bgm_boss.mp3",
+  "breakthrough": "assets/bgm/bgm_breakthrough.mp3"
+ }
+}

@@ -1,0 +1,172 @@
+{
+  "npc": "truong_lao_linh_dien",
+  "source": "npc_truong_lao_linh_dien.png",
+  "canvas": {
+    "width": 1120,
+    "height": 2240
+  },
+  "parts": [
+    {
+      "name": "chan_trai",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_chan_trai.png",
+      "offset": [
+        589,
+        1568
+      ],
+      "size": [
+        254,
+        572
+      ],
+      "pivot": [
+        706,
+        1590
+      ],
+      "z": 0,
+      "note": "Chân trái: hông (pivot) -> bước đi."
+    },
+    {
+      "name": "chan_phai",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_chan_phai.png",
+      "offset": [
+        348,
+        1568
+      ],
+      "size": [
+        245,
+        556
+      ],
+      "pivot": [
+        482,
+        1590
+      ],
+      "z": 0,
+      "note": "Chân phải: hông (pivot) -> bước đi."
+    },
+    {
+      "name": "than",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_than.png",
+      "offset": [
+        259,
+        88
+      ],
+      "size": [
+        773,
+        2067
+      ],
+      "pivot": [
+        582,
+        1344
+      ],
+      "z": 1,
+      "note": "Thân áo nâu (catch-all): trung tâm -> cúi làm việc, đi lại."
+    },
+    {
+      "name": "phu_kien_cuoc",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_phu_kien_cuoc.png",
+      "offset": [
+        48,
+        392
+      ],
+      "size": [
+        993,
+        256
+      ],
+      "pivot": [
+        190,
+        571
+      ],
+      "z": 2,
+      "note": "Cuốc vác vai: điểm nắm (pivot) -> vung lên/hạ xuống khi làm việc; tay_phai nắm cán đi theo."
+    },
+    {
+      "name": "tay_trai",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_tay_trai.png",
+      "offset": [
+        717,
+        628
+      ],
+      "size": [
+        269,
+        806
+      ],
+      "pivot": [
+        829,
+        717
+      ],
+      "z": 2,
+      "note": "Tay trái buông: vai (pivot) -> đung đưa khi đi, vẫy tay."
+    },
+    {
+      "name": "dau",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_dau.png",
+      "offset": [
+        418,
+        348
+      ],
+      "size": [
+        321,
+        493
+      ],
+      "pivot": [
+        571,
+        538
+      ],
+      "z": 3,
+      "note": "Đầu + râu dài: cổ (pivot) -> gật/lắc đầu, cúi chào."
+    },
+    {
+      "name": "phu_kien_non",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_phu_kien_non.png",
+      "offset": [
+        302,
+        100
+      ],
+      "size": [
+        616,
+        248
+      ],
+      "pivot": [
+        582,
+        202
+      ],
+      "z": 4,
+      "note": "Nón lá: gắn đỉnh đầu, đi theo dau."
+    },
+    {
+      "name": "phu_kien_ho_lo",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_phu_kien_ho_lo.png",
+      "offset": [
+        195,
+        1064
+      ],
+      "size": [
+        287,
+        337
+      ],
+      "pivot": [
+        325,
+        1098
+      ],
+      "z": 5,
+      "note": "Bầu hồ lô đeo hông: gắn hông, lắc lư khi đi."
+    },
+    {
+      "name": "tay_phai",
+      "file": "npc_parts/truong_lao_linh_dien/npc_truong_lao_linh_dien_part_tay_phai.png",
+      "offset": [
+        82,
+        499
+      ],
+      "size": [
+        299,
+        510
+      ],
+      "pivot": [
+        314,
+        717
+      ],
+      "z": 6,
+      "note": "Tay phải nắm cán cuốc: vai (pivot) -> vung cuốc làm việc, vẫy tay."
+    }
+  ]
+}

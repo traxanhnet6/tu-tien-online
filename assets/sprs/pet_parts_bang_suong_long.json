@@ -1,0 +1,101 @@
+{
+  "pet": "bang_suong_long",
+  "canvas": {
+    "width": 1600,
+    "height": 1600
+  },
+  "note": "Rong bang: DUNG _down.png (pose serpentine) thay webp (webp la chan dung, khong thay than/duoi). Canh + chan sau KHONG thay trong art. Bong dat da loai.",
+  "parts": {
+    "duoi": {
+      "file": "pet_bang_suong_long_part_duoi.png",
+      "pivot": [
+        807,
+        1363
+      ],
+      "z": 0,
+      "pixels": 15635,
+      "variants": {
+        "combat": "pet_bang_suong_long_part_duoi_combat.png",
+        "tinh_anh": "pet_bang_suong_long_part_duoi_tinh_anh.png"
+      }
+    },
+    "than_2": {
+      "file": "pet_bang_suong_long_part_than_2.png",
+      "pivot": [
+        799,
+        1285
+      ],
+      "z": 1,
+      "pixels": 85334,
+      "variants": {
+        "combat": "pet_bang_suong_long_part_than_2_combat.png",
+        "tinh_anh": "pet_bang_suong_long_part_than_2_tinh_anh.png"
+      }
+    },
+    "than_1": {
+      "file": "pet_bang_suong_long_part_than_1.png",
+      "pivot": [
+        803,
+        1218
+      ],
+      "z": 2,
+      "pixels": 94794,
+      "variants": {
+        "combat": "pet_bang_suong_long_part_than_1_combat.png",
+        "tinh_anh": "pet_bang_suong_long_part_than_1_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_bang_suong_long_part_chan_trai_truoc.png",
+      "pivot": [
+        601,
+        953
+      ],
+      "z": 3,
+      "pixels": 37509,
+      "variants": {
+        "combat": "pet_bang_suong_long_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_bang_suong_long_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_bang_suong_long_part_chan_phai_truoc.png",
+      "pivot": [
+        1015,
+        953
+      ],
+      "z": 4,
+      "pixels": 51205,
+      "variants": {
+        "combat": "pet_bang_suong_long_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_bang_suong_long_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "ham_duoi": {
+      "file": "pet_bang_suong_long_part_ham_duoi.png",
+      "pivot": [
+        817,
+        951
+      ],
+      "z": 5,
+      "pixels": 9640,
+      "variants": {
+        "combat": "pet_bang_suong_long_part_ham_duoi_combat.png",
+        "tinh_anh": "pet_bang_suong_long_part_ham_duoi_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_bang_suong_long_part_dau.png",
+      "pivot": [
+        871,
+        910
+      ],
+      "z": 6,
+      "pixels": 1024502,
+      "variants": {
+        "combat": "pet_bang_suong_long_part_dau_combat.png",
+        "tinh_anh": "pet_bang_suong_long_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

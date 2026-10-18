@@ -1,0 +1,75 @@
+{
+  "pet": "huyet_duc_buc",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Doi mau, view truoc, canh xoe. chan = 1 part gom 2 chan. duoi nho giua bung duoi.",
+  "parts": {
+    "canh_trai": {
+      "file": "pet_huyet_duc_buc_part_canh_trai.png",
+      "pivot": [
+        313,
+        575
+      ],
+      "z": 1,
+      "pixels": 170265,
+      "variants": {
+        "combat": "pet_huyet_duc_buc_part_canh_trai_combat.png",
+        "tinh_anh": "pet_huyet_duc_buc_part_canh_trai_tinh_anh.png"
+      }
+    },
+    "canh_phai": {
+      "file": "pet_huyet_duc_buc_part_canh_phai.png",
+      "pivot": [
+        716,
+        564
+      ],
+      "z": 2,
+      "pixels": 171944,
+      "variants": {
+        "combat": "pet_huyet_duc_buc_part_canh_phai_combat.png",
+        "tinh_anh": "pet_huyet_duc_buc_part_canh_phai_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_huyet_duc_buc_part_than.png",
+      "pivot": [
+        515,
+        600
+      ],
+      "z": 3,
+      "pixels": 48509,
+      "variants": {
+        "combat": "pet_huyet_duc_buc_part_than_combat.png",
+        "tinh_anh": "pet_huyet_duc_buc_part_than_tinh_anh.png"
+      }
+    },
+    "chan": {
+      "file": "pet_huyet_duc_buc_part_chan.png",
+      "pivot": [
+        515,
+        692
+      ],
+      "z": 4,
+      "pixels": 118452,
+      "variants": {
+        "combat": "pet_huyet_duc_buc_part_chan_combat.png",
+        "tinh_anh": "pet_huyet_duc_buc_part_chan_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_huyet_duc_buc_part_dau.png",
+      "pivot": [
+        517,
+        493
+      ],
+      "z": 5,
+      "pixels": 89428,
+      "variants": {
+        "combat": "pet_huyet_duc_buc_part_dau_combat.png",
+        "tinh_anh": "pet_huyet_duc_buc_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}
