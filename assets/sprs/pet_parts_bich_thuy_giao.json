@@ -1,0 +1,88 @@
+{
+  "pet": "bich_thuy_giao",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "giao nuoc cuon: than_1 khoi than tren, than_2 khoi than duoi, duoi la dau duoi cuon + tia nuoc gan",
+  "parts": {
+    "duoi": {
+      "file": "pet_bich_thuy_giao_part_duoi.png",
+      "pivot": [
+        519,
+        969
+      ],
+      "z": 0,
+      "pixels": 75791,
+      "variants": {
+        "combat": "pet_bich_thuy_giao_part_duoi_combat.png",
+        "tinh_anh": "pet_bich_thuy_giao_part_duoi_tinh_anh.png"
+      }
+    },
+    "than_2": {
+      "file": "pet_bich_thuy_giao_part_than_2.png",
+      "pivot": [
+        515,
+        804
+      ],
+      "z": 1,
+      "pixels": 66533,
+      "variants": {
+        "combat": "pet_bich_thuy_giao_part_than_2_combat.png",
+        "tinh_anh": "pet_bich_thuy_giao_part_than_2_tinh_anh.png"
+      }
+    },
+    "than_1": {
+      "file": "pet_bich_thuy_giao_part_than_1.png",
+      "pivot": [
+        514,
+        662
+      ],
+      "z": 2,
+      "pixels": 131062,
+      "variants": {
+        "combat": "pet_bich_thuy_giao_part_than_1_combat.png",
+        "tinh_anh": "pet_bich_thuy_giao_part_than_1_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_bich_thuy_giao_part_than.png",
+      "pivot": [
+        546,
+        540
+      ],
+      "z": 3,
+      "pixels": 157082,
+      "variants": {
+        "combat": "pet_bich_thuy_giao_part_than_combat.png",
+        "tinh_anh": "pet_bich_thuy_giao_part_than_tinh_anh.png"
+      }
+    },
+    "ham_duoi": {
+      "file": "pet_bich_thuy_giao_part_ham_duoi.png",
+      "pivot": [
+        405,
+        507
+      ],
+      "z": 4,
+      "pixels": 45496,
+      "variants": {
+        "combat": "pet_bich_thuy_giao_part_ham_duoi_combat.png",
+        "tinh_anh": "pet_bich_thuy_giao_part_ham_duoi_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_bich_thuy_giao_part_dau.png",
+      "pivot": [
+        551,
+        477
+      ],
+      "z": 5,
+      "pixels": 272026,
+      "variants": {
+        "combat": "pet_bich_thuy_giao_part_dau_combat.png",
+        "tinh_anh": "pet_bich_thuy_giao_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

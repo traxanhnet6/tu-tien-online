@@ -1,0 +1,196 @@
+{
+ "prefix": "pet_ngu_trao_kim_long",
+ "source": "pet_ngu_trao_kim_long.webp",
+ "canvas": {
+  "w": 1024,
+  "h": 1024
+ },
+ "note": "Pet Ngũ Trảo Kim Long Thiên phẩm - rồng vàng cuộn, mây vàng gộp vào duoi",
+ "pivot_convention": "pivot=[x,y] local trong PNG part: dau=co, ham_duoi=khop ham, chan/tay=vai/hong, canh=goc canh, duoi=goc duoi; bien the mau dung chung pivot",
+ "parts": {
+  "duoi": {
+   "file": "pet_ngu_trao_kim_long_part_duoi.png",
+   "bbox": [
+    51,
+    254,
+    927,
+    742
+   ],
+   "offset": [
+    51,
+    254
+   ],
+   "pivot": [
+    389,
+    386
+   ],
+   "z": 2,
+   "variants": {
+    "base": "pet_ngu_trao_kim_long_part_duoi.png",
+    "combat": "pet_ngu_trao_kim_long_part_duoi_combat.png",
+    "tinh_anh": "pet_ngu_trao_kim_long_part_duoi_tinh_anh.png"
+   }
+  },
+  "chan_truoc_trai": {
+   "file": "pet_ngu_trao_kim_long_part_chan_truoc_trai.png",
+   "bbox": [
+    101,
+    250,
+    345,
+    356
+   ],
+   "offset": [
+    101,
+    250
+   ],
+   "pivot": [
+    229,
+    180
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_ngu_trao_kim_long_part_chan_truoc_trai.png",
+    "combat": "pet_ngu_trao_kim_long_part_chan_truoc_trai_combat.png",
+    "tinh_anh": "pet_ngu_trao_kim_long_part_chan_truoc_trai_tinh_anh.png"
+   }
+  },
+  "chan_truoc_phai": {
+   "file": "pet_ngu_trao_kim_long_part_chan_truoc_phai.png",
+   "bbox": [
+    588,
+    318,
+    228,
+    314
+   ],
+   "offset": [
+    588,
+    318
+   ],
+   "pivot": [
+    82,
+    152
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_ngu_trao_kim_long_part_chan_truoc_phai.png",
+    "combat": "pet_ngu_trao_kim_long_part_chan_truoc_phai_combat.png",
+    "tinh_anh": "pet_ngu_trao_kim_long_part_chan_truoc_phai_tinh_anh.png"
+   }
+  },
+  "chan_sau_trai": {
+   "file": "pet_ngu_trao_kim_long_part_chan_sau_trai.png",
+   "bbox": [
+    226,
+    576,
+    266,
+    220
+   ],
+   "offset": [
+    226,
+    576
+   ],
+   "pivot": [
+    134,
+    64
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_ngu_trao_kim_long_part_chan_sau_trai.png",
+    "combat": "pet_ngu_trao_kim_long_part_chan_sau_trai_combat.png",
+    "tinh_anh": "pet_ngu_trao_kim_long_part_chan_sau_trai_tinh_anh.png"
+   }
+  },
+  "chan_sau_phai": {
+   "file": "pet_ngu_trao_kim_long_part_chan_sau_phai.png",
+   "bbox": [
+    536,
+    622,
+    300,
+    370
+   ],
+   "offset": [
+    536,
+    622
+   ],
+   "pivot": [
+    124,
+    38
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_ngu_trao_kim_long_part_chan_sau_phai.png",
+    "combat": "pet_ngu_trao_kim_long_part_chan_sau_phai_combat.png",
+    "tinh_anh": "pet_ngu_trao_kim_long_part_chan_sau_phai_tinh_anh.png"
+   }
+  },
+  "than": {
+   "file": "pet_ngu_trao_kim_long_part_than.png",
+   "bbox": [
+    366,
+    432,
+    262,
+    280
+   ],
+   "offset": [
+    366,
+    432
+   ],
+   "pivot": [
+    146,
+    128
+   ],
+   "z": 4,
+   "variants": {
+    "base": "pet_ngu_trao_kim_long_part_than.png",
+    "combat": "pet_ngu_trao_kim_long_part_than_combat.png",
+    "tinh_anh": "pet_ngu_trao_kim_long_part_than_tinh_anh.png"
+   }
+  },
+  "dau": {
+   "file": "pet_ngu_trao_kim_long_part_dau.png",
+   "bbox": [
+    268,
+    122,
+    564,
+    310
+   ],
+   "offset": [
+    268,
+    122
+   ],
+   "pivot": [
+    244,
+    298
+   ],
+   "z": 5,
+   "variants": {
+    "base": "pet_ngu_trao_kim_long_part_dau.png",
+    "combat": "pet_ngu_trao_kim_long_part_dau_combat.png",
+    "tinh_anh": "pet_ngu_trao_kim_long_part_dau_tinh_anh.png"
+   }
+  },
+  "sung": {
+   "file": "pet_ngu_trao_kim_long_part_sung.png",
+   "bbox": [
+    120,
+    21,
+    817,
+    251
+   ],
+   "offset": [
+    120,
+    21
+   ],
+   "pivot": [
+    392,
+    169
+   ],
+   "z": 6,
+   "variants": {
+    "base": "pet_ngu_trao_kim_long_part_sung.png",
+    "combat": "pet_ngu_trao_kim_long_part_sung_combat.png",
+    "tinh_anh": "pet_ngu_trao_kim_long_part_sung_tinh_anh.png"
+   }
+  }
+ }
+}

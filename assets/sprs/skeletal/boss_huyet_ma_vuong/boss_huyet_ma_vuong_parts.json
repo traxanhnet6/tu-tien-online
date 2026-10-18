@@ -1,0 +1,173 @@
+{
+ "prefix": "boss_huyet_ma_vuong",
+ "source": "mon_huyet_ma_vuong.png",
+ "canvas": {
+  "w": 1120,
+  "h": 2240
+ },
+ "note": "Boss Huyết Ma Vương - quỷ giáp đỏ, sừng cong (sừng gộp vào dau), hào quang lửa + áo choàng gộp vào than",
+ "pivot_convention": "pivot=[x,y] local trong PNG part: dau=co, ham_duoi=khop ham, chan/tay=vai/hong, canh=goc canh, duoi=goc duoi; bien the mau dung chung pivot",
+ "parts": {
+  "tay_trai": {
+   "file": "boss_huyet_ma_vuong_part_tay_trai.png",
+   "bbox": [
+    9,
+    685,
+    376,
+    702
+   ],
+   "offset": [
+    9,
+    685
+   ],
+   "pivot": [
+    321,
+    355
+   ],
+   "z": 3,
+   "variants": {
+    "base": "boss_huyet_ma_vuong_part_tay_trai.png",
+    "combat": "boss_huyet_ma_vuong_part_tay_trai_combat.png",
+    "tinh_anh": "boss_huyet_ma_vuong_part_tay_trai_tinh_anh.png"
+   }
+  },
+  "tay_phai": {
+   "file": "boss_huyet_ma_vuong_part_tay_phai.png",
+   "bbox": [
+    648,
+    618,
+    469,
+    718
+   ],
+   "offset": [
+    648,
+    618
+   ],
+   "pivot": [
+    142,
+    422
+   ],
+   "z": 3,
+   "variants": {
+    "base": "boss_huyet_ma_vuong_part_tay_phai.png",
+    "combat": "boss_huyet_ma_vuong_part_tay_phai_combat.png",
+    "tinh_anh": "boss_huyet_ma_vuong_part_tay_phai_tinh_anh.png"
+   }
+  },
+  "chan_trai": {
+   "file": "boss_huyet_ma_vuong_part_chan_trai.png",
+   "bbox": [
+    93,
+    1486,
+    448,
+    323
+   ],
+   "offset": [
+    93,
+    1486
+   ],
+   "pivot": [
+    327,
+    -46
+   ],
+   "z": 3,
+   "variants": {
+    "base": "boss_huyet_ma_vuong_part_chan_trai.png",
+    "combat": "boss_huyet_ma_vuong_part_chan_trai_combat.png",
+    "tinh_anh": "boss_huyet_ma_vuong_part_chan_trai_tinh_anh.png"
+   }
+  },
+  "chan_phai": {
+   "file": "boss_huyet_ma_vuong_part_chan_phai.png",
+   "bbox": [
+    136,
+    1423,
+    880,
+    465
+   ],
+   "offset": [
+    136,
+    1423
+   ],
+   "pivot": [
+    564,
+    17
+   ],
+   "z": 3,
+   "variants": {
+    "base": "boss_huyet_ma_vuong_part_chan_phai.png",
+    "combat": "boss_huyet_ma_vuong_part_chan_phai_combat.png",
+    "tinh_anh": "boss_huyet_ma_vuong_part_chan_phai_tinh_anh.png"
+   }
+  },
+  "than": {
+   "file": "boss_huyet_ma_vuong_part_than.png",
+   "bbox": [
+    58,
+    1053,
+    1033,
+    580
+   ],
+   "offset": [
+    58,
+    1053
+   ],
+   "pivot": [
+    502,
+    147
+   ],
+   "z": 4,
+   "variants": {
+    "base": "boss_huyet_ma_vuong_part_than.png",
+    "combat": "boss_huyet_ma_vuong_part_than_combat.png",
+    "tinh_anh": "boss_huyet_ma_vuong_part_than_tinh_anh.png"
+   }
+  },
+  "dau": {
+   "file": "boss_huyet_ma_vuong_part_dau.png",
+   "bbox": [
+    148,
+    376,
+    864,
+    478
+   ],
+   "offset": [
+    148,
+    376
+   ],
+   "pivot": [
+    412,
+    629
+   ],
+   "z": 5,
+   "variants": {
+    "base": "boss_huyet_ma_vuong_part_dau.png",
+    "combat": "boss_huyet_ma_vuong_part_dau_combat.png",
+    "tinh_anh": "boss_huyet_ma_vuong_part_dau_tinh_anh.png"
+   }
+  },
+  "ham_duoi": {
+   "file": "boss_huyet_ma_vuong_part_ham_duoi.png",
+   "bbox": [
+    270,
+    682,
+    477,
+    379
+   ],
+   "offset": [
+    270,
+    682
+   ],
+   "pivot": [
+    290,
+    253
+   ],
+   "z": 6,
+   "variants": {
+    "base": "boss_huyet_ma_vuong_part_ham_duoi.png",
+    "combat": "boss_huyet_ma_vuong_part_ham_duoi_combat.png",
+    "tinh_anh": "boss_huyet_ma_vuong_part_ham_duoi_tinh_anh.png"
+   }
+  }
+ }
+}

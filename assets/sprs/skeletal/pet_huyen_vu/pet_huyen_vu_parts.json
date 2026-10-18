@@ -1,0 +1,173 @@
+{
+ "prefix": "pet_huyen_vu",
+ "source": "pet_huyen_vu.webp",
+ "canvas": {
+  "w": 1024,
+  "h": 1024
+ },
+ "note": "Pet Huyền Vũ Thiên phẩm - rùa mai núi, đuôi rắn quấn quanh mai, đá/orb trôi gộp vào part gần nhất",
+ "pivot_convention": "pivot=[x,y] local trong PNG part: dau=co, ham_duoi=khop ham, chan/tay=vai/hong, canh=goc canh, duoi=goc duoi; bien the mau dung chung pivot",
+ "parts": {
+  "duoi_ran": {
+   "file": "pet_huyen_vu_part_duoi_ran.png",
+   "bbox": [
+    58,
+    55,
+    906,
+    641
+   ],
+   "offset": [
+    58,
+    55
+   ],
+   "pivot": [
+    642,
+    245
+   ],
+   "z": 2,
+   "variants": {
+    "base": "pet_huyen_vu_part_duoi_ran.png",
+    "combat": "pet_huyen_vu_part_duoi_ran_combat.png",
+    "tinh_anh": "pet_huyen_vu_part_duoi_ran_tinh_anh.png"
+   }
+  },
+  "chan_truoc_trai": {
+   "file": "pet_huyen_vu_part_chan_truoc_trai.png",
+   "bbox": [
+    270,
+    676,
+    176,
+    233
+   ],
+   "offset": [
+    270,
+    676
+   ],
+   "pivot": [
+    60,
+    54
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_huyen_vu_part_chan_truoc_trai.png",
+    "combat": "pet_huyen_vu_part_chan_truoc_trai_combat.png",
+    "tinh_anh": "pet_huyen_vu_part_chan_truoc_trai_tinh_anh.png"
+   }
+  },
+  "chan_truoc_phai": {
+   "file": "pet_huyen_vu_part_chan_truoc_phai.png",
+   "bbox": [
+    582,
+    586,
+    180,
+    323
+   ],
+   "offset": [
+    582,
+    586
+   ],
+   "pivot": [
+    118,
+    144
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_huyen_vu_part_chan_truoc_phai.png",
+    "combat": "pet_huyen_vu_part_chan_truoc_phai_combat.png",
+    "tinh_anh": "pet_huyen_vu_part_chan_truoc_phai_tinh_anh.png"
+   }
+  },
+  "chan_sau_trai": {
+   "file": "pet_huyen_vu_part_chan_sau_trai.png",
+   "bbox": [
+    141,
+    686,
+    149,
+    216
+   ],
+   "offset": [
+    141,
+    686
+   ],
+   "pivot": [
+    159,
+    14
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_huyen_vu_part_chan_sau_trai.png",
+    "combat": "pet_huyen_vu_part_chan_sau_trai_combat.png",
+    "tinh_anh": "pet_huyen_vu_part_chan_sau_trai_tinh_anh.png"
+   }
+  },
+  "chan_sau_phai": {
+   "file": "pet_huyen_vu_part_chan_sau_phai.png",
+   "bbox": [
+    742,
+    596,
+    211,
+    305
+   ],
+   "offset": [
+    742,
+    596
+   ],
+   "pivot": [
+    -2,
+    104
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_huyen_vu_part_chan_sau_phai.png",
+    "combat": "pet_huyen_vu_part_chan_sau_phai_combat.png",
+    "tinh_anh": "pet_huyen_vu_part_chan_sau_phai_tinh_anh.png"
+   }
+  },
+  "mai": {
+   "file": "pet_huyen_vu_part_mai.png",
+   "bbox": [
+    322,
+    272,
+    356,
+    328
+   ],
+   "offset": [
+    322,
+    272
+   ],
+   "pivot": [
+    190,
+    288
+   ],
+   "z": 4,
+   "variants": {
+    "base": "pet_huyen_vu_part_mai.png",
+    "combat": "pet_huyen_vu_part_mai_combat.png",
+    "tinh_anh": "pet_huyen_vu_part_mai_tinh_anh.png"
+   }
+  },
+  "dau": {
+   "file": "pet_huyen_vu_part_dau.png",
+   "bbox": [
+    366,
+    600,
+    296,
+    262
+   ],
+   "offset": [
+    366,
+    600
+   ],
+   "pivot": [
+    146,
+    40
+   ],
+   "z": 5,
+   "variants": {
+    "base": "pet_huyen_vu_part_dau.png",
+    "combat": "pet_huyen_vu_part_dau_combat.png",
+    "tinh_anh": "pet_huyen_vu_part_dau_tinh_anh.png"
+   }
+  }
+ }
+}

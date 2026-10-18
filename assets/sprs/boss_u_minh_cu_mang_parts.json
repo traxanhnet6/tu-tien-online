@@ -1,0 +1,78 @@
+{
+  "target": "boss_u_minh_cu_mang",
+  "canvas": {
+    "width": 1600,
+    "height": 1600
+  },
+  "source": "boss_u_minh_cu_mang.png",
+  "note": "U Minh Cu Mang coiled snake. ham_duoi reused from mouth-task cut (boss_part_u_minh_cu_mang_ham_duoi.png, RGB-identical), claimed BEFORE dau so the jaw is not eaten by the head rect. dau includes the red tongue. duoi = tapering tail tip (bottom-right coil). than_3 = outer coils + smoke wisps (fallback).",
+  "variants_note": "_combat: red overlay 25% + saturation x1.3; _tinh_anh: gold overlay 25% + brightness x1.1. All variants share the same pivot and z-order.",
+  "parts": {
+    "than_3": {
+      "file": "boss_u_minh_cu_mang_part_than_3.png",
+      "file_combat": "boss_u_minh_cu_mang_part_than_3_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_than_3_tinh_anh.png",
+      "pivot": [
+        800,
+        1100
+      ],
+      "z": 0,
+      "pixels": 597965
+    },
+    "duoi": {
+      "file": "boss_u_minh_cu_mang_part_duoi.png",
+      "file_combat": "boss_u_minh_cu_mang_part_duoi_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_duoi_tinh_anh.png",
+      "pivot": [
+        1300,
+        1420
+      ],
+      "z": 1,
+      "pixels": 6104
+    },
+    "than_2": {
+      "file": "boss_u_minh_cu_mang_part_than_2.png",
+      "file_combat": "boss_u_minh_cu_mang_part_than_2_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_than_2_tinh_anh.png",
+      "pivot": [
+        800,
+        850
+      ],
+      "z": 2,
+      "pixels": 488586
+    },
+    "than_1": {
+      "file": "boss_u_minh_cu_mang_part_than_1.png",
+      "file_combat": "boss_u_minh_cu_mang_part_than_1_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_than_1_tinh_anh.png",
+      "pivot": [
+        800,
+        480
+      ],
+      "z": 3,
+      "pixels": 194509
+    },
+    "dau": {
+      "file": "boss_u_minh_cu_mang_part_dau.png",
+      "file_combat": "boss_u_minh_cu_mang_part_dau_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_dau_tinh_anh.png",
+      "pivot": [
+        800,
+        640
+      ],
+      "z": 4,
+      "pixels": 369702
+    },
+    "ham_duoi": {
+      "file": "boss_u_minh_cu_mang_part_ham_duoi.png",
+      "file_combat": "boss_u_minh_cu_mang_part_ham_duoi_combat.png",
+      "file_tinh_anh": "boss_u_minh_cu_mang_part_ham_duoi_tinh_anh.png",
+      "pivot": [
+        820,
+        660
+      ],
+      "z": 5,
+      "pixels": 18136
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+ "prefix": "pet_bach_ho",
+ "source": "pet_bach_ho.webp",
+ "canvas": {
+  "w": 1024,
+  "h": 1024
+ },
+ "note": "Pet Bạch Hổ Thiên phẩm - hổ trắng ngồi chính diện, vệt gió gộp vào part gần nhất",
+ "pivot_convention": "pivot=[x,y] local trong PNG part: dau=co, ham_duoi=khop ham, chan/tay=vai/hong, canh=goc canh, duoi=goc duoi; bien the mau dung chung pivot",
+ "parts": {
+  "duoi": {
+   "file": "pet_bach_ho_part_duoi.png",
+   "bbox": [
+    624,
+    159,
+    353,
+    525
+   ],
+   "offset": [
+    624,
+    159
+   ],
+   "pivot": [
+    96,
+    461
+   ],
+   "z": 2,
+   "variants": {
+    "base": "pet_bach_ho_part_duoi.png",
+    "combat": "pet_bach_ho_part_duoi_combat.png",
+    "tinh_anh": "pet_bach_ho_part_duoi_tinh_anh.png"
+   }
+  },
+  "chan_truoc_trai": {
+   "file": "pet_bach_ho_part_chan_truoc_trai.png",
+   "bbox": [
+    286,
+    650,
+    230,
+    324
+   ],
+   "offset": [
+    286,
+    650
+   ],
+   "pivot": [
+    114,
+    50
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_bach_ho_part_chan_truoc_trai.png",
+    "combat": "pet_bach_ho_part_chan_truoc_trai_combat.png",
+    "tinh_anh": "pet_bach_ho_part_chan_truoc_trai_tinh_anh.png"
+   }
+  },
+  "chan_truoc_phai": {
+   "file": "pet_bach_ho_part_chan_truoc_phai.png",
+   "bbox": [
+    516,
+    648,
+    230,
+    327
+   ],
+   "offset": [
+    516,
+    648
+   ],
+   "pivot": [
+    114,
+    52
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_bach_ho_part_chan_truoc_phai.png",
+    "combat": "pet_bach_ho_part_chan_truoc_phai_combat.png",
+    "tinh_anh": "pet_bach_ho_part_chan_truoc_phai_tinh_anh.png"
+   }
+  },
+  "chan_sau_trai": {
+   "file": "pet_bach_ho_part_chan_sau_trai.png",
+   "bbox": [
+    48,
+    426,
+    338,
+    537
+   ],
+   "offset": [
+    48,
+    426
+   ],
+   "pivot": [
+    282,
+    234
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_bach_ho_part_chan_sau_trai.png",
+    "combat": "pet_bach_ho_part_chan_sau_trai_combat.png",
+    "tinh_anh": "pet_bach_ho_part_chan_sau_trai_tinh_anh.png"
+   }
+  },
+  "chan_sau_phai": {
+   "file": "pet_bach_ho_part_chan_sau_phai.png",
+   "bbox": [
+    646,
+    602,
+    331,
+    365
+   ],
+   "offset": [
+    646,
+    602
+   ],
+   "pivot": [
+    54,
+    58
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_bach_ho_part_chan_sau_phai.png",
+    "combat": "pet_bach_ho_part_chan_sau_phai_combat.png",
+    "tinh_anh": "pet_bach_ho_part_chan_sau_phai_tinh_anh.png"
+   }
+  },
+  "than": {
+   "file": "pet_bach_ho_part_than.png",
+   "bbox": [
+    356,
+    462,
+    316,
+    310
+   ],
+   "offset": [
+    356,
+    462
+   ],
+   "pivot": [
+    156,
+    158
+   ],
+   "z": 4,
+   "variants": {
+    "base": "pet_bach_ho_part_than.png",
+    "combat": "pet_bach_ho_part_than_combat.png",
+    "tinh_anh": "pet_bach_ho_part_than_tinh_anh.png"
+   }
+  },
+  "dau": {
+   "file": "pet_bach_ho_part_dau.png",
+   "bbox": [
+    100,
+    41,
+    768,
+    443
+   ],
+   "offset": [
+    100,
+    41
+   ],
+   "pivot": [
+    412,
+    429
+   ],
+   "z": 5,
+   "variants": {
+    "base": "pet_bach_ho_part_dau.png",
+    "combat": "pet_bach_ho_part_dau_combat.png",
+    "tinh_anh": "pet_bach_ho_part_dau_tinh_anh.png"
+   }
+  }
+ }
+}

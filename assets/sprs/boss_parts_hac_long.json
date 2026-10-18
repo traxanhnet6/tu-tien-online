@@ -1,0 +1,40 @@
+{
+  "monster": "hac_long",
+  "canvas": {
+    "width": 1600,
+    "height": 1600
+  },
+  "source": "hac_long_combat.png",
+  "note": "Black dragon, mouth already wide open breathing fire down. Jaw part includes fire column below mouth line; upper teeth stay with dau.",
+  "jaw_animation": "For frontal heads, open the jaw by translating ham_duoi DOWN from its pivot (in-plane rotation about the hinge midpoint skews a frontal jaw; verified visually). Small rotation (<10deg) may be mixed in for snap.",
+  "parts": {
+    "dau": {
+      "file": "boss_part_hac_long_dau.png",
+      "pivot": [
+        815,
+        550
+      ],
+      "z": 0,
+      "pixels": 202636
+    },
+    "mieng_trong": {
+      "file": "boss_part_hac_long_mieng_trong.png",
+      "pivot": [
+        815,
+        770
+      ],
+      "z": 1,
+      "pixels": 26946
+    },
+    "ham_duoi": {
+      "file": "boss_part_hac_long_ham_duoi.png",
+      "pivot": [
+        815,
+        700
+      ],
+      "z": 2,
+      "pixels": 77467
+    }
+  },
+  "breath_effect": "assets/eff/eff_hac_long_phun_lua.png"
+}

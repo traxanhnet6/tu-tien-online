@@ -1,0 +1,162 @@
+{
+ "npc": "npc_su_gia_ma",
+ "canvas": {
+  "w": 1120,
+  "h": 2240
+ },
+ "convention": "tay_trai/tay_phai, chan_trai/chan_phai theo phia nhan vat (nhan vat nhin ra man hinh). z: so thap = ve sau (sau), so cao = ve truoc. pivot: [x,y] theo toa do canvas goc.",
+ "parts": [
+  {
+   "name": "phu_kien_hieu_ung",
+   "file": "npc_su_gia_ma_part_phu_kien_hieu_ung.png",
+   "rects": [
+    [
+     40,
+     120,
+     1080,
+     2090
+    ]
+   ],
+   "z": -1,
+   "pivot": [
+    560,
+    1100
+   ],
+   "pixels": 166276,
+   "note": "Khoi tim + bong do duoi chan (hieu ung nen). z thap nhat. Animation: khoi bay luon lap (uv scroll/alpha pulse); bong co dinh theo chan."
+  },
+  {
+   "name": "chan_trai",
+   "file": "npc_su_gia_ma_part_chan_trai.png",
+   "rects": [
+    [
+     590,
+     1620,
+     870,
+     2010
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    730,
+    1670
+   ],
+   "pixels": 42234,
+   "note": "Chan trai NV (phai anh), giay den. Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "chan_phai",
+   "file": "npc_su_gia_ma_part_chan_phai.png",
+   "rects": [
+    [
+     270,
+     1620,
+     550,
+     2010
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    410,
+    1670
+   ],
+   "pixels": 43138,
+   "note": "Chan phai NV (trai anh), giay den. Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "than",
+   "file": "npc_su_gia_ma_part_than.png",
+   "rects": [
+    [
+     170,
+     570,
+     950,
+     1740
+    ]
+   ],
+   "z": 1,
+   "pivot": [
+    560,
+    700
+   ],
+   "pixels": 344403,
+   "note": "Ao den vien do. Pivot giua nguc. Cui chao: xoay nhe."
+  },
+  {
+   "name": "tay_trai",
+   "file": "npc_su_gia_ma_part_tay_trai.png",
+   "rects": [
+    [
+     720,
+     720,
+     980,
+     1280
+    ]
+   ],
+   "z": 2,
+   "pivot": [
+    850,
+    750
+   ],
+   "pixels": 87673,
+   "note": "Tay trai NV (phai anh) buong. Pivot vai. Vay tay: xoay quanh vai."
+  },
+  {
+   "name": "tay_phai",
+   "file": "npc_su_gia_ma_part_tay_phai.png",
+   "rects": [
+    [
+     170,
+     670,
+     510,
+     1140
+    ]
+   ],
+   "z": 2,
+   "pivot": [
+    330,
+    720
+   ],
+   "pixels": 90570,
+   "note": "Tay phai NV (trai anh) chong hong. Pivot vai."
+  },
+  {
+   "name": "dau",
+   "file": "npc_su_gia_ma_part_dau.png",
+   "rects": [
+    [
+     380,
+     270,
+     750,
+     720
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    565,
+    600
+   ],
+   "pixels": 65757,
+   "note": "Mu trum + mat na quy. Pivot co. Gat/lac dau: xoay quanh co."
+  },
+  {
+   "name": "phu_kien_sung",
+   "file": "npc_su_gia_ma_part_phu_kien_sung.png",
+   "rects": [
+    [
+     400,
+     110,
+     730,
+     430
+    ]
+   ],
+   "z": 4,
+   "pivot": [
+    565,
+    330
+   ],
+   "pixels": 27163,
+   "note": "Cap sung vang + dau lau tren mu. Pivot goc sung. Nghieng theo dau."
+  }
+ ]
+}

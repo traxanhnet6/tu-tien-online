@@ -1,0 +1,127 @@
+{
+  "pet": "han_ngoc_tho",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "tho ngoc, tai_trai/phai theo goc nhin",
+  "parts": {
+    "duoi": {
+      "file": "pet_han_ngoc_tho_part_duoi.png",
+      "pivot": [
+        805,
+        790
+      ],
+      "z": 0,
+      "pixels": 30976,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_duoi_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_duoi_tinh_anh.png"
+      }
+    },
+    "chan_sau_trai": {
+      "file": "pet_han_ngoc_tho_part_chan_sau_trai.png",
+      "pivot": [
+        314,
+        772
+      ],
+      "z": 1,
+      "pixels": 18690,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_chan_sau_trai_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_chan_sau_trai_tinh_anh.png"
+      }
+    },
+    "chan_sau_phai": {
+      "file": "pet_han_ngoc_tho_part_chan_sau_phai.png",
+      "pivot": [
+        670,
+        772
+      ],
+      "z": 2,
+      "pixels": 13674,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_chan_sau_phai_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_chan_sau_phai_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_han_ngoc_tho_part_than.png",
+      "pivot": [
+        510,
+        704
+      ],
+      "z": 3,
+      "pixels": 176417,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_than_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_than_tinh_anh.png"
+      }
+    },
+    "chan_truoc_trai": {
+      "file": "pet_han_ngoc_tho_part_chan_truoc_trai.png",
+      "pivot": [
+        415,
+        708
+      ],
+      "z": 4,
+      "pixels": 23580,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_chan_truoc_trai_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_chan_truoc_trai_tinh_anh.png"
+      }
+    },
+    "chan_truoc_phai": {
+      "file": "pet_han_ngoc_tho_part_chan_truoc_phai.png",
+      "pivot": [
+        585,
+        708
+      ],
+      "z": 5,
+      "pixels": 23580,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_chan_truoc_phai_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_chan_truoc_phai_tinh_anh.png"
+      }
+    },
+    "tai_trai": {
+      "file": "pet_han_ngoc_tho_part_tai_trai.png",
+      "pivot": [
+        342,
+        398
+      ],
+      "z": 6,
+      "pixels": 64689,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_tai_trai_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_tai_trai_tinh_anh.png"
+      }
+    },
+    "tai_phai": {
+      "file": "pet_han_ngoc_tho_part_tai_phai.png",
+      "pivot": [
+        683,
+        398
+      ],
+      "z": 7,
+      "pixels": 65046,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_tai_phai_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_tai_phai_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_han_ngoc_tho_part_dau.png",
+      "pivot": [
+        515,
+        681
+      ],
+      "z": 8,
+      "pixels": 153827,
+      "variants": {
+        "combat": "pet_han_ngoc_tho_part_dau_combat.png",
+        "tinh_anh": "pet_han_ngoc_tho_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

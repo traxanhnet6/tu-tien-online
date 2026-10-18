@@ -1,0 +1,91 @@
+{
+  "monster": "ngoc_tho",
+  "canvas": {
+    "width": 1600,
+    "height": 1600
+  },
+  "note": "trai = viewer-left, phai = viewer-right (frontal view)",
+  "parts": {
+    "duoi": {
+      "file": "mon_part_ngoc_tho_duoi.png",
+      "pivot": [
+        1180,
+        1220
+      ],
+      "z": 0,
+      "pixels": 31887
+    },
+    "chan_sau_trai": {
+      "file": "mon_part_ngoc_tho_chan_sau_trai.png",
+      "pivot": [
+        560,
+        1300
+      ],
+      "z": 1,
+      "pixels": 57426
+    },
+    "chan_sau_phai": {
+      "file": "mon_part_ngoc_tho_chan_sau_phai.png",
+      "pivot": [
+        1050,
+        1300
+      ],
+      "z": 2,
+      "pixels": 60227
+    },
+    "than": {
+      "file": "mon_part_ngoc_tho_than.png",
+      "pivot": [
+        790,
+        1180
+      ],
+      "z": 3,
+      "pixels": 204489
+    },
+    "chan_truoc_trai": {
+      "file": "mon_part_ngoc_tho_chan_truoc_trai.png",
+      "pivot": [
+        550,
+        1000
+      ],
+      "z": 4,
+      "pixels": 59690
+    },
+    "chan_truoc_phai": {
+      "file": "mon_part_ngoc_tho_chan_truoc_phai.png",
+      "pivot": [
+        730,
+        1000
+      ],
+      "z": 5,
+      "pixels": 46070
+    },
+    "tai_trai": {
+      "file": "mon_part_ngoc_tho_tai_trai.png",
+      "pivot": [
+        530,
+        480
+      ],
+      "z": 6,
+      "pixels": 74440
+    },
+    "tai_phai": {
+      "file": "mon_part_ngoc_tho_tai_phai.png",
+      "pivot": [
+        1070,
+        480
+      ],
+      "z": 7,
+      "pixels": 85005
+    },
+    "dau": {
+      "file": "mon_part_ngoc_tho_dau.png",
+      "pivot": [
+        800,
+        940
+      ],
+      "z": 8,
+      "pixels": 346469
+    }
+  }
+}

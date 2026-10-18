@@ -1,0 +1,88 @@
+{
+  "pet": "liet_diem_su",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Su tu lua, view truoc. Duoi khong thay trong art -> khong tach.",
+  "parts": {
+    "than": {
+      "file": "pet_liet_diem_su_part_than.png",
+      "pivot": [
+        511,
+        709
+      ],
+      "z": 0,
+      "pixels": 84725,
+      "variants": {
+        "combat": "pet_liet_diem_su_part_than_combat.png",
+        "tinh_anh": "pet_liet_diem_su_part_than_tinh_anh.png"
+      }
+    },
+    "chan_trai_sau": {
+      "file": "pet_liet_diem_su_part_chan_trai_sau.png",
+      "pivot": [
+        364,
+        752
+      ],
+      "z": 1,
+      "pixels": 60808,
+      "variants": {
+        "combat": "pet_liet_diem_su_part_chan_trai_sau_combat.png",
+        "tinh_anh": "pet_liet_diem_su_part_chan_trai_sau_tinh_anh.png"
+      }
+    },
+    "chan_phai_sau": {
+      "file": "pet_liet_diem_su_part_chan_phai_sau.png",
+      "pivot": [
+        662,
+        752
+      ],
+      "z": 2,
+      "pixels": 63425,
+      "variants": {
+        "combat": "pet_liet_diem_su_part_chan_phai_sau_combat.png",
+        "tinh_anh": "pet_liet_diem_su_part_chan_phai_sau_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_liet_diem_su_part_chan_trai_truoc.png",
+      "pivot": [
+        255,
+        512
+      ],
+      "z": 3,
+      "pixels": 61535,
+      "variants": {
+        "combat": "pet_liet_diem_su_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_liet_diem_su_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_liet_diem_su_part_chan_phai_truoc.png",
+      "pivot": [
+        769,
+        512
+      ],
+      "z": 4,
+      "pixels": 60327,
+      "variants": {
+        "combat": "pet_liet_diem_su_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_liet_diem_su_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_liet_diem_su_part_dau.png",
+      "pivot": [
+        523,
+        531
+      ],
+      "z": 5,
+      "pixels": 370729,
+      "variants": {
+        "combat": "pet_liet_diem_su_part_dau_combat.png",
+        "tinh_anh": "pet_liet_diem_su_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

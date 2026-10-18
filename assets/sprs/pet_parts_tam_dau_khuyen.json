@@ -1,0 +1,101 @@
+{
+  "pet": "tam_dau_khuyen",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Cho 3 dau, view truoc. dau = cum 3 dau + bom lua (1 part). duoi toi ben phai.",
+  "parts": {
+    "duoi": {
+      "file": "pet_tam_dau_khuyen_part_duoi.png",
+      "pivot": [
+        828,
+        579
+      ],
+      "z": 0,
+      "pixels": 7725,
+      "variants": {
+        "combat": "pet_tam_dau_khuyen_part_duoi_combat.png",
+        "tinh_anh": "pet_tam_dau_khuyen_part_duoi_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_tam_dau_khuyen_part_than.png",
+      "pivot": [
+        514,
+        696
+      ],
+      "z": 1,
+      "pixels": 101147,
+      "variants": {
+        "combat": "pet_tam_dau_khuyen_part_than_combat.png",
+        "tinh_anh": "pet_tam_dau_khuyen_part_than_tinh_anh.png"
+      }
+    },
+    "chan_trai_sau": {
+      "file": "pet_tam_dau_khuyen_part_chan_trai_sau.png",
+      "pivot": [
+        204,
+        583
+      ],
+      "z": 2,
+      "pixels": 49172,
+      "variants": {
+        "combat": "pet_tam_dau_khuyen_part_chan_trai_sau_combat.png",
+        "tinh_anh": "pet_tam_dau_khuyen_part_chan_trai_sau_tinh_anh.png"
+      }
+    },
+    "chan_phai_sau": {
+      "file": "pet_tam_dau_khuyen_part_chan_phai_sau.png",
+      "pivot": [
+        829,
+        583
+      ],
+      "z": 3,
+      "pixels": 50641,
+      "variants": {
+        "combat": "pet_tam_dau_khuyen_part_chan_phai_sau_combat.png",
+        "tinh_anh": "pet_tam_dau_khuyen_part_chan_phai_sau_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_tam_dau_khuyen_part_chan_trai_truoc.png",
+      "pivot": [
+        355,
+        742
+      ],
+      "z": 4,
+      "pixels": 54840,
+      "variants": {
+        "combat": "pet_tam_dau_khuyen_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_tam_dau_khuyen_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_tam_dau_khuyen_part_chan_phai_truoc.png",
+      "pivot": [
+        670,
+        742
+      ],
+      "z": 5,
+      "pixels": 53228,
+      "variants": {
+        "combat": "pet_tam_dau_khuyen_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_tam_dau_khuyen_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_tam_dau_khuyen_part_dau.png",
+      "pivot": [
+        503,
+        542
+      ],
+      "z": 6,
+      "pixels": 342966,
+      "variants": {
+        "combat": "pet_tam_dau_khuyen_part_dau_combat.png",
+        "tinh_anh": "pet_tam_dau_khuyen_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

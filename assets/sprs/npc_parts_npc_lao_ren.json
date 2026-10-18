@@ -1,0 +1,143 @@
+{
+ "npc": "npc_lao_ren",
+ "canvas": {
+  "w": 1120,
+  "h": 2240
+ },
+ "convention": "tay_trai/tay_phai, chan_trai/chan_phai theo phia nhan vat (nhan vat nhin ra man hinh). z: so thap = ve sau (sau), so cao = ve truoc. pivot: [x,y] theo toa do canvas goc.",
+ "parts": [
+  {
+   "name": "chan_trai",
+   "file": "npc_lao_ren_part_chan_trai.png",
+   "rects": [
+    [
+     590,
+     1420,
+     880,
+     2170
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    735,
+    1470
+   ],
+   "pixels": 61110,
+   "note": "Chan trai NV (phai anh), quan + giay. Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "chan_phai",
+   "file": "npc_lao_ren_part_chan_phai.png",
+   "rects": [
+    [
+     220,
+     1420,
+     590,
+     2120
+    ]
+   ],
+   "z": 0,
+   "pivot": [
+    430,
+    1470
+   ],
+   "pixels": 60863,
+   "note": "Chan phai NV (trai anh), quan + giay. Pivot hong. Di lai: xoay quanh hong."
+  },
+  {
+   "name": "than",
+   "file": "npc_lao_ren_part_than.png",
+   "rects": [
+    [
+     260,
+     480,
+     910,
+     1760
+    ]
+   ],
+   "z": 1,
+   "pivot": [
+    565,
+    620
+   ],
+   "pixels": 493694,
+   "note": "Than + tap de da, dung cu deo that lung. Pivot giua nguc. Cui chao: xoay nhe."
+  },
+  {
+   "name": "phu_kien_bua",
+   "file": "npc_lao_ren_part_phu_kien_bua.png",
+   "rects": [
+    [
+     30,
+     360,
+     320,
+     840
+    ]
+   ],
+   "z": 2,
+   "pivot": [
+    200,
+    720
+   ],
+   "pixels": 16931,
+   "note": "Bua ren cam tay phai. Pivot diem tay nam. REN DAP BUA: xoay bua quanh diem nam DONG BO voi tay_phai xoay quanh vai (bua z< tay de ngon tay ve tren can)."
+  },
+  {
+   "name": "tay_trai",
+   "file": "npc_lao_ren_part_tay_trai.png",
+   "rects": [
+    [
+     700,
+     470,
+     1020,
+     1360
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    760,
+    640
+   ],
+   "pixels": 214387,
+   "note": "Tay trai NV (phai anh) buong. Pivot vai. Vay tay: xoay quanh vai."
+  },
+  {
+   "name": "tay_phai",
+   "file": "npc_lao_ren_part_tay_phai.png",
+   "rects": [
+    [
+     90,
+     570,
+     350,
+     980
+    ]
+   ],
+   "z": 3,
+   "pivot": [
+    330,
+    620
+   ],
+   "pixels": 54700,
+   "note": "Tay phai NV (trai anh) nam can bua. Pivot vai. REN: xoay tay quanh vai, bua quay theo quanh diem nam."
+  },
+  {
+   "name": "dau",
+   "file": "npc_lao_ren_part_dau.png",
+   "rects": [
+    [
+     200,
+     100,
+     760,
+     600
+    ]
+   ],
+   "z": 4,
+   "pivot": [
+    540,
+    555
+   ],
+   "pixels": 124753,
+   "note": "Dau + bui toc. Pivot co. Gat dau: xoay quanh co."
+  }
+ ]
+}

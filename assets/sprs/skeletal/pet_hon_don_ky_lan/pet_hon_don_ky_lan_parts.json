@@ -1,0 +1,173 @@
+{
+ "prefix": "pet_hon_don_ky_lan",
+ "source": "pixel_thu_hon_don_ky_lan.webp",
+ "canvas": {
+  "w": 1600,
+  "h": 1600
+ },
+ "note": "Pet Hỗn Độn Kỳ Lân Thiên phẩm - kỳ lân bờm đỏ, sừng gộp vào dau, hào quang lửa gộp vào than, nền trắng tách theo mask",
+ "pivot_convention": "pivot=[x,y] local trong PNG part: dau=co, ham_duoi=khop ham, chan/tay=vai/hong, canh=goc canh, duoi=goc duoi; bien the mau dung chung pivot",
+ "parts": {
+  "duoi": {
+   "file": "pet_hon_don_ky_lan_part_duoi.png",
+   "bbox": [
+    1050,
+    376,
+    490,
+    1037
+   ],
+   "offset": [
+    1050,
+    376
+   ],
+   "pivot": [
+    180,
+    704
+   ],
+   "z": 2,
+   "variants": {
+    "base": "pet_hon_don_ky_lan_part_duoi.png",
+    "combat": "pet_hon_don_ky_lan_part_duoi_combat.png",
+    "tinh_anh": "pet_hon_don_ky_lan_part_duoi_tinh_anh.png"
+   }
+  },
+  "chan_truoc_trai": {
+   "file": "pet_hon_don_ky_lan_part_chan_truoc_trai.png",
+   "bbox": [
+    129,
+    973,
+    547,
+    559
+   ],
+   "offset": [
+    129,
+    973
+   ],
+   "pivot": [
+    451,
+    327
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_hon_don_ky_lan_part_chan_truoc_trai.png",
+    "combat": "pet_hon_don_ky_lan_part_chan_truoc_trai_combat.png",
+    "tinh_anh": "pet_hon_don_ky_lan_part_chan_truoc_trai_tinh_anh.png"
+   }
+  },
+  "chan_truoc_phai": {
+   "file": "pet_hon_don_ky_lan_part_chan_truoc_phai.png",
+   "bbox": [
+    654,
+    1304,
+    188,
+    235
+   ],
+   "offset": [
+    654,
+    1304
+   ],
+   "pivot": [
+    116,
+    6
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_hon_don_ky_lan_part_chan_truoc_phai.png",
+    "combat": "pet_hon_don_ky_lan_part_chan_truoc_phai_combat.png",
+    "tinh_anh": "pet_hon_don_ky_lan_part_chan_truoc_phai_tinh_anh.png"
+   }
+  },
+  "chan_sau_trai": {
+   "file": "pet_hon_don_ky_lan_part_chan_sau_trai.png",
+   "bbox": [
+    828,
+    1244,
+    216,
+    311
+   ],
+   "offset": [
+    828,
+    1244
+   ],
+   "pivot": [
+    122,
+    56
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_hon_don_ky_lan_part_chan_sau_trai.png",
+    "combat": "pet_hon_don_ky_lan_part_chan_sau_trai_combat.png",
+    "tinh_anh": "pet_hon_don_ky_lan_part_chan_sau_trai_tinh_anh.png"
+   }
+  },
+  "chan_sau_phai": {
+   "file": "pet_hon_don_ky_lan_part_chan_sau_phai.png",
+   "bbox": [
+    1009,
+    1178,
+    298,
+    347
+   ],
+   "offset": [
+    1009,
+    1178
+   ],
+   "pivot": [
+    111,
+    122
+   ],
+   "z": 3,
+   "variants": {
+    "base": "pet_hon_don_ky_lan_part_chan_sau_phai.png",
+    "combat": "pet_hon_don_ky_lan_part_chan_sau_phai_combat.png",
+    "tinh_anh": "pet_hon_don_ky_lan_part_chan_sau_phai_tinh_anh.png"
+   }
+  },
+  "than": {
+   "file": "pet_hon_don_ky_lan_part_than.png",
+   "bbox": [
+    75,
+    877,
+    1037,
+    514
+   ],
+   "offset": [
+    75,
+    877
+   ],
+   "pivot": [
+    725,
+    273
+   ],
+   "z": 4,
+   "variants": {
+    "base": "pet_hon_don_ky_lan_part_than.png",
+    "combat": "pet_hon_don_ky_lan_part_than_combat.png",
+    "tinh_anh": "pet_hon_don_ky_lan_part_than_tinh_anh.png"
+   }
+  },
+  "dau": {
+   "file": "pet_hon_don_ky_lan_part_dau.png",
+   "bbox": [
+    58,
+    33,
+    1390,
+    916
+   ],
+   "offset": [
+    58,
+    33
+   ],
+   "pivot": [
+    742,
+    917
+   ],
+   "z": 5,
+   "variants": {
+    "base": "pet_hon_don_ky_lan_part_dau.png",
+    "combat": "pet_hon_don_ky_lan_part_dau_combat.png",
+    "tinh_anh": "pet_hon_don_ky_lan_part_dau_tinh_anh.png"
+   }
+  }
+ }
+}

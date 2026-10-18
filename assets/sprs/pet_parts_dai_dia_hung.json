@@ -1,0 +1,88 @@
+{
+  "pet": "dai_dia_hung",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "Gau dat, view truoc. Duoi khong thay trong art -> khong tach.",
+  "parts": {
+    "than": {
+      "file": "pet_dai_dia_hung_part_than.png",
+      "pivot": [
+        510,
+        703
+      ],
+      "z": 0,
+      "pixels": 91711,
+      "variants": {
+        "combat": "pet_dai_dia_hung_part_than_combat.png",
+        "tinh_anh": "pet_dai_dia_hung_part_than_tinh_anh.png"
+      }
+    },
+    "chan_trai_sau": {
+      "file": "pet_dai_dia_hung_part_chan_trai_sau.png",
+      "pivot": [
+        385,
+        802
+      ],
+      "z": 1,
+      "pixels": 48230,
+      "variants": {
+        "combat": "pet_dai_dia_hung_part_chan_trai_sau_combat.png",
+        "tinh_anh": "pet_dai_dia_hung_part_chan_trai_sau_tinh_anh.png"
+      }
+    },
+    "chan_phai_sau": {
+      "file": "pet_dai_dia_hung_part_chan_phai_sau.png",
+      "pivot": [
+        636,
+        802
+      ],
+      "z": 2,
+      "pixels": 49281,
+      "variants": {
+        "combat": "pet_dai_dia_hung_part_chan_phai_sau_combat.png",
+        "tinh_anh": "pet_dai_dia_hung_part_chan_phai_sau_tinh_anh.png"
+      }
+    },
+    "chan_trai_truoc": {
+      "file": "pet_dai_dia_hung_part_chan_trai_truoc.png",
+      "pivot": [
+        156,
+        381
+      ],
+      "z": 3,
+      "pixels": 87290,
+      "variants": {
+        "combat": "pet_dai_dia_hung_part_chan_trai_truoc_combat.png",
+        "tinh_anh": "pet_dai_dia_hung_part_chan_trai_truoc_tinh_anh.png"
+      }
+    },
+    "chan_phai_truoc": {
+      "file": "pet_dai_dia_hung_part_chan_phai_truoc.png",
+      "pivot": [
+        884,
+        370
+      ],
+      "z": 4,
+      "pixels": 96794,
+      "variants": {
+        "combat": "pet_dai_dia_hung_part_chan_phai_truoc_combat.png",
+        "tinh_anh": "pet_dai_dia_hung_part_chan_phai_truoc_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_dai_dia_hung_part_dau.png",
+      "pivot": [
+        517,
+        530
+      ],
+      "z": 5,
+      "pixels": 195194,
+      "variants": {
+        "combat": "pet_dai_dia_hung_part_dau_combat.png",
+        "tinh_anh": "pet_dai_dia_hung_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

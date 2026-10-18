@@ -1,0 +1,101 @@
+{
+  "pet": "nham_thach_hung",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "gau da: tinh the tren vai thuoc than; duoi la part RONG (khong co duoi ro trong art mat truoc), pivot [512,965]",
+  "parts": {
+    "duoi": {
+      "file": "pet_nham_thach_hung_part_duoi.png",
+      "pivot": [
+        512,
+        965
+      ],
+      "z": 0,
+      "pixels": 0,
+      "variants": {
+        "combat": "pet_nham_thach_hung_part_duoi_combat.png",
+        "tinh_anh": "pet_nham_thach_hung_part_duoi_tinh_anh.png"
+      }
+    },
+    "chan_sau_trai": {
+      "file": "pet_nham_thach_hung_part_chan_sau_trai.png",
+      "pivot": [
+        380,
+        857
+      ],
+      "z": 1,
+      "pixels": 17389,
+      "variants": {
+        "combat": "pet_nham_thach_hung_part_chan_sau_trai_combat.png",
+        "tinh_anh": "pet_nham_thach_hung_part_chan_sau_trai_tinh_anh.png"
+      }
+    },
+    "chan_sau_phai": {
+      "file": "pet_nham_thach_hung_part_chan_sau_phai.png",
+      "pivot": [
+        646,
+        857
+      ],
+      "z": 2,
+      "pixels": 17116,
+      "variants": {
+        "combat": "pet_nham_thach_hung_part_chan_sau_phai_combat.png",
+        "tinh_anh": "pet_nham_thach_hung_part_chan_sau_phai_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_nham_thach_hung_part_than.png",
+      "pivot": [
+        505,
+        629
+      ],
+      "z": 3,
+      "pixels": 101052,
+      "variants": {
+        "combat": "pet_nham_thach_hung_part_than_combat.png",
+        "tinh_anh": "pet_nham_thach_hung_part_than_tinh_anh.png"
+      }
+    },
+    "chan_truoc_trai": {
+      "file": "pet_nham_thach_hung_part_chan_truoc_trai.png",
+      "pivot": [
+        305,
+        617
+      ],
+      "z": 4,
+      "pixels": 62100,
+      "variants": {
+        "combat": "pet_nham_thach_hung_part_chan_truoc_trai_combat.png",
+        "tinh_anh": "pet_nham_thach_hung_part_chan_truoc_trai_tinh_anh.png"
+      }
+    },
+    "chan_truoc_phai": {
+      "file": "pet_nham_thach_hung_part_chan_truoc_phai.png",
+      "pivot": [
+        725,
+        617
+      ],
+      "z": 5,
+      "pixels": 60720,
+      "variants": {
+        "combat": "pet_nham_thach_hung_part_chan_truoc_phai_combat.png",
+        "tinh_anh": "pet_nham_thach_hung_part_chan_truoc_phai_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_nham_thach_hung_part_dau.png",
+      "pivot": [
+        514,
+        551
+      ],
+      "z": 6,
+      "pixels": 225794,
+      "variants": {
+        "combat": "pet_nham_thach_hung_part_dau_combat.png",
+        "tinh_anh": "pet_nham_thach_hung_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}

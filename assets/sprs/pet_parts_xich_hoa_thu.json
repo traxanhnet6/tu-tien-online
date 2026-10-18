@@ -1,0 +1,101 @@
+{
+  "pet": "xich_hoa_thu",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "note": "cao lua: dau gom mao lua tren dau, duoi lua ben phai",
+  "parts": {
+    "duoi": {
+      "file": "pet_xich_hoa_thu_part_duoi.png",
+      "pivot": [
+        736,
+        773
+      ],
+      "z": 0,
+      "pixels": 38555,
+      "variants": {
+        "combat": "pet_xich_hoa_thu_part_duoi_combat.png",
+        "tinh_anh": "pet_xich_hoa_thu_part_duoi_tinh_anh.png"
+      }
+    },
+    "chan_sau_trai": {
+      "file": "pet_xich_hoa_thu_part_chan_sau_trai.png",
+      "pivot": [
+        307,
+        827
+      ],
+      "z": 1,
+      "pixels": 5694,
+      "variants": {
+        "combat": "pet_xich_hoa_thu_part_chan_sau_trai_combat.png",
+        "tinh_anh": "pet_xich_hoa_thu_part_chan_sau_trai_tinh_anh.png"
+      }
+    },
+    "chan_sau_phai": {
+      "file": "pet_xich_hoa_thu_part_chan_sau_phai.png",
+      "pivot": [
+        688,
+        827
+      ],
+      "z": 2,
+      "pixels": 7356,
+      "variants": {
+        "combat": "pet_xich_hoa_thu_part_chan_sau_phai_combat.png",
+        "tinh_anh": "pet_xich_hoa_thu_part_chan_sau_phai_tinh_anh.png"
+      }
+    },
+    "than": {
+      "file": "pet_xich_hoa_thu_part_than.png",
+      "pivot": [
+        501,
+        722
+      ],
+      "z": 3,
+      "pixels": 39086,
+      "variants": {
+        "combat": "pet_xich_hoa_thu_part_than_combat.png",
+        "tinh_anh": "pet_xich_hoa_thu_part_than_tinh_anh.png"
+      }
+    },
+    "chan_truoc_trai": {
+      "file": "pet_xich_hoa_thu_part_chan_truoc_trai.png",
+      "pivot": [
+        395,
+        687
+      ],
+      "z": 4,
+      "pixels": 34881,
+      "variants": {
+        "combat": "pet_xich_hoa_thu_part_chan_truoc_trai_combat.png",
+        "tinh_anh": "pet_xich_hoa_thu_part_chan_truoc_trai_tinh_anh.png"
+      }
+    },
+    "chan_truoc_phai": {
+      "file": "pet_xich_hoa_thu_part_chan_truoc_phai.png",
+      "pivot": [
+        595,
+        687
+      ],
+      "z": 5,
+      "pixels": 34881,
+      "variants": {
+        "combat": "pet_xich_hoa_thu_part_chan_truoc_phai_combat.png",
+        "tinh_anh": "pet_xich_hoa_thu_part_chan_truoc_phai_tinh_anh.png"
+      }
+    },
+    "dau": {
+      "file": "pet_xich_hoa_thu_part_dau.png",
+      "pivot": [
+        539,
+        626
+      ],
+      "z": 6,
+      "pixels": 299737,
+      "variants": {
+        "combat": "pet_xich_hoa_thu_part_dau_combat.png",
+        "tinh_anh": "pet_xich_hoa_thu_part_dau_tinh_anh.png"
+      }
+    }
+  }
+}
