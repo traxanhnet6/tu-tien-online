@@ -104,6 +104,85 @@ const MONSTERS = {
       { id: "manual_boss_datru", rate: 0.08, eliteRate: 0.15, min: 1, max: 1 },
     ],
   },
+  /* ============ QUÁI CỐT TRUYỆN NHÁNH CHÍNH/MA (Bui duyệt 2026-10-18) ============
+   * Cặp boss 2 nhánh có chỉ số GIỐNG HỆT NHAU để cân bằng độ khó:
+   *   trai_chu_hac_phong: boss chung 2 nhánh (NV12/NV22)
+   *   huyet_y_mon_chu = dai_su_huynh_ma (Trúc Cơ đỉnh phong)
+   *   dien_chu_u_minh = thu_linh_ve_dao_si (Kim Đan đỉnh phong)
+   *   sat_thu_huyet_y = tam_ma (quái thường) */
+  trai_chu_hac_phong: {
+    nameKey: "mon_trai_chu_hac_phong", hp: 750, atk: 58, def: 18, exp: 180,
+    img: null, fb: "#3a2a1a", loai: "nhan", boss: true, cg: 4,
+    drops: [
+      { id: "taycothao", rate: 0.5, min: 1, max: 2 },
+      { id: "yaodan1", rate: 0.3, min: 1, max: 1 },
+      { id: "wpn_linh", rate: 0.3, min: 1, max: 1 },
+      { id: "dan_hx_trung", rate: 0.1, min: 1, max: 1 },
+      { id: "trung_linh", rate: 0.05, min: 1, max: 1 },
+    ],
+  },
+  sat_thu_huyet_y: {
+    nameKey: "mon_sat_thu_huyet_y", hp: 200, atk: 48, def: 16, exp: 36,
+    img: null, fb: "#5a1a1a", loai: "nhan",
+    drops: [
+      { id: "pill_hl", rate: 0.08, min: 1, max: 1 },
+      { id: "taycothao", rate: 0.08, min: 1, max: 1 },
+      { id: "dan_hx_tieu", rate: 0.05, min: 1, max: 1 },
+    ],
+  },
+  huyet_y_mon_chu: {
+    nameKey: "mon_huyet_y_mon_chu", hp: 1100, atk: 82, def: 25, exp: 280,
+    img: null, fb: "#6a0f0f", loai: "nhan", boss: true, cg: 6,
+    drops: [
+      { id: "yaodan1", rate: 0.4, min: 1, max: 2 },
+      { id: "taycothao", rate: 0.5, min: 1, max: 2 },
+      { id: "arm_linh", rate: 0.25, min: 1, max: 1 },
+      { id: "dan_hx_trung", rate: 0.1, min: 1, max: 1 },
+      { id: "trung_linh", rate: 0.05, min: 1, max: 1 },
+    ],
+  },
+  tam_ma: {
+    nameKey: "mon_tam_ma", hp: 200, atk: 48, def: 16, exp: 36,
+    img: null, fb: "#3a1a3a", loai: "ma",
+    drops: [
+      { id: "pill_hl", rate: 0.08, min: 1, max: 1 },
+      { id: "taycothao", rate: 0.08, min: 1, max: 1 },
+      { id: "dan_hx_tieu", rate: 0.05, min: 1, max: 1 },
+    ],
+  },
+  dai_su_huynh_ma: {
+    nameKey: "mon_dai_su_huynh_ma", hp: 1100, atk: 82, def: 25, exp: 280,
+    img: null, fb: "#2a1a2a", loai: "nhan", boss: true, cg: 6,
+    drops: [
+      { id: "yaodan1", rate: 0.4, min: 1, max: 2 },
+      { id: "taycothao", rate: 0.5, min: 1, max: 2 },
+      { id: "arm_linh", rate: 0.25, min: 1, max: 1 },
+      { id: "dan_hx_trung", rate: 0.1, min: 1, max: 1 },
+      { id: "trung_linh", rate: 0.05, min: 1, max: 1 },
+    ],
+  },
+  dien_chu_u_minh: {
+    nameKey: "mon_dien_chu_u_minh", hp: 1600, atk: 110, def: 35, exp: 400,
+    img: null, fb: "#1a2a3a", loai: "ma", boss: true, cg: 8,
+    drops: [
+      { id: "yaodan1", rate: 0.5, min: 1, max: 2 },
+      { id: "dia_linh_qua", rate: 0.5, min: 1, max: 2 },
+      { id: "wpn_linh", rate: 0.3, min: 1, max: 1 },
+      { id: "dan_hx_dai", rate: 0.1, min: 1, max: 1 },
+      { id: "trung_huyen", rate: 0.05, min: 1, max: 1 },
+    ],
+  },
+  thu_linh_ve_dao_si: {
+    nameKey: "mon_thu_linh_ve_dao_si", hp: 1600, atk: 110, def: 35, exp: 400,
+    img: null, fb: "#3a3a1a", loai: "nhan", boss: true, cg: 8,
+    drops: [
+      { id: "yaodan1", rate: 0.5, min: 1, max: 2 },
+      { id: "dia_linh_qua", rate: 0.5, min: 1, max: 2 },
+      { id: "wpn_linh", rate: 0.3, min: 1, max: 1 },
+      { id: "dan_hx_dai", rate: 0.1, min: 1, max: 1 },
+      { id: "trung_huyen", rate: 0.05, min: 1, max: 1 },
+    ],
+  },
   phong_lang: {
     nameKey: "mon_phong_lang", hp: 150, atk: 34, def: 12, exp: 26,
     img: null, fb: "#7d9aa8", loai: "thu",
@@ -1980,6 +2059,9 @@ const NPCS = {
   de_tu_thu_1: { nameKey: "npc_de_tu_thu_1", mapId: 9, x: 620, y: 520, kind: "greet", img: "assets/sprs/npc_su_gia.png", wander: 90 },
   de_tu_thu_2: { nameKey: "npc_de_tu_thu_2", mapId: 9, x: 980, y: 520, kind: "greet", img: "assets/sprs/npc_su_gia.png", wander: 90 },
   huyet_ma_tu: { nameKey: "npc_huyet_ma_tu", mapId: 11, x: 700, y: 500, kind: "quest", img: "assets/sprs/npc_su_gia_ma.png" },
+  /* NPC nhánh ma đạo (Bui duyệt 2026-10-18): sư phụ U Minh Tôn Giả + Thánh Tử Mặc Vô Tâm */
+  u_minh_ton_gia: { nameKey: "npc_u_minh_ton_gia", mapId: 10, x: 800, y: 400, kind: "quest", img: "assets/sprs/npc_lao_dan_duong.png" },
+  mac_vo_tam: { nameKey: "npc_mac_vo_tam", mapId: 10, x: 900, y: 450, kind: "quest", img: "assets/sprs/npc_su_gia_ma.png" },
   lao_dan_duong: { nameKey: "npc_lao_dan_duong", mapId: 0, x: 700, y: 100, kind: "dungeon_guide", img: "assets/sprs/npc_lao_dan_duong.png" },
   thu_thap_nhan: { nameKey: "npc_thu_thap_nhan", mapId: 0, x: 780, y: 300, kind: "tower_guide", img: "assets/sprs/npc_truong_tran.png" },
   lao_nong_dan: { nameKey: "npc_lao_nong_dan", mapId: 3, x: 400, y: 300, kind: "farm", stock: ["hat_linh_chi", "hat_truc_co_thao", "hat_dia_linh_qua"], img: "assets/sprs/npc_truong_lao_linh_dien.png" },
@@ -2148,6 +2230,154 @@ const QUESTS = [
     npc: "co_tran_tu", req: "q_story_26", autoAccept: true,
     need: { type: "joinsect" },
     reward: { stones: 300, exp: 500 },
+  },
+  /* ============ NHÁNH CHÍNH ĐẠO "TIÊN LỘ CHÍNH NGHĨA" (NV8-17, Bui duyệt 2026-10-18) ============
+   * Cốt truyện v3 Chương 1-3 nhánh chính đạo. branch: "chinh" — chỉ khả dụng khi
+   * đã gia nhập 1 trong 5 tông chính đạo. Độ khó CÂN BẰNG với nhánh ma đạo:
+   * cùng số thứ tự → cùng loại mục tiêu, cùng cấp quái/boss, thưởng tương đương. */
+  {
+    id: "q_story_c01", nameKey: "q_story_c01", descKey: "q_story_c01_desc",
+    npc: "dai_phu", req: "q_story_27", autoAccept: true, branch: "chinh",
+    need: { type: "talk" },
+    reward: { stones: 400, exp: 600, contrib: 20, items: [{ id: "dan_tu_khi", qty: 2 }] },
+    acceptTalk: "q_story_c01_accept", turninTalk: "q_story_c01_turnin",
+  },
+  {
+    id: "q_story_c02", nameKey: "q_story_c02", descKey: "q_story_c02_desc",
+    npc: "diep_van", req: "q_story_c01", autoAccept: true, branch: "chinh",
+    need: { type: "talk" },
+    reward: { stones: 400, exp: 700, contrib: 15 },
+    acceptTalk: "q_story_c02_accept", turninTalk: "q_story_c02_turnin",
+  },
+  {
+    id: "q_story_c03", nameKey: "q_story_c03", descKey: "q_story_c03_desc",
+    npc: "diep_van", req: "q_story_c02", autoAccept: true, branch: "chinh",
+    need: { type: "kill", monster: "da_tru", count: 10 },
+    reward: { stones: 600, exp: 900, contrib: 30, items: [{ id: "dan_tu_khi", qty: 2 }] },
+    acceptTalk: "q_story_c03_accept", turninTalk: "q_story_c03_turnin",
+  },
+  {
+    id: "q_story_c04", nameKey: "q_story_c04", descKey: "q_story_c04_desc",
+    npc: "co_tran_tu", req: "q_story_c03", autoAccept: true, branch: "chinh",
+    need: { type: "talk" },
+    reward: { stones: 500, exp: 800, contrib: 20 },
+    acceptTalk: "q_story_c04_accept", turninTalk: "q_story_c04_turnin",
+  },
+  {
+    id: "q_story_c05", nameKey: "q_story_c05", descKey: "q_story_c05_desc",
+    npc: "co_tran_tu", req: "q_story_c04", autoAccept: true, branch: "chinh",
+    need: { type: "kill", monster: "trai_chu_hac_phong", count: 1 },
+    reward: { stones: 1000, exp: 1500, contrib: 50, items: [{ id: "wpn_linh", qty: 1 }, { id: "manual_boss_datru", qty: 1 }] },
+    acceptTalk: "q_story_c05_accept", turninTalk: "q_story_c05_turnin",
+  },
+  {
+    id: "q_story_c06", nameKey: "q_story_c06", descKey: "q_story_c06_desc",
+    npc: "dai_phu", req: "q_story_c05", autoAccept: true, branch: "chinh",
+    need: { type: "talk" },
+    reward: { stones: 600, exp: 1000, contrib: 25, items: [{ id: "dan_boi_nguyen", qty: 2 }] },
+    acceptTalk: "q_story_c06_accept", turninTalk: "q_story_c06_turnin",
+  },
+  {
+    id: "q_story_c07", nameKey: "q_story_c07", descKey: "q_story_c07_desc",
+    npc: "diep_van", req: "q_story_c06", autoAccept: true, branch: "chinh",
+    need: { type: "kill", monster: "sat_thu_huyet_y", count: 5 },
+    reward: { stones: 800, exp: 1200, contrib: 35, items: [{ id: "dan_boi_nguyen", qty: 1 }] },
+    acceptTalk: "q_story_c07_accept", turninTalk: "q_story_c07_turnin",
+  },
+  {
+    id: "q_story_c08", nameKey: "q_story_c08", descKey: "q_story_c08_desc",
+    npc: "co_tran_tu", req: "q_story_c07", autoAccept: true, branch: "chinh",
+    need: { type: "kill", monster: "huyet_y_mon_chu", count: 1 },
+    reward: { stones: 1500, exp: 2500, contrib: 80, items: [{ id: "pill_truccodan", qty: 1 }, { id: "manual_boss_langvuong", qty: 1 }] },
+    acceptTalk: "q_story_c08_accept", turninTalk: "q_story_c08_turnin",
+  },
+  {
+    id: "q_story_c09", nameKey: "q_story_c09", descKey: "q_story_c09_desc",
+    npc: "to_uyen_nhi", req: "q_story_c08", autoAccept: true, branch: "chinh",
+    need: { type: "item", item: "dia_linh_qua", count: 5 },
+    reward: { stones: 1000, exp: 1800, contrib: 40, items: [{ id: "dan_ngung_dan", qty: 1 }] },
+    acceptTalk: "q_story_c09_accept", turninTalk: "q_story_c09_turnin",
+  },
+  {
+    id: "q_story_c10", nameKey: "q_story_c10", descKey: "q_story_c10_desc",
+    npc: "to_uyen_nhi", req: "q_story_c09", autoAccept: true, branch: "chinh",
+    need: { type: "kill", monster: "dien_chu_u_minh", count: 1 },
+    reward: { stones: 2500, exp: 4000, contrib: 120, items: [{ id: "dan_cuu_chuyen", qty: 1 }, { id: "manual_boss_cottuong", qty: 1 }] },
+    acceptTalk: "q_story_c10_accept", turninTalk: "q_story_c10_turnin",
+  },
+  /* ============ NHÁNH MA ĐẠO "MA LỘ BÁ NGHIỆP" (NV18-27, Bui duyệt 2026-10-18) ============
+   * Cốt truyện v3 Chương 1-3 nhánh ma đạo. branch: "ma" — chỉ khả dụng khi
+   * đã gia nhập Cửu U Ma Tông. Cốt truyện/NPC KHÁC HẲN nhánh chính đạo nhưng
+   * độ khó TƯƠNG ĐƯƠNG từng cặp: c01=m01, c02=m02, ..., c10=m10. */
+  {
+    id: "q_story_m01", nameKey: "q_story_m01", descKey: "q_story_m01_desc",
+    npc: "u_minh_ton_gia", req: "q_story_27", autoAccept: true, branch: "ma",
+    need: { type: "talk" },
+    reward: { stones: 400, exp: 600, contrib: 20, items: [{ id: "dan_tu_khi", qty: 2 }] },
+    acceptTalk: "q_story_m01_accept", turninTalk: "q_story_m01_turnin",
+  },
+  {
+    id: "q_story_m02", nameKey: "q_story_m02", descKey: "q_story_m02_desc",
+    npc: "u_minh_ton_gia", req: "q_story_m01", autoAccept: true, branch: "ma",
+    need: { type: "talk" },
+    reward: { stones: 400, exp: 700, contrib: 15 },
+    acceptTalk: "q_story_m02_accept", turninTalk: "q_story_m02_turnin",
+  },
+  {
+    id: "q_story_m03", nameKey: "q_story_m03", descKey: "q_story_m03_desc",
+    npc: "mac_vo_tam", req: "q_story_m02", autoAccept: true, branch: "ma",
+    need: { type: "kill", monster: "da_tru", count: 10 },
+    reward: { stones: 600, exp: 900, contrib: 30, items: [{ id: "dan_tu_khi", qty: 2 }] },
+    acceptTalk: "q_story_m03_accept", turninTalk: "q_story_m03_turnin",
+  },
+  {
+    id: "q_story_m04", nameKey: "q_story_m04", descKey: "q_story_m04_desc",
+    npc: "u_minh_ton_gia", req: "q_story_m03", autoAccept: true, branch: "ma",
+    need: { type: "talk" },
+    reward: { stones: 500, exp: 800, contrib: 20 },
+    acceptTalk: "q_story_m04_accept", turninTalk: "q_story_m04_turnin",
+  },
+  {
+    id: "q_story_m05", nameKey: "q_story_m05", descKey: "q_story_m05_desc",
+    npc: "mac_vo_tam", req: "q_story_m04", autoAccept: true, branch: "ma",
+    need: { type: "kill", monster: "trai_chu_hac_phong", count: 1 },
+    reward: { stones: 1000, exp: 1500, contrib: 50, items: [{ id: "wpn_linh", qty: 1 }, { id: "manual_boss_datru", qty: 1 }] },
+    acceptTalk: "q_story_m05_accept", turninTalk: "q_story_m05_turnin",
+  },
+  {
+    id: "q_story_m06", nameKey: "q_story_m06", descKey: "q_story_m06_desc",
+    npc: "u_minh_ton_gia", req: "q_story_m05", autoAccept: true, branch: "ma",
+    need: { type: "talk" },
+    reward: { stones: 600, exp: 1000, contrib: 25, items: [{ id: "dan_boi_nguyen", qty: 2 }] },
+    acceptTalk: "q_story_m06_accept", turninTalk: "q_story_m06_turnin",
+  },
+  {
+    id: "q_story_m07", nameKey: "q_story_m07", descKey: "q_story_m07_desc",
+    npc: "u_minh_ton_gia", req: "q_story_m06", autoAccept: true, branch: "ma",
+    need: { type: "kill", monster: "tam_ma", count: 5 },
+    reward: { stones: 800, exp: 1200, contrib: 35, items: [{ id: "dan_boi_nguyen", qty: 1 }] },
+    acceptTalk: "q_story_m07_accept", turninTalk: "q_story_m07_turnin",
+  },
+  {
+    id: "q_story_m08", nameKey: "q_story_m08", descKey: "q_story_m08_desc",
+    npc: "mac_vo_tam", req: "q_story_m07", autoAccept: true, branch: "ma",
+    need: { type: "kill", monster: "dai_su_huynh_ma", count: 1 },
+    reward: { stones: 1500, exp: 2500, contrib: 80, items: [{ id: "pill_truccodan", qty: 1 }, { id: "manual_boss_langvuong", qty: 1 }] },
+    acceptTalk: "q_story_m08_accept", turninTalk: "q_story_m08_turnin",
+  },
+  {
+    id: "q_story_m09", nameKey: "q_story_m09", descKey: "q_story_m09_desc",
+    npc: "to_uyen_nhi", req: "q_story_m08", autoAccept: true, branch: "ma",
+    need: { type: "item", item: "dia_linh_qua", count: 5 },
+    reward: { stones: 1000, exp: 1800, contrib: 40, items: [{ id: "dan_ngung_dan", qty: 1 }] },
+    acceptTalk: "q_story_m09_accept", turninTalk: "q_story_m09_turnin",
+  },
+  {
+    id: "q_story_m10", nameKey: "q_story_m10", descKey: "q_story_m10_desc",
+    npc: "mac_vo_tam", req: "q_story_m09", autoAccept: true, branch: "ma",
+    need: { type: "kill", monster: "thu_linh_ve_dao_si", count: 1 },
+    reward: { stones: 2500, exp: 4000, contrib: 120, items: [{ id: "dan_cuu_chuyen", qty: 1 }, { id: "manual_boss_cottuong", qty: 1 }] },
+    acceptTalk: "q_story_m10_accept", turninTalk: "q_story_m10_turnin",
   },
   {
     id: "q_pet_intro", nameKey: "q_pet_intro", descKey: "q_pet_intro_desc",

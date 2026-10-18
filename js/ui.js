@@ -175,6 +175,24 @@ function toast(msg, cls) {
   setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 2600);
 }
 
+/* ============ THOẠI NHẬN/TRẢ NHIỆM VỤ CHÍNH TUYẾN (Bui 2026-10-18) ============
+ * Quest có field acceptTalk/turninTalk (lang key) → hiện hộp thoại NPC
+ * khi nhận/trả quest, đúng văn phong chính/ma đạo. */
+function showQuestTalk(talkKey, npcNameKey) {
+  if (!talkKey) return;
+  try {
+    var f = document.createElement("div");
+    f.className = "quest-talk-overlay";
+    f.innerHTML = '<div class="quest-talk-box">' +
+      (npcNameKey ? '<div class="quest-talk-npc">' + esc(t(npcNameKey)) + '</div>' : '') +
+      '<div class="quest-talk-text">' + esc(t(talkKey)) + '</div>' +
+      '<div class="quest-talk-hint">' + esc(t("quest_talk_tap")) + '</div></div>';
+    f.onclick = function () { if (f.parentNode) f.parentNode.removeChild(f); };
+    document.body.appendChild(f);
+    setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 6000);
+  } catch (e) {}
+}
+
 /* ---------------- i18n cho HTML tĩnh ---------------- */
 function applyI18n() {
   var els = document.querySelectorAll("[data-t]");
@@ -2508,15 +2526,37 @@ function onPanelClick(e) {
     case "tn-revive": doTnRevive(); break;
     case "tower-climb": doTowerClimb(); break;
     case "qtab": panelArg = { tab: v }; renderPanel(); break;
-    case "quest-accept":
-      if (typeof Quest !== "undefined" && Quest.accept(state, el.getAttribute("data-id"))) {
-        saveGame(state); sfx("success"); toast(t("quest_accept")); renderPanel();
+    case "quest-accept": {
+      var qaid = el.getAttribute("data-id");
+      var qar = (typeof Quest !== "undefined") ? Quest.accept(state, qaid) : null;
+      if (qar && qar.ok) {
+        saveGame(state); sfx("success");
+        /* Thoại nhận NV (nếu quest có acceptTalk) */
+        try {
+          var qd = Quest.def(qaid);
+          if (qd && qd.acceptTalk) {
+            var npcNK = (typeof NPCS !== "undefined" && NPCS[qd.npc]) ? NPCS[qd.npc].nameKey : null;
+            showQuestTalk(qd.acceptTalk, npcNK);
+          } else toast(t("quest_accept"));
+        } catch (e) { toast(t("quest_accept")); }
+        renderPanel();
       }
       break;
+    }
     case "quest-turnin": {
-      var qr = (typeof Quest !== "undefined") ? Quest.turnIn(state, el.getAttribute("data-id")) : null;
+      var qtid = el.getAttribute("data-id");
+      var qr = (typeof Quest !== "undefined") ? Quest.turnIn(state, qtid) : null;
       if (qr && qr.ok) {
-        saveGame(state); sfx("success"); toast(t("quest_done")); refreshHUD(); renderPanel();
+        saveGame(state); sfx("success");
+        /* Thoại trả NV (nếu quest có turninTalk) */
+        try {
+          var qd2 = Quest.def(qtid);
+          if (qd2 && qd2.turninTalk) {
+            var npcNK2 = (typeof NPCS !== "undefined" && NPCS[qd2.npc]) ? NPCS[qd2.npc].nameKey : null;
+            showQuestTalk(qd2.turninTalk, npcNK2);
+          } else toast(t("quest_done"));
+        } catch (e) { toast(t("quest_done")); }
+        refreshHUD(); renderPanel();
       } else { toast(t("q_incomplete")); sfx("fail"); }
       break;
     }

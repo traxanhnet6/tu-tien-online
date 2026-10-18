@@ -41,8 +41,24 @@ function _qdef(id) {
   for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
   return null;
 }
+/* Nhánh cốt truyện: quest có field branch ("chinh"|"ma") chỉ khả dụng khi
+ * người chơi đã gia nhập tông môn thuộc nhánh đó. Bui 2026-10-18:
+ * 2 nhánh khác nhau nhưng độ khó cân bằng. */
+function _branchOk(q, state) {
+  if (!q.branch) return true;
+  var joined = null;
+  try {
+    if (typeof Sect !== "undefined" && Sect.joinedSect) joined = Sect.joinedSect(state);
+    else if (state && state.sectInfo) joined = state.sectInfo.joined;
+  } catch (e) {}
+  if (q.branch === "ma") return joined === "cuu_u_ma_tong";
+  if (q.branch === "chinh") return !!joined && joined !== "cuu_u_ma_tong";
+  return true;
+}
 
 var Quest = {
+  /* Lấy định nghĩa quest theo id (cho UI hiển thị thoại nhận/trả) */
+  def: function (id) { return _qdef(id); },
   /* Quest chưa nhận mà đủ điều kiện nhận */
   available: function (state) {
     var out = [];
@@ -51,6 +67,7 @@ var Quest = {
       var s = qs[q.id];
       if (s && s.status) return; /* đã nhận hoặc đã xong */
       if (q.req && (!qs[q.req] || qs[q.req].status !== "done")) return;
+      if (!_branchOk(q, state)) return; /* sai nhánh chính/ma */
       out.push(q);
     });
     return out;
@@ -64,6 +81,7 @@ var Quest = {
     var s = qs[id];
     if (s && s.status) return { ok: false, reason: s.status === "done" ? "already_done" : "already_active" };
     if (q.req && (!qs[q.req] || qs[q.req].status !== "done")) return { ok: false, reason: "req_not_met" };
+    if (!_branchOk(q, state)) return { ok: false, reason: "wrong_branch" };
     qs[id] = { status: "active", count: 0 };
     return { ok: true };
   },
@@ -95,6 +113,13 @@ var Quest = {
     var rw = q.reward || {};
     if (rw.stones) state.stones = (state.stones || 0) + rw.stones;
     if (rw.exp) _gs("gainExp")(state, rw.exp);
+    /* Điểm cống hiến tông môn (Bui 2026-10-18: NV chính tuyến 2 nhánh thưởng cống hiến) */
+    if (rw.contrib) {
+      try {
+        state.sectInfo = state.sectInfo || { joined: null, contrib: 0 };
+        state.sectInfo.contrib = (state.sectInfo.contrib || 0) + rw.contrib;
+      } catch (e) {}
+    }
     (rw.items || []).forEach(function (it) {
       _gs("addItem")(state, it.id, it.qty || 1, !!it.locked);
     });
