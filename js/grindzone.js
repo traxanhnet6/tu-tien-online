@@ -113,7 +113,8 @@ var FRAG_RECIPES = [];
       FRAG_RECIPES.push({
         frag: "frag_r" + r + "_" + slots[s],
         need: need[r],
-        out: "eq_r" + (r + 1) + "_" + slots[s],
+        /* bậc 7 đã là đỉnh: đổi lại chính đồ bậc 7 (đúc lại) */
+        out: "eq_r" + Math.min(r + 1, 7) + "_" + slots[s],
         realm: r,
       });
     }

@@ -33,6 +33,33 @@
    "monsters": [
     "u_hon_lang"
    ]
+  },
+  {
+   "x": 800,
+   "y": 1000,
+   "r": 160,
+   "monsters": [
+    "thien_hac",
+    "huyet_buc"
+   ]
+  },
+  {
+   "x": 1300,
+   "y": 300,
+   "r": 160,
+   "monsters": [
+    "hon_don_thu",
+    "u_minh_cu_mang"
+   ]
+  },
+  {
+   "x": 200,
+   "y": 600,
+   "r": 150,
+   "monsters": [
+    "cuu_kiep_loi_thu",
+    "hac_long"
+   ]
   }
  ],
  "bossSpawn": {

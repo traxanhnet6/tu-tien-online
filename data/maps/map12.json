@@ -33,6 +33,50 @@
    "monsters": [
     "ma_lang"
    ]
+  },
+  {
+   "x": 1100,
+   "y": 950,
+   "r": 160,
+   "monsters": [
+    "ma_binh",
+    "ma_lang"
+   ]
+  },
+  {
+   "x": 500,
+   "y": 1000,
+   "r": 160,
+   "monsters": [
+    "oan_linh",
+    "am_anh_thu"
+   ]
+  },
+  {
+   "x": 180,
+   "y": 500,
+   "r": 150,
+   "monsters": [
+    "thien_ma"
+   ]
+  },
+  {
+   "x": 1450,
+   "y": 1000,
+   "r": 150,
+   "monsters": [
+    "thien_ma",
+    "am_anh_thu"
+   ]
+  },
+  {
+   "x": 800,
+   "y": 300,
+   "r": 150,
+   "monsters": [
+    "huyet_ma_phan_than",
+    "thien_ma"
+   ]
   }
  ],
  "bossSpawn": {

@@ -525,96 +525,6 @@ const MONSTERS = {
           { id: "frag_r7_phapbao", rate: 0.02, min: 1, max: 1 },
     ],
   },
-  /* --- Trứng Thuần Hóa: thu phục yêu thú ở bãi quái cày cấp --- */
-  trung_thuan_hoa: {
-    kind: "pet_egg", tier: 0, nameKey: "it_egg_tame", descKey: "it_egg_tame_desc",
-    price: 1000, sell: 200, tameEgg: true, icon: "\U0001f95a",
-  },
-  /* --- Mảnh trang bị: đủ số lượng đổi ở Lão Rèn --- */
-  frag_r1_vukhi: {
-    kind: "frag", nameKey: "it_frag_r1_vukhi", descKey: "it_frag_r1_desc",
-    fragRealm: 1, fragSlot: "vukhi", price: 100, sell: 30, icon: "\U0001f9e9",
-  },
-  frag_r1_giap: {
-    kind: "frag", nameKey: "it_frag_r1_giap", descKey: "it_frag_r1_desc",
-    fragRealm: 1, fragSlot: "giap", price: 100, sell: 30, icon: "\U0001f9e9",
-  },
-  frag_r1_phapbao: {
-    kind: "frag", nameKey: "it_frag_r1_phapbao", descKey: "it_frag_r1_desc",
-    fragRealm: 1, fragSlot: "phapbao", price: 100, sell: 30, icon: "\U0001f9e9",
-  },
-  frag_r2_vukhi: {
-    kind: "frag", nameKey: "it_frag_r2_vukhi", descKey: "it_frag_r2_desc",
-    fragRealm: 2, fragSlot: "vukhi", price: 200, sell: 60, icon: "\U0001f9e9",
-  },
-  frag_r2_giap: {
-    kind: "frag", nameKey: "it_frag_r2_giap", descKey: "it_frag_r2_desc",
-    fragRealm: 2, fragSlot: "giap", price: 200, sell: 60, icon: "\U0001f9e9",
-  },
-  frag_r2_phapbao: {
-    kind: "frag", nameKey: "it_frag_r2_phapbao", descKey: "it_frag_r2_desc",
-    fragRealm: 2, fragSlot: "phapbao", price: 200, sell: 60, icon: "\U0001f9e9",
-  },
-  frag_r3_vukhi: {
-    kind: "frag", nameKey: "it_frag_r3_vukhi", descKey: "it_frag_r3_desc",
-    fragRealm: 3, fragSlot: "vukhi", price: 300, sell: 90, icon: "\U0001f9e9",
-  },
-  frag_r3_giap: {
-    kind: "frag", nameKey: "it_frag_r3_giap", descKey: "it_frag_r3_desc",
-    fragRealm: 3, fragSlot: "giap", price: 300, sell: 90, icon: "\U0001f9e9",
-  },
-  frag_r3_phapbao: {
-    kind: "frag", nameKey: "it_frag_r3_phapbao", descKey: "it_frag_r3_desc",
-    fragRealm: 3, fragSlot: "phapbao", price: 300, sell: 90, icon: "\U0001f9e9",
-  },
-  frag_r4_vukhi: {
-    kind: "frag", nameKey: "it_frag_r4_vukhi", descKey: "it_frag_r4_desc",
-    fragRealm: 4, fragSlot: "vukhi", price: 400, sell: 120, icon: "\U0001f9e9",
-  },
-  frag_r4_giap: {
-    kind: "frag", nameKey: "it_frag_r4_giap", descKey: "it_frag_r4_desc",
-    fragRealm: 4, fragSlot: "giap", price: 400, sell: 120, icon: "\U0001f9e9",
-  },
-  frag_r4_phapbao: {
-    kind: "frag", nameKey: "it_frag_r4_phapbao", descKey: "it_frag_r4_desc",
-    fragRealm: 4, fragSlot: "phapbao", price: 400, sell: 120, icon: "\U0001f9e9",
-  },
-  frag_r5_vukhi: {
-    kind: "frag", nameKey: "it_frag_r5_vukhi", descKey: "it_frag_r5_desc",
-    fragRealm: 5, fragSlot: "vukhi", price: 500, sell: 150, icon: "\U0001f9e9",
-  },
-  frag_r5_giap: {
-    kind: "frag", nameKey: "it_frag_r5_giap", descKey: "it_frag_r5_desc",
-    fragRealm: 5, fragSlot: "giap", price: 500, sell: 150, icon: "\U0001f9e9",
-  },
-  frag_r5_phapbao: {
-    kind: "frag", nameKey: "it_frag_r5_phapbao", descKey: "it_frag_r5_desc",
-    fragRealm: 5, fragSlot: "phapbao", price: 500, sell: 150, icon: "\U0001f9e9",
-  },
-  frag_r6_vukhi: {
-    kind: "frag", nameKey: "it_frag_r6_vukhi", descKey: "it_frag_r6_desc",
-    fragRealm: 6, fragSlot: "vukhi", price: 600, sell: 180, icon: "\U0001f9e9",
-  },
-  frag_r6_giap: {
-    kind: "frag", nameKey: "it_frag_r6_giap", descKey: "it_frag_r6_desc",
-    fragRealm: 6, fragSlot: "giap", price: 600, sell: 180, icon: "\U0001f9e9",
-  },
-  frag_r6_phapbao: {
-    kind: "frag", nameKey: "it_frag_r6_phapbao", descKey: "it_frag_r6_desc",
-    fragRealm: 6, fragSlot: "phapbao", price: 600, sell: 180, icon: "\U0001f9e9",
-  },
-  frag_r7_vukhi: {
-    kind: "frag", nameKey: "it_frag_r7_vukhi", descKey: "it_frag_r7_desc",
-    fragRealm: 7, fragSlot: "vukhi", price: 700, sell: 210, icon: "\U0001f9e9",
-  },
-  frag_r7_giap: {
-    kind: "frag", nameKey: "it_frag_r7_giap", descKey: "it_frag_r7_desc",
-    fragRealm: 7, fragSlot: "giap", price: 700, sell: 210, icon: "\U0001f9e9",
-  },
-  frag_r7_phapbao: {
-    kind: "frag", nameKey: "it_frag_r7_phapbao", descKey: "it_frag_r7_desc",
-    fragRealm: 7, fragSlot: "phapbao", price: 700, sell: 210, icon: "\U0001f9e9",
-  },
 };
 /* ============================================================
  * BẢN ĐỒ — 3 map Luyện Khí
@@ -2348,6 +2258,96 @@ const ITEMS = {
   trung_thien: {
     kind: "pet_egg", tier: 4, nameKey: "it_egg_4", descKey: "it_egg_4_desc",
     price: 50000, sell: 10000,
+  },
+  /* --- Trứng Thuần Hóa: thu phục yêu thú ở bãi quái cày cấp --- */
+  trung_thuan_hoa: {
+    kind: "pet_egg", tier: 0, nameKey: "it_egg_tame", descKey: "it_egg_tame_desc",
+    price: 1000, sell: 200, tameEgg: true, icon: "\U0001f95a",
+  },
+  /* --- Mảnh trang bị: đủ số lượng đổi ở Lão Rèn --- */
+  frag_r1_vukhi: {
+    kind: "frag", nameKey: "it_frag_r1_vukhi", descKey: "it_frag_r1_desc",
+    fragRealm: 1, fragSlot: "vukhi", price: 100, sell: 30, icon: "\U0001f9e9",
+  },
+  frag_r1_giap: {
+    kind: "frag", nameKey: "it_frag_r1_giap", descKey: "it_frag_r1_desc",
+    fragRealm: 1, fragSlot: "giap", price: 100, sell: 30, icon: "\U0001f9e9",
+  },
+  frag_r1_phapbao: {
+    kind: "frag", nameKey: "it_frag_r1_phapbao", descKey: "it_frag_r1_desc",
+    fragRealm: 1, fragSlot: "phapbao", price: 100, sell: 30, icon: "\U0001f9e9",
+  },
+  frag_r2_vukhi: {
+    kind: "frag", nameKey: "it_frag_r2_vukhi", descKey: "it_frag_r2_desc",
+    fragRealm: 2, fragSlot: "vukhi", price: 200, sell: 60, icon: "\U0001f9e9",
+  },
+  frag_r2_giap: {
+    kind: "frag", nameKey: "it_frag_r2_giap", descKey: "it_frag_r2_desc",
+    fragRealm: 2, fragSlot: "giap", price: 200, sell: 60, icon: "\U0001f9e9",
+  },
+  frag_r2_phapbao: {
+    kind: "frag", nameKey: "it_frag_r2_phapbao", descKey: "it_frag_r2_desc",
+    fragRealm: 2, fragSlot: "phapbao", price: 200, sell: 60, icon: "\U0001f9e9",
+  },
+  frag_r3_vukhi: {
+    kind: "frag", nameKey: "it_frag_r3_vukhi", descKey: "it_frag_r3_desc",
+    fragRealm: 3, fragSlot: "vukhi", price: 300, sell: 90, icon: "\U0001f9e9",
+  },
+  frag_r3_giap: {
+    kind: "frag", nameKey: "it_frag_r3_giap", descKey: "it_frag_r3_desc",
+    fragRealm: 3, fragSlot: "giap", price: 300, sell: 90, icon: "\U0001f9e9",
+  },
+  frag_r3_phapbao: {
+    kind: "frag", nameKey: "it_frag_r3_phapbao", descKey: "it_frag_r3_desc",
+    fragRealm: 3, fragSlot: "phapbao", price: 300, sell: 90, icon: "\U0001f9e9",
+  },
+  frag_r4_vukhi: {
+    kind: "frag", nameKey: "it_frag_r4_vukhi", descKey: "it_frag_r4_desc",
+    fragRealm: 4, fragSlot: "vukhi", price: 400, sell: 120, icon: "\U0001f9e9",
+  },
+  frag_r4_giap: {
+    kind: "frag", nameKey: "it_frag_r4_giap", descKey: "it_frag_r4_desc",
+    fragRealm: 4, fragSlot: "giap", price: 400, sell: 120, icon: "\U0001f9e9",
+  },
+  frag_r4_phapbao: {
+    kind: "frag", nameKey: "it_frag_r4_phapbao", descKey: "it_frag_r4_desc",
+    fragRealm: 4, fragSlot: "phapbao", price: 400, sell: 120, icon: "\U0001f9e9",
+  },
+  frag_r5_vukhi: {
+    kind: "frag", nameKey: "it_frag_r5_vukhi", descKey: "it_frag_r5_desc",
+    fragRealm: 5, fragSlot: "vukhi", price: 500, sell: 150, icon: "\U0001f9e9",
+  },
+  frag_r5_giap: {
+    kind: "frag", nameKey: "it_frag_r5_giap", descKey: "it_frag_r5_desc",
+    fragRealm: 5, fragSlot: "giap", price: 500, sell: 150, icon: "\U0001f9e9",
+  },
+  frag_r5_phapbao: {
+    kind: "frag", nameKey: "it_frag_r5_phapbao", descKey: "it_frag_r5_desc",
+    fragRealm: 5, fragSlot: "phapbao", price: 500, sell: 150, icon: "\U0001f9e9",
+  },
+  frag_r6_vukhi: {
+    kind: "frag", nameKey: "it_frag_r6_vukhi", descKey: "it_frag_r6_desc",
+    fragRealm: 6, fragSlot: "vukhi", price: 600, sell: 180, icon: "\U0001f9e9",
+  },
+  frag_r6_giap: {
+    kind: "frag", nameKey: "it_frag_r6_giap", descKey: "it_frag_r6_desc",
+    fragRealm: 6, fragSlot: "giap", price: 600, sell: 180, icon: "\U0001f9e9",
+  },
+  frag_r6_phapbao: {
+    kind: "frag", nameKey: "it_frag_r6_phapbao", descKey: "it_frag_r6_desc",
+    fragRealm: 6, fragSlot: "phapbao", price: 600, sell: 180, icon: "\U0001f9e9",
+  },
+  frag_r7_vukhi: {
+    kind: "frag", nameKey: "it_frag_r7_vukhi", descKey: "it_frag_r7_desc",
+    fragRealm: 7, fragSlot: "vukhi", price: 700, sell: 210, icon: "\U0001f9e9",
+  },
+  frag_r7_giap: {
+    kind: "frag", nameKey: "it_frag_r7_giap", descKey: "it_frag_r7_desc",
+    fragRealm: 7, fragSlot: "giap", price: 700, sell: 210, icon: "\U0001f9e9",
+  },
+  frag_r7_phapbao: {
+    kind: "frag", nameKey: "it_frag_r7_phapbao", descKey: "it_frag_r7_desc",
+    fragRealm: 7, fragSlot: "phapbao", price: 700, sell: 210, icon: "\U0001f9e9",
   },
 };
 

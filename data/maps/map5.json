@@ -24,6 +24,15 @@
    "monsters": [
     "tinh_thach_quai"
    ]
+  },
+  {
+   "x": 800,
+   "y": 950,
+   "r": 160,
+   "monsters": [
+    "thach_giap_trung",
+    "tinh_thach_quai"
+   ]
   }
  ],
  "npcs": [

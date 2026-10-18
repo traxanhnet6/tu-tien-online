@@ -24,6 +24,24 @@
    "monsters": [
     "thien_hac"
    ]
+  },
+  {
+   "x": 1200,
+   "y": 300,
+   "r": 160,
+   "monsters": [
+    "ngoc_tho",
+    "thien_hac"
+   ]
+  },
+  {
+   "x": 500,
+   "y": 200,
+   "r": 150,
+   "monsters": [
+    "huyet_buc",
+    "thien_hac"
+   ]
   }
  ],
  "bossSpawn": {

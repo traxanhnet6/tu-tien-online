@@ -511,6 +511,26 @@ function rollLingen() {
   sfx("success");
 }
 
+/* Trắc linh căn cho state (dùng khi NV2 Dị Tượng Cửu Sắc hoàn thành — Bui 2026-10-18) */
+function rollLingenFor(st) {
+  var rates = (typeof LINGEN_RATES !== "undefined") ? LINGEN_RATES :
+    [["kim", 18], ["moc", 18], ["thuy", 18], ["hoa", 18], ["tho", 18]];
+  var total = 0, i;
+  for (i = 0; i < rates.length; i++) total += rates[i][1];
+  var r = Math.random() * total, el = rates[0][0];
+  for (i = 0; i < rates.length; i++) { r -= rates[i][1]; if (r <= 0) { el = rates[i][0]; break; } }
+  var rare = (el === "bang" || el === "loi" || el === "phong" || el === "hondon" ||
+              el === "quang" || el === "am" || el === "doc" || el === "huyet");
+  var q = Math.random();
+  var quality = q < 0.05 ? "thien" : (q < 0.30 ? "dia" : "pham");
+  if (rare && quality === "pham") quality = "dia";
+  st.char = st.char || {};
+  st.char.element = el;
+  st.char.elementQuality = quality;
+  st.char.roots = [el];
+  return { element: el, quality: quality };
+}
+
 /* Icon linh căn: <img> + fallback emoji nếu ảnh lỗi */
 function lingenIconHtml(el, size) {
   size = size || 28;
@@ -533,10 +553,9 @@ function beginGame() {
   state.char.name = name;
   state.char.sect = createSel.sect;
   state.char.gender = (createSel.gender === "nu") ? "nu" : "nam";
-  if (!createSel.element) rollLingen();
-  state.char.element = createSel.element;
-  state.char.elementQuality = createSel.quality;
-  state.char.roots = createSel.element ? [createSel.element] : []; /* linh căn đã khai mở (taycot.js) */
+  state.char.element = null; /* linh căn trắc ở NV2 Dị Tượng Cửu Sắc (Bui 2026-10-18) */
+  state.char.elementQuality = null;
+  state.char.roots = []; /* linh căn trắc ở NV2, khai mở thêm bằng Khai Mạch Đan */
   state.char.cotPham = null; /* phẩm chất căn cốt — định khi uống Tẩy Cốt Đan đầu tiên */
   state.char.realm = 1; state.char.tier = 1; /* bắt đầu Luyện Khí tầng 1 */
   /* Luồng vào game mới: nhân vật mới → chiếu cốt truyện "Đêm Máu Làng Phong Diệp" 1 lần */
@@ -544,7 +563,7 @@ function beginGame() {
   if (typeof Social !== "undefined") { try { Social.ensureCharId(state); } catch (e) {} }
   var bs = baseStats(1, 1, createSel.sect);
   state.char.hp = bs.maxHp; state.char.mp = bs.maxMp;
-  state.flags.taycot_done = !!createSel.element;
+  state.flags.taycot_done = false; /* tẩy cốt ở NV6 Tẩy Cốt Phạt Tủy */
   if (hasEngine() && Engine.bindState) Engine.bindState(state);
   if (hasAudio() && AudioSys.bindState) AudioSys.bindState(state);
   saveGame(state);

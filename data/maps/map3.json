@@ -24,6 +24,15 @@
    "monsters": [
     "thi_ma"
    ]
+  },
+  {
+   "x": 1300,
+   "y": 600,
+   "r": 160,
+   "monsters": [
+    "u_hon",
+    "thi_ma"
+   ]
   }
  ],
  "bossSpawn": {

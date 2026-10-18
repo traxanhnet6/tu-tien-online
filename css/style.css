@@ -1122,3 +1122,6 @@ body.landscape #hud-leftmid{top:40%}
 /* Dòng skill trên trang bị (xanh) */
 .eq-skill{display:inline-block;color:#4fc3f7;font-weight:bold;font-size:13px;margin:2px 4px 2px 0;
   background:rgba(79,195,247,.12);border:1px solid rgba(79,195,247,.4);border-radius:6px;padding:2px 8px}
+/* Đầu mục cảnh giới trong tab Bãi Quái / Đổi mảnh */
+.dg-realm{font-weight:bold;color:var(--gold);margin:10px 0 4px;padding:4px 8px;
+  background:rgba(201,162,39,.12);border-left:3px solid var(--gold);border-radius:0 6px 6px 0}

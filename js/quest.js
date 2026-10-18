@@ -148,6 +148,10 @@ var Quest = {
       _gs("addItem")(state, it.id, it.qty || 1, !!it.locked);
     });
     state.quests[id] = { status: "done", count: s.count || 0 };
+    /* NV2 Dị Tượng Cửu Sắc: trắc linh căn tại đài trắc linh (Bui 2026-10-18) */
+    if (id === "q_story_22" && typeof rollLingenFor === "function") {
+      try { rollLingenFor(state); } catch (e) {}
+    }
     /* Chuỗi cốt truyện: tự nhận quest tiếp theo có autoAccept (data-driven) */
     var autoAccepted = [];
     try {

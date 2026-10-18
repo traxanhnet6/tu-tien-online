@@ -33,6 +33,15 @@
    "monsters": [
     "u_hon_lang"
    ]
+  },
+  {
+   "x": 1000,
+   "y": 250,
+   "r": 160,
+   "monsters": [
+    "phong_lang",
+    "hu_thi"
+   ]
   }
  ],
  "bossSpawn": {
