@@ -1,0 +1,167 @@
+{
+ "atk_but": {
+  "frames": [
+   "atk_but_f1.png",
+   "atk_but_f2.png",
+   "atk_but_f3.png",
+   "atk_but_f4.png"
+  ],
+  "fx": "atk_but_fx.png",
+  "frame_count": 4
+ },
+ "atk_cung": {
+  "frames": [
+   "atk_cung_f1.png",
+   "atk_cung_f2.png",
+   "atk_cung_f3.png",
+   "atk_cung_f4.png"
+  ],
+  "fx": "atk_cung_fx.png",
+  "frame_count": 4
+ },
+ "atk_dao": {
+  "frames": [
+   "atk_dao_f1.png",
+   "atk_dao_f2.png",
+   "atk_dao_f3.png",
+   "atk_dao_f4.png"
+  ],
+  "fx": "atk_dao_fx.png",
+  "frame_count": 4
+ },
+ "atk_kiem": {
+  "frames": [
+   "atk_kiem_f1.png",
+   "atk_kiem_f2.png",
+   "atk_kiem_f3.png",
+   "atk_kiem_f4.png"
+  ],
+  "fx": "atk_kiem_fx.png",
+  "frame_count": 4
+ },
+ "atk_kiem_hap": {
+  "frames": [
+   "atk_kiem_hap_f1.png",
+   "atk_kiem_hap_f2.png",
+   "atk_kiem_hap_f3.png",
+   "atk_kiem_hap_f4.png"
+  ],
+  "fx": "atk_kiem_hap_fx.png",
+  "frame_count": 4
+ },
+ "atk_liem": {
+  "frames": [
+   "atk_liem_f2.png",
+   "atk_liem_f3.png",
+   "atk_liem_f4.png"
+  ],
+  "fx": "atk_liem_fx.png",
+  "frame_count": 3
+ },
+ "atk_phien": {
+  "frames": [
+   "atk_phien_f1.png",
+   "atk_phien_f2.png",
+   "atk_phien_f3.png",
+   "atk_phien_f4.png"
+  ],
+  "fx": "atk_phien_fx.png",
+  "frame_count": 4
+ },
+ "atk_roi": {
+  "frames": [
+   "atk_roi_f1.png",
+   "atk_roi_f2.png",
+   "atk_roi_f3.png",
+   "atk_roi_f4.png"
+  ],
+  "fx": "atk_roi_fx.png",
+  "frame_count": 4
+ },
+ "atk_thuong": {
+  "frames": [
+   "atk_thuong_f1.png",
+   "atk_thuong_f2.png",
+   "atk_thuong_f3.png",
+   "atk_thuong_f4.png"
+  ],
+  "fx": "atk_thuong_fx.png",
+  "frame_count": 4
+ },
+ "atk_tieu": {
+  "frames": [
+   "atk_tieu_f1.png",
+   "atk_tieu_f2.png",
+   "atk_tieu_f3.png",
+   "atk_tieu_f4.png"
+  ],
+  "fx": "atk_tieu_fx.png",
+  "frame_count": 4
+ },
+ "doc_chieu_cuu_u_ma_tong": {
+  "frames": [
+   "doc_chieu_cuu_u_ma_tong_f3.png",
+   "doc_chieu_cuu_u_ma_tong_f6.png"
+  ],
+  "fx": "doc_chieu_cuu_u_ma_tong_fx.png",
+  "frame_count": 2
+ },
+ "doc_chieu_duoc_vuong_tong": {
+  "frames": [
+   "doc_chieu_duoc_vuong_tong_f1.png",
+   "doc_chieu_duoc_vuong_tong_f2.png",
+   "doc_chieu_duoc_vuong_tong_f3.png",
+   "doc_chieu_duoc_vuong_tong_f4.png",
+   "doc_chieu_duoc_vuong_tong_f5.png",
+   "doc_chieu_duoc_vuong_tong_f6.png"
+  ],
+  "fx": "doc_chieu_duoc_vuong_tong_fx.png",
+  "frame_count": 6
+ },
+ "doc_chieu_kiem_tong": {
+  "frames": [
+   "doc_chieu_kiem_tong_f1.png",
+   "doc_chieu_kiem_tong_f2.png",
+   "doc_chieu_kiem_tong_f3.png",
+   "doc_chieu_kiem_tong_f4.png",
+   "doc_chieu_kiem_tong_f5.png",
+   "doc_chieu_kiem_tong_f6.png"
+  ],
+  "fx": "doc_chieu_kiem_tong_fx.png",
+  "frame_count": 6
+ },
+ "doc_chieu_kim_cang_tong": {
+  "frames": [
+   "doc_chieu_kim_cang_tong_f1.png",
+   "doc_chieu_kim_cang_tong_f2.png",
+   "doc_chieu_kim_cang_tong_f3.png",
+   "doc_chieu_kim_cang_tong_f4.png",
+   "doc_chieu_kim_cang_tong_f5.png",
+   "doc_chieu_kim_cang_tong_f6.png"
+  ],
+  "fx": "doc_chieu_kim_cang_tong_fx.png",
+  "frame_count": 6
+ },
+ "doc_chieu_ngu_thu_tong": {
+  "frames": [
+   "doc_chieu_ngu_thu_tong_f1.png",
+   "doc_chieu_ngu_thu_tong_f2.png",
+   "doc_chieu_ngu_thu_tong_f4.png",
+   "doc_chieu_ngu_thu_tong_f6.png"
+  ],
+  "fx": "doc_chieu_ngu_thu_tong_fx.png",
+  "frame_count": 4
+ },
+ "doc_chieu_thien_phap_tong": {
+  "frames": [
+   "doc_chieu_thien_phap_tong_f1.png",
+   "doc_chieu_thien_phap_tong_f2.png",
+   "doc_chieu_thien_phap_tong_f3.png",
+   "doc_chieu_thien_phap_tong_f4.png",
+   "doc_chieu_thien_phap_tong_f5.png",
+   "doc_chieu_thien_phap_tong_f6.png"
+  ],
+  "fx": "doc_chieu_thien_phap_tong_fx.png",
+  "frame_count": 6
+ }
+}

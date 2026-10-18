@@ -334,7 +334,14 @@ function migrateState(state) {
 }
 
 /* ---------- Save/Load qua Online (stub localStorage) ---------- */
-function saveGame(state) { Online.save(state); }
+function saveGame(state) {
+  try {
+    if (state && typeof state === "object" && typeof SAVE_VERSION !== "undefined") {
+      state.saveVer = SAVE_VERSION; /* đóng dấu phiên bản để phát hiện save cũ */
+    }
+  } catch (e) {}
+  Online.save(state);
+}
 function loadGame() { return migrateState(Online.load()); }
 
 if (typeof module !== "undefined" && module.exports) {

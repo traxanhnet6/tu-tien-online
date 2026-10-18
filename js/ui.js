@@ -212,6 +212,21 @@ function boot() {
       try { saved = (typeof Online !== "undefined" && Online.load) ? Online.load() : null; } catch (e) {}
       if (saved && saved.char && saved.char.name) state = saved;
       else state = defaultState();
+      /* Tự phát hiện save cũ không tương thích → đề xuất xóa dữ liệu cũ
+         (chỉ đề xuất, không tự xóa; hình ảnh & hiệu ứng luôn được giữ lại) */
+      try {
+        if (typeof isSaveIncompatible === "function" && isSaveIncompatible(saved)) {
+          setTimeout(function () {
+            try {
+              if (typeof clearOldData === "function" && typeof reloadFresh === "function" &&
+                  confirm(t("cleardata_oldsave"))) {
+                clearOldData();
+                reloadFresh();
+              }
+            } catch (e2) {}
+          }, 1500);
+        }
+      } catch (e) {}
       /* save cũ: tự sinh ID nhân vật khi load lần đầu */
       if (typeof Social !== "undefined") { try { Social.ensureCharId(state); } catch (e) {} }
       /* Milestone 2: đăng nhập ẩn danh Supabase + đồng bộ bạn bè/nhắn tin */
@@ -1814,6 +1829,9 @@ function renderSettings() {
     '<button class="mini' + (LANG_CUR === "en" ? " on" : " paper") + '" data-act="set-lang" data-v="en">EN</button></div></div>';
   h += '<div class="row"><div class="item-name">' + esc(t("settings_donate")) + '</div><div class="row-btns">' +
     '<button class="mini" data-act="open-donate">' + esc(t("donate_title")) + "</button></div></div>";
+  h += '<div class="row"><div class="item-name">' + esc(t("settings_cleardata")) +
+    '<div class="item-sub">' + esc(t("settings_cleardata_note")) + '</div></div><div class="row-btns">' +
+    '<button class="mini red" data-act="clear-data">' + esc(t("settings_cleardata")) + "</button></div></div>";
   if (typeof GamepadInput !== "undefined") h += renderGamepadSettings();
   return h;
 }
@@ -2434,6 +2452,19 @@ function onPanelClick(e) {
       applyDisplaySettings(); saveGame(state); renderPanel(); break;
     case "set-lang":
       setLang(v); state.lang = v; saveGame(state); applyI18n(); renderPanel(); refreshHUD(); break;
+    case "clear-data":
+      /* Xóa dữ liệu cũ — CHỈ xóa save/cài đặt, GIỮ NGUYÊN hình ảnh
+         và hiệu ứng skill linh thú (không nằm trong localStorage). */
+      try {
+        if (typeof clearOldData === "function" && typeof reloadFresh === "function") {
+          if (confirm(t("cleardata_confirm"))) {
+            clearOldData();
+            try { toast(t("cleardata_done")); } catch (e2) {}
+            setTimeout(function () { reloadFresh(); }, 600);
+          }
+        }
+      } catch (e) {}
+      break;
     case "gp-toggle":
       if (typeof GamepadInput !== "undefined") GamepadInput.setEnabled(!GamepadInput.isEnabled());
       saveGame(state); renderPanel(); break;
