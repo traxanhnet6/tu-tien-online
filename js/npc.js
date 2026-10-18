@@ -72,6 +72,75 @@ var FIRST_MEET = {
     { k: "npc_tam_tien_meet1", v: "assets/voice/npc_tam_tien_meet1.mp3" },
     { k: "npc_tam_tien_meet2", v: "assets/voice/npc_tam_tien_meet2.mp3" },
   ],
+  /* --- NPC nội thất 6 tông môn (17) --- */
+  thu_cac_truong_lao: [
+    { k: "npc_thu_cac_truong_lao_meet1", v: "assets/voice/npc_thu_cac_truong_lao_meet1.mp3" },
+    { k: "npc_thu_cac_truong_lao_meet2", v: "assets/voice/npc_thu_cac_truong_lao_meet2.mp3" },
+  ],
+  giao_dau_kiem: [
+    { k: "npc_giao_dau_kiem_meet1", v: "assets/voice/npc_giao_dau_kiem_meet1.mp3" },
+    { k: "npc_giao_dau_kiem_meet2", v: "assets/voice/npc_giao_dau_kiem_meet2.mp3" },
+  ],
+  thu_tang_kiem: [
+    { k: "npc_thu_tang_kiem_meet1", v: "assets/voice/npc_thu_tang_kiem_meet1.mp3" },
+    { k: "npc_thu_tang_kiem_meet2", v: "assets/voice/npc_thu_tang_kiem_meet2.mp3" },
+  ],
+  thap_chu_phap: [
+    { k: "npc_thap_chu_phap_meet1", v: "assets/voice/npc_thap_chu_phap_meet1.mp3" },
+    { k: "npc_thap_chu_phap_meet2", v: "assets/voice/npc_thap_chu_phap_meet2.mp3" },
+  ],
+  chiem_tinh_su: [
+    { k: "npc_chiem_tinh_su_meet1", v: "assets/voice/npc_chiem_tinh_su_meet1.mp3" },
+    { k: "npc_chiem_tinh_su_meet2", v: "assets/voice/npc_chiem_tinh_su_meet2.mp3" },
+  ],
+  thu_vien_quan: [
+    { k: "npc_thu_vien_quan_meet1", v: "assets/voice/npc_thu_vien_quan_meet1.mp3" },
+    { k: "npc_thu_vien_quan_meet2", v: "assets/voice/npc_thu_vien_quan_meet2.mp3" },
+  ],
+  phuong_truong: [
+    { k: "npc_phuong_truong_meet1", v: "assets/voice/npc_phuong_truong_meet1.mp3" },
+    { k: "npc_phuong_truong_meet2", v: "assets/voice/npc_phuong_truong_meet2.mp3" },
+  ],
+  thu_thap_tang: [
+    { k: "npc_thu_thap_tang_meet1", v: "assets/voice/npc_thu_thap_tang_meet1.mp3" },
+    { k: "npc_thu_thap_tang_meet2", v: "assets/voice/npc_thu_thap_tang_meet2.mp3" },
+  ],
+  thien_su: [
+    { k: "npc_thien_su_meet1", v: "assets/voice/npc_thien_su_meet1.mp3" },
+    { k: "npc_thien_su_meet2", v: "assets/voice/npc_thien_su_meet2.mp3" },
+  ],
+  luyen_dan_su: [
+    { k: "npc_luyen_dan_su_meet1", v: "assets/voice/npc_luyen_dan_su_meet1.mp3" },
+    { k: "npc_luyen_dan_su_meet2", v: "assets/voice/npc_luyen_dan_su_meet2.mp3" },
+  ],
+  duoc_nong: [
+    { k: "npc_duoc_nong_meet1", v: "assets/voice/npc_duoc_nong_meet1.mp3" },
+    { k: "npc_duoc_nong_meet2", v: "assets/voice/npc_duoc_nong_meet2.mp3" },
+  ],
+  duoc_dien_quan: [
+    { k: "npc_duoc_dien_quan_meet1", v: "assets/voice/npc_duoc_dien_quan_meet1.mp3" },
+    { k: "npc_duoc_dien_quan_meet2", v: "assets/voice/npc_duoc_dien_quan_meet2.mp3" },
+  ],
+  tuan_thu_chuong: [
+    { k: "npc_tuan_thu_chuong_meet1", v: "assets/voice/npc_tuan_thu_chuong_meet1.mp3" },
+    { k: "npc_tuan_thu_chuong_meet2", v: "assets/voice/npc_tuan_thu_chuong_meet2.mp3" },
+  ],
+  dau_thu_quan: [
+    { k: "npc_dau_thu_quan_meet1", v: "assets/voice/npc_dau_thu_quan_meet1.mp3" },
+    { k: "npc_dau_thu_quan_meet2", v: "assets/voice/npc_dau_thu_quan_meet2.mp3" },
+  ],
+  te_tu_thu_than: [
+    { k: "npc_te_tu_thu_than_meet1", v: "assets/voice/npc_te_tu_thu_than_meet1.mp3" },
+    { k: "npc_te_tu_thu_than_meet2", v: "assets/voice/npc_te_tu_thu_than_meet2.mp3" },
+  ],
+  huyet_ve: [
+    { k: "npc_huyet_ve_meet1", v: "assets/voice/npc_huyet_ve_meet1.mp3" },
+    { k: "npc_huyet_ve_meet2", v: "assets/voice/npc_huyet_ve_meet2.mp3" },
+  ],
+  huyet_te_tu: [
+    { k: "npc_huyet_te_tu_meet1", v: "assets/voice/npc_huyet_te_tu_meet1.mp3" },
+    { k: "npc_huyet_te_tu_meet2", v: "assets/voice/npc_huyet_te_tu_meet2.mp3" },
+  ],
 };
 
 /* Trả về mảng {k,v} lời chào lần đầu, đồng thời đánh dấu đã gặp.

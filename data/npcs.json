@@ -566,5 +566,141 @@
     "y": 300,
     "kind": "tower_guide",
     "img": "assets/sprs/npc_truong_tran.png"
+  },
+  "thu_cac_truong_lao": {
+    "nameKey": "npc_thu_cac_truong_lao",
+    "mapId": 5,
+    "x": 300,
+    "y": 300,
+    "kind": "sect",
+    "img": "assets/sprs/npc_thu_cac_truong_lao.png"
+  },
+  "giao_dau_kiem": {
+    "nameKey": "npc_giao_dau_kiem",
+    "mapId": 5,
+    "x": 1100,
+    "y": 300,
+    "kind": "guide",
+    "img": "assets/sprs/npc_giao_dau_kiem.png"
+  },
+  "thu_tang_kiem": {
+    "nameKey": "npc_thu_tang_kiem",
+    "mapId": 5,
+    "x": 300,
+    "y": 700,
+    "kind": "greet",
+    "img": "assets/sprs/npc_thu_tang_kiem.png"
+  },
+  "thap_chu_phap": {
+    "nameKey": "npc_thap_chu_phap",
+    "mapId": 6,
+    "x": 300,
+    "y": 300,
+    "kind": "sect",
+    "img": "assets/sprs/npc_thap_chu_phap.png"
+  },
+  "chiem_tinh_su": {
+    "nameKey": "npc_chiem_tinh_su",
+    "mapId": 6,
+    "x": 1100,
+    "y": 300,
+    "kind": "guide",
+    "img": "assets/sprs/npc_chiem_tinh_su.png"
+  },
+  "thu_vien_quan": {
+    "nameKey": "npc_thu_vien_quan",
+    "mapId": 6,
+    "x": 300,
+    "y": 700,
+    "kind": "greet",
+    "img": "assets/sprs/npc_thu_vien_quan.png"
+  },
+  "phuong_truong": {
+    "nameKey": "npc_phuong_truong",
+    "mapId": 7,
+    "x": 300,
+    "y": 300,
+    "kind": "sect",
+    "img": "assets/sprs/npc_phuong_truong.png"
+  },
+  "thu_thap_tang": {
+    "nameKey": "npc_thu_thap_tang",
+    "mapId": 7,
+    "x": 1100,
+    "y": 300,
+    "kind": "greet",
+    "img": "assets/sprs/npc_thu_thap_tang.png"
+  },
+  "thien_su": {
+    "nameKey": "npc_thien_su",
+    "mapId": 7,
+    "x": 300,
+    "y": 700,
+    "kind": "guide",
+    "img": "assets/sprs/npc_thien_su.png"
+  },
+  "luyen_dan_su": {
+    "nameKey": "npc_luyen_dan_su",
+    "mapId": 8,
+    "x": 300,
+    "y": 300,
+    "kind": "guide",
+    "img": "assets/sprs/npc_luyen_dan_su.png"
+  },
+  "duoc_nong": {
+    "nameKey": "npc_duoc_nong",
+    "mapId": 8,
+    "x": 1100,
+    "y": 300,
+    "kind": "greet",
+    "img": "assets/sprs/npc_duoc_nong.png"
+  },
+  "duoc_dien_quan": {
+    "nameKey": "npc_duoc_dien_quan",
+    "mapId": 8,
+    "x": 300,
+    "y": 700,
+    "kind": "guide",
+    "img": "assets/sprs/npc_duoc_dien_quan.png"
+  },
+  "tuan_thu_chuong": {
+    "nameKey": "npc_tuan_thu_chuong",
+    "mapId": 9,
+    "x": 300,
+    "y": 300,
+    "kind": "pet",
+    "img": "assets/sprs/npc_tuan_thu_chuong.png"
+  },
+  "dau_thu_quan": {
+    "nameKey": "npc_dau_thu_quan",
+    "mapId": 9,
+    "x": 1100,
+    "y": 300,
+    "kind": "guide",
+    "img": "assets/sprs/npc_dau_thu_quan.png"
+  },
+  "te_tu_thu_than": {
+    "nameKey": "npc_te_tu_thu_than",
+    "mapId": 9,
+    "x": 300,
+    "y": 700,
+    "kind": "greet",
+    "img": "assets/sprs/npc_te_tu_thu_than.png"
+  },
+  "huyet_ve": {
+    "nameKey": "npc_huyet_ve",
+    "mapId": 10,
+    "x": 300,
+    "y": 300,
+    "kind": "greet",
+    "img": "assets/sprs/npc_huyet_ve.png"
+  },
+  "huyet_te_tu": {
+    "nameKey": "npc_huyet_te_tu",
+    "mapId": 10,
+    "x": 1100,
+    "y": 300,
+    "kind": "sect",
+    "img": "assets/sprs/npc_huyet_te_tu.png"
   }
 }
