@@ -653,6 +653,18 @@ function startGame() {
       if (typeof NPC === "undefined" || !NPC.talk) return;
       Engine.talkNpcId = npcId; /* NPC hiện 💬 nói chuyện */
       openPanel("npc", { npcId: npcId, talk: NPC.talk(npcId, state) });
+      /* NV1 Lễ Trắc Linh: đếm số dân làng đã chào hỏi (Bui 2026-10-18) */
+      try {
+        if (typeof Quest !== "undefined" && Quest.onNpcTalk) {
+          var chg = Quest.onNpcTalk(state, npcId) || [];
+          chg.forEach(function (c) {
+            saveGame(state);
+            toast(t("q_progress_talk", { a: c.done, b: c.total }));
+            sfx("success");
+          });
+          if (chg.length && panel === "quest") renderPanel();
+        }
+      } catch (e) {}
     };
 
     Engine.onGate = function (to) {
@@ -1734,6 +1746,11 @@ function sectQuestNav(tg) {
 function questProgress(q, e) {
   var need = q.need || {};
   if (need.type === "kill") return t("q_progress", { a: e.count || 0, b: need.count });
+  if (need.type === "talk_npcs") {
+    var _tk = (e.talked) || {}, _tot = (need.npcs || []).length;
+    var _dn = (need.npcs || []).filter(function (id) { return !!_tk[id]; }).length;
+    return t("q_progress_talk", { a: _dn, b: _tot });
+  }
   if (need.type === "item") return t("q_progress", { a: countItem(state, need.item), b: need.count });
   /* Tiến trình nhiệm vụ bí cảnh (Bui 2026-10-18) */
   if (need.type === "secret_enter" || need.type === "secret_nodes" || need.type === "secret_party")
