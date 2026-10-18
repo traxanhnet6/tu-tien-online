@@ -672,6 +672,27 @@ function startGame() {
 
     Engine.onNpc = function (npcId) {
       if (typeof NPC === "undefined" || !NPC.talk) return;
+      /* AUTO QUEST: tự trả NV nếu đủ điều kiện, không mở panel (Bui 2026-10-19) */
+      if (state.autoQuest) {
+        try {
+          var _aqDone = false;
+          var _qs = state.quests || {};
+          Object.keys(_qs).forEach(function (qid) {
+            if (_aqDone) return;
+            var s = _qs[qid];
+            if (!s || s.status !== "active") return;
+            var qd = (typeof Quest !== "undefined") ? Quest.def(qid) : null;
+            if (!qd || qd.npc !== npcId) return;
+            var _ok = false;
+            try {
+              if (typeof QuestGuide !== "undefined" && QuestGuide.questReadyToTurnIn)
+                _ok = QuestGuide.questReadyToTurnIn(state, qd);
+            } catch (e) {}
+            if (_ok) { doQuestTurnIn(qid); _aqDone = true; }
+          });
+          if (_aqDone) return;
+        } catch (e) {}
+      }
       Engine.talkNpcId = npcId; /* NPC hiện 💬 nói chuyện */
       openPanel("npc", { npcId: npcId, talk: NPC.talk(npcId, state) });
       /* NV1 Lễ Trắc Linh: đếm số dân làng đã chào hỏi (Bui 2026-10-18) */
@@ -742,6 +763,7 @@ function startGame() {
 
     if (Engine.init) Engine.init("game");
     if (Engine.setAuto) Engine.setAuto(!!state.auto);
+    if (Engine.setAutoQuest) Engine.setAutoQuest(!!state.autoQuest); /* AUTO NV (Bui 2026-10-19) */
     if (Engine.setFly) Engine.setFly(!!state.fly);
     if (Engine.setRun) Engine.setRun(!!state.run);
     /* vào game cũng qua màn hình chờ của map hiện tại */
@@ -877,7 +899,8 @@ function updateBossBar() {
 }
 
 function syncToggles() {
-  $("btn-auto").classList.toggle("on", !!state.auto);
+  var _ba = $("btn-auto"); if (_ba) _ba.classList.toggle("on", !!state.auto);
+  var _baq = $("btn-autoquest"); if (_baq) _baq.classList.toggle("on", !!state.autoQuest);
   $("btn-fly").classList.toggle("on", !!state.fly);
   $("btn-run").classList.toggle("on", !!state.run);
   /* Nút Tọa sáng khi đang thiền */
@@ -1402,6 +1425,9 @@ function renderQuest() {
   h += list.map(function (o) {
     var q = o.q, r = '<div class="row"><div><div class="item-name">' + esc(t(q.nameKey)) + "</div>" +
       '<div class="item-desc">' + esc(t(q.descKey)) + "</div>";
+    /* Yêu cầu cụ thể — liên kết chặt chẽ (Bui 2026-10-19) */
+    var _needTx = questNeedText(q);
+    if (_needTx) r += '<div class="q-need">' + esc(_needTx) + "</div>";
     if (o.st === "active") r += '<div class="item-desc">' + esc(questProgress(q, o.e)) + "</div>";
     if (q.reward) r += '<div class="item-desc">' + esc(t("q_reward")) + ": " + esc(rewardText(q.reward)) + "</div>";
     r += '</div><div class="row-btns">';
@@ -1964,6 +1990,40 @@ function sectQuestNav(tg) {
   }
 }
 
+/* Yêu cầu cụ thể của NV — liên kết chặt chẽ với mô tả và thưởng (Bui 2026-10-19) */
+function questNeedText(q) {
+  if (!q) return "";
+  var need = q.need || { type: "talk" };
+  var npcNm = function (id) {
+    try {
+      if (typeof NPCS !== "undefined" && NPCS[id] && NPCS[id].nameKey) return t(NPCS[id].nameKey);
+    } catch (e) {}
+    return id;
+  };
+  if (need.type === "kill") {
+    var mn = monName(need.monster);
+    return "⚔ " + t("q_need_kill", { n: mn, c: need.count });
+  }
+  if (need.type === "item") {
+    return "🎒 " + t("q_need_item", { n: itemName(need.item), c: need.count });
+  }
+  if (need.type === "talk") {
+    return "💬 " + t("q_need_talk", { n: npcNm(q.npc) });
+  }
+  if (need.type === "talk_npcs") {
+    var ns = (need.npcs || []).map(npcNm).join(", ");
+    return "💬 " + t("q_need_talk_npcs", { n: ns });
+  }
+  if (need.type === "joinsect") return "🏯 " + t("q_need_joinsect");
+  if (need.type === "tower_floor") return "🗼 " + t("q_need_tower", { f: need.floor });
+  if (need.type === "trial") {
+    var bn = need.boss ? t(need.boss.nameKey) : "";
+    return "👹 " + t("q_need_trial", { n: bn });
+  }
+  if (need.type === "secret_enter" || need.type === "secret_nodes" || need.type === "secret_party")
+    return "🌀 " + t("q_need_secret");
+  return "";
+}
 function questProgress(q, e) {
   var need = q.need || {};
   if (need.type === "kill") return t("q_progress", { a: e.count || 0, b: need.count });
@@ -2869,6 +2929,37 @@ function doDaoPick(v) {
 }
 
 /* ----- delegated click cho mọi panel ----- */
+/* Trả nhiệm vụ (dùng chung cho click tay + AUTO QUEST — Bui 2026-10-19) */
+function doQuestTurnIn(qtid) {
+  var qr = (typeof Quest !== "undefined") ? Quest.turnIn(state, qtid) : null;
+  if (qr && qr.ok) {
+    saveGame(state); sfx("success");
+    /* Thoại trả NV (nếu quest có turninTalk) */
+    try {
+      var qd2 = Quest.def(qtid);
+      if (qd2 && qd2.turninTalk) {
+        var npcNK2 = (typeof NPCS !== "undefined" && NPCS[qd2.npc]) ? NPCS[qd2.npc].nameKey : null;
+        showQuestTalk(qd2.turninTalk, npcNK2);
+      } else toast(t("quest_done"));
+      /* NV2 Dị Tượng Cửu Sắc: cột sáng 9 màu (Bui 2026-10-18) */
+      if (qr.fx === "cuusac") showCuuSacFx();
+      /* NV chính tuyến 2 nhánh: đột phá / cửu chuyển đan / tâm ma kiếp (Bui 2026-10-18) */
+      if (qr.fx === "dotpha" || qr.fx === "cuuchuyen" || qr.fx === "tamma") {
+        var _fxLbl = "";
+        try { _fxLbl = t(qd2.id + "_fx"); } catch (e) {}
+        if (qr.fx === "dotpha") showDotPhaFx(_fxLbl);
+        else if (qr.fx === "cuuchuyen") showCuuChuyenFx(_fxLbl);
+        else if (qr.fx === "tamma") showTamMaFx(_fxLbl);
+      }
+      /* NV5 Rời Làng: thông báo nhập đội */
+      if (qr.party && qr.party.length) toast(t("q_story_25_party"));
+      /* NV7 Ngã Ba Định Mệnh: storyboard */
+      if (qr.storyboard === "nga_ba_dinh_menh") showNgaBaStoryboard();
+    } catch (e) { toast(t("quest_done")); }
+    refreshHUD(); renderPanel();
+    return true;
+  } else { toast(t("q_incomplete")); sfx("fail"); return false; }
+}
 function onPanelClick(e) {
   var el = e.target && e.target.closest ? e.target.closest("[data-act]") : null;
   if (!el) return;
@@ -2932,34 +3023,7 @@ function onPanelClick(e) {
       break;
     }
     case "quest-turnin": {
-      var qtid = el.getAttribute("data-id");
-      var qr = (typeof Quest !== "undefined") ? Quest.turnIn(state, qtid) : null;
-      if (qr && qr.ok) {
-        saveGame(state); sfx("success");
-        /* Thoại trả NV (nếu quest có turninTalk) */
-        try {
-          var qd2 = Quest.def(qtid);
-          if (qd2 && qd2.turninTalk) {
-            var npcNK2 = (typeof NPCS !== "undefined" && NPCS[qd2.npc]) ? NPCS[qd2.npc].nameKey : null;
-            showQuestTalk(qd2.turninTalk, npcNK2);
-          } else toast(t("quest_done"));
-          /* NV2 Dị Tượng Cửu Sắc: cột sáng 9 màu (Bui 2026-10-18) */
-          if (qr.fx === "cuusac") showCuuSacFx();
-          /* NV chính tuyến 2 nhánh: đột phá / cửu chuyển đan / tâm ma kiếp (Bui 2026-10-18) */
-          if (qr.fx === "dotpha" || qr.fx === "cuuchuyen" || qr.fx === "tamma") {
-            var _fxLbl = "";
-            try { _fxLbl = t(qd2.id + "_fx"); } catch (e) {}
-            if (qr.fx === "dotpha") showDotPhaFx(_fxLbl);
-            else if (qr.fx === "cuuchuyen") showCuuChuyenFx(_fxLbl);
-            else if (qr.fx === "tamma") showTamMaFx(_fxLbl);
-          }
-          /* NV5 Rời Làng: thông báo nhập đội */
-          if (qr.party && qr.party.length) toast(t("q_story_25_party"));
-          /* NV7 Ngã Ba Định Mệnh: storyboard */
-          if (qr.storyboard === "nga_ba_dinh_menh") showNgaBaStoryboard();
-        } catch (e) { toast(t("quest_done")); }
-        refreshHUD(); renderPanel();
-      } else { toast(t("q_incomplete")); sfx("fail"); }
+      doQuestTurnIn(el.getAttribute("data-id"));
       break;
     }
     /* ----- Nhiệm vụ tông môn ----- */
@@ -3450,6 +3514,14 @@ function bindStatic() {
     if (hasEngine() && Engine.setAuto) Engine.setAuto(state.auto);
     saveGame(state); syncToggles(); sfx("click");
   };
+  /* AUTO LÀM NHIỆM VỤ (Bui 2026-10-19) */
+  var _btnAQ = $("btn-autoquest");
+  if (_btnAQ) _btnAQ.onclick = function () {
+    state.autoQuest = !state.autoQuest;
+    if (hasEngine() && Engine.setAutoQuest) Engine.setAutoQuest(state.autoQuest);
+    saveGame(state); syncToggles(); sfx("click");
+    toast(t(state.autoQuest ? "aq_on" : "aq_off"));
+  };
   $("btn-fly").onclick = function () {
     /* Ngự Kiếm mở khóa ở Trúc Cơ (realm 2) */
     if (!state.fly && (state.char.realm || 0) < 2) {
@@ -3617,7 +3689,7 @@ function skillbarSkills() {
       state.skillSlots.forEach(function (id) {
         if (id && Skills.hasLearned(state, id)) { out.push(id); anySet = true; }
       });
-      if (anySet) return out.slice(0, 7);
+      if (anySet) return out.slice(0, 8);
     }
     var cls = (state.char && state.char.sect) || "kiem";
     var order = ["kiem_xuyen_van", "van_kiem_quy_tong", "kiem_cuong_ho_the", "kimdan_kiem_y",
@@ -3628,7 +3700,7 @@ function skillbarSkills() {
                                 "la_han_quyen", "su_tu_hong", "kim_cang_hoa_than"];
     order.forEach(function (id) { if (Skills.hasLearned(state, id)) out.push(id); });
   } catch (e) {}
-  return out.slice(0, 7);
+  return out.slice(0, 8);
 }
 /* Icon skill bằng ảnh pixel art (assets/skills/<id>.png); fallback emoji nếu ảnh lỗi */
 function skillIconHtml(techId, emoji) {
@@ -3641,7 +3713,7 @@ function renderSkillbar() {
   if (!bar || typeof Skills === "undefined") return;
   var ids = skillbarSkills();
   var h = "";
-  for (var i = 0; i < 7; i++) {
+  for (var i = 0; i < 8; i++) {
     var id = ids[i];
     if (!id) {
       h += '<div class="skill-slot locked"><span class="skill-key">' + (i + 1) +

@@ -598,7 +598,92 @@ var Engine = (function () {
     return best ? best.npcId : null;
   }
 
+  /* ---------- AUTO QUEST: tự làm nhiệm vụ (Bui 2026-10-19) ---------- */
+  /* Trả về true nếu đã xử lý di chuyển/đánh cho quest (để auto-farm không giành) */
+  function _autoQuestTick(dt, ps, manual) {
+    if (!Engine.autoQuest || manual) return false;
+    var S = _S();
+    var q = null;
+    try {
+      if (typeof QuestGuide !== "undefined" && QuestGuide.activeStoryQuest)
+        q = QuestGuide.activeStoryQuest(S);
+    } catch (e) {}
+    if (!q) return false;
+    var tgt = null;
+    try {
+      if (typeof QuestGuide !== "undefined" && QuestGuide.questTarget)
+        tgt = QuestGuide.questTarget(S, q, _mapId);
+    } catch (e) {}
+    /* talk_npcs: ưu tiên NPC chưa nói chuyện */
+    var need = q.need || {};
+    if (need.type === "talk_npcs" && need.npcs) {
+      var talked = (((S.quests || {})[q.id] || {}).talked) || {};
+      var untalked = [];
+      for (var ui = 0; ui < need.npcs.length; ui++)
+        if (!talked[need.npcs[ui]]) untalked.push(need.npcs[ui]);
+      if (untalked.length) {
+        var bn = null, bd = 1e12;
+        for (var ni = 0; ni < _npcs.length; ni++) {
+          if (untalked.indexOf(_npcs[ni].npcId) < 0) continue;
+          var ddn = Math.hypot(_npcs[ni].x - player.x, _npcs[ni].y - player.y);
+          if (ddn < bd) { bd = ddn; bn = _npcs[ni]; }
+        }
+        if (bn) tgt = { kind: "npc", npcId: bn.npcId, _npcObj: bn };
+      }
+    }
+    if (!tgt) return false;
+    /* Chỉ tự động trong cùng map (không tự chuyển map gây bất ngờ) */
+    if (tgt.map != null && tgt.map !== _mapId) return false;
+
+    if (tgt.kind === "npc") {
+      var n = tgt._npcObj || null;
+      if (!n) {
+        for (var i = 0; i < _npcs.length; i++)
+          if (_npcs[i].npcId === tgt.npcId) { n = _npcs[i]; break; }
+      }
+      if (!n) return false;
+      var d = Math.hypot(n.x - player.x, n.y - player.y);
+      if (_aqInteractCd > 0) _aqInteractCd -= dt;
+      if (d <= INTERACT_RANGE) {
+        if (_aqInteractCd <= 0) { _aqInteractCd = 1.5; tryInteract(); }
+      } else if (_dashT <= 0) {
+        _moveToward(n.x, n.y, dt);
+      }
+      return true;
+    }
+    if (tgt.kind === "monster") {
+      var best = null, bdd = 1e12;
+      for (var j = 0; j < _monsters.length; j++) {
+        var m = _monsters[j];
+        if (m.dead) continue;
+        if (tgt.monId && m.monId !== tgt.monId) continue;
+        var ddm = Math.hypot(m.x - player.x, m.y - player.y);
+        if (ddm < bdd) { bdd = ddm; best = m; }
+      }
+      if (best) {
+        player.target = best;
+        if (bdd > _atkRange() * 0.8 && _dashT <= 0) {
+          _moveToward(best.x, best.y, dt);
+        } else if (_attackCd <= 0 && bdd <= _atkRange()) {
+          _playerAttack(best, ps);
+        }
+        _autoSkills(ps);
+        return true;
+      }
+      /* Chưa có quái đúng loại: di chuyển về tâm bãi chờ respawn */
+      if (tgt.x != null && tgt.y != null && _dashT <= 0) {
+        _moveToward(tgt.x, tgt.y, dt);
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
   function setAuto(b) { Engine.auto = !!b; var S = _S(); if (S) S.auto = Engine.auto; }
+  /* AUTO LÀM NHIỆM VỤ (Bui 2026-10-19): tự tìm mục tiêu quest, di chuyển, đánh, trả NV */
+  var _aqInteractCd = 0;
+  function setAutoQuest(b) { Engine.autoQuest = !!b; var S = _S(); if (S) S.autoQuest = Engine.autoQuest; }
   function setFly(b) { Engine.fly = !!b; var S = _S(); if (S) S.fly = Engine.fly; }
   function setRun(b) { Engine.run = !!b; var S = _S(); if (S) S.run = Engine.run; }
 
@@ -1568,7 +1653,9 @@ var Engine = (function () {
 
     // Auto: tìm quái gần nhất, dí theo và đánh
     var tgt = (player.target && !player.target.dead) ? player.target : null;
-    if (Engine.auto) {
+    /* AUTO QUEST ưu tiên trước auto-farm (Bui 2026-10-19) */
+    var _aqHandled = _autoQuestTick(dt, ps, manual);
+    if (Engine.auto && !_aqHandled) {
       var nm = _nearestMon();
       if (nm && (!tgt || nm.m.uid !== tgt.uid)) tgt = nm.m;
       player.target = tgt;
@@ -2548,6 +2635,7 @@ var Engine = (function () {
     var S = _S();
     if (S) {
       Engine.auto = S.auto !== false;
+      Engine.autoQuest = !!S.autoQuest; /* AUTO làm nhiệm vụ (Bui 2026-10-19) */
       Engine.fly = !!S.fly;
       Engine.run = !!S.run;
     }
@@ -2584,6 +2672,7 @@ var Engine = (function () {
     player: player,
     joy: joy,
     otherPlayers: [],
+    autoQuest: false,     // AUTO làm nhiệm vụ (Bui 2026-10-19)
     getStats: null,       // ui.js gán () => ({atk, def, maxHp, maxMp})
     onGate: null,         // (toMapId)
     onKill: null,         // (monster)
@@ -2605,6 +2694,7 @@ var Engine = (function () {
       }
     },
     setAuto: setAuto,
+    setAutoQuest: setAutoQuest, /* AUTO làm nhiệm vụ (Bui 2026-10-19) */
     setFly: setFly,
     setRun: setRun,
     setTapMove: function (v) { _tapMove = !!v; _moveTarget = null; }, /* bật/tắt chạm-map-di-chuyển */
