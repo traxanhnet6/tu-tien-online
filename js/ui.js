@@ -569,6 +569,8 @@ function beginGame() {
   saveGame(state);
   sfx("success");
   startGame();
+  /* Cốt truyện mở đầu cho nhân vật mới (Bui 2026-10-18) */
+  try { if (typeof Story !== "undefined" && Story.maybeShow) Story.maybeShow(); } catch (e) {}
 }
 
 /* ---------------- vào game + wiring engine ---------------- */
