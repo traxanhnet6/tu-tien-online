@@ -1,0 +1,55 @@
+{
+ "monster": "u_hon",
+ "canvas": {
+  "width": 1600,
+  "height": 1600
+ },
+ "note": "U Hon (ma): frontal smoke ghost; duoi_vai = lower smoke tendrils",
+ "parts": {
+  "duoi_vai": {
+   "file": "quai_u_hon_part_duoi_vai.png",
+   "pivot": [
+    800,
+    1050
+   ],
+   "z": 0,
+   "pixels": 90013
+  },
+  "tay_trai": {
+   "file": "quai_u_hon_part_tay_trai.png",
+   "pivot": [
+    620,
+    620
+   ],
+   "z": 1,
+   "pixels": 142317
+  },
+  "tay_phai": {
+   "file": "quai_u_hon_part_tay_phai.png",
+   "pivot": [
+    980,
+    620
+   ],
+   "z": 2,
+   "pixels": 138746
+  },
+  "than": {
+   "file": "quai_u_hon_part_than.png",
+   "pivot": [
+    800,
+    900
+   ],
+   "z": 3,
+   "pixels": 143789
+  },
+  "dau": {
+   "file": "quai_u_hon_part_dau.png",
+   "pivot": [
+    800,
+    700
+   ],
+   "z": 4,
+   "pixels": 200636
+  }
+ }
+}

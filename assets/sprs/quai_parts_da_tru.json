@@ -1,0 +1,64 @@
+{
+ "monster": "da_tru",
+ "canvas": {
+  "width": 1392,
+  "height": 1712
+ },
+ "note": "Dã Trư (wild boar), top-down chibi pixel (AI redraw of sprs_mon_da_tru.png). Tail folded into than (no separate duoi part). Parts tiled by z-priority (higher z claims first): legs tuck under body, head over neck. trai/phai = viewer's left/right.",
+ "parts": {
+  "tay_trai": {
+   "file": "quai_da_tru_part_tay_trai.png",
+   "pivot": [
+    330,
+    700
+   ],
+   "z": 0,
+   "pixels": 29709
+  },
+  "tay_phai": {
+   "file": "quai_da_tru_part_tay_phai.png",
+   "pivot": [
+    1062,
+    700
+   ],
+   "z": 0,
+   "pixels": 30079
+  },
+  "chan_trai": {
+   "file": "quai_da_tru_part_chan_trai.png",
+   "pivot": [
+    380,
+    1220
+   ],
+   "z": 0,
+   "pixels": 42796
+  },
+  "chan_phai": {
+   "file": "quai_da_tru_part_chan_phai.png",
+   "pivot": [
+    1012,
+    1220
+   ],
+   "z": 0,
+   "pixels": 41489
+  },
+  "than": {
+   "file": "quai_da_tru_part_than.png",
+   "pivot": [
+    695,
+    900
+   ],
+   "z": 1,
+   "pixels": 751588
+  },
+  "dau": {
+   "file": "quai_da_tru_part_dau.png",
+   "pivot": [
+    695,
+    465
+   ],
+   "z": 2,
+   "pixels": 101648
+  }
+ }
+}

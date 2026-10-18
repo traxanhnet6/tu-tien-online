@@ -1,0 +1,112 @@
+{
+  "monster": "da_tru_vuong",
+  "canvas": {
+    "width": 1600,
+    "height": 1600
+  },
+  "source": "AI-generated master (1600x1600, black bg flood-filled), segmented by part",
+  "note": "Da Tru Vuong (Stone Pillar King): giant stone golem, golden crown + halo ring (halo included in dau), red eyes, rocky hide with mossy cracks.",
+  "variants_note": "combat: red battle grade (R boost) + blazing red eyes (cot_tuong soul-fire recolored green->red; da_tru_vuong eyes already red); tinh_anh: golden grade. Variants share the base alpha mask exactly (PIL palette grades, same convention as hac_long parts).",
+  "jaw_animation": "For frontal heads, open the jaw by translating ham_duoi DOWN from its pivot (in-plane rotation about the hinge midpoint skews a frontal jaw). mieng_trong (dark mouth interior) is revealed behind it.",
+  "parts": {
+    "dau": {
+      "file": "boss_da_tru_vuong_part_dau.png",
+      "file_combat": "boss_da_tru_vuong_part_dau_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_dau_tinh_anh.png",
+      "pivot": [
+        800,
+        700
+      ],
+      "z": 6,
+      "pixels": 240821
+    },
+    "ham_duoi": {
+      "file": "boss_da_tru_vuong_part_ham_duoi.png",
+      "file_combat": "boss_da_tru_vuong_part_ham_duoi_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_ham_duoi_tinh_anh.png",
+      "pivot": [
+        800,
+        612
+      ],
+      "z": 8,
+      "pixels": 17617
+    },
+    "mieng_trong": {
+      "file": "boss_da_tru_vuong_part_mieng_trong.png",
+      "file_combat": "boss_da_tru_vuong_part_mieng_trong_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_mieng_trong_tinh_anh.png",
+      "pivot": [
+        800,
+        625
+      ],
+      "z": 7,
+      "pixels": 8892
+    },
+    "than_tren": {
+      "file": "boss_da_tru_vuong_part_than_tren.png",
+      "file_combat": "boss_da_tru_vuong_part_than_tren_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_than_tren_tinh_anh.png",
+      "pivot": [
+        800,
+        810
+      ],
+      "z": 4,
+      "pixels": 133519
+    },
+    "than_duoi": {
+      "file": "boss_da_tru_vuong_part_than_duoi.png",
+      "file_combat": "boss_da_tru_vuong_part_than_duoi_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_than_duoi_tinh_anh.png",
+      "pivot": [
+        800,
+        1080
+      ],
+      "z": 5,
+      "pixels": 101664
+    },
+    "tay_trai": {
+      "file": "boss_da_tru_vuong_part_tay_trai.png",
+      "file_combat": "boss_da_tru_vuong_part_tay_trai_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_tay_trai_tinh_anh.png",
+      "pivot": [
+        400,
+        720
+      ],
+      "z": 0,
+      "pixels": 82481
+    },
+    "tay_phai": {
+      "file": "boss_da_tru_vuong_part_tay_phai.png",
+      "file_combat": "boss_da_tru_vuong_part_tay_phai_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_tay_phai_tinh_anh.png",
+      "pivot": [
+        1200,
+        720
+      ],
+      "z": 1,
+      "pixels": 101484
+    },
+    "chan_trai": {
+      "file": "boss_da_tru_vuong_part_chan_trai.png",
+      "file_combat": "boss_da_tru_vuong_part_chan_trai_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_chan_trai_tinh_anh.png",
+      "pivot": [
+        560,
+        1160
+      ],
+      "z": 2,
+      "pixels": 61573
+    },
+    "chan_phai": {
+      "file": "boss_da_tru_vuong_part_chan_phai.png",
+      "file_combat": "boss_da_tru_vuong_part_chan_phai_combat.png",
+      "file_tinh_anh": "boss_da_tru_vuong_part_chan_phai_tinh_anh.png",
+      "pivot": [
+        1040,
+        1160
+      ],
+      "z": 3,
+      "pixels": 80107
+    }
+  }
+}

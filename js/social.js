@@ -17,6 +17,10 @@ function _sdep(name) {
   if (_SO && typeof _SO[name] === "function") return _SO[name];
   throw new Error("missing dep: " + name);
 }
+/* Cầu nối Supabase (online_sb.js, milestone 2): fire-and-forget, không vỡ khi offline */
+function _sbPush(fn) {
+  try { if (typeof OnlineSB !== "undefined" && OnlineSB.active()) fn(OnlineSB); } catch (e) {}
+}
 /* Node shim cho localStorage (giống online.js) */
 if (typeof module !== "undefined" && module.exports && typeof localStorage === "undefined") {
   global.localStorage = {
@@ -130,6 +134,7 @@ var Social = {
     c.lastRenameAt = Date.now();
     c.renameFreeUsed = true;
     /* bản online (milestone 2): tên mới check trùng qua Supabase unique */
+    _sbPush(function (SB) { SB.pushRename(state, chk.name); });
     return { ok: true, free: cr.free };
   },
 
@@ -202,27 +207,50 @@ var Social = {
     return null;
   },
 
-  /* Tìm người chơi theo tên hoặc ID (không gồm chính mình) */
-  searchPlayers: function (query, state) {
-    var q = String(query || "").trim();
-    if (!q) return [];
+  /* Tìm người chơi theo tên hoặc ID (không gồm chính mình).
+     Online (milestone 2): query Supabase async, trả cache đồng bộ cho UI;
+     kết quả mới về qua Social._onSearchDone để UI vẽ lại. */
+  _onSearchDone: null,
+  _annotatePlayers: function (list, state) {
     var soc = this._soc(state);
-    var me = state.char.charId;
-    var qUp = q.toUpperCase();
     var friendIds = {}, reqOutIds = {};
     soc.friends.forEach(function (f) { friendIds[f.id] = 1; });
     soc.requestsOut.forEach(function (r) { reqOutIds[r.id] = 1; });
-    return this.SAMPLE_PLAYERS.filter(function (p) {
-      if (p.id === me) return false;
-      return p.name.toLowerCase().indexOf(q.toLowerCase()) >= 0 ||
-             p.id.toUpperCase().indexOf(qUp) >= 0;
-    }).map(function (p) {
+    return list.map(function (p) {
       return {
         id: p.id, name: p.name, gender: p.gender, sect: p.sect,
         realm: p.realm, tier: p.tier, online: p.online,
         isFriend: !!friendIds[p.id], requested: !!reqOutIds[p.id],
       };
     });
+  },
+  searchPlayers: function (query, state) {
+    var q = String(query || "").trim();
+    if (!q) return [];
+    var me = state.char.charId;
+    if (typeof OnlineSB !== "undefined" && OnlineSB.active()) {
+      var self = this;
+      var cached = OnlineSB.searchCached(q);
+      OnlineSB.searchOnline(q, function (res) {
+        try {
+          var ann = self._annotatePlayers(
+            res.filter(function (p) { return p.id !== me; }), state);
+          if (self._onSearchDone) self._onSearchDone(q, ann);
+        } catch (e) {}
+      });
+      if (cached)
+        return this._annotatePlayers(
+          cached.filter(function (p) { return p.id !== me; }), state);
+      return [];
+    }
+    var soc = this._soc(state);
+    var qUp = q.toUpperCase();
+    var list = this.SAMPLE_PLAYERS.filter(function (p) {
+      if (p.id === me) return false;
+      return p.name.toLowerCase().indexOf(q.toLowerCase()) >= 0 ||
+             p.id.toUpperCase().indexOf(qUp) >= 0;
+    });
+    return this._annotatePlayers(list, state);
   },
 
   /* ================= KẾT BẠN ================= */
@@ -239,6 +267,7 @@ var Social = {
     /* demo offline: bạn mẫu tự chấp nhận sau vài giây */
     soc._pendingAccept = soc._pendingAccept || [];
     soc._pendingAccept.push({ id: p.id, at: Date.now() + 4000 + Math.random() * 6000 });
+    _sbPush(function (SB) { SB.pushFriendRequest(playerId); });
     return { ok: true };
   },
   cancelRequest: function (state, playerId) {
@@ -246,6 +275,7 @@ var Social = {
     soc.requestsOut = soc.requestsOut.filter(function (r) { return r.id !== playerId; });
     if (soc._pendingAccept)
       soc._pendingAccept = soc._pendingAccept.filter(function (p) { return p.id !== playerId; });
+    _sbPush(function (SB) { SB.pushCancelRequest(playerId); });
     return { ok: true };
   },
   acceptRequest: function (state, playerId) {
@@ -261,11 +291,13 @@ var Social = {
       realm: p.realm || 1, tier: p.tier || 1, online: p.online !== false,
       addedAt: Date.now(),
     });
+    _sbPush(function (SB) { SB.pushAccept(playerId); });
     return { ok: true };
   },
   declineRequest: function (state, playerId) {
     var soc = this._soc(state);
     soc.requestsIn = soc.requestsIn.filter(function (r) { return r.id !== playerId; });
+    _sbPush(function (SB) { SB.pushDecline(playerId); });
     return { ok: true };
   },
   removeFriend: function (state, friendId) {
@@ -273,6 +305,7 @@ var Social = {
     soc.friends = soc.friends.filter(function (f) { return f.id !== friendId; });
     delete soc.threads[friendId];
     delete soc.unread[friendId];
+    _sbPush(function (SB) { SB.pushRemoveFriend(friendId); });
     return { ok: true };
   },
   getFriend: function (state, friendId) {
@@ -299,8 +332,10 @@ var Social = {
     soc.lastMsgAt = now;
     var th = soc.threads[friendId] = soc.threads[friendId] || [];
     /* tin nhắn cũ giữ tên lúc gửi (lưu name tại thời điểm gửi) */
-    th.push({ from: "me", name: state.char.name, text: this.censor(text), at: now });
+    var censored = this.censor(text);
+    th.push({ from: "me", name: state.char.name, text: censored, at: now });
     if (th.length > this.MAX_THREAD) soc.threads[friendId] = th.slice(-this.MAX_THREAD);
+    _sbPush(function (SB) { SB.pushMessage(friendId, censored); });
     /* demo offline: bạn mẫu trả lời sau 2-5 giây */
     soc._pendingReply = soc._pendingReply || [];
     if (this._sampleById(friendId))
@@ -318,8 +353,12 @@ var Social = {
     Object.keys(u).forEach(function (k) { n += u[k] || 0; });
     return n;
   },
-  /* Tick giả lập realtime (ui.js gọi mỗi vài giây). Trả về sự kiện để UI báo. */
+  /* Tick giả lập realtime (ui.js gọi mỗi vài giây). Trả về sự kiện để UI báo.
+     Online (milestone 2): lấy sự kiện thật từ OnlineSB thay vì mock. */
   mockTick: function (state, randFn) {
+    if (typeof OnlineSB !== "undefined" && OnlineSB.active()) {
+      try { return OnlineSB.drainEvents(); } catch (e) { return []; }
+    }
     var soc = this._soc(state), now = Date.now(), evts = [];
     var r = randFn || Math.random, self = this;
     /* lời mời đã gửi → bạn mẫu chấp nhận */

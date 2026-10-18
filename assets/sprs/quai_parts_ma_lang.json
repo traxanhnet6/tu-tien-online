@@ -1,0 +1,103 @@
+{
+ "monster": "ma_lang",
+ "canvas": {
+  "width": 1600,
+  "height": 1600
+ },
+ "note": "trai = near side (viewer), phai = far side",
+ "parts": {
+  "chan_truoc_phai": {
+   "file": "quai_ma_lang_part_chan_truoc_phai.png",
+   "pivot": [
+    1320,
+    900
+   ],
+   "z": 0,
+   "pixels": 46486
+  },
+  "chan_sau_phai": {
+   "file": "quai_ma_lang_part_chan_sau_phai.png",
+   "pivot": [
+    750,
+    1000
+   ],
+   "z": 1,
+   "pixels": 103578
+  },
+  "duoi": {
+   "file": "quai_ma_lang_part_duoi.png",
+   "pivot": [
+    520,
+    650
+   ],
+   "z": 2,
+   "pixels": 178863
+  },
+  "than": {
+   "file": "quai_ma_lang_part_than.png",
+   "pivot": [
+    700,
+    850
+   ],
+   "z": 3,
+   "pixels": 288714
+  },
+  "chan_sau_trai": {
+   "file": "quai_ma_lang_part_chan_sau_trai.png",
+   "pivot": [
+    350,
+    1000
+   ],
+   "z": 4,
+   "pixels": 75490
+  },
+  "chan_truoc_trai": {
+   "file": "quai_ma_lang_part_chan_truoc_trai.png",
+   "pivot": [
+    1000,
+    950
+   ],
+   "z": 5,
+   "pixels": 108998
+  },
+  "dau": {
+   "file": "quai_ma_lang_part_dau.png",
+   "pivot": [
+    1000,
+    700
+   ],
+   "z": 6,
+   "pixels": 118345
+  },
+  "mieng_trong": {
+   "file": "quai_ma_lang_part_mieng_trong.png",
+   "pivot": [
+    1210,
+    900
+   ],
+   "z": 7,
+   "bbox": [
+    1075,
+    785,
+    1344,
+    1019
+   ],
+   "note": "khoang mồm há (tối + răng); nằm dưới ham_duoi"
+  },
+  "ham_duoi": {
+   "file": "quai_ma_lang_part_ham_duoi.png",
+   "pivot": [
+    1085,
+    825
+   ],
+   "z": 8,
+   "bbox": [
+    1080,
+    838,
+    1333,
+    1013
+   ],
+   "note": "hàm dưới, xoay quanh pivot=khớp hàm (bản lề mép mồm) để há/ngậm"
+  }
+ }
+}

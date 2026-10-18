@@ -1,0 +1,156 @@
+{
+ "monster": "thien_tuong",
+ "canvas": {
+  "width": 1120,
+  "height": 2240
+ },
+ "source": "mon_thien_tuong.png",
+ "note": "Golden warrior, roaring. Jaw includes beard/chin. dau fixed 2026-10-18: added missing helmet wing tips + tassels (x300-400 & x740-800, y550-900) that the old segment lacked. 10 new parts segmented from mon_thien_tuong.png via polygon masks + flood-fill bg removal (black: max RGB<28); generous overlaps at joints for articulation; halo sparks within 30px claimed by nearest part. trai = viewer's left, phai = viewer's right.",
+ "jaw_animation": "For frontal heads, open the jaw by translating ham_duoi DOWN from its pivot (in-plane rotation about the hinge midpoint skews a frontal jaw; verified visually). Small rotation (<10deg) may be mixed in for snap.",
+ "variants_note": "_combat: red overlay 25% + saturation x1.3 (mat do ruc); _tinh_anh: gold overlay 25% + brightness x1.1. All variants share the same pivot and z-order.",
+ "parts": {
+  "dau": {
+   "file": "boss_thien_tuong_part_dau.png",
+   "file_combat": "boss_thien_tuong_part_dau_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_dau_tinh_anh.png",
+   "pivot": [
+    565,
+    730
+   ],
+   "z": 0,
+   "pixels": 163431
+  },
+  "mieng_trong": {
+   "file": "boss_thien_tuong_part_mieng_trong.png",
+   "file_combat": "boss_thien_tuong_part_mieng_trong_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_mieng_trong_tinh_anh.png",
+   "pivot": [
+    560,
+    800
+   ],
+   "z": 1,
+   "pixels": 15849
+  },
+  "ham_duoi": {
+   "file": "boss_thien_tuong_part_ham_duoi.png",
+   "file_combat": "boss_thien_tuong_part_ham_duoi_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_ham_duoi_tinh_anh.png",
+   "pivot": [
+    560,
+    762
+   ],
+   "z": 2,
+   "pixels": 7901
+  },
+  "vukhi": {
+   "file": "boss_thien_tuong_part_vukhi.png",
+   "file_combat": "boss_thien_tuong_part_vukhi_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_vukhi_tinh_anh.png",
+   "pivot": [
+    240,
+    1150
+   ],
+   "z": 3,
+   "pixels": 404011
+  },
+  "chan_trai_tren": {
+   "file": "boss_thien_tuong_part_chan_trai_tren.png",
+   "file_combat": "boss_thien_tuong_part_chan_trai_tren_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_chan_trai_tren_tinh_anh.png",
+   "pivot": [
+    390,
+    1500
+   ],
+   "z": 4,
+   "pixels": 78491
+  },
+  "chan_phai_tren": {
+   "file": "boss_thien_tuong_part_chan_phai_tren.png",
+   "file_combat": "boss_thien_tuong_part_chan_phai_tren_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_chan_phai_tren_tinh_anh.png",
+   "pivot": [
+    740,
+    1500
+   ],
+   "z": 4,
+   "pixels": 68459
+  },
+  "chan_trai_duoi": {
+   "file": "boss_thien_tuong_part_chan_trai_duoi.png",
+   "file_combat": "boss_thien_tuong_part_chan_trai_duoi_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_chan_trai_duoi_tinh_anh.png",
+   "pivot": [
+    350,
+    1700
+   ],
+   "z": 5,
+   "pixels": 136613
+  },
+  "chan_phai_duoi": {
+   "file": "boss_thien_tuong_part_chan_phai_duoi.png",
+   "file_combat": "boss_thien_tuong_part_chan_phai_duoi_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_chan_phai_duoi_tinh_anh.png",
+   "pivot": [
+    770,
+    1700
+   ],
+   "z": 5,
+   "pixels": 204958
+  },
+  "than": {
+   "file": "boss_thien_tuong_part_than.png",
+   "file_combat": "boss_thien_tuong_part_than_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_than_tinh_anh.png",
+   "pivot": [
+    560,
+    1400
+   ],
+   "z": 6,
+   "pixels": 408279
+  },
+  "tay_trai_tren": {
+   "file": "boss_thien_tuong_part_tay_trai_tren.png",
+   "file_combat": "boss_thien_tuong_part_tay_trai_tren_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_tay_trai_tren_tinh_anh.png",
+   "pivot": [
+    300,
+    900
+   ],
+   "z": 7,
+   "pixels": 74236
+  },
+  "tay_phai_tren": {
+   "file": "boss_thien_tuong_part_tay_phai_tren.png",
+   "file_combat": "boss_thien_tuong_part_tay_phai_tren_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_tay_phai_tren_tinh_anh.png",
+   "pivot": [
+    800,
+    900
+   ],
+   "z": 7,
+   "pixels": 203082
+  },
+  "tay_trai_duoi": {
+   "file": "boss_thien_tuong_part_tay_trai_duoi.png",
+   "file_combat": "boss_thien_tuong_part_tay_trai_duoi_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_tay_trai_duoi_tinh_anh.png",
+   "pivot": [
+    255,
+    1070
+   ],
+   "z": 8,
+   "pixels": 38871
+  },
+  "tay_phai_duoi": {
+   "file": "boss_thien_tuong_part_tay_phai_duoi.png",
+   "file_combat": "boss_thien_tuong_part_tay_phai_duoi_combat.png",
+   "file_tinh_anh": "boss_thien_tuong_part_tay_phai_duoi_tinh_anh.png",
+   "pivot": [
+    850,
+    1100
+   ],
+   "z": 8,
+   "pixels": 144077
+  }
+ }
+}

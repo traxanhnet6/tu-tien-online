@@ -1,0 +1,123 @@
+{
+ "monster": "hu_thi",
+ "canvas": {
+  "width": 1920,
+  "height": 1280
+ },
+ "note": "Ho Thi (ho bat tu): side view facing left, roaring; duoi_1 = tail base, duoi_2 = tail tip",
+ "parts": {
+  "chan_truoc_phai": {
+   "file": "quai_hu_thi_part_chan_truoc_phai.png",
+   "pivot": [
+    450,
+    1000
+   ],
+   "z": 0,
+   "pixels": 13530
+  },
+  "chan_sau_phai": {
+   "file": "quai_hu_thi_part_chan_sau_phai.png",
+   "pivot": [
+    920,
+    1000
+   ],
+   "z": 1,
+   "pixels": 34503
+  },
+  "chan_truoc_trai": {
+   "file": "quai_hu_thi_part_chan_truoc_trai.png",
+   "pivot": [
+    680,
+    1000
+   ],
+   "z": 2,
+   "pixels": 39173
+  },
+  "chan_sau_trai": {
+   "file": "quai_hu_thi_part_chan_sau_trai.png",
+   "pivot": [
+    1160,
+    1000
+   ],
+   "z": 3,
+   "pixels": 32682
+  },
+  "duoi_2": {
+   "file": "quai_hu_thi_part_duoi_2.png",
+   "pivot": [
+    1420,
+    900
+   ],
+   "z": 4,
+   "pixels": 63326
+  },
+  "duoi_1": {
+   "file": "quai_hu_thi_part_duoi_1.png",
+   "pivot": [
+    1200,
+    900
+   ],
+   "z": 5,
+   "pixels": 78739
+  },
+  "than_sau": {
+   "file": "quai_hu_thi_part_than_sau.png",
+   "pivot": [
+    1250,
+    830
+   ],
+   "z": 6,
+   "pixels": 271020
+  },
+  "than_truoc": {
+   "file": "quai_hu_thi_part_than_truoc.png",
+   "pivot": [
+    830,
+    830
+   ],
+   "z": 7,
+   "pixels": 144707
+  },
+  "dau": {
+   "file": "quai_hu_thi_part_dau.png",
+   "pivot": [
+    600,
+    700
+   ],
+   "z": 8,
+   "pixels": 237978
+  },
+  "mieng_trong": {
+   "file": "quai_hu_thi_part_mieng_trong.png",
+   "pivot": [
+    240,
+    610
+   ],
+   "z": 9,
+   "pixels": 31672,
+   "bbox": [
+    144,
+    470,
+    340,
+    770
+   ],
+   "note": "khoang mom ha (toi + rang/lua); nam duoi ham_duoi"
+  },
+  "ham_duoi": {
+   "file": "quai_hu_thi_part_ham_duoi.png",
+   "pivot": [
+    330,
+    620
+   ],
+   "z": 10,
+   "pixels": 6443,
+   "bbox": [
+    260,
+    640,
+    360,
+    823
+   ],
+   "note": "ham duoi, xoay quanh pivot=khop ham (ban le mep mom) de ha/ngam"
+  }
+ }
+}

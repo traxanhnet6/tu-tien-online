@@ -1,0 +1,181 @@
+{
+ "monster": "lang_vuong",
+ "canvas": {
+  "width": 1440,
+  "height": 1536
+ },
+ "source": "boss_lang_vuong.png",
+ "note": "Lang Vuong - wolf king, side view facing left. trai=near-side leg (viewer side), phai=far-side leg. Upper teeth stay with dau; mieng_trong is the dark mouth interior patch (child of dau). Background: pure black, flood-filled from border (maxRGB<28).",
+ "jaw_animation": "Open the jaw by translating ham_duoi DOWN from its pivot (hinge at jaw joint); small rotation (<10deg) may be mixed in.",
+ "leg_convention": "trai = near-side (viewer side), phai = far-side",
+ "parts": {
+  "duoi_2": {
+   "file": "boss_lang_vuong_part_duoi_2.png",
+   "pivot": [
+    1240,
+    700
+   ],
+   "z": 1,
+   "pixels": 67239,
+   "variants": {
+    "base": "boss_lang_vuong_part_duoi_2.png",
+    "combat": "boss_lang_vuong_part_duoi_2_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_duoi_2_tinh_anh.png"
+   }
+  },
+  "duoi_1": {
+   "file": "boss_lang_vuong_part_duoi_1.png",
+   "pivot": [
+    1080,
+    780
+   ],
+   "z": 2,
+   "pixels": 52104,
+   "variants": {
+    "base": "boss_lang_vuong_part_duoi_1.png",
+    "combat": "boss_lang_vuong_part_duoi_1_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_duoi_1_tinh_anh.png"
+   }
+  },
+  "chan_truoc_phai": {
+   "file": "boss_lang_vuong_part_chan_truoc_phai.png",
+   "pivot": [
+    500,
+    1020
+   ],
+   "z": 3,
+   "pixels": 34718,
+   "variants": {
+    "base": "boss_lang_vuong_part_chan_truoc_phai.png",
+    "combat": "boss_lang_vuong_part_chan_truoc_phai_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_chan_truoc_phai_tinh_anh.png"
+   }
+  },
+  "chan_sau_phai": {
+   "file": "boss_lang_vuong_part_chan_sau_phai.png",
+   "pivot": [
+    1120,
+    1000
+   ],
+   "z": 3,
+   "pixels": 27324,
+   "variants": {
+    "base": "boss_lang_vuong_part_chan_sau_phai.png",
+    "combat": "boss_lang_vuong_part_chan_sau_phai_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_chan_sau_phai_tinh_anh.png"
+   }
+  },
+  "than_truoc": {
+   "file": "boss_lang_vuong_part_than_truoc.png",
+   "pivot": [
+    740,
+    870
+   ],
+   "z": 4,
+   "pixels": 64554,
+   "variants": {
+    "base": "boss_lang_vuong_part_than_truoc.png",
+    "combat": "boss_lang_vuong_part_than_truoc_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_than_truoc_tinh_anh.png"
+   }
+  },
+  "than_sau": {
+   "file": "boss_lang_vuong_part_than_sau.png",
+   "pivot": [
+    960,
+    870
+   ],
+   "z": 4,
+   "pixels": 44253,
+   "variants": {
+    "base": "boss_lang_vuong_part_than_sau.png",
+    "combat": "boss_lang_vuong_part_than_sau_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_than_sau_tinh_anh.png"
+   }
+  },
+  "chan_truoc_trai": {
+   "file": "boss_lang_vuong_part_chan_truoc_trai.png",
+   "pivot": [
+    420,
+    920
+   ],
+   "z": 5,
+   "pixels": 32364,
+   "variants": {
+    "base": "boss_lang_vuong_part_chan_truoc_trai.png",
+    "combat": "boss_lang_vuong_part_chan_truoc_trai_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_chan_truoc_trai_tinh_anh.png"
+   }
+  },
+  "chan_sau_trai": {
+   "file": "boss_lang_vuong_part_chan_sau_trai.png",
+   "pivot": [
+    1000,
+    980
+   ],
+   "z": 5,
+   "pixels": 27172,
+   "variants": {
+    "base": "boss_lang_vuong_part_chan_sau_trai.png",
+    "combat": "boss_lang_vuong_part_chan_sau_trai_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_chan_sau_trai_tinh_anh.png"
+   }
+  },
+  "co": {
+   "file": "boss_lang_vuong_part_co.png",
+   "pivot": [
+    560,
+    800
+   ],
+   "z": 6,
+   "pixels": 53068,
+   "variants": {
+    "base": "boss_lang_vuong_part_co.png",
+    "combat": "boss_lang_vuong_part_co_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_co_tinh_anh.png"
+   }
+  },
+  "mieng_trong": {
+   "file": "boss_lang_vuong_part_mieng_trong.png",
+   "pivot": [
+    240,
+    720
+   ],
+   "z": 7,
+   "pixels": 1478,
+   "variants": {
+    "base": "boss_lang_vuong_part_mieng_trong.png",
+    "combat": "boss_lang_vuong_part_mieng_trong_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_mieng_trong_tinh_anh.png"
+   }
+  },
+  "ham_duoi": {
+   "file": "boss_lang_vuong_part_ham_duoi.png",
+   "pivot": [
+    430,
+    740
+   ],
+   "z": 8,
+   "pixels": 15424,
+   "variants": {
+    "base": "boss_lang_vuong_part_ham_duoi.png",
+    "combat": "boss_lang_vuong_part_ham_duoi_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_ham_duoi_tinh_anh.png"
+   }
+  },
+  "dau": {
+   "file": "boss_lang_vuong_part_dau.png",
+   "pivot": [
+    470,
+    750
+   ],
+   "z": 9,
+   "pixels": 127813,
+   "variants": {
+    "base": "boss_lang_vuong_part_dau.png",
+    "combat": "boss_lang_vuong_part_dau_combat.png",
+    "tinh_anh": "boss_lang_vuong_part_dau_tinh_anh.png"
+   }
+  }
+ }
+}

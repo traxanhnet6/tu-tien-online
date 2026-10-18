@@ -1,0 +1,139 @@
+{
+ "monster": "u_hon_lang",
+ "source": "mon_u_hon_lang.png",
+ "canvas": [
+  1600,
+  1600
+ ],
+ "note": "trai/phai theo goc nhin cua quai (quai doi dien nguoi choi): trai = nua phai cua anh (x lon), phai = nua trai cua anh (x nho)",
+ "parts": {
+  "duoi": {
+   "file": "quai_u_hon_lang_part_duoi.png",
+   "pivot": [
+    1355,
+    1050
+   ],
+   "z": 0,
+   "bbox": [
+    1315,
+    700,
+    1470,
+    1125
+   ]
+  },
+  "chan_sau_phai": {
+   "file": "quai_u_hon_lang_part_chan_sau_phai.png",
+   "pivot": [
+    675,
+    975
+   ],
+   "z": 1,
+   "bbox": [
+    606,
+    935,
+    825,
+    1310
+   ]
+  },
+  "chan_sau_trai": {
+   "file": "quai_u_hon_lang_part_chan_sau_trai.png",
+   "pivot": [
+    1380,
+    1105
+   ],
+   "z": 2,
+   "bbox": [
+    1356,
+    1045,
+    1485,
+    1355
+   ]
+  },
+  "than": {
+   "file": "quai_u_hon_lang_part_than.png",
+   "pivot": [
+    800,
+    1080
+   ],
+   "z": 3,
+   "bbox": [
+    44,
+    0,
+    1562,
+    1574
+   ]
+  },
+  "chan_truoc_phai": {
+   "file": "quai_u_hon_lang_part_chan_truoc_phai.png",
+   "pivot": [
+    465,
+    925
+   ],
+   "z": 4,
+   "bbox": [
+    290,
+    890,
+    605,
+    1495
+   ]
+  },
+  "chan_truoc_trai": {
+   "file": "quai_u_hon_lang_part_chan_truoc_trai.png",
+   "pivot": [
+    1175,
+    975
+   ],
+   "z": 5,
+   "bbox": [
+    995,
+    940,
+    1355,
+    1561
+   ]
+  },
+  "dau": {
+   "file": "quai_u_hon_lang_part_dau.png",
+   "pivot": [
+    800,
+    830
+   ],
+   "z": 6,
+   "bbox": [
+    430,
+    195,
+    1170,
+    845
+   ]
+  },
+  "mieng_trong": {
+   "file": "quai_u_hon_lang_part_mieng_trong.png",
+   "pivot": [
+    800,
+    890
+   ],
+   "z": 7,
+   "bbox": [
+    692,
+    782,
+    908,
+    992
+   ],
+   "note": "khoang mồm há (tối + răng); nằm dưới ham_duoi"
+  },
+  "ham_duoi": {
+   "file": "quai_u_hon_lang_part_ham_duoi.png",
+   "pivot": [
+    735,
+    820
+   ],
+   "z": 8,
+   "bbox": [
+    692,
+    815,
+    908,
+    992
+   ],
+   "note": "hàm dưới, xoay quanh pivot=khớp hàm (bản lề mép mồm) để há/ngậm"
+  }
+ }
+}

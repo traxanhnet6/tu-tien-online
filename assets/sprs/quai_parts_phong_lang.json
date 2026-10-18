@@ -1,0 +1,123 @@
+{
+ "monster": "phong_lang",
+ "canvas": {
+  "width": 1600,
+  "height": 1600
+ },
+ "note": "Phong Lang (soi gio): side view facing left; duoi_2 = outer wind-swirls of tail; upper back swirls stay with than_sau",
+ "parts": {
+  "chan_truoc_phai": {
+   "file": "quai_phong_lang_part_chan_truoc_phai.png",
+   "pivot": [
+    350,
+    1050
+   ],
+   "z": 0,
+   "pixels": 19999
+  },
+  "chan_sau_phai": {
+   "file": "quai_phong_lang_part_chan_sau_phai.png",
+   "pivot": [
+    875,
+    1050
+   ],
+   "z": 1,
+   "pixels": 23292
+  },
+  "chan_truoc_trai": {
+   "file": "quai_phong_lang_part_chan_truoc_trai.png",
+   "pivot": [
+    640,
+    1050
+   ],
+   "z": 2,
+   "pixels": 68744
+  },
+  "chan_sau_trai": {
+   "file": "quai_phong_lang_part_chan_sau_trai.png",
+   "pivot": [
+    1020,
+    1050
+   ],
+   "z": 3,
+   "pixels": 45325
+  },
+  "duoi_2": {
+   "file": "quai_phong_lang_part_duoi_2.png",
+   "pivot": [
+    1290,
+    800
+   ],
+   "z": 4,
+   "pixels": 74363
+  },
+  "duoi_1": {
+   "file": "quai_phong_lang_part_duoi_1.png",
+   "pivot": [
+    1080,
+    820
+   ],
+   "z": 5,
+   "pixels": 83257
+  },
+  "than_sau": {
+   "file": "quai_phong_lang_part_than_sau.png",
+   "pivot": [
+    1050,
+    950
+   ],
+   "z": 6,
+   "pixels": 195577
+  },
+  "than_truoc": {
+   "file": "quai_phong_lang_part_than_truoc.png",
+   "pivot": [
+    750,
+    1000
+   ],
+   "z": 7,
+   "pixels": 66239
+  },
+  "dau": {
+   "file": "quai_phong_lang_part_dau.png",
+   "pivot": [
+    560,
+    830
+   ],
+   "z": 8,
+   "pixels": 155280
+  },
+  "mieng_trong": {
+   "file": "quai_phong_lang_part_mieng_trong.png",
+   "pivot": [
+    200,
+    755
+   ],
+   "z": 9,
+   "pixels": 17572,
+   "bbox": [
+    107,
+    690,
+    290,
+    825
+   ],
+   "note": "khoang mom ha (toi + rang/lua); nam duoi ham_duoi"
+  },
+  "ham_duoi": {
+   "file": "quai_phong_lang_part_ham_duoi.png",
+   "pivot": [
+    300,
+    770
+   ],
+   "z": 10,
+   "pixels": 7526,
+   "bbox": [
+    169,
+    770,
+    340,
+    925
+   ],
+   "note": "ham duoi, xoay quanh pivot=khop ham (ban le mep mom) de ha/ngam"
+  }
+ }
+}

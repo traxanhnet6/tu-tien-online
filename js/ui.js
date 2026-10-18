@@ -179,6 +179,21 @@ function boot() {
       else state = defaultState();
       /* save cũ: tự sinh ID nhân vật khi load lần đầu */
       if (typeof Social !== "undefined") { try { Social.ensureCharId(state); } catch (e) {} }
+      /* Milestone 2: đăng nhập ẩn danh Supabase + đồng bộ bạn bè/nhắn tin */
+      try {
+        if (typeof OnlineSB !== "undefined") {
+          OnlineSB.boot(state);
+          if (typeof Social !== "undefined") {
+            Social._onSearchDone = function (q, res) {
+              try {
+                if (q === frQuery && panel === "friends" && friendTab() === "list") {
+                  frResults = res; renderPanel();
+                }
+              } catch (e) {}
+            };
+          }
+        }
+      } catch (e) {}
       if (hasEngine() && Engine.bindState) Engine.bindState(state);
       if (hasAudio() && AudioSys.bindState) AudioSys.bindState(state);
       /* Thọ Nguyên: trừ theo ngày thực đã trôi khi offline (lifespan.js) */
@@ -855,6 +870,8 @@ function socialTick() {
   if (!hasSocial() || !state || !state.char || !state.char.name) return;
   _socialTickN++;
   if (_socialTickN % 5 !== 0) return; /* mỗi ~5 giây */
+  /* Milestone 2: kéo dữ liệu bạn bè/nhắn tin thật từ Supabase (30s/lần) */
+  try { if (typeof OnlineSB !== "undefined") OnlineSB.maybePull(state); } catch (e) {}
   Social.mockWorldTick(state);
   var evts = Social.mockTick(state);
   if (!evts.length) { updateChatBadge(); return; }

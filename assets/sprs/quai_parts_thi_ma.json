@@ -1,0 +1,114 @@
+{
+ "monster": "thi_ma",
+ "canvas": {
+  "width": 1600,
+  "height": 1600
+ },
+ "note": "Thi Ma (ac ma): frontal symmetric; green flame wisps claimed by adjacent part; ham_duoi rotates around jaw hinge",
+ "parts": {
+  "canh_trai": {
+   "file": "quai_thi_ma_part_canh_trai.png",
+   "pivot": [
+    620,
+    450
+   ],
+   "z": 0,
+   "pixels": 145792
+  },
+  "canh_phai": {
+   "file": "quai_thi_ma_part_canh_phai.png",
+   "pivot": [
+    980,
+    450
+   ],
+   "z": 1,
+   "pixels": 132019
+  },
+  "chan_trai": {
+   "file": "quai_thi_ma_part_chan_trai.png",
+   "pivot": [
+    630,
+    1250
+   ],
+   "z": 2,
+   "pixels": 35862
+  },
+  "chan_phai": {
+   "file": "quai_thi_ma_part_chan_phai.png",
+   "pivot": [
+    970,
+    1250
+   ],
+   "z": 3,
+   "pixels": 37148
+  },
+  "tay_trai": {
+   "file": "quai_thi_ma_part_tay_trai.png",
+   "pivot": [
+    560,
+    720
+   ],
+   "z": 4,
+   "pixels": 66895
+  },
+  "tay_phai": {
+   "file": "quai_thi_ma_part_tay_phai.png",
+   "pivot": [
+    1040,
+    720
+   ],
+   "z": 5,
+   "pixels": 66368
+  },
+  "than": {
+   "file": "quai_thi_ma_part_than.png",
+   "pivot": [
+    800,
+    950
+   ],
+   "z": 6,
+   "pixels": 280631
+  },
+  "dau": {
+   "file": "quai_thi_ma_part_dau.png",
+   "pivot": [
+    800,
+    620
+   ],
+   "z": 7,
+   "pixels": 138808
+  },
+  "mieng_trong": {
+   "file": "quai_thi_ma_part_mieng_trong.png",
+   "pivot": [
+    800,
+    580
+   ],
+   "z": 8,
+   "pixels": 26255,
+   "bbox": [
+    690,
+    520,
+    910,
+    640
+   ],
+   "note": "khoang mom ha (toi + rang/lua); nam duoi ham_duoi"
+  },
+  "ham_duoi": {
+   "file": "quai_thi_ma_part_ham_duoi.png",
+   "pivot": [
+    800,
+    560
+   ],
+   "z": 9,
+   "pixels": 17461,
+   "bbox": [
+    630,
+    580,
+    970,
+    700
+   ],
+   "note": "ham duoi, xoay quanh pivot=khop ham (ban le mep mom) de ha/ngam"
+  }
+ }
+}

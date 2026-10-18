@@ -1,0 +1,2166 @@
+{
+ "bosses": {
+  "cot_tuong": {
+   "parts": {
+    "dau": {
+     "files": {
+      "base": "boss_cot_tuong_part_dau.png",
+      "combat": "boss_cot_tuong_part_dau_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_dau_tinh_anh.png"
+     },
+     "pivot": [
+      795,
+      655
+     ],
+     "z": 12,
+     "missing_files": null
+    },
+    "ham_duoi": {
+     "files": {
+      "base": "boss_cot_tuong_part_ham_duoi.png",
+      "combat": "boss_cot_tuong_part_ham_duoi_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_ham_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      800,
+      628
+     ],
+     "z": 13,
+     "missing_files": null
+    },
+    "mieng_trong": {
+     "files": {
+      "base": "boss_cot_tuong_part_mieng_trong.png",
+      "combat": "boss_cot_tuong_part_mieng_trong_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_mieng_trong_tinh_anh.png"
+     },
+     "pivot": [
+      790,
+      630
+     ],
+     "z": 11,
+     "missing_files": null
+    },
+    "co": {
+     "files": {
+      "base": "boss_cot_tuong_part_co.png",
+      "combat": "boss_cot_tuong_part_co_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_co_tinh_anh.png"
+     },
+     "pivot": [
+      795,
+      705
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "than": {
+     "files": {
+      "base": "boss_cot_tuong_part_than.png",
+      "combat": "boss_cot_tuong_part_than_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_than_tinh_anh.png"
+     },
+     "pivot": [
+      800,
+      950
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "tay_trai_tren": {
+     "files": {
+      "base": "boss_cot_tuong_part_tay_trai_tren.png",
+      "combat": "boss_cot_tuong_part_tay_trai_tren_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_tay_trai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      465,
+      712
+     ],
+     "z": 2,
+     "missing_files": null
+    },
+    "tay_trai_duoi": {
+     "files": {
+      "base": "boss_cot_tuong_part_tay_trai_duoi.png",
+      "combat": "boss_cot_tuong_part_tay_trai_duoi_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_tay_trai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      380,
+      735
+     ],
+     "z": 8,
+     "missing_files": null
+    },
+    "tay_phai_tren": {
+     "files": {
+      "base": "boss_cot_tuong_part_tay_phai_tren.png",
+      "combat": "boss_cot_tuong_part_tay_phai_tren_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_tay_phai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      1090,
+      810
+     ],
+     "z": 3,
+     "missing_files": null
+    },
+    "tay_phai_duoi": {
+     "files": {
+      "base": "boss_cot_tuong_part_tay_phai_duoi.png",
+      "combat": "boss_cot_tuong_part_tay_phai_duoi_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_tay_phai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      1105,
+      875
+     ],
+     "z": 9,
+     "missing_files": null
+    },
+    "chan_trai_tren": {
+     "files": {
+      "base": "boss_cot_tuong_part_chan_trai_tren.png",
+      "combat": "boss_cot_tuong_part_chan_trai_tren_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_chan_trai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      605,
+      1090
+     ],
+     "z": 0,
+     "missing_files": null
+    },
+    "chan_trai_duoi": {
+     "files": {
+      "base": "boss_cot_tuong_part_chan_trai_duoi.png",
+      "combat": "boss_cot_tuong_part_chan_trai_duoi_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_chan_trai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      600,
+      1300
+     ],
+     "z": 6,
+     "missing_files": null
+    },
+    "chan_phai_tren": {
+     "files": {
+      "base": "boss_cot_tuong_part_chan_phai_tren.png",
+      "combat": "boss_cot_tuong_part_chan_phai_tren_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_chan_phai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      1000,
+      1090
+     ],
+     "z": 1,
+     "missing_files": null
+    },
+    "chan_phai_duoi": {
+     "files": {
+      "base": "boss_cot_tuong_part_chan_phai_duoi.png",
+      "combat": "boss_cot_tuong_part_chan_phai_duoi_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_chan_phai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      1000,
+      1300
+     ],
+     "z": 7,
+     "missing_files": null
+    },
+    "vukhi": {
+     "files": {
+      "base": "boss_cot_tuong_part_vukhi.png",
+      "combat": "boss_cot_tuong_part_vukhi_combat.png",
+      "tinh_anh": "boss_cot_tuong_part_vukhi_tinh_anh.png"
+     },
+     "pivot": [
+      1110,
+      985
+     ],
+     "z": 10,
+     "missing_files": null
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "Cot Tuong (Bone General): skeletal warrior, spiked bone crown, bone+leather armor, wields cot dao (bone sword). vukhi excludes the grip section occluded by the fist in the master — parent vukhi to tay_phai_duoi. chan_*_tren include the knee skull (kneecap); thigh is hidden behind the skirt armor.",
+   "complete": true
+  },
+  "da_tru_vuong": {
+   "parts": {
+    "dau": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_dau.png",
+      "combat": "boss_da_tru_vuong_part_dau_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_dau_tinh_anh.png"
+     },
+     "pivot": [
+      800,
+      700
+     ],
+     "z": 6,
+     "missing_files": null
+    },
+    "ham_duoi": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_ham_duoi.png",
+      "combat": "boss_da_tru_vuong_part_ham_duoi_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_ham_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      800,
+      612
+     ],
+     "z": 8,
+     "missing_files": null
+    },
+    "mieng_trong": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_mieng_trong.png",
+      "combat": "boss_da_tru_vuong_part_mieng_trong_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_mieng_trong_tinh_anh.png"
+     },
+     "pivot": [
+      800,
+      625
+     ],
+     "z": 7,
+     "missing_files": null
+    },
+    "than_tren": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_than_tren.png",
+      "combat": "boss_da_tru_vuong_part_than_tren_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_than_tren_tinh_anh.png"
+     },
+     "pivot": [
+      800,
+      810
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "than_duoi": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_than_duoi.png",
+      "combat": "boss_da_tru_vuong_part_than_duoi_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_than_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      800,
+      1080
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "tay_trai": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_tay_trai.png",
+      "combat": "boss_da_tru_vuong_part_tay_trai_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_tay_trai_tinh_anh.png"
+     },
+     "pivot": [
+      400,
+      720
+     ],
+     "z": 0,
+     "missing_files": null
+    },
+    "tay_phai": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_tay_phai.png",
+      "combat": "boss_da_tru_vuong_part_tay_phai_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_tay_phai_tinh_anh.png"
+     },
+     "pivot": [
+      1200,
+      720
+     ],
+     "z": 1,
+     "missing_files": null
+    },
+    "chan_trai": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_chan_trai.png",
+      "combat": "boss_da_tru_vuong_part_chan_trai_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_chan_trai_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      1160
+     ],
+     "z": 2,
+     "missing_files": null
+    },
+    "chan_phai": {
+     "files": {
+      "base": "boss_da_tru_vuong_part_chan_phai.png",
+      "combat": "boss_da_tru_vuong_part_chan_phai_combat.png",
+      "tinh_anh": "boss_da_tru_vuong_part_chan_phai_tinh_anh.png"
+     },
+     "pivot": [
+      1040,
+      1160
+     ],
+     "z": 3,
+     "missing_files": null
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "Da Tru Vuong (Stone Pillar King): giant stone golem, golden crown + halo ring (halo included in dau), red eyes, rocky hide with mossy cracks.",
+   "complete": true
+  },
+  "hac_long": {
+   "parts": {
+    "dau": {
+     "files": {
+      "base": "boss_part_hac_long_dau.png",
+      "combat": null,
+      "tinh_anh": null
+     },
+     "pivot": [
+      815,
+      550
+     ],
+     "z": 0,
+     "missing_files": null
+    },
+    "mieng_trong": {
+     "files": {
+      "base": "boss_part_hac_long_mieng_trong.png",
+      "combat": null,
+      "tinh_anh": null
+     },
+     "pivot": [
+      815,
+      770
+     ],
+     "z": 1,
+     "missing_files": null
+    },
+    "ham_duoi": {
+     "files": {
+      "base": "boss_part_hac_long_ham_duoi.png",
+      "combat": null,
+      "tinh_anh": null
+     },
+     "pivot": [
+      815,
+      700
+     ],
+     "z": 2,
+     "missing_files": null
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "Black dragon, mouth already wide open breathing fire down. Jaw part includes fire column below mouth line; upper teeth stay with dau.",
+   "complete": true
+  },
+  "huyet_ma_vuong": {
+   "parts": {
+    "dau": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_dau.png",
+      "combat": "boss_huyet_ma_vuong_part_dau_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_dau_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      640
+     ],
+     "z": 0,
+     "missing_files": null
+    },
+    "mieng_trong": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_mieng_trong.png",
+      "combat": "boss_huyet_ma_vuong_part_mieng_trong_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_mieng_trong_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      757
+     ],
+     "z": 1,
+     "missing_files": null
+    },
+    "ham_duoi": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_ham_duoi.png",
+      "combat": "boss_huyet_ma_vuong_part_ham_duoi_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_ham_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      712
+     ],
+     "z": 2,
+     "missing_files": null
+    },
+    "duoi": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_duoi.png",
+      "combat": "boss_huyet_ma_vuong_part_duoi_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      1650
+     ],
+     "z": 3,
+     "missing_files": null
+    },
+    "canh_trai": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_canh_trai.png",
+      "combat": "boss_huyet_ma_vuong_part_canh_trai_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_canh_trai_tinh_anh.png"
+     },
+     "pivot": [
+      330,
+      1200
+     ],
+     "z": 3,
+     "missing_files": null
+    },
+    "canh_phai": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_canh_phai.png",
+      "combat": "boss_huyet_ma_vuong_part_canh_phai_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_canh_phai_tinh_anh.png"
+     },
+     "pivot": [
+      790,
+      1200
+     ],
+     "z": 3,
+     "missing_files": null
+    },
+    "chan_trai_duoi": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_chan_trai_duoi.png",
+      "combat": "boss_huyet_ma_vuong_part_chan_trai_duoi_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_chan_trai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      370,
+      1900
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "chan_phai_duoi": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_chan_phai_duoi.png",
+      "combat": "boss_huyet_ma_vuong_part_chan_phai_duoi_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_chan_phai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      780,
+      1900
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "chan_trai_tren": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_chan_trai_tren.png",
+      "combat": "boss_huyet_ma_vuong_part_chan_trai_tren_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_chan_trai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      370,
+      1700
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "chan_phai_tren": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_chan_phai_tren.png",
+      "combat": "boss_huyet_ma_vuong_part_chan_phai_tren_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_chan_phai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      780,
+      1700
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "tay_trai_duoi": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_tay_trai_duoi.png",
+      "combat": "boss_huyet_ma_vuong_part_tay_trai_duoi_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_tay_trai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      210,
+      1090
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "tay_phai_duoi": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_tay_phai_duoi.png",
+      "combat": "boss_huyet_ma_vuong_part_tay_phai_duoi_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_tay_phai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      910,
+      1090
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "tay_trai_tren": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_tay_trai_tren.png",
+      "combat": "boss_huyet_ma_vuong_part_tay_trai_tren_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_tay_trai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      330,
+      1080
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "tay_phai_tren": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_tay_phai_tren.png",
+      "combat": "boss_huyet_ma_vuong_part_tay_phai_tren_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_tay_phai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      790,
+      1080
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "than": {
+     "files": {
+      "base": "boss_huyet_ma_vuong_part_than.png",
+      "combat": "boss_huyet_ma_vuong_part_than_combat.png",
+      "tinh_anh": "boss_huyet_ma_vuong_part_than_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      1250
+     ],
+     "z": 6,
+     "missing_files": null
+    }
+   },
+   "canvas": {
+    "width": 1120,
+    "height": 2240
+   },
+   "note": "Huyet Ma Vuong - demon king, frontal. canh_trai/canh_phai = the big flame-wing masses on both sides; duoi = bright flame tongues between the legs; horns merged into dau. trai = screen-left.",
+   "complete": true
+  },
+  "lang_vuong": {
+   "parts": {
+    "duoi_2": {
+     "files": {
+      "base": "boss_lang_vuong_part_duoi_2.png",
+      "combat": "boss_lang_vuong_part_duoi_2_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_duoi_2_tinh_anh.png"
+     },
+     "pivot": [
+      1240,
+      700
+     ],
+     "z": 1,
+     "missing_files": null
+    },
+    "duoi_1": {
+     "files": {
+      "base": "boss_lang_vuong_part_duoi_1.png",
+      "combat": "boss_lang_vuong_part_duoi_1_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_duoi_1_tinh_anh.png"
+     },
+     "pivot": [
+      1080,
+      780
+     ],
+     "z": 2,
+     "missing_files": null
+    },
+    "chan_truoc_phai": {
+     "files": {
+      "base": "boss_lang_vuong_part_chan_truoc_phai.png",
+      "combat": "boss_lang_vuong_part_chan_truoc_phai_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_chan_truoc_phai_tinh_anh.png"
+     },
+     "pivot": [
+      500,
+      1020
+     ],
+     "z": 3,
+     "missing_files": null
+    },
+    "chan_sau_phai": {
+     "files": {
+      "base": "boss_lang_vuong_part_chan_sau_phai.png",
+      "combat": "boss_lang_vuong_part_chan_sau_phai_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_chan_sau_phai_tinh_anh.png"
+     },
+     "pivot": [
+      1120,
+      1000
+     ],
+     "z": 3,
+     "missing_files": null
+    },
+    "than_truoc": {
+     "files": {
+      "base": "boss_lang_vuong_part_than_truoc.png",
+      "combat": "boss_lang_vuong_part_than_truoc_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_than_truoc_tinh_anh.png"
+     },
+     "pivot": [
+      740,
+      870
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "than_sau": {
+     "files": {
+      "base": "boss_lang_vuong_part_than_sau.png",
+      "combat": "boss_lang_vuong_part_than_sau_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_than_sau_tinh_anh.png"
+     },
+     "pivot": [
+      960,
+      870
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "chan_truoc_trai": {
+     "files": {
+      "base": "boss_lang_vuong_part_chan_truoc_trai.png",
+      "combat": "boss_lang_vuong_part_chan_truoc_trai_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_chan_truoc_trai_tinh_anh.png"
+     },
+     "pivot": [
+      420,
+      920
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "chan_sau_trai": {
+     "files": {
+      "base": "boss_lang_vuong_part_chan_sau_trai.png",
+      "combat": "boss_lang_vuong_part_chan_sau_trai_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_chan_sau_trai_tinh_anh.png"
+     },
+     "pivot": [
+      1000,
+      980
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "co": {
+     "files": {
+      "base": "boss_lang_vuong_part_co.png",
+      "combat": "boss_lang_vuong_part_co_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_co_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      800
+     ],
+     "z": 6,
+     "missing_files": null
+    },
+    "mieng_trong": {
+     "files": {
+      "base": "boss_lang_vuong_part_mieng_trong.png",
+      "combat": "boss_lang_vuong_part_mieng_trong_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_mieng_trong_tinh_anh.png"
+     },
+     "pivot": [
+      240,
+      720
+     ],
+     "z": 7,
+     "missing_files": null
+    },
+    "ham_duoi": {
+     "files": {
+      "base": "boss_lang_vuong_part_ham_duoi.png",
+      "combat": "boss_lang_vuong_part_ham_duoi_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_ham_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      430,
+      740
+     ],
+     "z": 8,
+     "missing_files": null
+    },
+    "dau": {
+     "files": {
+      "base": "boss_lang_vuong_part_dau.png",
+      "combat": "boss_lang_vuong_part_dau_combat.png",
+      "tinh_anh": "boss_lang_vuong_part_dau_tinh_anh.png"
+     },
+     "pivot": [
+      470,
+      750
+     ],
+     "z": 9,
+     "missing_files": null
+    }
+   },
+   "canvas": {
+    "width": 1440,
+    "height": 1536
+   },
+   "note": "Lang Vuong - wolf king, side view facing left. trai=near-side leg (viewer side), phai=far-side leg. Upper teeth stay with dau; mieng_trong is the dark mouth interior patch (child of dau). Background: pure black, flood-filled from border (maxRGB<28).",
+   "complete": true
+  },
+  "thien_tuong": {
+   "parts": {
+    "dau": {
+     "files": {
+      "base": "boss_thien_tuong_part_dau.png",
+      "combat": "boss_thien_tuong_part_dau_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_dau_tinh_anh.png"
+     },
+     "pivot": [
+      565,
+      730
+     ],
+     "z": 0,
+     "missing_files": null
+    },
+    "mieng_trong": {
+     "files": {
+      "base": "boss_thien_tuong_part_mieng_trong.png",
+      "combat": "boss_thien_tuong_part_mieng_trong_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_mieng_trong_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      800
+     ],
+     "z": 1,
+     "missing_files": null
+    },
+    "ham_duoi": {
+     "files": {
+      "base": "boss_thien_tuong_part_ham_duoi.png",
+      "combat": "boss_thien_tuong_part_ham_duoi_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_ham_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      762
+     ],
+     "z": 2,
+     "missing_files": null
+    },
+    "vukhi": {
+     "files": {
+      "base": "boss_thien_tuong_part_vukhi.png",
+      "combat": "boss_thien_tuong_part_vukhi_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_vukhi_tinh_anh.png"
+     },
+     "pivot": [
+      240,
+      1150
+     ],
+     "z": 3,
+     "missing_files": null
+    },
+    "chan_trai_tren": {
+     "files": {
+      "base": "boss_thien_tuong_part_chan_trai_tren.png",
+      "combat": "boss_thien_tuong_part_chan_trai_tren_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_chan_trai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      390,
+      1500
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "chan_phai_tren": {
+     "files": {
+      "base": "boss_thien_tuong_part_chan_phai_tren.png",
+      "combat": "boss_thien_tuong_part_chan_phai_tren_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_chan_phai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      740,
+      1500
+     ],
+     "z": 4,
+     "missing_files": null
+    },
+    "chan_trai_duoi": {
+     "files": {
+      "base": "boss_thien_tuong_part_chan_trai_duoi.png",
+      "combat": "boss_thien_tuong_part_chan_trai_duoi_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_chan_trai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      350,
+      1700
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "chan_phai_duoi": {
+     "files": {
+      "base": "boss_thien_tuong_part_chan_phai_duoi.png",
+      "combat": "boss_thien_tuong_part_chan_phai_duoi_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_chan_phai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      770,
+      1700
+     ],
+     "z": 5,
+     "missing_files": null
+    },
+    "than": {
+     "files": {
+      "base": "boss_thien_tuong_part_than.png",
+      "combat": "boss_thien_tuong_part_than_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_than_tinh_anh.png"
+     },
+     "pivot": [
+      560,
+      1400
+     ],
+     "z": 6,
+     "missing_files": null
+    },
+    "tay_trai_tren": {
+     "files": {
+      "base": "boss_thien_tuong_part_tay_trai_tren.png",
+      "combat": "boss_thien_tuong_part_tay_trai_tren_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_tay_trai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      300,
+      900
+     ],
+     "z": 7,
+     "missing_files": null
+    },
+    "tay_phai_tren": {
+     "files": {
+      "base": "boss_thien_tuong_part_tay_phai_tren.png",
+      "combat": "boss_thien_tuong_part_tay_phai_tren_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_tay_phai_tren_tinh_anh.png"
+     },
+     "pivot": [
+      800,
+      900
+     ],
+     "z": 7,
+     "missing_files": null
+    },
+    "tay_trai_duoi": {
+     "files": {
+      "base": "boss_thien_tuong_part_tay_trai_duoi.png",
+      "combat": "boss_thien_tuong_part_tay_trai_duoi_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_tay_trai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      255,
+      1070
+     ],
+     "z": 8,
+     "missing_files": null
+    },
+    "tay_phai_duoi": {
+     "files": {
+      "base": "boss_thien_tuong_part_tay_phai_duoi.png",
+      "combat": "boss_thien_tuong_part_tay_phai_duoi_combat.png",
+      "tinh_anh": "boss_thien_tuong_part_tay_phai_duoi_tinh_anh.png"
+     },
+     "pivot": [
+      850,
+      1100
+     ],
+     "z": 8,
+     "missing_files": null
+    }
+   },
+   "canvas": {
+    "width": 1120,
+    "height": 2240
+   },
+   "note": "Golden warrior, roaring. Jaw includes beard/chin. dau fixed 2026-10-18: added missing helmet wing tips + tassels (x300-400 & x740-800, y550-900) that the old segment lacked. 10 new parts segmented from mon_thien_tuong.png via polygon masks + flood-fill bg removal (black: max RGB<28); generous overlaps at joints for articulation; halo sparks within 30px claimed by nearest part. trai = viewer's left, phai = viewer's right.",
+   "complete": true
+  },
+  "u_minh_cu_mang": {
+   "parts": {
+    "dau": {
+     "files": {
+      "base": "boss_part_u_minh_cu_mang_dau.png",
+      "combat": null,
+      "tinh_anh": null
+     },
+     "pivot": [
+      820,
+      500
+     ],
+     "z": 0,
+     "missing_files": null
+    },
+    "mieng_trong": {
+     "files": {
+      "base": "boss_part_u_minh_cu_mang_mieng_trong.png",
+      "combat": null,
+      "tinh_anh": null
+     },
+     "pivot": [
+      820,
+      700
+     ],
+     "z": 1,
+     "missing_files": null
+    },
+    "ham_duoi": {
+     "files": {
+      "base": "boss_part_u_minh_cu_mang_ham_duoi.png",
+      "combat": null,
+      "tinh_anh": null
+     },
+     "pivot": [
+      820,
+      665
+     ],
+     "z": 2,
+     "missing_files": null
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "Snake boss, frontal. Tongue stays with dau (head). Jaw hinge at mouth-corner midpoint.",
+   "complete": true
+  }
+ },
+ "monsters": {
+  "da_tru": {
+   "parts": {
+    "tay_trai": {
+     "file": "quai_da_tru_part_tay_trai.png",
+     "pivot": [
+      330,
+      700
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "tay_phai": {
+     "file": "quai_da_tru_part_tay_phai.png",
+     "pivot": [
+      1062,
+      700
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_trai": {
+     "file": "quai_da_tru_part_chan_trai.png",
+     "pivot": [
+      380,
+      1220
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_phai": {
+     "file": "quai_da_tru_part_chan_phai.png",
+     "pivot": [
+      1012,
+      1220
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_da_tru_part_than.png",
+     "pivot": [
+      695,
+      900
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_da_tru_part_dau.png",
+     "pivot": [
+      695,
+      465
+     ],
+     "z": 2,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1392,
+    "height": 1712
+   },
+   "note": "Dã Trư (wild boar), top-down chibi pixel (AI redraw of sprs_mon_da_tru.png). Tail folded into than (no separate duoi part). Parts tiled by z-priority (higher z claims first): legs tuck under body, head over neck. trai/phai = viewer's left/right.",
+   "complete": true
+  },
+  "hu_thi": {
+   "parts": {
+    "chan_truoc_phai": {
+     "file": "quai_hu_thi_part_chan_truoc_phai.png",
+     "pivot": [
+      450,
+      1000
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_sau_phai": {
+     "file": "quai_hu_thi_part_chan_sau_phai.png",
+     "pivot": [
+      920,
+      1000
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "chan_truoc_trai": {
+     "file": "quai_hu_thi_part_chan_truoc_trai.png",
+     "pivot": [
+      680,
+      1000
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "chan_sau_trai": {
+     "file": "quai_hu_thi_part_chan_sau_trai.png",
+     "pivot": [
+      1160,
+      1000
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "duoi_2": {
+     "file": "quai_hu_thi_part_duoi_2.png",
+     "pivot": [
+      1420,
+      900
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "duoi_1": {
+     "file": "quai_hu_thi_part_duoi_1.png",
+     "pivot": [
+      1200,
+      900
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "than_sau": {
+     "file": "quai_hu_thi_part_than_sau.png",
+     "pivot": [
+      1250,
+      830
+     ],
+     "z": 6,
+     "missing": false
+    },
+    "than_truoc": {
+     "file": "quai_hu_thi_part_than_truoc.png",
+     "pivot": [
+      830,
+      830
+     ],
+     "z": 7,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_hu_thi_part_dau.png",
+     "pivot": [
+      600,
+      700
+     ],
+     "z": 8,
+     "missing": false
+    },
+    "mieng_trong": {
+     "file": "quai_hu_thi_part_mieng_trong.png",
+     "pivot": [
+      240,
+      610
+     ],
+     "z": 9,
+     "missing": false
+    },
+    "ham_duoi": {
+     "file": "quai_hu_thi_part_ham_duoi.png",
+     "pivot": [
+      330,
+      620
+     ],
+     "z": 10,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1920,
+    "height": 1280
+   },
+   "note": "Ho Thi (ho bat tu): side view facing left, roaring; duoi_1 = tail base, duoi_2 = tail tip",
+   "complete": true
+  },
+  "ma_binh": {
+   "parts": {
+    "chan_phai": {
+     "file": "quai_ma_binh_part_chan_phai.png",
+     "pivot": [
+      365,
+      1340
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_trai": {
+     "file": "quai_ma_binh_part_chan_trai.png",
+     "pivot": [
+      990,
+      1340
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_ma_binh_part_than.png",
+     "pivot": [
+      600,
+      1050
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "tay_phai": {
+     "file": "quai_ma_binh_part_tay_phai.png",
+     "pivot": [
+      320,
+      700
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "tay_trai": {
+     "file": "quai_ma_binh_part_tay_trai.png",
+     "pivot": [
+      910,
+      700
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "vukhi": {
+     "file": "quai_ma_binh_part_vukhi.png",
+     "pivot": [
+      220,
+      870
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_ma_binh_part_dau.png",
+     "pivot": [
+      605,
+      550
+     ],
+     "z": 6,
+     "missing": false
+    }
+   },
+   "canvas": [
+    1120,
+    2240
+   ],
+   "note": "trai/phai theo goc nhin cua quai (quai doi dien nguoi choi): trai = nua phai cua anh (x lon), phai = nua trai cua anh (x nho)",
+   "complete": true
+  },
+  "ma_lang": {
+   "parts": {
+    "chan_truoc_phai": {
+     "file": "quai_ma_lang_part_chan_truoc_phai.png",
+     "pivot": [
+      1320,
+      900
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_sau_phai": {
+     "file": "quai_ma_lang_part_chan_sau_phai.png",
+     "pivot": [
+      750,
+      1000
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "duoi": {
+     "file": "quai_ma_lang_part_duoi.png",
+     "pivot": [
+      520,
+      650
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_ma_lang_part_than.png",
+     "pivot": [
+      700,
+      850
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "chan_sau_trai": {
+     "file": "quai_ma_lang_part_chan_sau_trai.png",
+     "pivot": [
+      350,
+      1000
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "chan_truoc_trai": {
+     "file": "quai_ma_lang_part_chan_truoc_trai.png",
+     "pivot": [
+      1000,
+      950
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_ma_lang_part_dau.png",
+     "pivot": [
+      1000,
+      700
+     ],
+     "z": 6,
+     "missing": false
+    },
+    "mieng_trong": {
+     "file": "quai_ma_lang_part_mieng_trong.png",
+     "pivot": [
+      1210,
+      900
+     ],
+     "z": 7,
+     "missing": false
+    },
+    "ham_duoi": {
+     "file": "quai_ma_lang_part_ham_duoi.png",
+     "pivot": [
+      1085,
+      825
+     ],
+     "z": 8,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "trai = near side (viewer), phai = far side",
+   "complete": true
+  },
+  "ngoc_tho": {
+   "parts": {
+    "duoi": {
+     "file": "quai_ngoc_tho_part_duoi.png",
+     "pivot": [
+      1180,
+      1220
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_sau_trai": {
+     "file": "quai_ngoc_tho_part_chan_sau_trai.png",
+     "pivot": [
+      560,
+      1300
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "chan_sau_phai": {
+     "file": "quai_ngoc_tho_part_chan_sau_phai.png",
+     "pivot": [
+      1050,
+      1300
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_ngoc_tho_part_than.png",
+     "pivot": [
+      790,
+      1180
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "chan_truoc_trai": {
+     "file": "quai_ngoc_tho_part_chan_truoc_trai.png",
+     "pivot": [
+      550,
+      1000
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "chan_truoc_phai": {
+     "file": "quai_ngoc_tho_part_chan_truoc_phai.png",
+     "pivot": [
+      730,
+      1000
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "tai_trai": {
+     "file": "quai_ngoc_tho_part_tai_trai.png",
+     "pivot": [
+      530,
+      480
+     ],
+     "z": 6,
+     "missing": false
+    },
+    "tai_phai": {
+     "file": "quai_ngoc_tho_part_tai_phai.png",
+     "pivot": [
+      1070,
+      480
+     ],
+     "z": 7,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_ngoc_tho_part_dau.png",
+     "pivot": [
+      800,
+      940
+     ],
+     "z": 8,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "trai = viewer-left, phai = viewer-right (frontal view)",
+   "complete": true
+  },
+  "oan_linh": {
+   "parts": {
+    "duoi_vai": {
+     "file": "quai_oan_linh_part_duoi_vai.png",
+     "pivot": [
+      800,
+      1030
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "tay_trai": {
+     "file": "quai_oan_linh_part_tay_trai.png",
+     "pivot": [
+      640,
+      540
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "tay_phai": {
+     "file": "quai_oan_linh_part_tay_phai.png",
+     "pivot": [
+      960,
+      540
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_oan_linh_part_than.png",
+     "pivot": [
+      800,
+      720
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_oan_linh_part_dau.png",
+     "pivot": [
+      800,
+      490
+     ],
+     "z": 4,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "",
+   "complete": true
+  },
+  "phong_lang": {
+   "parts": {
+    "chan_truoc_phai": {
+     "file": "quai_phong_lang_part_chan_truoc_phai.png",
+     "pivot": [
+      350,
+      1050
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_sau_phai": {
+     "file": "quai_phong_lang_part_chan_sau_phai.png",
+     "pivot": [
+      875,
+      1050
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "chan_truoc_trai": {
+     "file": "quai_phong_lang_part_chan_truoc_trai.png",
+     "pivot": [
+      640,
+      1050
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "chan_sau_trai": {
+     "file": "quai_phong_lang_part_chan_sau_trai.png",
+     "pivot": [
+      1020,
+      1050
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "duoi_2": {
+     "file": "quai_phong_lang_part_duoi_2.png",
+     "pivot": [
+      1290,
+      800
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "duoi_1": {
+     "file": "quai_phong_lang_part_duoi_1.png",
+     "pivot": [
+      1080,
+      820
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "than_sau": {
+     "file": "quai_phong_lang_part_than_sau.png",
+     "pivot": [
+      1050,
+      950
+     ],
+     "z": 6,
+     "missing": false
+    },
+    "than_truoc": {
+     "file": "quai_phong_lang_part_than_truoc.png",
+     "pivot": [
+      750,
+      1000
+     ],
+     "z": 7,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_phong_lang_part_dau.png",
+     "pivot": [
+      560,
+      830
+     ],
+     "z": 8,
+     "missing": false
+    },
+    "mieng_trong": {
+     "file": "quai_phong_lang_part_mieng_trong.png",
+     "pivot": [
+      200,
+      755
+     ],
+     "z": 9,
+     "missing": false
+    },
+    "ham_duoi": {
+     "file": "quai_phong_lang_part_ham_duoi.png",
+     "pivot": [
+      300,
+      770
+     ],
+     "z": 10,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "Phong Lang (soi gio): side view facing left; duoi_2 = outer wind-swirls of tail; upper back swirls stay with than_sau",
+   "complete": true
+  },
+  "son_ke": {
+   "parts": {
+    "duoi": {
+     "file": "quai_son_ke_part_duoi.png",
+     "pivot": [
+      860,
+      900
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "canh_trai": {
+     "file": "quai_son_ke_part_canh_trai.png",
+     "pivot": [
+      600,
+      670
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "canh_phai": {
+     "file": "quai_son_ke_part_canh_phai.png",
+     "pivot": [
+      1112,
+      670
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_son_ke_part_than.png",
+     "pivot": [
+      860,
+      800
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "chan_trai": {
+     "file": "quai_son_ke_part_chan_trai.png",
+     "pivot": [
+      765,
+      1080
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "chan_phai": {
+     "file": "quai_son_ke_part_chan_phai.png",
+     "pivot": [
+      955,
+      1080
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_son_ke_part_dau.png",
+     "pivot": [
+      860,
+      570
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "mo": {
+     "file": "quai_son_ke_part_mo.png",
+     "pivot": [
+      860,
+      460
+     ],
+     "z": 5,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1712,
+    "height": 1392
+   },
+   "note": "Sơn Kê (mountain pheasant), top-down chibi pixel (AI redraw of sprs_mon_son_ke.png). duoi = full radial tail-feather fan as z=0 background layer (wing/body/head/feet pixels excluded via z-priority tiling). trai/phai = viewer's left/right.",
+   "complete": true
+  },
+  "thach_giap_trung": {
+   "parts": {
+    "chan_phai_1": {
+     "file": "quai_thach_giap_trung_part_chan_phai_1.png",
+     "pivot": [
+      200,
+      930
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_phai_2": {
+     "file": "quai_thach_giap_trung_part_chan_phai_2.png",
+     "pivot": [
+      360,
+      935
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "chan_phai_3": {
+     "file": "quai_thach_giap_trung_part_chan_phai_3.png",
+     "pivot": [
+      555,
+      1000
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "chan_trai_1": {
+     "file": "quai_thach_giap_trung_part_chan_trai_1.png",
+     "pivot": [
+      1400,
+      930
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "chan_trai_2": {
+     "file": "quai_thach_giap_trung_part_chan_trai_2.png",
+     "pivot": [
+      1240,
+      935
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "chan_trai_3": {
+     "file": "quai_thach_giap_trung_part_chan_trai_3.png",
+     "pivot": [
+      1045,
+      1000
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "mai_giap": {
+     "file": "quai_thach_giap_trung_part_mai_giap.png",
+     "pivot": [
+      800,
+      700
+     ],
+     "z": 6,
+     "missing": false
+    },
+    "rau": {
+     "file": "quai_thach_giap_trung_part_rau.png",
+     "pivot": [
+      800,
+      350
+     ],
+     "z": 7,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_thach_giap_trung_part_dau.png",
+     "pivot": [
+      800,
+      830
+     ],
+     "z": 8,
+     "missing": false
+    },
+    "mieng_trong": {
+     "file": "quai_thach_giap_trung_part_mieng_trong.png",
+     "pivot": [
+      800,
+      850
+     ],
+     "z": 9,
+     "missing": false
+    },
+    "ham_duoi": {
+     "file": "quai_thach_giap_trung_part_ham_duoi.png",
+     "pivot": [
+      700,
+      800
+     ],
+     "z": 10,
+     "missing": false
+    }
+   },
+   "canvas": [
+    1600,
+    1600
+   ],
+   "note": "trai/phai theo goc nhin cua quai (quai doi dien nguoi choi): trai = nua phai cua anh (x lon), phai = nua trai cua anh (x nho)",
+   "complete": true
+  },
+  "thi_ma": {
+   "parts": {
+    "canh_trai": {
+     "file": "quai_thi_ma_part_canh_trai.png",
+     "pivot": [
+      620,
+      450
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "canh_phai": {
+     "file": "quai_thi_ma_part_canh_phai.png",
+     "pivot": [
+      980,
+      450
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "chan_trai": {
+     "file": "quai_thi_ma_part_chan_trai.png",
+     "pivot": [
+      630,
+      1250
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "chan_phai": {
+     "file": "quai_thi_ma_part_chan_phai.png",
+     "pivot": [
+      970,
+      1250
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "tay_trai": {
+     "file": "quai_thi_ma_part_tay_trai.png",
+     "pivot": [
+      560,
+      720
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "tay_phai": {
+     "file": "quai_thi_ma_part_tay_phai.png",
+     "pivot": [
+      1040,
+      720
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_thi_ma_part_than.png",
+     "pivot": [
+      800,
+      950
+     ],
+     "z": 6,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_thi_ma_part_dau.png",
+     "pivot": [
+      800,
+      620
+     ],
+     "z": 7,
+     "missing": false
+    },
+    "mieng_trong": {
+     "file": "quai_thi_ma_part_mieng_trong.png",
+     "pivot": [
+      800,
+      580
+     ],
+     "z": 8,
+     "missing": false
+    },
+    "ham_duoi": {
+     "file": "quai_thi_ma_part_ham_duoi.png",
+     "pivot": [
+      800,
+      560
+     ],
+     "z": 9,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "Thi Ma (ac ma): frontal symmetric; green flame wisps claimed by adjacent part; ham_duoi rotates around jaw hinge",
+   "complete": true
+  },
+  "thien_hac": {
+   "parts": {
+    "canh_phai": {
+     "file": "quai_thien_hac_part_canh_phai.png",
+     "pivot": [
+      700,
+      750
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_phai": {
+     "file": "quai_thien_hac_part_chan_phai.png",
+     "pivot": [
+      700,
+      980
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "duoi": {
+     "file": "quai_thien_hac_part_duoi.png",
+     "pivot": [
+      980,
+      760
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "chan_trai": {
+     "file": "quai_thien_hac_part_chan_trai.png",
+     "pivot": [
+      625,
+      990
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_thien_hac_part_than.png",
+     "pivot": [
+      700,
+      800
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "canh_trai": {
+     "file": "quai_thien_hac_part_canh_trai.png",
+     "pivot": [
+      620,
+      700
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "co": {
+     "file": "quai_thien_hac_part_co.png",
+     "pivot": [
+      560,
+      690
+     ],
+     "z": 6,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_thien_hac_part_dau.png",
+     "pivot": [
+      560,
+      390
+     ],
+     "z": 7,
+     "missing": false
+    },
+    "mieng_trong": {
+     "file": "quai_thien_hac_part_mieng_trong.png",
+     "pivot": [
+      510,
+      335
+     ],
+     "z": 8,
+     "missing": false
+    },
+    "ham_duoi": {
+     "file": "quai_thien_hac_part_ham_duoi.png",
+     "pivot": [
+      560,
+      308
+     ],
+     "z": 9,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "canh_phai (far wing) is fully occluded in this side-view pose: empty part, pivot at far shoulder",
+   "complete": true
+  },
+  "tinh_thach_quai": {
+   "parts": {
+    "chan_phai": {
+     "file": "quai_tinh_thach_quai_part_chan_phai.png",
+     "pivot": [
+      500,
+      1080
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_trai": {
+     "file": "quai_tinh_thach_quai_part_chan_trai.png",
+     "pivot": [
+      1100,
+      1080
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_tinh_thach_quai_part_than.png",
+     "pivot": [
+      800,
+      850
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "tay_phai": {
+     "file": "quai_tinh_thach_quai_part_tay_phai.png",
+     "pivot": [
+      520,
+      640
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "tay_trai": {
+     "file": "quai_tinh_thach_quai_part_tay_trai.png",
+     "pivot": [
+      1080,
+      640
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_tinh_thach_quai_part_dau.png",
+     "pivot": [
+      800,
+      560
+     ],
+     "z": 5,
+     "missing": false
+    }
+   },
+   "canvas": [
+    1600,
+    1600
+   ],
+   "note": "trai/phai theo goc nhin cua quai (quai doi dien nguoi choi): trai = nua phai cua anh (x lon), phai = nua trai cua anh (x nho)",
+   "complete": true
+  },
+  "u_hon": {
+   "parts": {
+    "duoi_vai": {
+     "file": "quai_u_hon_part_duoi_vai.png",
+     "pivot": [
+      800,
+      1050
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "tay_trai": {
+     "file": "quai_u_hon_part_tay_trai.png",
+     "pivot": [
+      620,
+      620
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "tay_phai": {
+     "file": "quai_u_hon_part_tay_phai.png",
+     "pivot": [
+      980,
+      620
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_u_hon_part_than.png",
+     "pivot": [
+      800,
+      900
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_u_hon_part_dau.png",
+     "pivot": [
+      800,
+      700
+     ],
+     "z": 4,
+     "missing": false
+    }
+   },
+   "canvas": {
+    "width": 1600,
+    "height": 1600
+   },
+   "note": "U Hon (ma): frontal smoke ghost; duoi_vai = lower smoke tendrils",
+   "complete": true
+  },
+  "u_hon_lang": {
+   "parts": {
+    "duoi": {
+     "file": "quai_u_hon_lang_part_duoi.png",
+     "pivot": [
+      1355,
+      1050
+     ],
+     "z": 0,
+     "missing": false
+    },
+    "chan_sau_phai": {
+     "file": "quai_u_hon_lang_part_chan_sau_phai.png",
+     "pivot": [
+      675,
+      975
+     ],
+     "z": 1,
+     "missing": false
+    },
+    "chan_sau_trai": {
+     "file": "quai_u_hon_lang_part_chan_sau_trai.png",
+     "pivot": [
+      1380,
+      1105
+     ],
+     "z": 2,
+     "missing": false
+    },
+    "than": {
+     "file": "quai_u_hon_lang_part_than.png",
+     "pivot": [
+      800,
+      1080
+     ],
+     "z": 3,
+     "missing": false
+    },
+    "chan_truoc_phai": {
+     "file": "quai_u_hon_lang_part_chan_truoc_phai.png",
+     "pivot": [
+      465,
+      925
+     ],
+     "z": 4,
+     "missing": false
+    },
+    "chan_truoc_trai": {
+     "file": "quai_u_hon_lang_part_chan_truoc_trai.png",
+     "pivot": [
+      1175,
+      975
+     ],
+     "z": 5,
+     "missing": false
+    },
+    "dau": {
+     "file": "quai_u_hon_lang_part_dau.png",
+     "pivot": [
+      800,
+      830
+     ],
+     "z": 6,
+     "missing": false
+    },
+    "mieng_trong": {
+     "file": "quai_u_hon_lang_part_mieng_trong.png",
+     "pivot": [
+      800,
+      890
+     ],
+     "z": 7,
+     "missing": false
+    },
+    "ham_duoi": {
+     "file": "quai_u_hon_lang_part_ham_duoi.png",
+     "pivot": [
+      735,
+      820
+     ],
+     "z": 8,
+     "missing": false
+    }
+   },
+   "canvas": [
+    1600,
+    1600
+   ],
+   "note": "trai/phai theo goc nhin cua quai (quai doi dien nguoi choi): trai = nua phai cua anh (x lon), phai = nua trai cua anh (x nho)",
+   "complete": true
+  }
+ }
+}

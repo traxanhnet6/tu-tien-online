@@ -1,0 +1,112 @@
+{
+ "monster": "thien_hac",
+ "canvas": {
+  "width": 1600,
+  "height": 1600
+ },
+ "note": "canh_phai (far wing) is fully occluded in this side-view pose: empty part, pivot at far shoulder",
+ "parts": {
+  "canh_phai": {
+   "file": "quai_thien_hac_part_canh_phai.png",
+   "pivot": [
+    700,
+    750
+   ],
+   "z": 0,
+   "pixels": 0
+  },
+  "chan_phai": {
+   "file": "quai_thien_hac_part_chan_phai.png",
+   "pivot": [
+    700,
+    980
+   ],
+   "z": 1,
+   "pixels": 29611
+  },
+  "duoi": {
+   "file": "quai_thien_hac_part_duoi.png",
+   "pivot": [
+    980,
+    760
+   ],
+   "z": 2,
+   "pixels": 164937
+  },
+  "chan_trai": {
+   "file": "quai_thien_hac_part_chan_trai.png",
+   "pivot": [
+    625,
+    990
+   ],
+   "z": 3,
+   "pixels": 12761
+  },
+  "than": {
+   "file": "quai_thien_hac_part_than.png",
+   "pivot": [
+    700,
+    800
+   ],
+   "z": 4,
+   "pixels": 80485
+  },
+  "canh_trai": {
+   "file": "quai_thien_hac_part_canh_trai.png",
+   "pivot": [
+    620,
+    700
+   ],
+   "z": 5,
+   "pixels": 168026
+  },
+  "co": {
+   "file": "quai_thien_hac_part_co.png",
+   "pivot": [
+    560,
+    690
+   ],
+   "z": 6,
+   "pixels": 17264
+  },
+  "dau": {
+   "file": "quai_thien_hac_part_dau.png",
+   "pivot": [
+    560,
+    390
+   ],
+   "z": 7,
+   "pixels": 12554
+  },
+  "mieng_trong": {
+   "file": "quai_thien_hac_part_mieng_trong.png",
+   "pivot": [
+    510,
+    335
+   ],
+   "z": 8,
+   "bbox": [
+    455,
+    304,
+    559,
+    362
+   ],
+   "note": "khoang mồm há (tối + răng); nằm dưới ham_duoi"
+  },
+  "ham_duoi": {
+   "file": "quai_thien_hac_part_ham_duoi.png",
+   "pivot": [
+    560,
+    308
+   ],
+   "z": 9,
+   "bbox": [
+    455,
+    304,
+    559,
+    362
+   ],
+   "note": "hàm dưới, xoay quanh pivot=khớp hàm (bản lề mép mồm) để há/ngậm"
+  }
+ }
+}

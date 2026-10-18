@@ -23,8 +23,9 @@ create table if not exists profiles (
 create index if not exists profiles_char_id_idx on profiles(char_id);
 create index if not exists profiles_name_idx on profiles(name);
 
--- Bạn bè (2 chiều: ghi 2 hàng hoặc 1 hàng + query cả 2 phía;
--- ở đây ghi 2 hàng khi chấp nhận để list đơn giản)
+-- Bạn bè: 1 hàng / tình bạn (user_id, friend_id); query cả 2 chiều bằng
+-- or(user_id.eq.X, friend_id.eq.X). RLS cho phép 1 trong 2 bên đọc/ghi/xóa
+-- (xem supabase-migration-20261018-friends.sql).
 create table if not exists friends (
   user_id uuid not null references profiles(user_id) on delete cascade,
   friend_id uuid not null references profiles(user_id) on delete cascade,

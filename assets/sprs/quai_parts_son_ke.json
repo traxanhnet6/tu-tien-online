@@ -1,0 +1,82 @@
+{
+ "monster": "son_ke",
+ "canvas": {
+  "width": 1712,
+  "height": 1392
+ },
+ "note": "Sơn Kê (mountain pheasant), top-down chibi pixel (AI redraw of sprs_mon_son_ke.png). duoi = full radial tail-feather fan as z=0 background layer (wing/body/head/feet pixels excluded via z-priority tiling). trai/phai = viewer's left/right.",
+ "parts": {
+  "duoi": {
+   "file": "quai_son_ke_part_duoi.png",
+   "pivot": [
+    860,
+    900
+   ],
+   "z": 0,
+   "pixels": 935458
+  },
+  "canh_trai": {
+   "file": "quai_son_ke_part_canh_trai.png",
+   "pivot": [
+    600,
+    670
+   ],
+   "z": 1,
+   "pixels": 120093
+  },
+  "canh_phai": {
+   "file": "quai_son_ke_part_canh_phai.png",
+   "pivot": [
+    1112,
+    670
+   ],
+   "z": 1,
+   "pixels": 116846
+  },
+  "than": {
+   "file": "quai_son_ke_part_than.png",
+   "pivot": [
+    860,
+    800
+   ],
+   "z": 2,
+   "pixels": 174380
+  },
+  "chan_trai": {
+   "file": "quai_son_ke_part_chan_trai.png",
+   "pivot": [
+    765,
+    1080
+   ],
+   "z": 3,
+   "pixels": 19463
+  },
+  "chan_phai": {
+   "file": "quai_son_ke_part_chan_phai.png",
+   "pivot": [
+    955,
+    1080
+   ],
+   "z": 3,
+   "pixels": 19138
+  },
+  "dau": {
+   "file": "quai_son_ke_part_dau.png",
+   "pivot": [
+    860,
+    570
+   ],
+   "z": 4,
+   "pixels": 22920
+  },
+  "mo": {
+   "file": "quai_son_ke_part_mo.png",
+   "pivot": [
+    860,
+    460
+   ],
+   "z": 5,
+   "pixels": 6331
+  }
+ }
+}

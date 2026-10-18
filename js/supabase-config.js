@@ -5,5 +5,5 @@
 var SUPABASE_CONFIG = {
   url: "https://cifpkmxkrtdowdjvrzls.supabase.co",
   anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpZnBrbXhrcnRkb3dkanZyemxzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyOTE0MzQsImV4cCI6MjEwNzg2NzQzNH0.Et7vkX7HxvzIPTmJ0z-JlTVz8blXxryFFmx1akDxi58",
-  enabled: false // bật true ở milestone 2 khi online.js cắm Supabase thật
+  enabled: true // milestone 2: online.js/social.js cắm Supabase thật qua online_sb.js
 };
