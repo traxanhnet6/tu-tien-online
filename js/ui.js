@@ -580,6 +580,13 @@ function beginGame() {
   state.char.cotPham = null; /* phẩm chất căn cốt — định khi uống Tẩy Cốt Đan đầu tiên */
   state.char.realm = 1; state.char.tier = 1; /* bắt đầu Luyện Khí tầng 1 */
   state.map = { id: 0, zone: 13 }; /* nhân vật mới luôn spawn ở Thanh Vân Trấn (Bui 2026-10-19) */
+  /* Tân thủ nhận sẵn Kiếm Gỗ Đào, đeo ngay (Bui 2026-10-19: báo tạo nhân vật không nhận được vũ khí) */
+  try {
+    if (typeof EquipSet !== "undefined" && EquipSet.getById("eq_vukhi_r1")) {
+      if (!state.equipSet) state.equipSet = { vukhi: null, ao: null, quan: null, giay: null, mu: null, daychuyen: null, nhan: null, phapbao: null, toaky: null };
+      state.equipSet.vukhi = "eq_vukhi_r1";
+    }
+  } catch (e) {}
   /* Luồng vào game mới: nhân vật mới → chiếu cốt truyện "Đêm Máu Làng Phong Diệp" 1 lần */
   state.flags.story_intro_done = false;
   if (typeof Social !== "undefined") { try { Social.ensureCharId(state); } catch (e) {} }
