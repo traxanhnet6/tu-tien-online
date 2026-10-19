@@ -23,6 +23,7 @@ var Engine = (function () {
   /* ---------- Hằng số ---------- */
   var WORLD_W = 1600, WORLD_H = 1200;
   var ATTACK_RANGE = 70;      // tầm đánh player
+  var ATK_CHASE_MAX = 700;    // bấm Đánh: quái trong bán kính này thì tự dí theo rồi đánh
   var INTERACT_RANGE = 60;    // tầm tương tác NPC (Space/?)
   var GATE_RANGE = 46;        // tầm kích hoạt cổng
   var MONSTER_AGGRO = 300;    // quái đuổi theo trong bán kính này
@@ -105,6 +106,7 @@ var Engine = (function () {
   var _dmgNums = [], _fx = [];
   var _keys = {};
   var _moveTarget = null;
+  var _chaseTgt = false; /* bấm Đánh khi quái ngoài tầm → tự dí theo rồi đánh (attack-move) */
   var _tapMove = true; /* chạm map để di chuyển — bật/tắt trong Cài đặt */
   var _attackCd = 0;
   var _respawnT = 0, _bossRespawnAt = 0, _bossDef = null;
@@ -536,7 +538,7 @@ var Engine = (function () {
     var ps = _getStats();
     player.hp = ps.maxHp; player.mp = ps.maxMp;
     player.shield = 0; player.maxShield = 0;
-    player.target = null; _moveTarget = null;
+    player.target = null; _moveTarget = null; _chaseTgt = false;
     _dmgNums = []; _fx = [];
     _buffs = []; _bossTele = []; _weakUntil = 0;
     _dashT = 0; _dashCd = 0;
@@ -552,7 +554,7 @@ var Engine = (function () {
                 monsters: [], boss: null, npcs: [], gates: [], stoneDrop: [10, 30] };
     _npcs = []; _gates = []; _objects = [];
     player.x = WORLD_W / 2; player.y = WORLD_H - 220;
-    player.target = null; _moveTarget = null;
+    player.target = null; _moveTarget = null; _chaseTgt = false;
     _dmgNums = []; _fx = [];
     _spawnStage(run.stageIdx);
     _audio(function (A) { A.playMusic('boss'); });
@@ -570,7 +572,7 @@ var Engine = (function () {
     _npcs = []; _objects = [];
     _gates = [{ to: 0, x: 80, y: 600 }];
     player.x = WORLD_W / 2; player.y = WORLD_H - 220;
-    player.target = null; _moveTarget = null;
+    player.target = null; _moveTarget = null; _chaseTgt = false;
     _dmgNums = []; _fx = [];
     _buffs = []; _bossTele = []; _weakUntil = 0;
     _dashT = 0; _dashCd = 0;
@@ -685,7 +687,7 @@ var Engine = (function () {
     return false;
   }
 
-  function setAuto(b) { Engine.auto = !!b; var S = _S(); if (S) S.auto = Engine.auto; }
+  function setAuto(b) { Engine.auto = !!b; _chaseTgt = false; var S = _S(); if (S) S.auto = Engine.auto; }
   /* AUTO LÀM NHIỆM VỤ (Bui 2026-10-19): tự tìm mục tiêu quest, di chuyển, đánh, trả NV */
   var _aqInteractCd = 0;
   function setAutoQuest(b) { Engine.autoQuest = !!b; var S = _S(); if (S) S.autoQuest = Engine.autoQuest; }
@@ -791,7 +793,7 @@ var Engine = (function () {
         }
       }
     } catch (err) {}
-    _moveTarget = { x: wx, y: wy };
+    _moveTarget = { x: wx, y: wy }; _chaseTgt = false; /* chạm map đi chỗ khác → hủy dí mục tiêu */
   }
   function _inputVec() {
     var dx = 0, dy = 0;
@@ -1188,15 +1190,17 @@ var Engine = (function () {
     return { ok: true, hits: 1 };
   }
 
-  /* Đánh thường bằng nút (tìm mục tiêu gần nhất nếu chưa có) */
+  /* Đánh thường bằng nút: khóa mục tiêu gần nhất; ngoài tầm thì dí theo rồi đánh */
   function manualAttack() {
     var ps = _effStats(_getStats());
     var tgt = (player.target && !player.target.dead) ? player.target
       : (function () { var nm = _nearestMon(); return nm ? nm.m : null; })();
-    if (!tgt) return false;
+    if (!tgt) { _chaseTgt = false; return false; }
     player.target = tgt;
     var d = Math.hypot(tgt.x - player.x, tgt.y - player.y);
-    if (d > _atkRange() * 1.4) return false; // quá xa
+    if (d > ATK_CHASE_MAX) { _chaseTgt = false; _toast('atk_too_far'); return true; }
+    if (d > _atkRange()) { _chaseTgt = true; return true; } // dí theo, tick sẽ đánh khi vào tầm
+    _chaseTgt = false;
     if (_attackCd > 0) return false;
     _playerAttack(tgt, ps);
     return true;
@@ -1450,7 +1454,7 @@ var Engine = (function () {
     player.mp = ps.maxMp;
     _vibrate([70, 50, 120]); /* rung mạnh khi chết */
     player.x = WORLD_W / 2; player.y = WORLD_H / 2;
-    player.target = null; _moveTarget = null;
+    player.target = null; _moveTarget = null; _chaseTgt = false;
   }
 
   function _updateMonsters(dt, ps) {
@@ -1675,10 +1679,14 @@ var Engine = (function () {
         }
         _autoSkills(ps); // tự tung bí thuật khi hồi chiêu
       }
-    } else if (tgt && _attackCd <= 0) {
+    } else if (tgt) {
       var d2 = Math.hypot(tgt.x - player.x, tgt.y - player.y);
-      if (d2 <= _atkRange()) _playerAttack(tgt, ps);
-    }
+      if (_chaseTgt && !_aqHandled && !manual && d2 > _atkRange() && _dashT <= 0) {
+        _moveToward(tgt.x, tgt.y, dt); // đang dí theo mục tiêu đã khóa bằng nút Đánh
+      } else if (_attackCd <= 0 && d2 <= _atkRange()) {
+        _playerAttack(tgt, ps); _chaseTgt = false;
+      }
+    } else if (!tgt) { _chaseTgt = false; }
 
     if (iv.active) { _moveTarget = null; _moveBy(iv.dx, iv.dy, dt); }
     else if (_moveTarget) { if (_moveToward(_moveTarget.x, _moveTarget.y, dt)) _moveTarget = null; }
