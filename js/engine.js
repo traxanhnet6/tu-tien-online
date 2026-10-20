@@ -1277,6 +1277,7 @@ var Engine = (function () {
     if (S.char) S.char.mp = player.mp;
     player.atkT = 0.25; // chồm lên khi tung chiêu
     player.skillT = 0.4; // khung skill riêng (không dùng khung đánh thường)
+    player.lastSkill = skillId; // Bui 2026-10-21: để chọn hình chưởng ấn
     var ps = _effStats(_getStats());
     var def = cast.def, wm = _weakMult();
     _audio(function (A) { A.sfx('slash'); });
@@ -2612,6 +2613,16 @@ var Engine = (function () {
     var src = null;
     /* đang TUNG SKILL: khung skill riêng theo hướng (char_*_skill*) — chỉ dùng khi đã tải xong */
     if (player.skillT > 0) {
+      /* Bui 2026-10-21: skill chưởng dùng hình chưởng ấn */
+      try {
+        var _sk = player.lastSkill || "";
+        if (/chuong|chuong_an|palm/i.test(_sk)) {
+          var _ca = 'assets/sprs/char_' + gioi + '_chuong_an.png';
+          var _cae = _imgCache[_ca];
+          if (!_cae) _img(_ca);
+          else if (_cae.done && _cae.ok) return _ca;
+        }
+      } catch (_e) {}
       var _sf = (player.skillT > 0.2) ? 1 : 2;
       var _ssrc = 'assets/sprs/char_' + gioi + '_' + huong + '_skill' + _sf + '.png';
       var _sce = _imgCache[_ssrc];
