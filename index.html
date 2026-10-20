@@ -11,10 +11,11 @@
 <script>
 /* TT_BUILD: phiên bản build — tăng mỗi lần deploy để tránh cache JS/CSS cũ.
    (Giá trị dùng chung cho toàn trang, khai báo 1 lần duy nhất tại đây.) */
-var TT_BUILD = "20261020-27";
+var TT_BUILD = "20261020-28";
 </script>
 <script>document.write('<link rel="stylesheet" href="css/style.css?v=' + TT_BUILD + '">');</script>
 <script>document.write('<link rel="stylesheet" href="css/hud-tutien2d.css?v=' + TT_BUILD + '">');</script>
+<script>document.write('<link rel="stylesheet" href="css/appearance.css?v=' + TT_BUILD + '">');</script>
 </head>
 <body>
 <div id="app">
@@ -66,7 +67,9 @@ var TT_BUILD = "20261020-27";
       <h2 data-t="btn_create_role">Tạo nhân vật</h2>
       <div class="create-preview">
         <img id="create-char-img" src="assets/sprs/char_nam_xuong_walk1.png" alt="">
+        <canvas id="create-char-canvas" width="180" height="230" class="hidden"></canvas>
       </div>
+      <div id="appearance-panel"></div>
       <div class="gender-row">
         <button id="create-gender-nam" class="btn gender-btn sel" type="button">♂ <span data-t="gender_nam">Nam</span></button>
         <button id="create-gender-nu" class="btn gender-btn" type="button">♀ <span data-t="gender_nu">Nữ</span></button>
@@ -229,6 +232,8 @@ var TT_BUILD = "20261020-27";
       <button data-panel="quest" data-t="nav_quest">Nhiệm vụ</button>
       <button data-panel="map" data-t="nav_map">Bản đồ</button>
       <button data-panel="dungeon" data-t="nav_dungeon">Phụ bản</button>
+      <button data-panel="events" data-t="nav_events">Sự Kiện</button>
+      <button data-panel="wardrobe" data-t="nav_wardrobe">Trang Phục</button>
       <button data-panel="gift" data-t="nav_gift">Giftcode</button>
       <button data-panel="settings" data-t="nav_settings">Cài đặt</button>
     </nav>
@@ -245,7 +250,7 @@ var TT_BUILD = "20261020-27";
     "js/bodycult.js", "js/taycot.js", "js/khilinh.js", "js/lifespan.js", "js/secret.js", "js/secretbook.js", "js/tower.js",
     "js/social.js", "js/skills.js", "js/sect.js", "js/sectquest.js", "js/alliance.js",
     "js/encounter.js", "js/gacha.js", "js/pet.js", "js/market.js", "js/farm.js", "js/grindzone.js",
-    "js/charanim.js", "js/equipset.js"];
+    "js/charanim.js", "js/appearance.js", "js/equipset.js"];
   for (var i = 0; i < core.length; i++) {
     document.write('<script src="' + core[i] + '?v=' + TT_BUILD + '"><\/script>');
   }
@@ -256,7 +261,7 @@ var TT_BUILD = "20261020-27";
 (function () {
   var rest = ["js/supabase-config.js", "js/online.js", "js/online_sb.js", "js/auth.js",
     "js/audio.js", "js/engine.js", "js/combat.js", "js/npc.js", "js/quest.js",
-    "js/mapload.js", "js/ui.js", "js/story.js", "js/questguide.js", "js/worldmap.js",
+    "js/mapload.js", "js/ui.js", "js/events.js", "js/wardrobe.js", "js/giftcode.js", "js/story.js", "js/questguide.js", "js/worldmap.js",
     "js/gamepad.js"];
   for (var i = 0; i < rest.length; i++) {
     document.write('<script src="' + rest[i] + '?v=' + TT_BUILD + '"><\/script>');

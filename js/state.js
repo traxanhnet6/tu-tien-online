@@ -50,6 +50,7 @@ function defaultState() {
       hp: 100, mp: 50,
       charId: null,                    // ID duy nhất "TT-XXXXXX" — sinh 1 lần, không đổi
       gender: "nam",                   // nam | nu — đổi bằng Thẻ Đổi Giới Tính
+      appearance: { face: "mat_thuong", hair: "toc_bui_cao", skin: "da_sang", hairColor: "toc_den", outfitColor: "ao_goc" }, // ngoại hình — xem appearance.js
       nameHistory: [],                 // [{name, at}] tên cũ
       lastRenameAt: 0,                 // timestamp lần đổi tên gần nhất
       renameFreeUsed: false,           // đã dùng lượt đổi tên miễn phí chưa
@@ -328,6 +329,12 @@ function migrateState(state) {
   /* ID nhân vật: save cũ tự sinh khi load lần đầu (không đổi về sau) */
   if (state.char) {
     if (!state.char.gender) state.char.gender = state.char.sect === "phap" ? "nu" : "nam";
+    /* Ngoại hình (appearance.js): save cũ chưa có -> gán mặc định; có rồi -> chuẩn hóa theo giới */
+    if (!state.char.appearance || typeof state.char.appearance !== "object") {
+      state.char.appearance = { face: "mat_thuong", hair: "toc_bui_cao", skin: "da_sang", hairColor: "toc_den", outfitColor: "ao_goc" };
+    } else if (typeof Appearance !== "undefined" && Appearance.normalize) {
+      try { state.char.appearance = Appearance.normalize(state.char.appearance, state.char.gender); } catch (e) {}
+    }
     if (!Array.isArray(state.char.nameHistory)) state.char.nameHistory = [];
     if (state.char.lastRenameAt == null) state.char.lastRenameAt = 0;
     if (state.char.renameFreeUsed == null) state.char.renameFreeUsed = false;

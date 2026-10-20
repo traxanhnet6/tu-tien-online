@@ -67,7 +67,7 @@ var screen = "menu";
 var panel = null, panelArg = null;
 var tnWarned = false; /* đã cảnh báo thọ nguyên thấp trong phiên này chưa */
 var curMapId = 0;
-var createSel = { sect: "kiem", element: null, quality: null, gender: "nam" };
+var createSel = { sect: "kiem", element: null, quality: null, gender: "nam", appearance: null };
 var lastHp = null, bossMusicOn = false, saveTick = 0;
 var btTimer = null, btStep = "needs", btBattle = null;
 var statsCache = null;
@@ -482,7 +482,18 @@ function doCheckin() {
 /* ---------------- tạo nhân vật ---------------- */
 function initCreate() {
   /* Đầu game là phàm nhân — không chọn tông môn/hệ phái, mặc định kiếm cho chỉ số */
-  createSel = { sect: "kiem", element: null, quality: null, gender: "nam" };
+  createSel = { sect: "kiem", element: null, quality: null, gender: "nam", appearance: null };
+  /* Ngoại hình mặc định + gắn UI chọn mặt/tóc/màu (appearance.js) */
+  try {
+    if (typeof Appearance !== "undefined") {
+      createSel.appearance = Appearance.defaults(createSel.gender);
+      Appearance.mountCreateUI({
+        panel: $("appearance-panel"), nameInput: $("create-name"),
+        getSel: function () { return createSel; },
+        onChange: function () { updateCreatePreview(); }
+      });
+    }
+  } catch (e) {}
   $("lingen-result").textContent = t("lingen_none");
   syncCreateGender();
   startCreatePreview();
@@ -496,14 +507,40 @@ function syncCreateGender() {
   var bn = $("create-gender-nam"), bu = $("create-gender-nu");
   if (bn) bn.classList.toggle("sel", g === "nam");
   if (bu) bu.classList.toggle("sel", g === "nu");
+  try {
+    if (typeof Appearance !== "undefined") {
+      createSel.appearance = Appearance.normalize(createSel.appearance, g);
+      Appearance.syncCreateUI({
+        panel: $("appearance-panel"), nameInput: $("create-name"),
+        getSel: function () { return createSel; },
+        onChange: function () { updateCreatePreview(); }
+      });
+    }
+  } catch (e) {}
   updateCreatePreview();
 }
 function updateCreatePreview() {
   var img = $("create-char-img");
   if (!img) return;
   var g = (createSel.gender === "nu") ? "nu" : "nam";
-  /* Đầu game là phàm nhân — preview áo vải thô theo giới tính */
-  img.src = "assets/sprs/mortal_preview_" + g + ".png";
+  /* Preview sống bằng CharAnim + ngoại hình đã chọn (appearance.js);
+     chưa vẽ được (manifest/ảnh đang tải) thì dùng ảnh tĩnh phàm nhân. */
+  var cv = $("create-char-canvas");
+  var drawn = false;
+  try {
+    if (cv && typeof Appearance !== "undefined") {
+      drawn = Appearance.drawPreview(cv, createSel);
+      if (!drawn) {
+        /* ảnh part tải bất đồng bộ — thử lại vài nhịp khi còn ở màn tạo */
+        [350, 900].forEach(function (ms) {
+          setTimeout(function () { if (screen === "create") updateCreatePreview(); }, ms);
+        });
+      }
+    }
+  } catch (e) { drawn = false; }
+  if (cv) cv.classList.toggle("hidden", !drawn);
+  img.classList.toggle("hidden", !!drawn);
+  if (!drawn) img.src = "assets/sprs/mortal_preview_" + g + ".png";
 }
 function startCreatePreview() {
   stopCreatePreview();
@@ -574,6 +611,12 @@ function beginGame() {
   state.char.name = name;
   state.char.sect = createSel.sect;
   state.char.gender = (createSel.gender === "nu") ? "nu" : "nam";
+  /* Ngoại hình đã chọn ở màn tạo (appearance.js) */
+  try {
+    if (typeof Appearance !== "undefined") {
+      state.char.appearance = Appearance.normalize(createSel.appearance, state.char.gender);
+    }
+  } catch (e) {}
   state.char.element = null; /* linh căn trắc ở NV2 Dị Tượng Cửu Sắc (Bui 2026-10-18) */
   state.char.elementQuality = null;
   state.char.roots = []; /* linh căn trắc ở NV2, khai mở thêm bằng Khai Mạch Đan */

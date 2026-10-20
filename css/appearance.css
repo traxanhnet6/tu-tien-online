@@ -1,0 +1,26 @@
+/* css/appearance.css — UI tùy chỉnh ngoại hình ở màn tạo nhân vật (appearance.js) */
+#appearance-panel { margin: 6px 0 2px; }
+.ap-title {
+  font-weight: 700; font-size: 15px; color: #6b4a2f;
+  margin: 4px 0 2px; text-align: left;
+}
+.ap-row { margin: 6px 0; text-align: left; }
+.ap-label { font-size: 13px; font-weight: 600; color: #7a5a38; margin-bottom: 3px; }
+.ap-choices { display: flex; flex-wrap: wrap; gap: 5px; }
+.ap-choice {
+  border: 2px solid #b99b6b; background: #fdf6e3; color: #5a4028;
+  border-radius: 8px; padding: 4px 9px; font-size: 13px; cursor: pointer;
+  font-family: inherit;
+}
+.ap-choice.sel { border-color: #2fa37c; background: #dff5ea; font-weight: 700; }
+.ap-swatch {
+  width: 30px; height: 30px; border-radius: 50%; padding: 0;
+  border: 2px solid #b99b6b;
+}
+.ap-swatch.sel { border-color: #2fa37c; box-shadow: 0 0 0 2px #2fa37c inset; }
+.ap-rnd-row { margin-top: 8px; }
+.ap-rnd-btn { width: 100%; }
+.ap-name-rnd-btn {
+  margin-left: 6px; padding: 6px 10px; font-size: 13px; vertical-align: middle;
+}
+#create-char-canvas { max-width: 100%; height: auto; }

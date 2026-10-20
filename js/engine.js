@@ -26,6 +26,7 @@ var Engine = (function () {
   var ATK_CHASE_MAX = 700;    // bấm Đánh: quái trong bán kính này thì tự dí theo rồi đánh
   var INTERACT_RANGE = 60;    // tầm tương tác NPC (Space/?)
   var GATE_RANGE = 46;        // tầm kích hoạt cổng
+  var GATE_SAFE_R = 96;       // bán kính vùng cấm NPC quanh cổng (chống NPC chặn cổng)
   var MONSTER_AGGRO = 300;    // quái đuổi theo trong bán kính này
   var BOSS_RESPAWN_S = 120;   // boss hồi sinh sau 120s
   var MAP_MON_COUNT = 6;      // giữ ~6 quái thường / map
@@ -783,6 +784,14 @@ var Engine = (function () {
     var cam = _camera();
     var wx = e.clientX - r.left + cam.x;
     var wy = e.clientY - r.top + cam.y;
+    /* Chạm gần cổng: ưu tiên đi vào cổng — NPC đứng gần cổng không được
+       chiếm cú chạm này (phòng thủ: cổng luôn kích hoạt được) */
+    for (var gi9 = 0; gi9 < _gates.length; gi9++) {
+      if (Math.hypot(_gates[gi9].x - wx, _gates[gi9].y - wy) < GATE_SAFE_R) {
+        _moveTarget = { x: _gates[gi9].x, y: _gates[gi9].y }; _chaseTgt = false;
+        return;
+      }
+    }
     /* Chạm trực tiếp vào NPC → nói chuyện ngay (Bui 2026-10-18) */
     try {
       for (var i = 0; i < _npcs.length; i++) {
@@ -1550,16 +1559,61 @@ var Engine = (function () {
     }
   }
 
+  /* ---------- Vùng an toàn quanh cổng chuyển map ----------
+   * NPC không bao giờ được đứng/lang thang trong bán kính GATE_SAFE_R
+   * quanh tâm cổng: tránh NPC che cổng và chiếm cú chạm vào cổng khiến
+   * người chơi không qua map được (ca thật: lao_dan_duong spawn cách
+   * cổng (720,80) ở Thanh Vân Trấn chỉ 28px).
+   * - _gatesOf(mapDef): lấy danh sách cổng của 1 map từ dữ liệu MAPS.
+   * - _gateZoneAt(x, y): cổng mà điểm (x, y) đang nằm trong vùng cấm.
+   * - _pushOutOfGates(x, y): điểm hợp lệ gần nhất ngoài mọi vùng cấm.
+   * --------------------------------------------------------------- */
+  function _gatesOf(mapDef) { return (mapDef && mapDef.gates) || []; }
+  function _gateZoneAt(x, y) {
+    var gs = _gatesOf(_mapDef);
+    for (var i = 0; i < gs.length; i++) {
+      if (Math.hypot(gs[i].x - x, gs[i].y - y) < GATE_SAFE_R) return gs[i];
+    }
+    return null;
+  }
+  function _pushOutOfGates(x, y) {
+    var px = x, py = y;
+    for (var k = 0; k < 6; k++) {
+      var g = _gateZoneAt(px, py);
+      if (!g) break;
+      var r = GATE_SAFE_R + 8;
+      var dx = px - g.x, dy = py - g.y, d = Math.hypot(dx, dy);
+      if (d < 1) { dx = WORLD_W / 2 - g.x; dy = WORLD_H / 2 - g.y; d = Math.hypot(dx, dy) || 1; }
+      /* hướng xuyên tâm trước; nếu bị biên map ép lại vào vùng cấm thì
+         thử 8 hướng la bàn quanh cổng */
+      var dirs = [[dx / d, dy / d], [1, 0], [-1, 0], [0, 1], [0, -1],
+                  [0.707, 0.707], [-0.707, 0.707], [0.707, -0.707], [-0.707, -0.707]];
+      var moved = false;
+      for (var j = 0; j < dirs.length; j++) {
+        var nx = Math.max(40, Math.min(WORLD_W - 40, g.x + dirs[j][0] * r));
+        var ny = Math.max(40, Math.min(WORLD_H - 40, g.y + dirs[j][1] * r));
+        if (!_gateZoneAt(nx, ny)) { px = nx; py = ny; moved = true; break; }
+      }
+      if (!moved) break; /* cổng quá sát nhau/biên — giữ nguyên, hiếm gặp */
+    }
+    return { x: px, y: py };
+  }
+
   /* ---------- NPC chuyển động 3D ----------
    * - NPC có def.wander (bán kính px) sẽ đi tuần quanh vị trí gốc:
    *   tăng tốc/giảm tốc mượt (arrive behavior), không giật cục.
    * - NPC đứng yên: idle bob nhẹ, quay mặt về phía người chơi khi lại gần.
    * - Nghiêng người (lean) theo vận tốc x, bóng đổ lệch ngược hướng nghiêng.
    * - NPC không chặn đường: người chơi đi xuyên được (không có collision).
+   * - Vùng cấm cổng: xem _gateZoneAt — đích tuần tra không bao giờ nằm
+   *   trong vùng cấm; NPC đang ở trong vùng cấm thì tự đi ra ngoài.
    * --------------------------------------------------------------- */
   function _updateNpcs(dt) {
     for (var i = 0; i < _npcs.length; i++) {
       var n = _npcs[i], R = n.def.wander || 0;
+      var inGate = _gateZoneAt(n.x, n.y);
+      if (n.graceT == null) { n.graceT = 0; n.spawnInGate = !!inGate; }
+      n.graceT += dt;
       var pdx = player.x - n.x, pdy = player.y - n.y;
       var pd = Math.hypot(pdx, pdy);
       /* chào khi người chơi lại gần (mỗi NPC 10s một lần) */
@@ -1570,9 +1624,19 @@ var Engine = (function () {
         if (n.tx == null) {
           if (n.wt > 0) { n.wt -= dt; }
           else {
-            var a = Math.random() * Math.PI * 2, r = 25 + Math.random() * R;
-            n.tx = Math.max(60, Math.min(WORLD_W - 60, n.hx + Math.cos(a) * r));
-            n.ty = Math.max(60, Math.min(WORLD_H - 60, n.hy + Math.sin(a) * r));
+            /* Tâm tuần tra: nếu vị trí gốc nằm trong vùng cấm cổng thì
+               tuần tra quanh điểm neo đã đẩy ra ngoài vùng cấm */
+            var ax = n.hx, ay = n.hy;
+            if (_gateZoneAt(ax, ay)) { var ap = _pushOutOfGates(ax, ay); ax = ap.x; ay = ap.y; }
+            /* Đích tuần tra không bao giờ nằm trong vùng cấm cổng */
+            var picked = false;
+            for (var tr = 0; tr < 6 && !picked; tr++) {
+              var a = Math.random() * Math.PI * 2, r = 25 + Math.random() * R;
+              var cx = Math.max(60, Math.min(WORLD_W - 60, ax + Math.cos(a) * r));
+              var cy = Math.max(60, Math.min(WORLD_H - 60, ay + Math.sin(a) * r));
+              if (!_gateZoneAt(cx, cy)) { n.tx = cx; n.ty = cy; picked = true; }
+            }
+            if (!picked) n.wt = 0.5; /* quanh nhà không có điểm hợp lệ → chờ rồi thử lại */
           }
           /* đứng chờ: giảm tốc mượt về 0 */
           n.vx += (0 - n.vx) * Math.min(1, dt * 6);
@@ -1603,8 +1667,30 @@ var Engine = (function () {
           if (!n.greetT && n.greetCd <= 0) { n.greetT = 0.9; n.greetCd = 10; }
         }
       }
+      /* Đang trong vùng cấm cổng (spawn gần cổng / lạc vào): tự đi ra
+         điểm hợp lệ gần nhất — áp dụng cả NPC đứng yên */
+      if (inGate) {
+        if (n.escTx == null || Math.hypot(n.escTx - n.x, n.escTy - n.y) < 8) {
+          var ep = _pushOutOfGates(n.x, n.y);
+          n.escTx = ep.x; n.escTy = ep.y;
+        }
+        var edx = n.escTx - n.x, edy = n.escTy - n.y, ed = Math.hypot(edx, edy);
+        if (ed > 1) {
+          var ewant = 58 * Math.min(1, ed / 70);
+          var ek = Math.min(1, dt * 5);
+          n.vx += (edx / ed * ewant - n.vx) * ek;
+          n.vy += (edy / ed * ewant - n.vy) * ek;
+        }
+        n.tx = null; n.ty = null; /* hủy đích tuần tra đang ở trong vùng cấm */
+      } else { n.escTx = null; n.escTy = null; }
       n.x = Math.max(40, Math.min(WORLD_W - 40, n.x + n.vx * dt));
       n.y = Math.max(40, Math.min(WORLD_H - 40, n.y + n.vy * dt));
+      /* Chốt cứng sau ân hạn spawn 3s: không bao giờ kết thúc frame
+         trong vùng cấm cổng */
+      if (!(n.spawnInGate && n.graceT < 3) && _gateZoneAt(n.x, n.y)) {
+        var fp = _pushOutOfGates(n.x, n.y);
+        n.x = fp.x; n.y = fp.y;
+      }
       /* lean mượt theo vận tốc x */
       var targetLean = Math.max(-0.16, Math.min(0.16, n.vx * 0.0022));
       n.lean += (targetLean - n.lean) * Math.min(1, dt * 6);
@@ -1885,6 +1971,347 @@ var Engine = (function () {
     } catch (e) {}
     return 'kiem';
   }
+  /* ================================================================
+   * PLAYER_SPRITE_MODE (Bui 2026-10-20): vẽ người chơi bằng sprite
+   * 4 hướng MỚI (áo trắng viền đỏ) trong assets/sprs/dirs/:
+   *   player_<nam|nu>_<down|left|right|up>.png (cao 128px, nền trong suốt)
+   * true  = dùng sprite mới; hướng đổi theo mặt hiện tại (_face4),
+   *         đứng yên giữ hướng cuối, di chuyển có bobbing 2px + bóng đổ.
+   * false = TẮT hoàn toàn, quay về CharAnim skeletal + fallback cũ
+   *         (đường vẽ bên dưới _drawPlayer không đổi — dễ hoàn tác).
+   * Sprite chưa tải xong/lỗi -> _drawPlayerSpriteMode trả false và
+   * game tự rơi xuống đường vẽ cũ, không crash, không ô vuông. */
+  var PLAYER_SPRITE_MODE = true;
+  /* CHAR_DRAW_H (Bui 2026-10-20): chiều cao vẽ CHUNG (px) cho người chơi + NPC
+   * trong map để hai bên đồng bộ cỡ khi đứng cạnh nhau.
+   * 62 = điểm giữa khoảng cũ (người chơi 54, NPC 69). */
+  var CHAR_DRAW_H = 62;
+  var _PLAYER_SPRITE_H = CHAR_DRAW_H; /* chiều cao vẽ người chơi trong map (px) */
+
+  /* Hàm thuần: (giới tính, hướng mặt) -> đường dẫn sprite. Test qua Engine._playerSpriteTest */
+  function _playerDirFile(gioi, face) {
+    var g = (gioi === 'nu') ? 'nu' : 'nam';
+    var f = (face === 'left' || face === 'right' || face === 'up' || face === 'down') ? face : 'down';
+    return 'assets/sprs/dirs/player_' + g + '_' + f + '.png';
+  }
+  /* Hướng mặt hiện tại của người chơi (đứng yên giữ hướng cuối qua _face4) */
+  function _playerDirFace() {
+    var ang = (typeof player.ang === 'number') ? player.ang : Math.PI / 2;
+    return _face4(player, ang);
+  }
+  /* Sprite hiện tại nếu ĐÃ tải xong OK; chưa xong thì warm cache + trả null (dùng fallback) */
+  function _playerDirSprite() {
+    var S = _S();
+    var gioi = (S && S.char && S.char.gender === 'nu') ? 'nu' : 'nam';
+    var src = _playerDirFile(gioi, _playerDirFace());
+    var ce = _imgCache[src];
+    if (ce && ce.done) return ce.ok ? src : null;
+    _img(src); /* warm cache lần đầu */
+    return null;
+  }
+  /* Bản nhuộm đỏ của ảnh (nhấp nháy khi trúng đòn, giống flashRed của CharAnim) */
+  var _tintCache = {};
+  function _redTint(im, keyOverride) {
+    try {
+      var key = keyOverride || im.src || '';
+      var c = _tintCache[key];
+      if (c) return c;
+      if (typeof document === 'undefined') return null;
+      c = document.createElement('canvas');
+      c.width = im.width; c.height = im.height;
+      var g = c.getContext('2d');
+      g.drawImage(im, 0, 0);
+      g.globalCompositeOperation = 'source-atop';
+      g.fillStyle = 'rgba(255,60,60,0.55)';
+      g.fillRect(0, 0, c.width, c.height);
+      _tintCache[key] = c;
+      return c;
+    } catch (e) { return null; }
+  }
+  /* ================================================================
+   * BIẾN THỂ NGOẠI HÌNH CHO SPRITE MODE (Bui 2026-10-20):
+   * áp lựa chọn tạo nhân vật (state.char.appearance, js/appearance.js)
+   * lên sprite 4 hướng đang đi trong map:
+   *  - MÀU DA / MÀU TÓC / MÀU ÁO: nhuộm trực tiếp lên ảnh sprite MỌI
+   *    hướng, dùng cùng kỹ thuật tints của charanim.js (scale theo họ
+   *    màu / remap theo độ sáng, lấy spec từ Appearance.optsFor):
+   *      da  = scale theo họ màu da gốc;
+   *      tóc = remap pixel tối TRONG VÙNG ĐẦU (tránh nhuộm quần/viền);
+   *      áo  = remap pixel vải SÁNG ít bão hòa (phần trắng của áo) theo
+   *            màu áo đã chọn, GIỮ NGUYÊN viền đỏ + lưỡi kiếm thép.
+   *  - MẶT + KIỂU TÓC: chỉ hướng DOWN (chính diện, thấy mặt rõ nhất):
+   *    chồng part faces/ + hairs/ đã chọn lên vùng đầu của sprite bằng
+   *    phép biến đổi chung part-space 256px -> vùng mặt sprite (đo từ
+   *    sprite 128px). Hướng left/right/up góc nhìn không khớp part
+   *    chính diện nên chỉ nhuộm màu.
+   *  - Mặc định toàn bộ (mặt thường / tóc mặc định / da sáng / màu tóc
+   *    gốc / áo gốc) -> KHÔNG tạo biến thể, vẽ ảnh gốc (0 thay đổi).
+   * Kết quả cache theo khóa tổ hợp (giới+hướng+5 lựa chọn), tối đa
+   * _VARIANT_MAX bản; lỗi/part chưa tải -> dùng bản chỉ-nhuộm hoặc
+   * ảnh gốc, game không crash. */
+  var _SPR_FACE_PART = { x: 88, y: 164, w: 84, h: 72 }; /* bbox đầu trong part-space 256px (faces/) */
+  var _SPR_FACE_ZONE = { /* vùng mặt (kèm viền) trên sprite down 128px */
+    nam: { x: 14, y: 36, w: 54, h: 40 },
+    nu:  { x: 14, y: 34, w: 48, h: 34 }
+  };
+  var _SPR_FACE_INNER = { /* vùng GIỮA mặt phải luôn trống khi chồng tóc (sprite px) */
+    nam: { x: 22, y: 46, w: 38, h: 28 },
+    nu:  { x: 22, y: 44, w: 32, h: 22 }
+  };
+  var _SPR_HEAD_ZONE = { /* vùng đầu để giới hạn nhuộm tóc theo (giới, hướng) */
+    nam: { down: { x1: 96, y1: 82 }, left: { x1: 104, y1: 82 }, right: { x1: 107, y1: 82 }, up: { x0: 10, x1: 86, y1: 118 } },
+    nu:  { down: { x1: 81, y1: 80 }, left: { x1: 99, y1: 82 }, right: { x1: 98, y1: 82 }, up: { x0: 2, x1: 74, y1: 118 } }
+  };
+  function _apFind(list, id) {
+    if (!list) return null;
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+  /* Tổ hợp biến thể hiện tại của người chơi -> spec hoặc null nếu mặc định/thiếu dữ liệu */
+  function _variantSpec() {
+    try {
+      var S = _S();
+      if (!S || !S.char) return null;
+      if (typeof Appearance === 'undefined' || !Appearance.normalize || !Appearance.optsFor) return null;
+      var g = (S.char.gender === 'nu') ? 'nu' : 'nam';
+      var a = Appearance.normalize(S.char.appearance, g);
+      var def = Appearance.defaults(g);
+      var o = Appearance.optsFor(S) || {};
+      var tints = o.tints || {};
+      var skinSpec = tints.dau || null;                 /* scale da (spec dùng chung mọi part da) */
+      var hairSpec = tints.toc || null;                 /* remap tóc; null khi màu tóc = mặc định giới */
+      var oc = _apFind(Appearance.OUTFIT_COLORS, a.outfitColor);
+      var outHex = (oc && oc.hex) ? oc.hex : null;
+      var needFace = (a.face !== def.face);
+      var needHair = (a.hair !== def.hair);
+      if (!skinSpec && !hairSpec && !outHex && !needFace && !needHair) return null;
+      return { g: g, a: a, skinSpec: skinSpec, hairSpec: hairSpec, outHex: outHex,
+               needFace: needFace, needHair: needHair,
+               key: g + '|' + a.face + '|' + a.hair + '|' + a.skin + '|' + a.hairColor + '|' + a.outfitColor };
+    } catch (e) { return null; }
+  }
+  function _hexRgbV(h) {
+    if (!h) return null;
+    h = String(h).replace('#', '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    return [((n >> 16) & 255), ((n >> 8) & 255), (n & 255)];
+  }
+  function _lumV(r, g, b) { return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; }
+  /* Áp 1 spec tint kiểu charanim (scale/remap) lên ImageData, giới hạn trong box (tùy chọn).
+   * Cùng công thức với CharAnim._tintedImg: scale nhân kênh theo to/from cho pixel gần
+   * họ màu match; remap ánh xạ độ sáng -> tông màu đích (giữ shading). */
+  function _applyTintSpecPx(d, w, h, spec, box) {
+    if (!spec) return;
+    var to = _hexRgbV(spec.to); if (!to) return;
+    var matchRgbs = null, tol2 = 0;
+    if (spec.match) {
+      matchRgbs = spec.match.map(_hexRgbV);
+      var tol = spec.tol || 80; tol2 = tol * tol;
+    }
+    var fx = 1, fy = 1, fz = 1, refL = 0.5;
+    if (spec.m === 'scale') {
+      var from = _hexRgbV(spec.from); if (!from) return;
+      fx = to[0] / (from[0] || 1); fy = to[1] / (from[1] || 1); fz = to[2] / (from[2] || 1);
+    } else {
+      refL = spec.refLum != null ? spec.refLum : _lumV.apply(null, _hexRgbV(spec.ref) || [128, 128, 128]);
+      if (refL <= 0) refL = 0.5;
+    }
+    var satMin = spec.satMin || 0;
+    var x0 = box ? (box.x0 || 0) : 0, x1 = box ? Math.min(w, box.x1 || w) : w;
+    var y0 = box ? (box.y0 || 0) : 0, y1 = box ? Math.min(h, box.y1 || h) : h;
+    for (var y = y0; y < y1; y++) {
+      for (var x = x0; x < x1; x++) {
+        var i = (y * w + x) * 4;
+        if (d[i + 3] === 0) continue;
+        var r = d[i], gg = d[i + 1], b = d[i + 2];
+        /* spec.warm: chỉ nhuộm pixel "ấm" kiểu da (r>=g, r-b>=25) — tránh ăn vào
+         * áo trắng/mắt trắng khi áp spec da lên cả sprite (áo nữ trắng gần tông da sáng) */
+        if (spec.warm && !(r >= gg && (r - b) >= 25)) continue;
+        if (matchRgbs) {
+          var okM = false;
+          for (var j = 0; j < matchRgbs.length; j++) {
+            var mc = matchRgbs[j];
+            var dr = r - mc[0], dg = gg - mc[1], db = b - mc[2];
+            if (dr * dr + dg * dg + db * db <= tol2) { okM = true; break; }
+          }
+          if (!okM) continue;
+        }
+        if (satMin > 0) {
+          var mx = Math.max(r, gg, b), mn = Math.min(r, gg, b);
+          if (mx === 0 || (mx - mn) / mx < satMin) continue;
+        }
+        if (spec.m === 'scale') {
+          d[i] = Math.min(255, r * fx); d[i + 1] = Math.min(255, gg * fy); d[i + 2] = Math.min(255, b * fz);
+        } else {
+          var k = 0.25 + 0.75 * (_lumV(r, gg, b) / refL);
+          if (k > 1.6) k = 1.6;
+          d[i] = Math.min(255, to[0] * k); d[i + 1] = Math.min(255, to[1] * k); d[i + 2] = Math.min(255, to[2] * k);
+        }
+      }
+    }
+  }
+  /* Nhuộm phần vải TRẮNG của áo trên sprite -> màu áo đã chọn (giữ viền đỏ/thép/đen):
+   * chỉ pixel sáng (lum>=0.5), ít bão hòa (sat<=0.25), đục (alpha>=200), không trội xanh dương. */
+  function _applyOutfitPx(d, w, h, hex) {
+    var to = _hexRgbV(hex); if (!to) return;
+    var refL = 0.85;
+    for (var i = 0; i < d.length; i += 4) {
+      if (d[i + 3] < 200) continue;
+      var r = d[i], gg = d[i + 1], b = d[i + 2];
+      var mx = Math.max(r, gg, b), mn = Math.min(r, gg, b);
+      if (mx === 0) continue;
+      if ((mx - mn) / mx > 0.25) continue;      /* viền đỏ bão hòa cao -> giữ nguyên */
+      var L = _lumV(r, gg, b);
+      if (L < 0.5) continue;                    /* viền đen/quần tối -> giữ nguyên */
+      if (b > r && b > gg) continue;           /* lưỡi kiếm thép hơi xanh -> giữ nguyên */
+      var k = 0.25 + 0.75 * (L / refL);
+      if (k > 1.6) k = 1.6;
+      d[i] = Math.min(255, to[0] * k); d[i + 1] = Math.min(255, to[1] * k); d[i + 2] = Math.min(255, to[2] * k);
+    }
+  }
+  /* Part (mặt/tóc) đã nhuộm theo spec tương ứng — cache riêng theo src+spec */
+  var _partTintCache = {};
+  function _tintedPart(src, spec) {
+    var im = _img(src);
+    if (!im) return null;
+    if (!spec) return im;
+    var key = src + '|' + JSON.stringify(spec);
+    var c = _partTintCache[key];
+    if (c) return c;
+    try {
+      c = document.createElement('canvas');
+      c.width = im.width; c.height = im.height;
+      var g2 = c.getContext('2d');
+      g2.drawImage(im, 0, 0);
+      var id = g2.getImageData(0, 0, c.width, c.height);
+      _applyTintSpecPx(id.data, c.width, c.height, spec, null);
+      g2.putImageData(id, 0, 0);
+      _partTintCache[key] = c;
+      return c;
+    } catch (e) { return im; }
+  }
+  /* Canvas biến thể của 1 sprite (đã nhuộm + chồng part nếu down).
+   * Trả {cv, full} — full=false khi part chưa tải xong (chỉ mới nhuộm). */
+  var _variantCache = {};
+  var _variantKeys = [];
+  var _VARIANT_MAX = 24;
+  function _playerVariantCanvas(im, src) {
+    if (typeof document === 'undefined') return null;
+    var spec = _variantSpec();
+    if (!spec) return null;
+    var mm = /player_(nam|nu)_(down|left|right|up)\.png/.exec(src || '');
+    if (!mm) return null;
+    var dir = mm[2];
+    var key = spec.key + '|' + dir;
+    var ent = _variantCache[key];
+    if (ent && ent.full) return ent.cv;
+    /* spec da bản "ấm" (chỉ nhuộm pixel da thật, chừa áo trắng/mắt) */
+    var skinW = spec.skinSpec ? Object.assign({}, spec.skinSpec, { warm: true }) : null;
+    /* part cho hướng down: cần sẵn sàng thì mới chốt cache bản đầy đủ */
+    var faceCv = null, hairCv = null, partsReady = true;
+    if (dir === 'down' && (spec.needFace || spec.needHair)) {
+      if (spec.needFace) {
+        faceCv = _tintedPart(Appearance.faceImg(spec.a, spec.g), skinW);
+        if (!faceCv) partsReady = false;
+      }
+      if (spec.needHair) {
+        hairCv = _tintedPart(Appearance.hairImg(spec.a, spec.g), spec.hairSpec);
+        if (!hairCv) partsReady = false;
+      }
+    }
+    if (ent && !partsReady) return ent.cv; /* đang có bản nhuộm, part chưa xong thì dùng tạm */
+    try {
+      var w = im.width, h = im.height;
+      var cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      var g2 = cv.getContext('2d');
+      g2.drawImage(im, 0, 0);
+      var id = g2.getImageData(0, 0, w, h);
+      if (skinW) _applyTintSpecPx(id.data, w, h, skinW, null);
+      if (spec.hairSpec) {
+        var hz = (_SPR_HEAD_ZONE[spec.g] || {})[dir];
+        if (hz) _applyTintSpecPx(id.data, w, h, spec.hairSpec, hz);
+      }
+      if (spec.outHex) _applyOutfitPx(id.data, w, h, spec.outHex);
+      g2.putImageData(id, 0, 0);
+      if (dir === 'down' && partsReady && (faceCv || hairCv)) {
+        var z = _SPR_FACE_ZONE[spec.g];
+        var sx = z.w / _SPR_FACE_PART.w, sy = z.h / _SPR_FACE_PART.h;
+        var tx = z.x - _SPR_FACE_PART.x * sx, ty = z.y - _SPR_FACE_PART.y * sy;
+        g2.imageSmoothingEnabled = true;
+        if (faceCv) {
+          g2.save();
+          g2.translate(tx, ty);
+          g2.scale(sx, sy);
+          g2.drawImage(faceCv, 0, 0);
+          g2.restore();
+        }
+        if (hairCv) {
+          /* Tóc vẽ qua canvas đệm cùng cỡ sprite: dịch lên 9.6px part (anchor
+           * "toc" cao hơn "dau" 0.1 unit trong CharAnim) rồi CẮT vùng giữa mặt —
+           * vài part tóc (vd xõa dài nữ) có mảng tóc phủ giữa mặt, cắt để mặt
+           * luôn hiện rõ, chỉ giữ tóc trên trán + hai bên. */
+          var hc = document.createElement('canvas');
+          hc.width = w; hc.height = h;
+          var hg = hc.getContext('2d');
+          hg.imageSmoothingEnabled = true;
+          hg.translate(tx, ty - 9.6 * sy);
+          hg.scale(sx, sy);
+          hg.drawImage(hairCv, 0, 0);
+          var ir = _SPR_FACE_INNER[spec.g];
+          hg.setTransform(1, 0, 0, 1, 0, 0);
+          hg.clearRect(ir.x, ir.y, ir.w, ir.h);
+          g2.drawImage(hc, 0, 0);
+        }
+      }
+      _variantCache[key] = { cv: cv, full: partsReady };
+      _variantKeys.push(key);
+      while (_variantKeys.length > _VARIANT_MAX) {
+        var old = _variantKeys.shift();
+        if (old !== key) delete _variantCache[old];
+      }
+      return cv;
+    } catch (e) { return null; }
+  }
+
+  /* Vẽ người chơi bằng sprite mới tại (cx, cy) — true nếu vẽ được.
+   * Bóng đổ nằm yên trên mặt đất; thân nhún 2px theo nhịp bước khi di chuyển. */
+  function _drawPlayerSpriteMode(cx, cy, lift, blift) {
+    var src = _playerDirSprite();
+    if (!src) return false;
+    var im = _img(src);
+    if (!im || !im.width) return false;
+    /* cùng hệ số độ sâu ds như _drawCreature của NPC: đứng cùng hàng y thì bằng cỡ nhau */
+    var _camP = _camera();
+    var _syP = (cy - _camP.y) / Math.max(1, _viewH);
+    if (_syP < 0) _syP = 0; if (_syP > 1) _syP = 1;
+    var dh = _PLAYER_SPRITE_H * (0.94 + 0.12 * _syP);
+    var dw = dh * (im.width / im.height);
+    /* bóng đổ như fallback cũ: bay cao -> nhỏ/mờ dần */
+    var flyLift = (Engine.fly ? 26 : 0) + Math.max(0, blift);
+    var hF = Math.min(flyLift, 70) / 70;
+    _drawShadow(cx, player.y + 18 - blift, dw * 0.32 * (1 - hF * 0.4), 0.26 * (1 - hF * 0.65));
+    /* bobbing: chỉ khi đang di chuyển (cùng nhịp bước _playerAnimName dùng) */
+    var bob = 0;
+    if (player._lastMove && (Date.now() - player._lastMove < 250))
+      bob = Math.abs(Math.sin(Date.now() / 1000 * 10)) * 2;
+    var useIm = im;
+    /* biến thể ngoại hình (mặt/tóc/màu đã chọn): có thì vẽ bản biến thể thay ảnh gốc */
+    var _vKey = null;
+    try {
+      var _vc = _playerVariantCanvas(im, src);
+      if (_vc) {
+        useIm = _vc;
+        var _vs = _variantSpec();
+        _vKey = _vs ? (_vs.key + '|' + src) : null;
+      }
+    } catch (e) {}
+    if (player.hitT > 0) { var tim = _redTint(useIm, _vKey ? ('red|' + _vKey) : undefined); if (tim) useIm = tim; }
+    _ctx.drawImage(useIm, cx - dw / 2, cy - dh / 2 - bob, dw, dh);
+    return true;
+  }
+
   function _playerFrame() {
     var S = _S();
     var gioi = (S && S.char && S.char.gender === 'nu') ? 'nu' : 'nam';
@@ -2025,9 +2452,17 @@ var Engine = (function () {
         _ctx.globalAlpha = 1;
       }
     }
-    /* --- Skeletal animation (CharAnim) — Bui 2026-10-18 --- */
+    /* --- PLAYER_SPRITE_MODE: nhân vật mới 4 hướng (áo trắng viền đỏ) — Bui 2026-10-20 ---
+     * Vẽ được thì bỏ qua CharAnim; không được (tắt mode/chưa tải/lỗi) -> đường cũ bên dưới. */
+    var _spriteNewDrawn = false;
+    if (typeof PLAYER_SPRITE_MODE !== "undefined" && PLAYER_SPRITE_MODE) {
+      try {
+        _spriteNewDrawn = _drawPlayerSpriteMode(player.x + lunge, player.y + lift - blift, lift, blift);
+      } catch (_pe) { _spriteNewDrawn = false; }
+    }
+    /* --- Skeletal animation (CharAnim) — Bui 2026-10-18 (giờ là fallback khi sprite mode không vẽ) --- */
     var _skeletalOk = false;
-    try {
+    if (!_spriteNewDrawn) try {
       if (typeof CharAnim !== "undefined" && CharAnim.draw) {
         var _st8 = _S();
         var _gioi = (_st8 && _st8.char && _st8.char.gender === "nu") ? "nu" : "nam";
@@ -2049,18 +2484,35 @@ var Engine = (function () {
             }
           }
         } catch (_ee) {}
+        /* Ngoại hình tạo nhân vật (appearance.js): mặt + tóc thay part,
+         * màu da/tóc/áo qua tints. Mũ EquipSet (mu->toc) thắng tóc. */
+        var _apTints = null;
+        try {
+          if (typeof Appearance !== "undefined" && Appearance.optsFor) {
+            var _apo = Appearance.optsFor(_st8);
+            if (_apo) {
+              _eqOverride = _eqOverride || {};
+              if (_apo.equip) {
+                if (_apo.equip.dau) _eqOverride.dau = _apo.equip.dau;
+                if (_apo.equip.toc && !_eqOverride.toc) _eqOverride.toc = _apo.equip.toc;
+              }
+              _apTints = _apo.tints;
+            }
+          }
+        } catch (_ae) {}
         _skeletalOk = CharAnim.draw(_ctx, player.x + lunge, player.y + lift - blift,
           _anim, _at, {
             dir: player.dir || 1,
             scale: 14, /* 1 unit = 14px: nhân vật ~48px, khớp sprite cũ 38x48 (art vẽ 96px/unit, nativeScale trong manifest) */
             gender: _gioi,
             equip: _eqOverride,
+            tints: _apTints,
             flashRed: (player.hitT > 0) ? 1 : 0
           });
       }
     } catch (_se) { _skeletalOk = false; }
-    if (!_skeletalOk) {
-      /* fallback: sprite full-body cũ */
+    if (!_spriteNewDrawn && !_skeletalOk) {
+      /* fallback cuối: sprite full-body cũ */
       _drawCreature(player, player.x + lunge, player.y + lift - blift, 38, 48, _playerFrame(), '#2fa3a0',
         { lift: (Engine.fly ? 26 : 0) + blift, shadowY: player.y + 18 - blift, noAutoFlip: true });
     }
@@ -2177,12 +2629,17 @@ var Engine = (function () {
     var drawX = n.x + (wiping ? Math.sin(_tickT * 3 + ph) * 7 : 0);
     /* bóng đổ lệch ngược hướng nghiêng */
     var shOff = -(lean * 90);
-    /* NPC to gấp 1.5x (46→69) + phóng to thêm khi người chơi đến gần — cảm giác 3D */
-    var _npcBase = 69;
+    /* NPC dùng chung CHAR_DRAW_H với người chơi — đồng bộ cỡ (Bui 2026-10-20).
+       Chỉ phóng to rất nhẹ khi người chơi đến gần (tối đa +3% ≈ 2px) cho cảm giác 3D.
+       Rộng suy từ tỉ lệ ảnh gốc để không méo hình. */
+    var _npcBase = CHAR_DRAW_H;
     var _nd = Math.hypot(player.x - n.x, player.y - n.y);
-    var _nprox = 1 + 0.12 * Math.max(0, 1 - _nd / 220);
+    var _nprox = 1 + 0.03 * Math.max(0, 1 - _nd / 220);
     var _nsz = _npcBase * _nprox;
-    _drawCreature(n, drawX, n.y - bob, _nsz, _nsz, n.def.img, '#6b4a2f',
+    var _nw = _nsz;
+    var _nim = _img(n.def.img);
+    if (_nim && _nim.width && _nim.height) _nw = _nsz * (_nim.width / _nim.height);
+    _drawCreature(n, drawX, n.y - bob, _nw, _nsz, n.def.img, '#6b4a2f',
       { lean: lean + swayRot, flip: (n.face || 1) < 0, shadowOffX: shOff,
         scaleY: breathe * squash });
 
@@ -2785,6 +3242,17 @@ var Engine = (function () {
     khu: function () { return _khuOf(player.x, player.y); }, // khu hiện tại (lưới 400x400)
     /* test hook: logic quay mặt (không dùng trong game) */
     _faceTest: { angLerp: _angLerp, face4: _face4 },
+    /* test hook: chọn sprite người chơi mới theo (giới tính, hướng) + trạng thái mode */
+    _playerSpriteTest: { file: (typeof _playerDirFile === 'function') ? _playerDirFile : null,
+                         MODE: (typeof PLAYER_SPRITE_MODE !== 'undefined') ? PLAYER_SPRITE_MODE : null },
+    /* test hook: biến thể ngoại hình trên sprite mode (spec từ appearance hiện tại) */
+    _variantTest: { spec: (typeof _variantSpec === 'function') ? _variantSpec : null,
+                    faceZone: (typeof _SPR_FACE_ZONE !== 'undefined') ? _SPR_FACE_ZONE : null,
+                    facePart: (typeof _SPR_FACE_PART !== 'undefined') ? _SPR_FACE_PART : null,
+                    canvas: (typeof _playerVariantCanvas === 'function') ? _playerVariantCanvas : null },
+    /* test hook: vùng cấm NPC quanh cổng chuyển map (không dùng trong game) */
+    _gateTest: { SAFE_R: GATE_SAFE_R, gatesOf: _gatesOf, gateZoneAt: _gateZoneAt,
+                 pushOut: _pushOutOfGates, stepNpcs: function (dt) { _updateNpcs(dt); } },
     khuOf: _khuOf,                 // (x, y) → số khu
     hitSolid: _hitSolid,           // (x, y) → bool (va chạm vật thể)
     getObjects: function () { return _objects; },

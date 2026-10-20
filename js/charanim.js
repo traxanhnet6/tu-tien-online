@@ -94,6 +94,79 @@
     return result;
   }
 
+  /* ---------- Nhuộm màu part (Appearance: màu da/tóc/áo) ----------
+   * spec: { m:'scale', from:'#hex', to:'#hex', match:['#hex'...], tol }
+   *       { m:'remap', to:'#hex', ref:'#hex'|refLum, match?, tol?, satMin? }
+   * - scale: nhân kênh theo hệ số to/from, chỉ pixel gần các màu trong match.
+   * - remap: ánh xạ độ sáng pixel -> tông của màu đích (giữ shading),
+   *          lọc theo match/tol nếu có, hoặc theo độ bão hòa >= satMin.
+   * Kết quả cache theo src+spec; lỗi canvas thì trả ảnh gốc. */
+  var _tintCache = {};
+  function _hexRgb(h) {
+    if (!h) return null;
+    h = String(h).replace('#', '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    return [((n >> 16) & 255), ((n >> 8) & 255), (n & 255)];
+  }
+  function _lum(r, g, b) { return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; }
+
+  function _tintedImg(img, src, spec) {
+    var key = src + '|' + JSON.stringify(spec);
+    if (_tintCache[key]) return _tintCache[key];
+    if (!img || !img.complete || !img.naturalWidth || typeof document === 'undefined') return img;
+    try {
+      var w = img.naturalWidth, h = img.naturalHeight;
+      var cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      var cx = cv.getContext('2d');
+      cx.drawImage(img, 0, 0);
+      var id = cx.getImageData(0, 0, w, h), d = id.data;
+      var to = _hexRgb(spec.to); if (!to) return img;
+      var matchRgbs = null, tol2 = 0;
+      if (spec.match) {
+        matchRgbs = spec.match.map(_hexRgb);
+        var tol = spec.tol || 80; tol2 = tol * tol;
+      }
+      var fx = 1, fy = 1, fz = 1, refL = 0.5;
+      if (spec.m === 'scale') {
+        var from = _hexRgb(spec.from); if (!from) return img;
+        fx = to[0] / (from[0] || 1); fy = to[1] / (from[1] || 1); fz = to[2] / (from[2] || 1);
+      } else {
+        refL = spec.refLum != null ? spec.refLum : _lum.apply(null, _hexRgb(spec.ref) || [128, 128, 128]);
+        if (refL <= 0) refL = 0.5;
+      }
+      var satMin = spec.satMin || 0;
+      for (var i = 0; i < d.length; i += 4) {
+        if (d[i + 3] === 0) continue;
+        var r = d[i], g = d[i + 1], b = d[i + 2];
+        if (matchRgbs) {
+          var okM = false;
+          for (var j = 0; j < matchRgbs.length; j++) {
+            var mc = matchRgbs[j];
+            var dr = r - mc[0], dg = g - mc[1], db = b - mc[2];
+            if (dr * dr + dg * dg + db * db <= tol2) { okM = true; break; }
+          }
+          if (!okM) continue;
+        }
+        if (satMin > 0) {
+          var mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+          if (mx === 0 || (mx - mn) / mx < satMin) continue;
+        }
+        if (spec.m === 'scale') {
+          d[i] = Math.min(255, r * fx); d[i + 1] = Math.min(255, g * fy); d[i + 2] = Math.min(255, b * fz);
+        } else {
+          var k = 0.25 + 0.75 * (_lum(r, g, b) / refL);
+          if (k > 1.6) k = 1.6;
+          d[i] = Math.min(255, to[0] * k); d[i + 1] = Math.min(255, to[1] * k); d[i + 2] = Math.min(255, to[2] * k);
+        }
+      }
+      cx.putImageData(id, 0, 0);
+      _tintCache[key] = cv;
+      return cv;
+    } catch (e) { return img; }
+  }
+
   /* ---------- Draw skeleton ---------- */
   // ctx: canvas 2d context, x/y: feet position, scale: pixels per unit
   // opts: {dir (1/-1), equip: {slot: imgSrc}, tint, alpha, flip}
@@ -127,6 +200,11 @@
 
       var img = _getImg(src);
       if (!img || !img.complete || !img.naturalWidth) continue;
+      /* nhuộm màu theo ngoại hình (da/tóc/áo) — Appearance.optsFor */
+      if (opts.tints && opts.tints[pn]) {
+        var _timg = _tintedImg(img, src, opts.tints[pn]);
+        if (_timg) img = _timg;
+      }
 
       var tr = pose[pn] || { rot: 0, dx: 0, dy: 0, sx: 1, sy: 1 };
       var pv = def.pivot || [0.5, 0.5];
@@ -208,7 +286,9 @@
     autoInit: autoInit,
     SPEEDS: SPEEDS,
     // for tests
-    _interpTrack: _interpTrack
+    _interpTrack: _interpTrack,
+    _tintedImg: _tintedImg,
+    _hexRgb: _hexRgb
   };
 
   // Export

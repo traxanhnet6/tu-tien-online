@@ -1,0 +1,202 @@
+{
+  "kiem_bao": {
+    "name_vi": "Kiếm Bào",
+    "file": "outfit_kiem_bao.png"
+  },
+  "tien_bao": {
+    "name_vi": "Tiên Bào",
+    "file": "outfit_tien_bao.png"
+  },
+  "ca_sa": {
+    "name_vi": "Cà Sa",
+    "file": "outfit_ca_sa.png"
+  },
+  "chien_giap": {
+    "name_vi": "Chiến Giáp",
+    "file": "outfit_chien_giap.png"
+  },
+  "ma_bao": {
+    "name_vi": "Ma Bào",
+    "file": "outfit_ma_bao.png"
+  },
+  "thu_sinh": {
+    "name_vi": "Thư Sinh Bào",
+    "file": "outfit_thu_sinh.png"
+  },
+  "hy_phuc": {
+    "name_vi": "Hỷ Phục",
+    "file": "outfit_hy_phuc.png"
+  },
+  "han_bang_giap": {
+    "name_vi": "Hàn Băng Giáp",
+    "file": "outfit_han_bang_giap.png"
+  },
+  "da_hanh_y": {
+    "name_vi": "Dạ Hành Y",
+    "file": "outfit_da_hanh_y.png"
+  },
+  "hoang_bao": {
+    "name_vi": "Hoàng Bào",
+    "file": "outfit_hoang_bao.png"
+  },
+  "kiem_tong": {
+    "name_vi": "Kiếm Tông Bào",
+    "file": "outfit_kiem_tong.png"
+  },
+  "phap_tong": {
+    "name_vi": "Pháp Tông Bào",
+    "file": "outfit_phap_tong.png"
+  },
+  "the_tong": {
+    "name_vi": "Thể Tông Bào",
+    "file": "outfit_the_tong.png"
+  },
+  "duoc_tong": {
+    "name_vi": "Dược Tông Bào",
+    "file": "outfit_duoc_tong.png"
+  },
+  "thu_tong": {
+    "name_vi": "Thú Tông Bào",
+    "file": "outfit_thu_tong.png"
+  },
+  "ma_tong": {
+    "name_vi": "Ma Tông Bào",
+    "file": "outfit_ma_tong.png"
+  },
+  "dai_phu_bao": {
+    "name_vi": "Đại Phu Bào",
+    "file": "outfit_dai_phu_bao.png"
+  },
+  "tho_ren_trang": {
+    "name_vi": "Thợ Rèn Trang",
+    "file": "outfit_tho_ren_trang.png"
+  },
+  "ngu_ong_trang": {
+    "name_vi": "Ngư Ông Trang",
+    "file": "outfit_ngu_ong_trang.png"
+  },
+  "nong_phu_trang": {
+    "name_vi": "Nông Phu Trang",
+    "file": "outfit_nong_phu_trang.png"
+  },
+  "tuong_quan": {
+    "name_vi": "Tướng Quân Giáp",
+    "file": "outfit_tuong_quan.png"
+  },
+  "cam_y_ve": {
+    "name_vi": "Cẩm Y Vệ Bào",
+    "file": "outfit_cam_y_ve.png"
+  },
+  "ngu_lam": {
+    "name_vi": "Ngự Lâm Giáp",
+    "file": "outfit_ngu_lam.png"
+  },
+  "cung_thu": {
+    "name_vi": "Cung Thủ Trang",
+    "file": "outfit_cung_thu.png"
+  },
+  "ky_binh": {
+    "name_vi": "Kỵ Binh Giáp",
+    "file": "outfit_ky_binh.png"
+  },
+  "vuong_gia": {
+    "name_vi": "Vương Gia Bào",
+    "file": "outfit_vuong_gia.png"
+  },
+  "thai_tu": {
+    "name_vi": "Thái Tử Bào",
+    "file": "outfit_thai_tu.png"
+  },
+  "quan_van": {
+    "name_vi": "Quan Văn Bào",
+    "file": "outfit_quan_van.png"
+  },
+  "quan_vo": {
+    "name_vi": "Quan Võ Bào",
+    "file": "outfit_quan_vo.png"
+  },
+  "tu_tai": {
+    "name_vi": "Tú Tài Bào",
+    "file": "outfit_tu_tai.png"
+  },
+  "hoa_diem": {
+    "name_vi": "Hỏa Diệm Bào",
+    "file": "outfit_hoa_diem.png"
+  },
+  "han_thuy": {
+    "name_vi": "Hàn Thủy Bào",
+    "file": "outfit_han_thuy.png"
+  },
+  "thanh_moc": {
+    "name_vi": "Thanh Mộc Bào",
+    "file": "outfit_thanh_moc.png"
+  },
+  "kim_quang": {
+    "name_vi": "Kim Quang Giáp",
+    "file": "outfit_kim_quang.png"
+  },
+  "hau_tho": {
+    "name_vi": "Hậu Thổ Bào",
+    "file": "outfit_hau_tho.png"
+  },
+  "xuan_hoa": {
+    "name_vi": "Xuân Hoa Phục",
+    "file": "outfit_xuan_hoa.png"
+  },
+  "ha_viem": {
+    "name_vi": "Hạ Viêm Trang",
+    "file": "outfit_ha_viem.png"
+  },
+  "thu_phong": {
+    "name_vi": "Thu Phong Bào",
+    "file": "outfit_thu_phong.png"
+  },
+  "tuyet_vu": {
+    "name_vi": "Tuyết Vũ Trang",
+    "file": "outfit_tuyet_vu.png"
+  },
+  "hy_khanh": {
+    "name_vi": "Hỷ Khánh Bào",
+    "file": "outfit_hy_khanh.png"
+  },
+  "huyet_ma": {
+    "name_vi": "Huyết Ma Bào",
+    "file": "outfit_huyet_ma.png"
+  },
+  "u_minh": {
+    "name_vi": "U Minh Bào",
+    "file": "outfit_u_minh.png"
+  },
+  "ho_yeu": {
+    "name_vi": "Hồ Yêu Bào",
+    "file": "outfit_ho_yeu.png"
+  },
+  "cuong_thi": {
+    "name_vi": "Cương Thi Bào",
+    "file": "outfit_cuong_thi.png"
+  },
+  "quy_dien": {
+    "name_vi": "Quỷ Diện Trang",
+    "file": "outfit_quy_dien.png"
+  },
+  "thien_binh": {
+    "name_vi": "Thiên Binh Giáp",
+    "file": "outfit_thien_binh.png"
+  },
+  "thien_tuong": {
+    "name_vi": "Thiên Tướng Bào",
+    "file": "outfit_thien_tuong.png"
+  },
+  "tai_than": {
+    "name_vi": "Tài Thần Bào",
+    "file": "outfit_tai_than.png"
+  },
+  "nguyet_lao": {
+    "name_vi": "Nguyệt Lão Bào",
+    "file": "outfit_nguyet_lao.png"
+  },
+  "chung_quy": {
+    "name_vi": "Chung Quỳ Bào",
+    "file": "outfit_chung_quy.png"
+  }
+}
