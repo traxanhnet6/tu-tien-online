@@ -33,7 +33,8 @@
       { id: "toc_xoa_dai",  nameKey: "ap_hair_toc_xoa_dai" },
       { id: "toc_dau_dinh", nameKey: "ap_hair_toc_dau_dinh" },
       { id: "toc_bui_doi",  nameKey: "ap_hair_toc_bui_doi" },
-      { id: "toc_tem_lech", nameKey: "ap_hair_toc_tem_lech" }
+      { id: "toc_tem_lech", nameKey: "ap_hair_toc_tem_lech" },
+      { id: "toc_dau_troc", nameKey: "ap_hair_toc_dau_troc" }
     ],
     nu: [
       { id: "toc_bui_cao_hoa",    nameKey: "ap_hair_toc_bui_cao_hoa" },

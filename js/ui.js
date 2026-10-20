@@ -114,6 +114,17 @@ function itemIcon(id) {
   var d = itemDef(id);
   if (d && d.kind === "yaodan") { var yh = yaodanIconHtml(id); if (yh) return yh; }
   if (d && d.kind === "pill") { var ph = pillIconHtml(id); if (ph) return ph; }
+  /* Bui 2026-10-21: trang bị dùng icon AI theo ô */
+  if (d && d.kind === "equip" && d.slot) {
+    var _slotIcon = {
+      vukhi: "eq_vukhi", giap: "eq_giap", yphuc: "eq_yphuc",
+      phapbao: "eq_phapbao", phapboi: "eq_phapboi", linhgioi: "eq_linhgioi",
+      hanhngoa: "eq_hanhngoa", huanh: "eq_huanh", phihanh: "eq_phihanh"
+    }[d.slot];
+    if (_slotIcon) return '<img class="item-img" src="assets/icons/' + _slotIcon +
+      '.webp" alt="" draggable="false" style="width:28px;height:28px;vertical-align:middle;border-radius:6px;"' +
+      ' onerror="this.outerHTML=\'🎒\'"/>';
+  }
   if (d && d.icon) return d.icon;
   /* Bí tịch: dùng icon pixel art của skill/bị động trong bí tịch */
   if (d && d.kind === "manual") {
