@@ -543,6 +543,27 @@ var Engine = (function () {
     }
     /* Miễn chạm cổng 2s sau khi vào map (chống bounce tức thì) */
     _gateCdUntil = Date.now() + 2000;
+    /* Đẩy điểm spawn ra xa MỌI cổng (vd map 0 spawn (790,80) cách cổng về map 14
+     * chỉ 10px — đứng yên 2s vẫn bị đá về; Bui 2026-10-21) */
+    try {
+      var _minD = GATE_RANGE + 50;
+      for (var _pass = 0; _pass < 3; _pass++) {
+        var _moved = false;
+        for (var _sgi = 0; _sgi < _gates.length; _sgi++) {
+          var _sg = _gates[_sgi];
+          var _sd = Math.hypot(_sg.x - player.x, _sg.y - player.y);
+          if (_sd < _minD) {
+            var _sa = _sd > 0.01 ? Math.atan2(player.y - _sg.y, player.x - _sg.x) : Math.PI / 2;
+            player.x = _sg.x + Math.cos(_sa) * _minD;
+            player.y = _sg.y + Math.sin(_sa) * _minD;
+            _moved = true;
+          }
+        }
+        if (!_moved) break;
+      }
+      player.x = Math.max(40, Math.min(WORLD_W - 40, player.x));
+      player.y = Math.max(40, Math.min(WORLD_H - 40, player.y));
+    } catch (_e) {}
     var ps = _getStats();
     player.hp = ps.maxHp; player.mp = ps.maxMp;
     player.shield = 0; player.maxShield = 0;

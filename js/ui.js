@@ -1022,6 +1022,16 @@ function openPanel(name, arg) {
     '<button class="panel-x" id="p-x">✕</button></div>' +
     '<div class="panel-body" id="p-body"></div></div></div>';
   $("p-x").onclick = function () { closePanel(); sfx("click"); };
+  /* Bui 2026-10-21: nút ▁ gắn trực tiếp (không qua delegate) cho chắc ăn */
+  try {
+    var _qcb = document.querySelector('#p-overlay [data-act="quest-collapse"]');
+    if (_qcb) _qcb.onclick = function (ev) {
+      try { ev.stopPropagation(); } catch (_e) {}
+      try { ev.preventDefault(); } catch (_e2) {}
+      _questPanelCollapse();
+      try { sfx("click"); } catch (_e3) {}
+    };
+  } catch (_e4) {}
   /* NPC tự đọc thoại khi mở hội thoại (Bui 2026-10-20) */
   try {
     if (typeof NPCVoice !== "undefined") {
