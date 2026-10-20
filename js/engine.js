@@ -929,6 +929,17 @@ var Engine = (function () {
         }
       }
     } catch (err) {}
+    /* Bui 2026-10-21: chạm vào quái → nhắm và đánh ngay */
+    try {
+      var _bm = null, _bd = 60;
+      for (var mi = 0; mi < _monsters.length; mi++) {
+        var _mm = _monsters[mi];
+        if (_mm.dead) continue;
+        var _md = Math.hypot(_mm.x - wx, _mm.y - wy);
+        if (_md < _bd) { _bd = _md; _bm = _mm; }
+      }
+      if (_bm) { player.target = _bm; manualAttack(); return; }
+    } catch (err2) {}
     _moveTarget = { x: wx, y: wy }; _chaseTgt = false; /* chạm map đi chỗ khác → hủy dí mục tiêu */
   }
   function _inputVec() {
@@ -1335,7 +1346,7 @@ var Engine = (function () {
     var ps = _effStats(_getStats());
     var tgt = (player.target && !player.target.dead) ? player.target
       : (function () { var nm = _nearestMon(); return nm ? nm.m : null; })();
-    if (!tgt) { _chaseTgt = false; return false; }
+    if (!tgt) { _chaseTgt = false; _toast('atk_no_target'); return false; }
     player.target = tgt;
     var d = Math.hypot(tgt.x - player.x, tgt.y - player.y);
     if (d > ATK_CHASE_MAX) { _chaseTgt = false; _toast('atk_too_far'); return true; }
