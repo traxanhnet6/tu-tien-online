@@ -3899,6 +3899,19 @@ function bindStatic() {
     if (hasEngine() && Engine.setRun) Engine.setRun(state.run);
     saveGame(state); syncToggles(); sfx("click");
   };
+  /* Bui 2026-10-21: chạm map mini → tìm đường tới điểm chạm */
+  try {
+    var _mm = $("minimap");
+    if (_mm) _mm.onclick = function (e) {
+      if (!hasEngine() || !Engine.player) return;
+      var r = _mm.getBoundingClientRect();
+      var cx = (e.clientX - r.left) / r.width, cy = (e.clientY - r.top) / r.height;
+      var wx = Math.max(16, Math.min(1584, cx * 1600)), wy = Math.max(16, Math.min(1184, cy * 1200));
+      if (Engine.navigateTo) Engine.navigateTo(wx, wy);
+      else if (Engine.setMoveTarget) Engine.setMoveTarget(wx, wy);
+      sfx("click");
+    };
+  } catch (_e) {}
   /* Nút Tọa (thiền định) — kiểu tutien2d */
   $("btn-meditate").onclick = function () {
     sfx("click");

@@ -2863,13 +2863,14 @@ var Engine = (function () {
     _ctx.strokeStyle = "#7a5c10";
     _ctx.lineWidth = 2;
     _ctx.beginPath();
-    _ctx.moveTo(0, -14);
-    _ctx.lineTo(10, 6);
-    _ctx.lineTo(4, 6);
-    _ctx.lineTo(4, 14);
-    _ctx.lineTo(-4, 14);
-    _ctx.lineTo(-4, 6);
-    _ctx.lineTo(-10, 6);
+    /* Bui 2026-10-21: mũi tên bé lại */
+    _ctx.moveTo(0, -9);
+    _ctx.lineTo(6, 4);
+    _ctx.lineTo(2.5, 4);
+    _ctx.lineTo(2.5, 9);
+    _ctx.lineTo(-2.5, 9);
+    _ctx.lineTo(-2.5, 4);
+    _ctx.lineTo(-6, 4);
     _ctx.closePath();
     _ctx.fill();
     _ctx.stroke();
