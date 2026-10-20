@@ -290,7 +290,8 @@ var QuestGuide = (function () {
     "#qg-tracker{position:fixed;left:8px;top:132px;z-index:5000;max-width:250px;" +
     "background:linear-gradient(180deg,rgba(42,31,20,.94),rgba(26,19,12,.94));" +
     "border:2px solid #c9a227;border-radius:12px;padding:8px 10px;color:#f3e6c8;" +
-    "font-size:13px;line-height:1.5;box-shadow:0 2px 12px rgba(0,0,0,.5);cursor:pointer;}" +
+    "font-size:13px;line-height:1.5;box-shadow:0 2px 12px rgba(0,0,0,.5);cursor:pointer;" +
+    "word-wrap:break-word;overflow-wrap:break-word;}" +
     "#qg-tracker .qg-t{color:#ffd76a;font-weight:bold;font-size:13px;}" +
     "#qg-tracker .qg-p{color:#9fe08a;}" +
     "#qg-tracker .qg-rw{color:#bfa76a;font-size:12px;}" +

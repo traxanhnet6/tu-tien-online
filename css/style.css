@@ -1211,3 +1211,7 @@ body.landscape #hud-leftmid{top:40%}
   background:rgba(0,0,0,.6);padding:0 3px;border-radius:4px}
 .bag-lock{position:absolute;left:3px;top:2px;font-size:10px}
 .bag-detail{margin-top:8px;padding:8px;background:#1a2418;border:1px solid #3a4a35;border-radius:8px}
+
+/* Bui 2026-10-21: tiêu đề Tạo nhân vật không bị ảnh che */
+.create-wrap h2{position:relative;z-index:2;margin-bottom:12px}
+.create-preview{position:relative;z-index:1}

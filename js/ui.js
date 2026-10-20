@@ -1035,7 +1035,7 @@ function openPanel(name, arg) {
     '<div class="panel-overlay" id="p-overlay"><div class="panel' + (name === "quest" ? " panel-quest" : "") + '">' +
     '<div class="panel-head"><h3>' + esc(t(titleKey)) + '</h3>' +
     (name === "quest" ?
-      '<button class="mini qz" data-act="quest-collapse" title="' + esc(t("qcoll_collapse")) + '">▁</button>' +
+      '<button class="mini qz" data-act="quest-collapse" title="' + esc(t("qcoll_collapse")) + '">－</button>' +
       '<div class="qzoom">' +
       '<button class="mini qz" data-act="quest-zoom-out" title="' + esc(t("qzoom_out")) + '">−</button>' +
       '<button class="mini qz" data-act="quest-zoom-reset" title="' + esc(t("qzoom_reset")) + '">⟳</button>' +

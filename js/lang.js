@@ -1681,7 +1681,7 @@ vi: {
   msg_new: "Tin nhắn mới",
   char_id: "ID",
   char_id_copied: "Đã copy ID",
-  char_copy: "Copy",
+  char_copy: "Sao chép",
   char_gender: "Giới tính",
   gender_nam: "Nam",
   gender_nu: "Nữ",
