@@ -1611,8 +1611,8 @@ var Engine = (function () {
   function _updateMonsters(dt, ps) {
     for (var i = 0; i < _monsters.length; i++) {
       var m = _monsters[i];
-      if (m.dead && !m.dieT) continue;
-      if (m.dieT > 0) { m.dieT -= dt; continue; } /* đang mờ dần khi chết */
+      if (m.dead && !(m.dieT > 0)) continue;
+      if (m.dieT > 0) { m.dieT = Math.max(0, m.dieT - dt); continue; } /* đang mờ dần khi chết */
       if (m.hitT > 0) m.hitT -= dt;
       if (m.kx || m.ky) { /* quán tính giật lùi */
         m.x += (m.kx || 0) * dt; m.y += (m.ky || 0) * dt;
@@ -3252,7 +3252,7 @@ var Engine = (function () {
     // (trừ lift cầu: đứng trên cầu thì sort theo mặt cầu)
     var ents = [];
     for (var mi = 0; mi < _monsters.length; mi++) {
-      if (_monsters[mi].dead && !_monsters[mi].dieT) continue;
+      if (_monsters[mi].dead && !(_monsters[mi].dieT > 0)) continue;
       ents.push({ y: _monsters[mi].y - _bridgeLiftAt(_monsters[mi].x, _monsters[mi].y), k: 'm', o: _monsters[mi] });
     }
     for (var ni = 0; ni < _npcs.length; ni++) ents.push({ y: _npcs[ni].y - _bridgeLiftAt(_npcs[ni].x, _npcs[ni].y), k: 'n', o: _npcs[ni] });
