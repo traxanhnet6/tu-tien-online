@@ -1033,7 +1033,11 @@ function openPanel(name, arg) {
     if (e.target && e.target.id === "p-overlay") closePanel();
   });
   var body = $("p-body");
-  body.addEventListener("click", onPanelClick);
+  /* Bui 2026-10-21: bind click cho cả header (nút ▁ thu gọn, zoom −/+/⟳ nằm ở header,
+   * trước đây chỉ bind p-body nên bấm không ăn) */
+  var _panel = document.querySelector("#p-overlay .panel");
+  if (_panel) _panel.addEventListener("click", onPanelClick);
+  else body.addEventListener("click", onPanelClick);
   renderPanel();
   var gi = $("gift-code");
   if (gi) gi.addEventListener("keydown", function (e) { if (e.key === "Enter") doGiftRedeem(); });

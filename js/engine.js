@@ -94,6 +94,9 @@ var Engine = (function () {
 
   var _mapId = 0, _mapDef = null;
   var _monsters = [], _npcs = [], _gates = [], _objects = [];
+  /* Bui 2026-10-21: chống đá về map cũ ngay khi vào map mới — vd vào map 0
+   * spawn ở (790,80) cách cổng về map 14 (800,80) chỉ 10px < GATE_RANGE. */
+  var _gateCdUntil = 0;
   /* Lưới tọa độ ngầm kiểu tutien2d: world chia ô KHU_W x KHU_H → đánh số khu 1..N */
   var KHU_W = 400, KHU_H = 400;
   function _khuOf(x, y) {
@@ -538,6 +541,8 @@ var Engine = (function () {
     } else {
       player.x = WORLD_W / 2; player.y = WORLD_H / 2;
     }
+    /* Miễn chạm cổng 2s sau khi vào map (chống bounce tức thì) */
+    _gateCdUntil = Date.now() + 2000;
     var ps = _getStats();
     player.hp = ps.maxHp; player.mp = ps.maxMp;
     player.shield = 0; player.maxShield = 0;
@@ -1881,8 +1886,8 @@ var Engine = (function () {
     if (iv.active) { _moveTarget = null; _moveBy(iv.dx, iv.dy, dt); }
     else if (_moveTarget) { if (_moveToward(_moveTarget.x, _moveTarget.y, dt)) _moveTarget = null; }
 
-    // Cổng chuyển map
-    for (var gi = 0; gi < _gates.length; gi++) {
+    // Cổng chuyển map (miễn 2s sau khi vào map — chống bounce tức thì)
+    if (Date.now() >= _gateCdUntil) for (var gi = 0; gi < _gates.length; gi++) {
       var g = _gates[gi];
       if (Math.hypot(g.x - player.x, g.y - player.y) < GATE_RANGE) {
         var to = g.to;

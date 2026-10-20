@@ -34,7 +34,8 @@ var MapLoading = (function () {
     map_cuu_u_ma_tong: "assets/maps/loading_10.webp",
     map_huyet_ma_vuc: "assets/maps/loading_11.webp",
     map_thai_hu_tien_canh: "assets/maps/loading_12.webp",
-    map_thong_thien_gioi: "assets/maps/loading_12.webp",
+    map_thong_thien_gioi: "assets/maps/tilemap/map_13.png",
+    map_dai_dien_tong_mon: "assets/maps/tilemap/map_14.png",
   };
 
   /* Ảnh chờ của 1 map: loadingBg trong def → bảng → mặc định. */
