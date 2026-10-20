@@ -2094,17 +2094,30 @@ var Engine = (function () {
     var f = (face === 'left' || face === 'right' || face === 'up' || face === 'down') ? face : 'down';
     return 'assets/sprs/dirs/player_' + g + '_' + f + '.png';
   }
-  /* Hàm thuần: (giới tính, hướng mặt, a/b) -> đường dẫn sprite khung bước đi.
-   * Test qua Engine._playerWalkTest. a/b = chân trái trước / chân phải trước. */
+  /* Hàm thuần: (giới tính, hướng mặt, a/b/c) -> đường dẫn sprite khung bước đi.
+   * Test qua Engine._playerWalkTest. a = chân trái trước, b = chân phải trước,
+   * c = khung trung gian. */
   function _playerWalkFile(gioi, face, ab) {
     var g = (gioi === 'nu') ? 'nu' : 'nam';
     var f = (face === 'left' || face === 'right' || face === 'up' || face === 'down') ? face : 'down';
-    var k = (ab === 'b') ? 'b' : 'a';
+    var k = (ab === 'b') ? 'b' : ((ab === 'c') ? 'c' : 'a');
     return 'assets/sprs/dirs/walk/player_' + g + '_' + f + '_' + k + '.png';
   }
   /* Đang di chuyển? (cùng điều kiện bobbing/nhịp bước dùng) */
   function _playerMoving() {
     return !!(player._lastMove && (Date.now() - player._lastMove < 250));
+  }
+  /* Nhịp bước 4 khung: a -> c -> b -> c -> a..., đổi mỗi ~150ms (Bui 2026-10-20).
+   * Hàm thuần, test qua Engine._playerWalkTest.cycle. */
+  var _WALK_CYCLE = ['a', 'c', 'b', 'c'];
+  function _walkCycleAb(nowMs) {
+    return _WALK_CYCLE[Math.floor(nowMs / 150) % 4];
+  }
+  /* Hàm thuần: góc nghiêng giả lập bước đi của NPC (radian). Đang di chuyển ->
+   * nghiêng luân phiên ±4° mỗi 150ms; đứng yên -> 0. Test qua hook _npcWalkTiltTest. */
+  function _npcWalkTilt(moving, nowMs) {
+    if (!moving) return 0;
+    return (Math.floor(nowMs / 150) % 2 === 0) ? 0.07 : -0.07;
   }
   /* Hướng mặt hiện tại của người chơi (đứng yên giữ hướng cuối qua _face4) */
   function _playerDirFace() {
@@ -2338,10 +2351,10 @@ var Engine = (function () {
     if (typeof document === 'undefined') return null;
     var spec = _variantSpec();
     if (!spec) return null;
-    var mm = /player_(nam|nu)_(down|left|right|up)(?:_([ab]))?\.png/.exec(src || '');
+    var mm = /player_(nam|nu)_(down|left|right|up)(?:_([abc]))?\.png/.exec(src || '');
     if (!mm) return null;
     var dir = mm[2];
-    var walkAb = mm[3] || null; /* khung walk a/b, null = sprite tĩnh */
+    var walkAb = mm[3] || null; /* khung walk a/b/c, null = sprite tĩnh */
     var key = spec.key + '|' + dir + (walkAb ? '|' + walkAb : '');
     var ent = _variantCache[key];
     if (ent && ent.full) return ent.cv;
@@ -2369,14 +2382,17 @@ var Engine = (function () {
       var id = g2.getImageData(0, 0, w, h);
       if (skinW) _applyTintSpecPx(id.data, w, h, skinW, null);
       if (spec.hairSpec) {
-        var hz = walkAb ? (((_WALK_HEAD_ZONE[spec.g] || {})[dir] || {})[walkAb])
+        /* khung c dùng chung zone đầu của khung a (đầu giống nhau, chỉ chân khác) */
+        var _hzSet = ((_WALK_HEAD_ZONE[spec.g] || {})[dir] || {});
+        var hz = walkAb ? (_hzSet[walkAb] || _hzSet.a)
                         : ((_SPR_HEAD_ZONE[spec.g] || {})[dir]);
         if (hz) _applyTintSpecPx(id.data, w, h, spec.hairSpec, hz);
       }
       if (spec.outHex) _applyOutfitPx(id.data, w, h, spec.outHex);
       g2.putImageData(id, 0, 0);
       if (dir === 'down' && partsReady && (faceCv || hairCv)) {
-        var z = walkAb ? ((_WALK_FACE_ZONE[spec.g] || {})[walkAb]) : _SPR_FACE_ZONE[spec.g];
+        var _fzSet = ((_WALK_FACE_ZONE[spec.g] || {}));
+        var z = walkAb ? (_fzSet[walkAb] || _fzSet.a) : _SPR_FACE_ZONE[spec.g];
         if (!z) z = _SPR_FACE_ZONE[spec.g];
         var sx = z.w / _SPR_FACE_PART.w, sy = z.h / _SPR_FACE_PART.h;
         var tx = z.x - _SPR_FACE_PART.x * sx, ty = z.y - _SPR_FACE_PART.y * sy;
@@ -2400,7 +2416,8 @@ var Engine = (function () {
           hg.translate(tx, ty - 9.6 * sy);
           hg.scale(sx, sy);
           hg.drawImage(hairCv, 0, 0);
-          var ir = (walkAb ? ((_WALK_FACE_INNER[spec.g] || {})[walkAb]) : null) || _SPR_FACE_INNER[spec.g];
+          var _irSet = ((_WALK_FACE_INNER[spec.g] || {}));
+          var ir = (walkAb ? (_irSet[walkAb] || _irSet.a) : null) || _SPR_FACE_INNER[spec.g];
           hg.setTransform(1, 0, 0, 1, 0, 0);
           hg.clearRect(ir.x, ir.y, ir.w, ir.h);
           g2.drawImage(hc, 0, 0);
@@ -2422,17 +2439,27 @@ var Engine = (function () {
     var S = _S();
     var gioi = (S && S.char && S.char.gender === 'nu') ? 'nu' : 'nam';
     var face = _playerDirFace();
-    /* đang di chuyển -> khung bước đi a/b luân phiên mỗi 0.25s; đứng yên -> sprite tĩnh.
+    /* đang di chuyển -> khung bước đi a/c/b/c luân phiên mỗi ~0.15s; đứng yên -> sprite tĩnh.
      * khung walk lỗi/thiếu -> rớt về sprite tĩnh, không crash. */
     var moving = _playerMoving();
     var ab = 'a';
     var src = null;
     if (moving) {
-      ab = (Math.floor(Date.now() / 250) % 2 === 0) ? 'a' : 'b';
+      /* chu kỳ 4 khung a->c->b->c; khung c chưa tải xong -> rớt về nhịp a/b cũ */
+      ab = _walkCycleAb(Date.now());
       var wsrc = _playerWalkFile(gioi, face, ab);
       var wce = _imgCache[wsrc];
       if (wce && wce.done && wce.ok) src = wsrc;
-      else _img(wsrc); /* warm cache lần đầu */
+      else {
+        _img(wsrc); /* warm cache lần đầu */
+        if (ab === 'c') {
+          ab = (Math.floor(Date.now() / 250) % 2 === 0) ? 'a' : 'b';
+          var fsrc = _playerWalkFile(gioi, face, ab);
+          var fce = _imgCache[fsrc];
+          if (fce && fce.done && fce.ok) src = fsrc;
+          else _img(fsrc);
+        }
+      }
     }
     if (!src) {
       src = _playerDirSprite();
@@ -2749,8 +2776,10 @@ var Engine = (function () {
     var breathe = 1 + 0.022 * Math.sin(_tickT * 2.1 + ph);
     /* đầu khẽ quay: dao động xoay nhẹ */
     var swayRot = 0.035 * Math.sin(_tickT * 1.2 + ph * 1.7);
-    /* nhún: đi thì theo bước chân, đứng thì idle */
-    var bob = moving ? Math.abs(Math.sin(_tickT * 9 + ph)) * 3
+    /* nhún: đi thì theo nhịp bước 150ms đồng bộ với nghiêng, đứng thì idle thở */
+    var _wStep = moving ? (Math.floor(Date.now() / 150) % 2) : -1;
+    var walkTilt = _npcWalkTilt(moving, Date.now()); /* ±4° luân phiên khi đi, 0 khi đứng */
+    var bob = moving ? (_wStep === 0 ? 3 : 1)
                      : Math.sin(_tickT * 2 + ph) * 2;
     var lean = n.lean || 0, squash = 1;
     /* cúi chào khi người chơi lại gần */
@@ -2799,7 +2828,7 @@ var Engine = (function () {
     var _nim = _img(n.def.img);
     if (_nim && _nim.width && _nim.height) _nw = _nsz * (_nim.width / _nim.height);
     _drawCreature(n, drawX, n.y - bob, _nw, _nsz, n.def.img, '#6b4a2f',
-      { lean: lean + swayRot, flip: (n.face || 1) < 0, shadowOffX: shOff,
+      { lean: lean + swayRot + walkTilt, flip: (n.face || 1) < 0, shadowOffX: shOff,
         scaleY: breathe * squash });
 
     /* búa của thợ rèn (vẽ procedural, xoay theo nhịp đập) */
@@ -3416,10 +3445,13 @@ var Engine = (function () {
     /* test hook: chọn sprite người chơi mới theo (giới tính, hướng) + trạng thái mode */
     _playerSpriteTest: { file: (typeof _playerDirFile === 'function') ? _playerDirFile : null,
                          MODE: (typeof PLAYER_SPRITE_MODE !== 'undefined') ? PLAYER_SPRITE_MODE : null },
-    /* test hook: khung bước đi theo (giới tính, hướng, a/b) + nhịp đổi khung */
+    /* test hook: khung bước đi theo (giới tính, hướng, a/b/c) + nhịp đổi khung */
     _playerWalkTest: { file: (typeof _playerWalkFile === 'function') ? _playerWalkFile : null,
+                       cycle: (typeof _walkCycleAb === 'function') ? _walkCycleAb : null,
                        moving: (typeof _playerMoving === 'function') ? _playerMoving : null,
                        walkZones: (typeof _WALK_FACE_ZONE !== 'undefined') ? _WALK_FACE_ZONE : null },
+    /* test hook: góc nghiêng giả lập bước đi của NPC (moving, nowMs) -> radian */
+    _npcWalkTiltTest: (typeof _npcWalkTilt === 'function') ? _npcWalkTilt : null,
     /* test hook: biến thể ngoại hình trên sprite mode (spec từ appearance hiện tại) */
     _variantTest: { spec: (typeof _variantSpec === 'function') ? _variantSpec : null,
                     faceZone: (typeof _SPR_FACE_ZONE !== 'undefined') ? _SPR_FACE_ZONE : null,
