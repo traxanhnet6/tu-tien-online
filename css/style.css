@@ -1199,3 +1199,15 @@ body.landscape #hud-leftmid{top:40%}
 /* Bui 2026-10-21: tab nhiệm vụ bị cắt chữ trên iOS — ép đủ cao, không cắt dấu */
 .panel-quest .tabs .mini{line-height:1.5!important;padding:8px 6px!important;
   white-space:nowrap;overflow:visible;min-height:38px}
+
+/* Bui 2026-10-21: lưới ô túi đồ */
+.bag-slot{position:relative;aspect-ratio:1;background:#1a2418;border:1px solid #3a4a35;
+  border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;min-height:52px}
+.bag-slot.empty{background:#141a12;border-color:#2a3327;opacity:.6}
+.bag-slot.sel{border-color:#ffd76a;box-shadow:0 0 6px #ffd76a}
+.bag-icon{font-size:26px;line-height:1}
+.bag-icon img{width:34px;height:34px;object-fit:contain}
+.bag-qty{position:absolute;right:3px;bottom:2px;font-size:10px;color:#ffd76a;
+  background:rgba(0,0,0,.6);padding:0 3px;border-radius:4px}
+.bag-lock{position:absolute;left:3px;top:2px;font-size:10px}
+.bag-detail{margin-top:8px;padding:8px;background:#1a2418;border:1px solid #3a4a35;border-radius:8px}

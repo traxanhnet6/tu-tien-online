@@ -1443,66 +1443,87 @@ function socialTick() {
 
 /* ----- Túi đồ ----- */
 function renderBag() {
-  if (!state.bag.length) return "<p>" + esc(t("bag_empty")) + "</p>";
-  return state.bag.map(function (it, i) {
-    var d = itemDef(it.id);
-    var btns = "";
-    if (it.locked) {
-      btns = "🔒 ";
-      if (countItem(state, "khaiphongphu") > 0)
-        btns += '<button class="mini paper" data-act="bag-unlock" data-i="' + i + '">' + esc(t("ui_unlock")) + "</button>";
-    } else if (d && d.kind === "pill") {
-      btns = '<button class="mini" data-act="bag-use" data-i="' + i + '">' + esc(t("ui_use")) + "</button>";
-    } else if (d && d.kind === "equip" && d.slot) {
-      var canEq = true, reqTxt = "", overTxt = "";
-      try {
-        if (typeof Khilinh !== "undefined") {
-          canEq = Khilinh.canEquip(state, d);
-          var _rr = Khilinh.realmOfItem(d);
-          reqTxt = t("eq_req_realm", { realm: stageName(_rr, 0) });
-          /* Đồ hiếm vượt cấp: cảnh báo hiệu quả -50%, tốn linh lực ×2 */
-          if (Khilinh.isOverlevel(state, d))
-            overTxt = t("eq_overlevel_warn");
-        }
-      } catch (e) {}
-      btns = '<button class="mini' + (canEq ? "" : " paper") + '" data-act="bag-equip" data-i="' + i + '"' +
-        (canEq ? "" : ' disabled style="opacity:.4"') + '>' + esc(t("ui_equip")) + "</button>";
-      if (reqTxt) extra += ' <span class="' + (canEq ? "manual-lv" : "manual-locked") + '">' + esc(reqTxt) + "</span>";
-      if (overTxt) extra += ' <span class="manual-locked">⚠️ ' + esc(overTxt) + "</span>";
-      /* Dòng skill trang bị (xanh) + gợi ý thay đồ cũ */
-      try {
-        if (typeof Khilinh !== "undefined") {
-          var _sl = equipSkillDesc(d);
-          if (_sl) extra += " " + _sl;
-          if (Khilinh.isOutdated(state, d))
-            extra += ' <span class="manual-lv">⚠️ ' + esc(t("eq_outdated")) + "</span>";
-        }
-      } catch (e) {}
-    } else if (d && d.kind === "manual") {
-      btns = '<button class="mini" data-act="manual-open" data-i="' + i + '">' + esc(t("manual_upgrade")) + "</button>";
-    } else if (d && d.kind === "pet_egg") {
-      btns = '<button class="mini" data-act="egg-open" data-i="' + i + '">' + esc(t("pet_hatch")) + "</button>";
-    } else if (d && d.kind === "seed") {
-      btns = '<button class="mini" data-act="farm-open">' + esc(t("npc_farm_open")) + "</button>";
+  /* Bui 2026-10-21: túi dạng lưới ô — hiện cả ô trống, chạm ô để xem chi tiết */
+  var MAXBAG = 50, COLS = 5;
+  var sel = -1;
+  try { sel = (panelArg && panelArg.bagSel != null) ? panelArg.bagSel : -1; } catch (e) {}
+  var h = '<div class="bag-grid" style="display:grid;grid-template-columns:repeat(' + COLS +
+    ',1fr);gap:6px;margin-bottom:8px;">';
+  for (var i = 0; i < MAXBAG; i++) {
+    var it = state.bag[i];
+    var inner = "", cls = "bag-slot";
+    if (it) {
+      inner = '<div class="bag-icon">' + itemIcon(it.id) + "</div>";
+      if (it.qty > 1) inner += '<span class="bag-qty">x' + it.qty + "</span>";
+      if (it.locked) inner += '<span class="bag-lock">🔒</span>';
+      if (i === sel) cls += " sel";
+    } else {
+      cls += " empty";
     }
-    var extra = "";
-    if (d && d.kind === "manual" && typeof Skills !== "undefined") {
-      try {
-        var techId = Skills.manualTechId(it.id);
-        var lv = techId ? Skills.manualLevel(state, techId) : 0;
-        var mi = Skills.manualInfo(it.id);
-        extra = ' <span class="manual-lv">Lv' + lv + " · " + esc(t("tier_" + (mi ? mi.tier : 0))) + "</span>";
-        if (mi && !Skills.manualRealmOk(state, it.id)) {
-          extra += ' <span class="manual-locked">🔒 ' +
-            esc(t("manual_locked_realm", { realm: stageName(mi.realm, 0) })) + "</span>";
-        }
-      } catch (e) {}
-    }
-    return '<div class="row"><div><div class="item-name">' + itemIcon(it.id) + " " + esc(itemName(it.id)) +
-      ' <span class="item-qty">x' + it.qty + "</span>" + extra + "</div>" +
-      '<div class="item-desc">' + esc(itemDesc(it.id)) + "</div></div>" +
-      '<div class="row-btns">' + btns + "</div></div>";
-  }).join("");
+    h += '<div class="' + cls + '" data-act="bag-select" data-i="' + i + '">' + inner + "</div>";
+  }
+  h += "</div>";
+  h += '<div class="item-desc">' + esc(t("bag_slots", { n: state.bag.length })) + "</div>";
+  /* Chi tiết vật phẩm đang chọn */
+  if (sel >= 0 && state.bag[sel]) h += _renderBagDetail(sel);
+  return h;
+}
+/* Chi tiết + nút thao tác của ô túi đang chọn */
+function _renderBagDetail(i) {
+  var it = state.bag[i];
+  if (!it) return "";
+  var d = itemDef(it.id);
+  var btns = "";
+  if (it.locked) {
+    btns = "🔒 ";
+    if (countItem(state, "khaiphongphu") > 0)
+      btns += '<button class="mini paper" data-act="bag-unlock" data-i="' + i + '">' + esc(t("ui_unlock")) + "</button>";
+  } else if (d && d.kind === "pill") {
+    btns = '<button class="mini" data-act="bag-use" data-i="' + i + '">' + esc(t("ui_use")) + "</button>";
+  } else if (d && d.kind === "equip" && d.slot) {
+    var canEq = true, reqTxt = "", overTxt = "";
+    try {
+      if (typeof Khilinh !== "undefined") {
+        canEq = Khilinh.canEquip(state, d);
+        var _rr = Khilinh.realmOfItem(d);
+        reqTxt = t("eq_req_realm", { realm: stageName(_rr, 0) });
+        if (Khilinh.isOverlevel(state, d)) overTxt = t("eq_overlevel_warn");
+      }
+    } catch (e) {}
+    btns = '<button class="mini' + (canEq ? "" : " paper") + '" data-act="bag-equip" data-i="' + i + '"' +
+      (canEq ? "" : ' disabled style="opacity:.4"') + '>' + esc(t("ui_equip")) + "</button>";
+    if (reqTxt) btns += ' <span class="' + (canEq ? "manual-lv" : "manual-locked") + '">' + esc(reqTxt) + "</span>";
+    if (overTxt) btns += ' <span class="manual-locked">⚠️ ' + esc(overTxt) + "</span>";
+    try {
+      if (typeof Khilinh !== "undefined") {
+        var _sl = equipSkillDesc(d);
+        if (_sl) btns += " " + _sl;
+        if (Khilinh.isOutdated(state, d)) btns += ' <span class="manual-lv">⚠️ ' + esc(t("eq_outdated")) + "</span>";
+      }
+    } catch (e) {}
+  } else if (d && d.kind === "manual") {
+    btns = '<button class="mini" data-act="manual-open" data-i="' + i + '">' + esc(t("manual_upgrade")) + "</button>";
+  } else if (d && d.kind === "pet_egg") {
+    btns = '<button class="mini" data-act="egg-open" data-i="' + i + '">' + esc(t("pet_hatch")) + "</button>";
+  } else if (d && d.kind === "seed") {
+    btns = '<button class="mini" data-act="farm-open">' + esc(t("npc_farm_open")) + "</button>";
+  }
+  var extra = "";
+  if (d && d.kind === "manual" && typeof Skills !== "undefined") {
+    try {
+      var techId = Skills.manualTechId(it.id);
+      var lv = techId ? Skills.manualLevel(state, techId) : 0;
+      var mi = Skills.manualInfo(it.id);
+      extra = ' <span class="manual-lv">Lv' + lv + " · " + esc(t("tier_" + (mi ? mi.tier : 0))) + "</span>";
+      if (mi && !Skills.manualRealmOk(state, it.id)) {
+        extra += ' <span class="manual-locked">🔒 ' + esc(t("manual_locked_realm", { realm: stageName(mi.realm, 0) })) + "</span>";
+      }
+    } catch (e) {}
+  }
+  return '<div class="bag-detail"><div class="item-name">' + itemIcon(it.id) + " " + esc(itemName(it.id)) +
+    ' <span class="item-qty">x' + it.qty + "</span>" + extra + "</div>" +
+    '<div class="item-desc">' + esc(itemDesc(it.id)) + "</div>" +
+    (btns ? '<div class="row-btns">' + btns + "</div>" : "") + "</div>";
 }
 
 /* ----- Nhân vật ----- */
@@ -3418,6 +3439,14 @@ function onPanelClick(e) {
     }
     case "quest-showall": {
       try { if (!panelArg) panelArg = {}; panelArg.showAllSub = true; } catch (e) {}
+      renderPanel();
+      break;
+    }
+    case "bag-select": {
+      try {
+        if (!panelArg) panelArg = {};
+        panelArg.bagSel = parseInt(el.getAttribute("data-i"), 10);
+      } catch (e) {}
       renderPanel();
       break;
     }
