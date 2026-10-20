@@ -910,7 +910,11 @@ var Engine = (function () {
     if (_keys['arrowdown'] || _keys['s']) dy += 1;
     if (_keys['arrowleft'] || _keys['a']) dx -= 1;
     if (_keys['arrowright'] || _keys['d']) dx += 1;
-    dx += joy.dx; dy += joy.dy;
+    /* Bui 2026-10-20: ui.js/gamepad.js ghi Engine.joy (thay object mới) —
+     * đọc live từ Engine.joy; closure joy cũ luôn {0,0} nên không dùng. */
+    var _ej = joy;
+    try { if (typeof Engine !== "undefined" && Engine.joy) _ej = Engine.joy; } catch (_e) {}
+    dx += _ej.dx || 0; dy += _ej.dy || 0;
     /* Tay cầm (GamepadInput): cộng dồn vector analog, không xung đột joystick ảo/phím */
     if (typeof GamepadInput !== "undefined" && GamepadInput.moveVec) {
       try {

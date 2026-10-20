@@ -558,11 +558,16 @@ var QuestGuide = (function () {
       ev.stopPropagation();
       _finishTutorial(true);
     });
-    /* Đặt gần nút cần bấm */
+    /* Đặt gần nút cần bấm — anchor ẩn/không đo được thì rơi về giữa-dưới,
+     * không đè lên tiêu đề màn hình (Bui 2026-10-20) */
     try {
       var el = document.querySelector(anchorSel);
+      var r = null;
       if (el) {
-        var r = el.getBoundingClientRect();
+        var _r = el.getBoundingClientRect();
+        if (_r && _r.width > 0 && _r.height > 0) r = _r;
+      }
+      if (r) {
         var cw = 230, ch = 110;
         var x = Math.max(8, Math.min(window.innerWidth - cw - 8, r.left + r.width / 2 - cw / 2));
         var y = r.top - ch - 12;
@@ -571,7 +576,7 @@ var QuestGuide = (function () {
         _coachEl.style.top = y + "px";
       } else {
         _coachEl.style.left = "50%";
-        _coachEl.style.top = "60%";
+        _coachEl.style.top = "62%";
         _coachEl.style.transform = "translateX(-50%)";
       }
     } catch (e) {}

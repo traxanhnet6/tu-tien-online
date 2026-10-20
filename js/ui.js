@@ -418,6 +418,7 @@ function boot() {
       music("menu");
       setInterval(hudTick, 1000);
       try { _initQuestZoom(); } catch (e) {} /* zoom nhiệm vụ + gesture + menu chạm */
+      try { _initQuestCollapse(); } catch (e2) {} /* thu gọn bảng + tracker nhiệm vụ */
     }],
   ];
   var i = 0;
@@ -1000,6 +1001,8 @@ function healPlayer(hpAmt, mpAmt) {
 /* ---------------- panels ---------------- */
 function openPanel(name, arg) {
   panel = name; panelArg = arg || null;
+  /* thu gọn bảng nhiệm vụ: mở panel (mới) thì bỏ trạng thái thu gọn */
+  try { _questPanelExpand(); } catch (e) {}
   /* sáng nút nav đang mở */
   try {
     var _nbs = document.querySelectorAll("#bottomnav button");
@@ -1011,6 +1014,7 @@ function openPanel(name, arg) {
     '<div class="panel-overlay" id="p-overlay"><div class="panel' + (name === "quest" ? " panel-quest" : "") + '">' +
     '<div class="panel-head"><h3>' + esc(t(titleKey)) + '</h3>' +
     (name === "quest" ?
+      '<button class="mini qz" data-act="quest-collapse" title="' + esc(t("qcoll_collapse")) + '">▁</button>' +
       '<div class="qzoom">' +
       '<button class="mini qz" data-act="quest-zoom-out" title="' + esc(t("qzoom_out")) + '">−</button>' +
       '<button class="mini qz" data-act="quest-zoom-reset" title="' + esc(t("qzoom_reset")) + '">⟳</button>' +
@@ -1057,6 +1061,8 @@ function closePanel() {
     for (var _nj = 0; _nj < _nbs2.length; _nj++) _nbs2[_nj].classList.remove("active");
   } catch (e2) {}
   if (typeof Engine !== "undefined") Engine.talkNpcId = null; /* tắt 💬 */
+  /* đóng panel: ẩn luôn nút nổi mở lại bảng nhiệm vụ (nếu đang thu gọn) */
+  try { var _qfab = document.getElementById("quest-fab"); if (_qfab) _qfab.classList.add("hidden"); _questPanelCollapsed = false; } catch (e3) {}
   var p = $("panels");
   if (p) p.innerHTML = "";
 }
@@ -1551,6 +1557,16 @@ function renderSkill() {
 
 /* ----- Nhiệm vụ ----- */
 function questTab() { return (panelArg && panelArg.tab) || "avail"; }
+/* Lọc nhiệm vụ chính chỉ giữ 1 (Bui 2026-10-20): thuần, dùng cho test. */
+function _filterMainQuest(list) {
+  var seen = false;
+  return (list || []).filter(function (o) {
+    if (!o || !o.q || o.q.kind !== "chinh") return true;
+    if (seen) return false;
+    seen = true;
+    return true;
+  });
+}
 function renderQuest() {
   if (typeof QUESTS === "undefined" || typeof Quest === "undefined") return "";
   if (questTab() === "sect") return renderSectQuests();
@@ -1574,6 +1590,10 @@ function renderQuest() {
       if (questTab() === "done" && e.status === "done") list.push({ q: q, st: "done", e: e });
     });
   }
+  /* Bui 2026-10-20: nhiệm vụ CHÍNH mỗi lúc chỉ hiện 1 (đang làm ưu tiên,
+   * không có thì cái avail đầu chuỗi). Nhiệm vụ PHỤ giữ nguyên.
+   * Tab "Đã xong" giữ nguyên hiện tất cả. */
+  if (questTab() !== "done") list = _filterMainQuest(list);
   if (!list.length) return h + "<p>" + esc(t("q_no")) + "</p>";
   h += list.map(function (o) {
     var q = o.q, r = '<div class="row"><div data-act="quest-menu" data-id="' + esc(q.id) + '"><div class="item-name">' + esc(t(q.nameKey)) + "</div>" +
@@ -2575,6 +2595,8 @@ function renderSettings() {
     '<div class="item-sub">' + esc(t("settings_cleardata_note")) + '</div></div><div class="row-btns">' +
     '<button class="mini red" data-act="clear-data">' + esc(t("settings_cleardata")) + "</button></div></div>";
   if (typeof GamepadInput !== "undefined") h += renderGamepadSettings();
+  /* Số build để Bui kiểm tra bản live (2026-10-20) */
+  try { h += '<div class="sect-note" style="text-align:center;opacity:.6">Build ' + esc(typeof TT_BUILD !== "undefined" ? TT_BUILD : "?") + "</div>"; } catch (_e) {}
   return h;
 }
 
@@ -3187,6 +3209,7 @@ function onPanelClick(e) {
     /* ----- Zoom giao diện nhiệm vụ (Bui 2026-10-20) ----- */
     case "quest-zoom-in": setQuestZoom(_questZoom + 0.1); sfx("click"); break;
     case "quest-zoom-out": setQuestZoom(_questZoom - 0.1); sfx("click"); break;
+    case "quest-collapse": _questPanelCollapse(); sfx("click"); break;
     case "quest-zoom-reset": setQuestZoom(1); sfx("click"); break;
     /* ----- Chạm nhiệm vụ → menu Tự tìm đường (Bui 2026-10-20) ----- */
     case "quest-menu": {
@@ -5750,6 +5773,126 @@ function _initQuestZoom() {
   } catch (e) {}
 }
 
+/* ================= THU GỌN BẢNG + TRACKER NHIỆM VỤ (Bui 2026-10-20) ================= */
+
+/* ---- Thu gọn panel nhiệm vụ thành nút nổi 📜 (góc màn hình) ---- */
+var _questPanelCollapsed = false;
+function _questFabEl() {
+  if (typeof document === "undefined") return null;
+  var fab = document.getElementById("quest-fab");
+  if (!fab) {
+    fab = document.createElement("div");
+    fab.id = "quest-fab";
+    fab.className = "hidden";
+    fab.textContent = "📜";
+    try { fab.setAttribute("title", t("qcoll_expand")); } catch (e) {}
+    fab.addEventListener("click", function (ev) {
+      try { ev.stopPropagation(); } catch (_e) {}
+      try { ev.preventDefault(); } catch (_e2) {}
+      _questPanelExpand();
+      try { sfx("click"); } catch (_e3) {}
+    });
+    document.body.appendChild(fab);
+  }
+  return fab;
+}
+function _questPanelCollapse() {
+  if (typeof document === "undefined") return;
+  try {
+    var ov = document.getElementById("p-overlay");
+    if (ov) ov.style.display = "none";
+    var fab = _questFabEl();
+    if (fab) fab.classList.remove("hidden");
+    _questPanelCollapsed = true;
+  } catch (e) {}
+}
+function _questPanelExpand() {
+  if (typeof document === "undefined") return;
+  try {
+    var ov = document.getElementById("p-overlay");
+    if (ov) ov.style.display = "";
+    var fab = document.getElementById("quest-fab");
+    if (fab) fab.classList.add("hidden");
+    _questPanelCollapsed = false;
+  } catch (e) {}
+}
+
+/* ---- Thu gọn tracker nhiệm vụ trên HUD: chỉ giữ 1 dòng tên NV chính ---- */
+var _QG_COLL_KEY = "tutien_qgcollapsed_v1";
+function _qgCollapsedGet() {
+  try { return localStorage.getItem(_QG_COLL_KEY) === "1"; } catch (e) { return false; }
+}
+function _qgCollapsedSet(v) {
+  try { localStorage.setItem(_QG_COLL_KEY, v ? "1" : "0"); } catch (e) {}
+}
+function _qgToggleCollapsed() {
+  _qgCollapsedSet(!_qgCollapsedGet());
+  _qgApplyCollapsed();
+  try { sfx("click"); } catch (e) {}
+}
+function _qgApplyCollapsed() {
+  if (typeof document === "undefined") return;
+  try {
+    var tr = document.getElementById("qg-tracker");
+    if (!tr) return;
+    var c = _qgCollapsedGet();
+    if (c) tr.classList.add("qg-collapsed"); else tr.classList.remove("qg-collapsed");
+    var b = document.getElementById("qg-collbtn");
+    if (b) {
+      b.textContent = c ? "＋" : "−";
+      try { b.setAttribute("title", t(c ? "qg_expand" : "qg_collapse")); } catch (e2) {}
+    }
+  } catch (e3) {}
+}
+function _qgInjectCollBtn() {
+  if (typeof document === "undefined") return;
+  try {
+    var tr = document.getElementById("qg-tracker");
+    if (!tr) return;
+    var b = document.getElementById("qg-collbtn");
+    if (!b) {
+      b = document.createElement("button");
+      b.id = "qg-collbtn";
+      b.className = "qg-collbtn";
+      b.addEventListener("click", function (ev) {
+        try { ev.stopPropagation(); } catch (_e) {}
+        try { ev.preventDefault(); } catch (_e2) {}
+        _qgToggleCollapsed();
+      });
+      tr.insertBefore(b, tr.firstChild);
+    } else if (b.parentNode !== tr) {
+      tr.insertBefore(b, tr.firstChild);
+    }
+    var c = _qgCollapsedGet();
+    b.textContent = c ? "＋" : "−";
+    try { b.setAttribute("title", t(c ? "qg_expand" : "qg_collapse")); } catch (e2) {}
+  } catch (e3) {}
+}
+var _qCollBooted = false;
+function _initQuestCollapse() {
+  if (_qCollBooted) return; _qCollBooted = true;
+  _qgApplyCollapsed();
+  if (typeof document === "undefined") return;
+  var scan = function () {
+    try {
+      var tr = document.getElementById("qg-tracker");
+      if (tr) {
+        if (!tr._qgCollObs && typeof MutationObserver !== "undefined") {
+          tr._qgCollObs = true;
+          new MutationObserver(function () { _qgInjectCollBtn(); }).observe(tr, { childList: true });
+        }
+        _qgInjectCollBtn();
+        _qgApplyCollapsed();
+      }
+    } catch (e) {}
+  };
+  scan();
+  try {
+    if (typeof MutationObserver !== "undefined")
+      new MutationObserver(function () { scan(); }).observe(document.body, { childList: true, subtree: true });
+  } catch (e2) {}
+}
+
 /* test hook (node): logic zoom + điều hướng, không cần DOM thật */
 try {
   if (typeof module !== "undefined" && module.exports) {
@@ -5764,6 +5907,11 @@ try {
       toggle: questNavToggle, active: function () { return _navQid; },
       step: _questNavStep,
       setState: function (s) { state = s; }, setMap: function (m) { curMapId = m; }
+    };
+    module.exports._questCollTest = {
+      filterMain: _filterMainQuest,
+      qgGet: _qgCollapsedGet, qgSet: _qgCollapsedSet,
+      panelCollapsed: function () { return _questPanelCollapsed; }
     };
   }
 } catch (e) {}

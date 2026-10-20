@@ -1186,3 +1186,12 @@ body.landscape #hud-leftmid{top:40%}
 /* joystick cố định: luôn hiện, co giãn theo cỡ cài đặt */
 #joystick.fixed-ctl{opacity:.6;pointer-events:auto;transform:scale(var(--ctl-size,1));transform-origin:bottom left}
 #joystick.fixed-ctl.active{opacity:.95}
+
+/* ---------- Nút nổi mở lại bảng nhiệm vụ khi thu gọn (Bui 2026-10-20) ----------
+ * z-index 6000: luôn trên toast (40), panel (20) và tracker (5000). */
+#quest-fab{position:fixed;right:14px;bottom:120px;z-index:6000;width:52px;height:52px;
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  background:linear-gradient(165deg,#2a1f14f5,#17100af5);
+  border:2px solid #c9a227;border-radius:50%;box-shadow:0 4px 16px #000d;
+  cursor:pointer;pointer-events:auto}
+#quest-fab.hidden{display:none}
