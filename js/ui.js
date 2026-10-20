@@ -3228,6 +3228,89 @@ function onPanelClick(e) {
     case "set-npcvoice":
       if (typeof NPCVoice !== "undefined") NPCVoice.setEnabled(!NPCVoice.isEnabled());
       renderPanel(); break;
+    /* ----- Các nút bị mất handler (vá 2026-10-20): render có nhưng switch thiếu case ----- */
+    case "gacha-pull": doGachaPull(+el.getAttribute("data-n") || 1); break;
+    case "gacha-merge": {
+      var _gm = (typeof Gacha !== "undefined") ? Gacha.mergeFragments(state, +v) : null;
+      if (_gm && _gm.ok) { saveGame(state); sfx("success"); toast(t("gacha_merge_ok")); }
+      else { sfx("fail"); toast(t(_gm && _gm.reason === "no_frag" ? "gacha_no_frag" : "gacha_merge_fail")); }
+      refreshHUD(); renderPanel(); break;
+    }
+    case "do-checkin": doCheckin(); break;
+    case "open-gift": openPanel("gift"); break;
+    case "sect-join": doSectJoin(el.getAttribute("data-sect")); break;
+    case "sect-buy": {
+      var _sb = (typeof Sect !== "undefined") ? Sect.buyManual(state, el.getAttribute("data-id")) : null;
+      if (_sb && _sb.ok) { saveGame(state); sfx("success"); toast(t("shop_bought")); }
+      else { sfx("fail"); toast(t(_sb && _sb.reason === "thieu_cong_hien" ? "sect_low_contrib" : "shop_no_stone")); }
+      refreshHUD(); renderPanel(); break;
+    }
+    case "sect-claim": {
+      var _sc = (typeof Sect !== "undefined") ? Sect.claimDaily(state, el.getAttribute("data-id")) : null;
+      if (_sc && _sc.ok) { saveGame(state); sfx("success"); toast(t("sect_daily_claimed")); }
+      else sfx("fail");
+      refreshHUD(); renderPanel(); break;
+    }
+    case "sect-donate": {
+      var _sd = (typeof Sect !== "undefined") ? Sect.donateStones(state, +v) : null;
+      if (_sd && _sd.ok) { saveGame(state); sfx("success"); toast(t("sect_donated")); }
+      else { sfx("fail"); toast(t("shop_no_stone")); }
+      refreshHUD(); renderPanel(); break;
+    }
+    case "manual-learn": doManualLearn(); break;
+    case "manual-open": openPanel("manual", { bagIdx: +(el.getAttribute("data-i") || 0) }); break;
+    case "manual-upg-dup": doManualUpgDup(); break;
+    case "manual-upg-frag": doManualUpgFrag(); break;
+    case "egg-open": openPanel("pet", { eggIdx: +(el.getAttribute("data-i") || 0) }); break;
+    case "egg-hatch-now": doEggHatch(+(el.getAttribute("data-i") || 0), true); break;
+    case "egg-hatch-wait": doEggHatch(+(el.getAttribute("data-i") || 0), false); break;
+    case "pet-rename": { var _pn = $("pet-name"); if (_pn) _pn.focus(); break; }
+    case "pet-rename-do": {
+      var _pn2 = $("pet-name"), _pr = null;
+      if (_pn2 && typeof Pet !== "undefined") _pr = Pet.renamePet(state, _pn2.value);
+      if (_pr && _pr.ok) { saveGame(state); sfx("success"); } else sfx("fail");
+      renderPanel(); break;
+    }
+    case "farm-open": openPanel("farm"); break;
+    case "farm-unlock": {
+      var _fu = (typeof Farm !== "undefined") ? Farm.unlockPlot(state, (state.farm || {}).unlocked) : null;
+      if (_fu && _fu.ok) { saveGame(state); sfx("success"); toast(t("farm_unlocked")); }
+      else { sfx("fail"); toast(t("shop_no_stone")); }
+      renderPanel(); break;
+    }
+    case "alchemy-craft": doAlchemyCraft(el.getAttribute("data-recipe")); break;
+    case "assign-skill": doAssignSkill(el.getAttribute("data-tech")); break;
+    case "bag-cell": doBagCell(el.getAttribute("data-id")); break;
+    case "enc-choice": doEncounterChoice(el.getAttribute("data-id")); break;
+    case "market-search": {
+      var _mq = $("market-q"); panelArg = { tab: "buy", q: _mq ? _mq.value : "" };
+      renderPanel(); break;
+    }
+    case "market-buy": {
+      var _mb = (typeof Market !== "undefined") ? Market.buyListing(state, el.getAttribute("data-id")) : null;
+      if (_mb && _mb.ok) { saveGame(state); sfx("success"); toast(t("shop_bought")); }
+      else { sfx("fail"); toast(t("shop_no_stone")); }
+      refreshHUD(); renderPanel(); break;
+    }
+    case "market-cancel": {
+      var _mc = (typeof Market !== "undefined") ? Market.cancelListing(state, el.getAttribute("data-id")) : null;
+      if (_mc && _mc.ok) { saveGame(state); sfx("click"); } else sfx("fail");
+      refreshHUD(); renderPanel(); break;
+    }
+    case "market-list": {
+      var _mi = +(el.getAttribute("data-i") || 0), _mp = $("mk-price-" + _mi);
+      var _ml = null;
+      if (typeof Market !== "undefined" && state.bag[_mi])
+        _ml = Market.listItem(state, state.bag[_mi].id, 1, _mp ? +_mp.value : 0);
+      if (_ml && _ml.ok) { saveGame(state); sfx("success"); toast(t("market_listed")); }
+      else { sfx("fail"); toast(t("market_bad_price")); }
+      refreshHUD(); renderPanel(); break;
+    }
+    case "auto-target": state.autoCfg = state.autoCfg || {}; state.autoCfg.target = v; saveGame(state); renderPanel(); break;
+    case "auto-skill": state.autoCfg = state.autoCfg || {}; state.autoCfg.autoSkill = !(state.autoCfg.autoSkill !== false); saveGame(state); renderPanel(); break;
+    case "auto-potion": state.autoCfg = state.autoCfg || {}; state.autoCfg.autoPotion = !(state.autoCfg.autoPotion !== false); saveGame(state); renderPanel(); break;
+    case "auto-potion-at": state.autoCfg = state.autoCfg || {}; state.autoCfg.potionAt = +v || 30; saveGame(state); renderPanel(); break;
+    case "auto-mp-at": state.autoCfg = state.autoCfg || {}; state.autoCfg.mpPotionAt = +v || 30; saveGame(state); renderPanel(); break;
     case "quest-accept": {
       var qaid = el.getAttribute("data-id");
       var qar = (typeof Quest !== "undefined") ? Quest.accept(state, qaid) : null;
