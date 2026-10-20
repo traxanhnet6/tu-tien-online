@@ -44,6 +44,20 @@ function _qdef(id) {
   for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
   return null;
 }
+/* Độ sâu của quest chính trong chuỗi (đếm ngược theo req).
+ * Không phải quest chính → -1. Có guard chống vòng lặp. */
+function _chinhDepth(id) {
+  var cur = _qdef(id);
+  if (!cur || _kindOf(cur) !== "chinh") return -1;
+  var d = 0, seen = {};
+  while (cur && cur.req && !seen[cur.id]) {
+    seen[cur.id] = true;
+    var p = _qdef(cur.req);
+    if (!p || _kindOf(p) !== "chinh") break;
+    d++; cur = p;
+  }
+  return d;
+}
 /* Nhánh cốt truyện: quest có field branch ("chinh"|"ma") chỉ khả dụng khi
  * người chơi đã gia nhập tông môn thuộc nhánh đó. Bui 2026-10-18:
  * 2 nhánh khác nhau nhưng độ khó cân bằng. */
@@ -86,6 +100,50 @@ var Quest = {
     });
     return out;
   },
+  /* Chuẩn hóa quest chính về tối đa 1 active (Bui 2026-10-20).
+   * Save cũ (trước luật tuần tự) có thể dính 2 quest chính active do chơi
+   * lại intro giữa chuỗi. Cách xử lý:
+   *  1. Quest đang active nhưng nông hơn một quest chính đã DONE → stale,
+   *     gỡ bỏ (người chơi nhận lại sau theo đúng thứ tự, không mất thưởng
+   *     vì chưa từng trả quest đó).
+   *  2. Còn hơn 1 quest chính active → giữ quest đi xa nhất trong chuỗi,
+   *     gỡ các quest còn lại.
+   * Idempotent: không làm gì khi đã đúng luật (0–1 quest chính active). */
+  normalizeMain: function (state) {
+    var qs = (state && state.quests) || {};
+    var active = [], doneMax = -1;
+    Object.keys(qs).forEach(function (id) {
+      var s = qs[id];
+      if (!s || !s.status) return;
+      if (_kindOf(_qdef(id)) !== "chinh") return;
+      if (s.status === "active") active.push(id);
+      else if (s.status === "done") {
+        var dd = _chinhDepth(id);
+        if (dd > doneMax) doneMax = dd;
+      }
+    });
+    var removed = [];
+    active = active.filter(function (id) {
+      if (_chinhDepth(id) < doneMax) {
+        delete qs[id];
+        removed.push(id);
+        return false;
+      }
+      return true;
+    });
+    var kept = null;
+    if (active.length > 1) {
+      active.sort(function (a, b) { return _chinhDepth(b) - _chinhDepth(a); });
+      kept = active[0];
+      for (var i = 1; i < active.length; i++) {
+        delete qs[active[i]];
+        removed.push(active[i]);
+      }
+    } else if (active.length === 1) {
+      kept = active[0];
+    }
+    return { kept: kept, removed: removed };
+  },
   /* Quest chưa nhận mà đủ điều kiện nhận */
   available: function (state) {
     var out = [];
@@ -105,6 +163,10 @@ var Quest = {
   accept: function (state, id) {
     var q = _qdef(id);
     if (!q) return { ok: false, reason: "no_quest" };
+    /* Tự chuẩn hóa save cũ trước mọi lượt nhận: không bao giờ để lọt
+     * 2 quest chính active (Bui 2026-10-20). Idempotent, không ảnh hưởng
+     * luồng thường (0–1 quest chính active → không làm gì). */
+    try { Quest.normalizeMain(state); } catch (e) {}
     var qs = state.quests || (state.quests = {});
     var s = qs[id];
     if (s && s.status) return { ok: false, reason: s.status === "done" ? "already_done" : "already_active" };

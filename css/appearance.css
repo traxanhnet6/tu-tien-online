@@ -24,3 +24,9 @@
   margin-left: 6px; padding: 6px 10px; font-size: 13px; vertical-align: middle;
 }
 #create-char-canvas { max-width: 100%; height: auto; }
+/* Panel Đổi Ngoại Hình (mở từ panel Nhân Vật) — tái dùng style màn tạo */
+.apedit-box { text-align: center; }
+#apedit-canvas { max-width: 100%; height: auto; margin: 0 auto 8px; display: block; }
+#apedit-panel { text-align: left; }
+.apedit-btns { margin-top: 10px; display: flex; gap: 8px; justify-content: center; }
+.apedit-btns .btn { min-width: 110px; }

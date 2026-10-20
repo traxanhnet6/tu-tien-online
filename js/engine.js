@@ -2082,6 +2082,21 @@ var Engine = (function () {
    * Sprite chưa tải xong/lỗi -> _drawPlayerSpriteMode trả false và
    * game tự rơi xuống đường vẽ cũ, không crash, không ô vuông. */
   var PLAYER_SPRITE_MODE = true;
+  /* PAPERDOLL_MODE (Bui 2026-10-20 paper-doll): vẽ nhân vật bằng các lớp
+   * body+legs (+outfit) ghép qua js/paperdoll.js thay vì 1 sprite khối.
+   * false (mặc định) = pipeline sprite khối cũ 100%, không đổi hành vi.
+   * true  = _drawPlayerSpriteMode ghép lớp; lớp chưa tải xong/thiếu file ->
+   *         tự fallback về sprite khối cũ, không crash, không vỡ hình.
+   * Bật cờ này khi art lớp đã đủ (assets/sprs/paperdoll/). */
+  var PAPERDOLL_MODE = false;
+  /* id trang phục đang mặc (wardrobe.js: state.outfit_worn); null = mặc định. */
+  function _wornOutfitId() {
+    try {
+      var S = _S();
+      var id = S && S.outfit_worn;
+      return (typeof id === 'string' && id) ? id : null;
+    } catch (e) { return null; }
+  }
   /* CHAR_DRAW_H (Bui 2026-10-20): chiều cao vẽ CHUNG (px) cho người chơi + NPC
    * trong map để hai bên đồng bộ cỡ khi đứng cạnh nhau.
    * 62 = điểm giữa khoảng cũ (người chơi 54, NPC 69). */
@@ -2218,16 +2233,15 @@ var Engine = (function () {
     for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
     return null;
   }
-  /* Tổ hợp biến thể hiện tại của người chơi -> spec hoặc null nếu mặc định/thiếu dữ liệu */
-  function _variantSpec() {
+  /* Tổ hợp biến thể từ (giới tính, appearance) tường minh -> spec hoặc null.
+   * Bui 2026-10-20: preview màn tạo nhân vật dùng chung pipeline biến thể này. */
+  function _variantSpecFrom(g, a) {
     try {
-      var S = _S();
-      if (!S || !S.char) return null;
       if (typeof Appearance === 'undefined' || !Appearance.normalize || !Appearance.optsFor) return null;
-      var g = (S.char.gender === 'nu') ? 'nu' : 'nam';
-      var a = Appearance.normalize(S.char.appearance, g);
+      g = (g === 'nu') ? 'nu' : 'nam';
+      a = Appearance.normalize(a, g);
       var def = Appearance.defaults(g);
-      var o = Appearance.optsFor(S) || {};
+      var o = Appearance.optsFor({ char: { gender: g, appearance: a } }) || {};
       var tints = o.tints || {};
       var skinSpec = tints.dau || null;                 /* scale da (spec dùng chung mọi part da) */
       var hairSpec = tints.toc || null;                 /* remap tóc; null khi màu tóc = mặc định giới */
@@ -2239,6 +2253,14 @@ var Engine = (function () {
       return { g: g, a: a, skinSpec: skinSpec, hairSpec: hairSpec, outHex: outHex,
                needFace: needFace, needHair: needHair,
                key: g + '|' + a.face + '|' + a.hair + '|' + a.skin + '|' + a.hairColor + '|' + a.outfitColor };
+    } catch (e) { return null; }
+  }
+  /* Tổ hợp biến thể hiện tại của người chơi -> spec hoặc null nếu mặc định/thiếu dữ liệu */
+  function _variantSpec() {
+    try {
+      var S = _S();
+      if (!S || !S.char) return null;
+      return _variantSpecFrom(S.char.gender, S.char.appearance);
     } catch (e) { return null; }
   }
   function _hexRgbV(h) {
@@ -2347,9 +2369,9 @@ var Engine = (function () {
   var _variantCache = {};
   var _variantKeys = [];
   var _VARIANT_MAX = 24;
-  function _playerVariantCanvas(im, src) {
+  function _playerVariantCanvas(im, src, spec) {
     if (typeof document === 'undefined') return null;
-    var spec = _variantSpec();
+    if (typeof spec === 'undefined') spec = _variantSpec();
     if (!spec) return null;
     var mm = /player_(nam|nu)_(down|left|right|up)(?:_([abc]))?\.png/.exec(src || '');
     if (!mm) return null;
@@ -2433,6 +2455,19 @@ var Engine = (function () {
     } catch (e) { return null; }
   }
 
+  /* Part mặt/tóc đã tải xong trong cache engine chưa (cho preview tạo nhân vật).
+   * Dùng đúng Image object mà _tintedPart dùng -> không race khi kiểm tra. */
+  function _variantPartsReady(spec) {
+    try {
+      if (!spec || (!spec.needFace && !spec.needHair)) return true;
+      if (typeof Appearance === 'undefined' || !Appearance.faceImg || !Appearance.hairImg) return false;
+      var ok = true;
+      if (spec.needFace) ok = ok && !!_img(Appearance.faceImg(spec.a, spec.g));
+      if (spec.needHair) ok = ok && !!_img(Appearance.hairImg(spec.a, spec.g));
+      return ok;
+    } catch (e) { return false; }
+  }
+
   /* Vẽ người chơi bằng sprite mới tại (cx, cy) — true nếu vẽ được.
    * Bóng đổ nằm yên trên mặt đất; thân nhún 2px theo nhịp bước khi di chuyển. */
   function _drawPlayerSpriteMode(cx, cy, lift, blift) {
@@ -2466,7 +2501,30 @@ var Engine = (function () {
       ab = 'a';
       if (!src) return false;
     }
-    var im = _img(src);
+    /* PAPER-DOLL: ghép body+legs (+outfit) thành 1 canvas rồi đi tiếp pipeline
+     * vẽ chung (bóng đổ/bobbing/biến thể/hit-flash). Composite khớp pixel 100%
+     * với sprite khối nên pipeline cũ không cần biết nguồn ảnh. */
+    var _pdCanvas = null;
+    if (typeof PAPERDOLL_MODE !== 'undefined' && PAPERDOLL_MODE && typeof PaperDoll !== 'undefined') {
+      try {
+        var _pdOid = _wornOutfitId();
+        PaperDoll.warm(gioi, face, _pdOid);
+        _pdCanvas = PaperDoll.compose(gioi, face, moving ? ab : '0', _pdOid);
+      } catch (_pde) { _pdCanvas = null; }
+    }
+    var im = null;
+    if (_pdCanvas) {
+      /* src giả khớp regex biến thể (player_<g>_<dir>[_<khung>].png) để pipeline
+       * nhuộm da/tóc/áo + mặt/tóc cũ áp đúng hướng/khung; outfit (đã baked sẵn
+       * mặt/tóc) dùng src không khớp -> tự bỏ qua biến thể, giữ nguyên thiết kế. */
+      var _oidChk = null;
+      try { _oidChk = _wornOutfitId(); } catch (_oe2) {}
+      src = _oidChk ? 'paperdoll_outfit_baked.png'
+                    : ('player_' + gioi + '_' + face + (moving ? '_' + ab : '') + '.png');
+      im = _pdCanvas;
+    } else {
+      im = _img(src);
+    }
     if (!im || !im.width) return false;
     /* cùng hệ số độ sâu ds như _drawCreature của NPC: đứng cùng hàng y thì bằng cỡ nhau */
     var _camP = _camera();
@@ -3457,6 +3515,10 @@ var Engine = (function () {
                     faceZone: (typeof _SPR_FACE_ZONE !== 'undefined') ? _SPR_FACE_ZONE : null,
                     facePart: (typeof _SPR_FACE_PART !== 'undefined') ? _SPR_FACE_PART : null,
                     canvas: (typeof _playerVariantCanvas === 'function') ? _playerVariantCanvas : null },
+    /* Bui 2026-10-20: preview màn tạo nhân vật / Đổi Ngoại Hình dùng đúng pipeline biến thể sprite */
+    variantSpecFor: (typeof _variantSpecFrom === 'function') ? _variantSpecFrom : null,
+    variantCanvasFor: function (im, src, spec) { return (typeof _playerVariantCanvas === 'function') ? _playerVariantCanvas(im, src, spec) : null; },
+    variantPartsReady: function (spec) { return (typeof _variantPartsReady === 'function') ? _variantPartsReady(spec) : true; },
     /* test hook: vùng cấm NPC quanh cổng chuyển map (không dùng trong game) */
     _gateTest: { SAFE_R: GATE_SAFE_R, gatesOf: _gatesOf, gateZoneAt: _gateZoneAt,
                  pushOut: _pushOutOfGates, stepNpcs: function (dt) { _updateNpcs(dt); } },

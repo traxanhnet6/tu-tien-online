@@ -193,7 +193,7 @@ button{font-family:var(--font-body);cursor:pointer;color:var(--ink)}
 
 /* Panel nhân vật trên-trái (chuẩn tutien2d) */
 #char-panel{position:absolute;top:calc(6px + env(safe-area-inset-top));left:8px;
-  z-index:6;min-width:176px;max-width:236px;padding:6px 10px;
+  z-index:6;min-width:176px;max-width:236px;padding:6px 10px;cursor:pointer;
   border:1px solid transparent;border-radius:16px;
   background:linear-gradient(165deg,#251b0ef2,#17100af2) padding-box,
     linear-gradient(140deg,#ffe9a8,#c9a227 45%,#77601d 75%,#c9a227) border-box;
@@ -1148,3 +1148,41 @@ body.landscape #hud-leftmid{top:40%}
 .eqset-icon-sm { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
 .eqset-item-info { flex: 1; }
 .eqset-realm { font-size: 11px; color: #c9a227; }
+
+/* ================= ZOOM GIAO DIỆN NHIỆM VỤ (Bui 2026-10-20) =================
+ * --quest-zoom: 0.7–1.5, nhân vào font-size/padding (KHÔNG dùng transform). */
+:root{--quest-zoom:1;--ctl-size:1}
+.panel-quest .panel-body .item-name{font-size:calc(16px * var(--quest-zoom,1))}
+.panel-quest .panel-body .item-desc{font-size:calc(12px * var(--quest-zoom,1));line-height:calc(1.5 * var(--quest-zoom,1))}
+.panel-quest .panel-body .q-need{font-size:calc(12px * var(--quest-zoom,1))}
+.panel-quest .panel-body .row{padding:calc(9px * var(--quest-zoom,1)) 2px}
+.panel-quest .tabs .mini{font-size:calc(13px * var(--quest-zoom,1))}
+/* nút +/−/đặt lại trên thanh tiêu đề panel nhiệm vụ */
+.qzoom{display:flex;gap:4px;margin-left:auto;margin-right:8px}
+.qzoom .mini.qz{padding:4px 10px;font-size:14px;min-width:0}
+/* menu chạm nhiệm vụ */
+.quest-menu{position:fixed;z-index:70000;min-width:200px;max-width:250px;
+  background:linear-gradient(180deg,#2b1f14,#1c1410);border:2px solid #c9a227;
+  border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;
+  box-shadow:0 4px 18px #000c;font-size:calc(14px * var(--quest-zoom,1))}
+.quest-menu .qm-title{color:#ffd76a;font-weight:bold;margin-bottom:2px}
+.quest-menu .qm-btn{width:100%;text-align:left}
+
+/* ================= TÙY CHỈNH NÚT DI CHUYỂN (Bui 2026-10-20) ================= */
+/* D-pad 4 nút */
+#dpad{position:absolute;z-index:6;width:150px;height:150px;display:none;touch-action:none;
+  transform:scale(var(--ctl-size,1));transform-origin:bottom left}
+#dpad.show{display:block}
+#dpad .dp-btn{position:absolute;width:48px;height:48px;border-radius:12px;touch-action:none;
+  background:radial-gradient(circle at 35% 30%,#4a3a24,#241a0e 68%);
+  border:2px solid #c9a227;color:#ffd76a;font-size:20px;
+  display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none}
+#dpad .dp-btn.on{background:radial-gradient(circle at 35% 30%,#8a6a2f,#3a2c10 68%);
+  box-shadow:0 0 12px #c9a22788}
+#dpad .dp-up{left:51px;top:0}
+#dpad .dp-down{left:51px;top:102px}
+#dpad .dp-left{left:0;top:51px}
+#dpad .dp-right{left:102px;top:51px}
+/* joystick cố định: luôn hiện, co giãn theo cỡ cài đặt */
+#joystick.fixed-ctl{opacity:.6;pointer-events:auto;transform:scale(var(--ctl-size,1));transform-origin:bottom left}
+#joystick.fixed-ctl.active{opacity:.95}

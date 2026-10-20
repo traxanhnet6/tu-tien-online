@@ -205,16 +205,95 @@
   }
 
   /* ---------------- Preview (trình duyệt) ---------------- */
-  /* Vẽ nhân vật bằng CharAnim lên canvas. Trả true nếu vẽ được. */
-  function drawPreview(canvas, sel) {
-    if (!canvas || typeof document === "undefined") return false;
+  /* Preload part mặt/tóc để kiểm tra sẵn sàng trước khi vẽ. */
+  var _preImgs = {};
+  function readyImg(src) {
+    if (!src || typeof document === "undefined") return false;
+    var im = _preImgs[src];
+    if (!im) { im = new Image(); im.src = src; _preImgs[src] = im; }
+    return !!(im.complete && im.naturalWidth);
+  }
+
+  /* ---------------- Preview bằng SPRITE THẬT (Bui 2026-10-20) ---------------- */
+  /* Preview màn tạo nhân vật / Đổi Ngoại Hình phải GIỐNG Y nhân vật trong map:
+   * vẽ đúng file sprite player_<giới>_down.png rồi áp Y HỆT pipeline biến thể
+   * của engine (Engine.variantSpecFor/variantCanvasFor). */
+  var _sprImgs = {};    // src -> Image (preload sprite thật)
+  var _sprWaiters = {}; // src -> [fn] gọi khi sprite vừa tải xong
+  function _spriteSrc(gender) {
+    return "assets/sprs/dirs/player_" + _gender(gender) + "_down.png";
+  }
+  /* Trả Image khi đã tải xong; chưa xong thì warm + xếp onready vào hàng đợi. */
+  function _warmSprite(gender, onready) {
+    if (typeof document === "undefined") return null;
+    var src = _spriteSrc(gender);
+    var im = _sprImgs[src];
+    if (!im) {
+      im = new Image();
+      _sprImgs[src] = im;
+      var _fire = function () {
+        var ws = _sprWaiters[src] || [];
+        _sprWaiters[src] = [];
+        for (var i = 0; i < ws.length; i++) { try { ws[i](); } catch (e) {} }
+      };
+      im.onload = _fire;
+      im.onerror = _fire; /* lỗi tải: bỏ hàng đợi, giữ fallback CharAnim */
+      im.src = src;
+    }
+    if (im.complete && im.naturalWidth) return im;
+    if (onready) {
+      if (!_sprWaiters[src]) _sprWaiters[src] = [];
+      _sprWaiters[src].push(onready);
+    }
+    return null;
+  }
+
+  /* Vẽ lại khi asset vừa sẵn; thử tối đa vài nhịp rồi thôi (tránh kẹt CharAnim). */
+  function _redrawSoon(canvas, sel, tries) {
+    if (typeof document === "undefined") return;
+    if (!document.contains(canvas)) return;
+    var ok = false;
+    try { ok = !!drawPreview(canvas, sel); } catch (e) { ok = false; }
+    if (!ok && tries > 0) {
+      setTimeout(function () { _redrawSoon(canvas, sel, tries - 1); }, 400);
+    }
+  }
+
+  /* Vẽ canvas/ảnh vừa khung preview (180x230), giữ tỉ lệ, pixel sắc nét. */
+  function _drawFitted(ctx, canvas, img) {
+    var cw = canvas.width, ch = canvas.height;
+    var iw = img.width, ih = img.height;
+    if (!iw || !ih) return false;
+    ctx.clearRect(0, 0, cw, ch);
+    var sc = Math.min(cw / iw, ch / ih) * 0.96;
+    var dw = iw * sc, dh = ih * sc;
+    var dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+    ctx.save();
+    ctx.fillStyle = "rgba(0,0,0,0.22)";
+    ctx.beginPath();
+    ctx.ellipse(cw / 2, dy + dh * 0.94, dw * 0.26, dh * 0.04, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    var _sm = ctx.imageSmoothingEnabled;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, dx, dy, dw, dh);
+    ctx.imageSmoothingEnabled = _sm;
+    return true;
+  }
+
+  /* Vẽ nhân vật bằng CharAnim lên canvas (fallback khi sprite thật chưa sẵn).
+   * Giữ nguyên logic cũ — BUGFIX (Bui 2026-10-20): part mặt/tóc mới chọn tải
+   * bất đồng bộ, chưa xong thì trả false để caller thử lại. */
+  function _drawPreviewCharAnim(canvas, ctx, gender, a) {
     if (typeof CharAnim === "undefined" || !CharAnim.getManifest || !CharAnim.getManifest()) return false;
-    var ctx = canvas.getContext("2d");
-    if (!ctx) return false;
-    var gender = _gender(sel && sel.gender);
-    var a = normalize(sel && sel.appearance, gender);
     var fakeState = { char: { gender: gender, appearance: a } };
     var o = optsFor(fakeState);
+    if (o && o.equip) {
+      var _need = [o.equip.dau, o.equip.toc];
+      for (var _ni = 0; _ni < _need.length; _ni++) {
+        if (!readyImg(_need[_ni])) return false;
+      }
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     try {
       return !!CharAnim.draw(ctx, canvas.width / 2, canvas.height - 14, "idle", 0.3, {
@@ -222,6 +301,36 @@
         equip: o ? o.equip : null, tints: o ? o.tints : null
       });
     } catch (e) { return false; }
+  }
+
+  /* Vẽ preview: sprite thật + pipeline biến thể y hệt trong game.
+   * Trả true khi đã vẽ xong bản ĐẦY ĐỦ; false khi còn asset đang tải
+   * (caller thử lại theo nhịp 350/900ms có sẵn trong ui.js). */
+  function drawPreview(canvas, sel) {
+    if (!canvas || typeof document === "undefined") return false;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return false;
+    var gender = _gender(sel && sel.gender);
+    var a = normalize(sel && sel.appearance, gender);
+    var hasPipe = (typeof Engine !== "undefined" && Engine &&
+                   typeof Engine.variantSpecFor === "function" &&
+                   typeof Engine.variantCanvasFor === "function" &&
+                   typeof Engine.variantPartsReady === "function");
+    /* Sprite thật chưa tải xong: warm, hẹn vẽ lại khi xong, tạm vẽ CharAnim. */
+    var im = hasPipe ? _warmSprite(gender, function () { _redrawSoon(canvas, sel, 5); }) : null;
+    if (!im || !hasPipe) return _drawPreviewCharAnim(canvas, ctx, gender, a);
+    var src = _spriteSrc(gender);
+    var spec = null;
+    try { spec = Engine.variantSpecFor(gender, a); } catch (e) { spec = null; }
+    /* Part mặt/tóc chưa xong trong cache engine -> giữ khung cũ, thử lại sau. */
+    try {
+      if (!Engine.variantPartsReady(spec)) return false;
+    } catch (e) { return false; }
+    var cv = null;
+    try { cv = Engine.variantCanvasFor(im, src, spec); } catch (e) { cv = null; }
+    /* spec null -> không cần biến thể: vẽ thẳng sprite gốc. */
+    var drawIm = cv || im;
+    return _drawFitted(ctx, canvas, drawIm);
   }
 
   /* ---------------- UI màn tạo nhân vật (trình duyệt) ---------------- */

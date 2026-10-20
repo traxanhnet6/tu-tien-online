@@ -11,7 +11,7 @@
 <script>
 /* TT_BUILD: phiên bản build — tăng mỗi lần deploy để tránh cache JS/CSS cũ.
    (Giá trị dùng chung cho toàn trang, khai báo 1 lần duy nhất tại đây.) */
-var TT_BUILD = "20261020-30";
+var TT_BUILD = "20261020-31";
 </script>
 <script>document.write('<link rel="stylesheet" href="css/style.css?v=' + TT_BUILD + '">');</script>
 <script>document.write('<link rel="stylesheet" href="css/hud-tutien2d.css?v=' + TT_BUILD + '">');</script>
@@ -161,7 +161,7 @@ var TT_BUILD = "20261020-30";
       <div id="secret-banner" class="hidden"></div>
 
       <!-- Panel nhân vật trên-trái (chuẩn tutien2d): tên + cảnh giới + kim cương, 4 thanh có nhãn -->
-      <div id="char-panel">
+      <div id="char-panel" title="Chạm để mở hành trang">
         <div class="hud-name"><span id="hud-name">-</span> <span id="hud-power" class="hud-power"></span></div>
         <div class="hud-realm"><span id="hud-realm">-</span></div>
         <div class="cbar"><div id="hud-hp-fill" class="cfill hp"></div><span class="cbar-label">Khí Huyết</span><span id="hud-hp-txt" class="cbar-txt"></span></div>
@@ -260,9 +260,9 @@ var TT_BUILD = "20261020-30";
 <script>
 (function () {
   var rest = ["js/supabase-config.js", "js/online.js", "js/online_sb.js", "js/auth.js",
-    "js/audio.js", "js/engine.js", "js/combat.js", "js/npc.js", "js/quest.js",
+    "js/audio.js", "js/paperdoll.js", "js/engine.js", "js/combat.js", "js/npc.js", "js/quest.js",
     "js/mapload.js", "js/ui.js", "js/events.js", "js/wardrobe.js", "js/giftcode.js", "js/story.js", "js/questguide.js", "js/worldmap.js",
-    "js/gamepad.js"];
+    "js/gamepad.js", "js/npcvoice.js"];
   for (var i = 0; i < rest.length; i++) {
     document.write('<script src="' + rest[i] + '?v=' + TT_BUILD + '"><\/script>');
   }
