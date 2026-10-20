@@ -1602,6 +1602,19 @@ function _filterMainQuest(list) {
     return true;
   });
 }
+/* Bui 2026-10-21: nhiệm vụ PHỤ cũng phải chặt — sắp xếp theo cảnh giới yêu cầu,
+ * chỉ hiện 8 cái phù hợp nhất, còn lại ẩn sau nút "Xem thêm" */
+function _sortSubQuests(list, state) {
+  var cr = 1, ct = 0;
+  try { cr = state.char.realm || 1; ct = state.char.tier || 0; } catch (e) {}
+  return (list || []).sort(function (a, b) {
+    var ar = (a.q.minRealm && a.q.minRealm[0]) || 1, at = (a.q.minRealm && a.q.minRealm[1]) || 0;
+    var br = (b.q.minRealm && b.q.minRealm[0]) || 1, bt = (b.q.minRealm && b.q.minRealm[1]) || 0;
+    var ad = Math.abs(ar - cr) * 100 + Math.abs(at - ct);
+    var bd = Math.abs(br - cr) * 100 + Math.abs(bt - ct);
+    return ad - bd;
+  });
+}
 function renderQuest() {
   if (typeof QUESTS === "undefined" || typeof Quest === "undefined") return "";
   if (questTab() === "sect") return renderSectQuests();
@@ -1627,8 +1640,23 @@ function renderQuest() {
   }
   /* Bui 2026-10-20: nhiệm vụ CHÍNH mỗi lúc chỉ hiện 1 (đang làm ưu tiên,
    * không có thì cái avail đầu chuỗi). Nhiệm vụ PHỤ giữ nguyên.
-   * Tab "Đã xong" giữ nguyên hiện tất cả. */
+   * Tab "Đã xong" giữ nguyên hiện tất cả.
+   * Bui 2026-10-21: nhiệm vụ PHỤ cũng chặt — sắp xếp theo cảnh giới, hiện 8 cái
+   * phù hợp nhất trước, còn lại thu gọn sau nút "Xem thêm". */
   if (questTab() !== "done") list = _filterMainQuest(list);
+  var _subHidden = 0;
+  if (questTab() === "avail") {
+    var _mains = [], _subs = [];
+    list.forEach(function (o) { ((o.q && o.q.kind === "chinh") ? _mains : _subs).push(o); });
+    _subs = _sortSubQuests(_subs, state);
+    var _showAll = false;
+    try { _showAll = !!(panelArg && panelArg.showAllSub); } catch (e) {}
+    if (_subs.length > 8 && !_showAll) {
+      _subHidden = _subs.length - 8;
+      _subs = _subs.slice(0, 8);
+    }
+    list = _mains.concat(_subs);
+  }
   if (!list.length) return h + "<p>" + esc(t("q_no")) + "</p>";
   h += list.map(function (o) {
     var q = o.q, r = '<div class="row"><div data-act="quest-menu" data-id="' + esc(q.id) + '"><div class="item-name">' + esc(t(q.nameKey)) + "</div>" +
@@ -1652,6 +1680,9 @@ function renderQuest() {
     else r += '<span class="item-desc">✓ ' + esc(t("quest_done")) + "</span>";
     return r + "</div></div>";
   }).join("");
+  /* Bui 2026-10-21: nút xem thêm nhiệm vụ phụ bị ẩn */
+  if (_subHidden > 0) h += '<button class="mini" data-act="quest-showall" style="margin:8px 0;">' +
+    esc(t("quest_showall") || ("Xem thêm " + _subHidden + " nhiệm vụ")) + "</button>";
   return h;
 }
 /* ================= NHIỆM VỤ TÔNG MÔN (tab sect trong panel nhiệm vụ) ================= */
@@ -3383,6 +3414,11 @@ function onPanelClick(e) {
     }
     case "quest-turnin": {
       doQuestTurnIn(el.getAttribute("data-id"));
+      break;
+    }
+    case "quest-showall": {
+      try { if (!panelArg) panelArg = {}; panelArg.showAllSub = true; } catch (e) {}
+      renderPanel();
       break;
     }
     /* ----- Nhiệm vụ tông môn ----- */
