@@ -125,6 +125,16 @@ function itemIcon(id) {
       '.webp" alt="" draggable="false" style="width:28px;height:28px;vertical-align:middle;border-radius:6px;"' +
       ' onerror="this.outerHTML=\'🎒\'"/>';
   }
+  /* Bui 2026-10-21: nguyên liệu dùng icon AI */
+  if (d && d.kind === "material") {
+    var _matIcon = {
+      taycothao: "mat_taycothao", huyet_tinh: "mat_huyettinh",
+      oan_hon_thach: "mat_oanhon", tien_thao: "mat_tienthao"
+    }[id];
+    if (_matIcon) return '<img class="item-img" src="assets/icons/' + _matIcon +
+      '.webp" alt="" draggable="false" style="width:28px;height:28px;vertical-align:middle;border-radius:6px;"' +
+      ' onerror="this.outerHTML=\'🌿\'"/>';
+  }
   if (d && d.icon) return d.icon;
   /* Bí tịch: dùng icon pixel art của skill/bị động trong bí tịch */
   if (d && d.kind === "manual") {
@@ -136,7 +146,7 @@ function itemIcon(id) {
     }
     return "📕";
   }
-  if (d && d.kind === "pet_egg") return "🥚";
+  if (d && d.kind === "pet_egg") return '<img class="item-img" src="assets/icons/egg_linhthu.webp" alt="" draggable="false" style="width:28px;height:28px;vertical-align:middle;border-radius:6px;" onerror="this.outerHTML=\'🥚\'"/>';
   if (d && d.kind === "seed") return "🌱";
   if (d && d.kind === "herb") return "🌿";
   return "🎒";
