@@ -5836,11 +5836,12 @@ function _qgApplyCollapsed() {
     var tr = document.getElementById("qg-tracker");
     if (!tr) return;
     var c = _qgCollapsedGet();
-    if (c) tr.classList.add("qg-collapsed"); else tr.classList.remove("qg-collapsed");
+    /* Chỉ chạm DOM khi trạng thái thật sự đổi — tránh vòng lặp MutationObserver (Bui 2026-10-20) */
+    if (tr.classList.contains("qg-collapsed") !== c) tr.classList.toggle("qg-collapsed", c);
     var b = document.getElementById("qg-collbtn");
     if (b) {
-      b.textContent = c ? "＋" : "−";
-      try { b.setAttribute("title", t(c ? "qg_expand" : "qg_collapse")); } catch (e2) {}
+      var _tx = c ? "＋" : "−";
+      if (b.textContent !== _tx) b.textContent = _tx;
     }
   } catch (e3) {}
 }
@@ -5864,8 +5865,13 @@ function _qgInjectCollBtn() {
       tr.insertBefore(b, tr.firstChild);
     }
     var c = _qgCollapsedGet();
-    b.textContent = c ? "＋" : "−";
-    try { b.setAttribute("title", t(c ? "qg_expand" : "qg_collapse")); } catch (e2) {}
+    /* Chỉ ghi text/title khi đổi — ghi thừa kích hoạt MutationObserver gây lặp vô hạn */
+    var _tx2 = c ? "＋" : "−";
+    if (b.textContent !== _tx2) b.textContent = _tx2;
+    try {
+      var _ti = t(c ? "qg_expand" : "qg_collapse");
+      if (b.getAttribute("title") !== _ti) b.setAttribute("title", _ti);
+    } catch (e2) {}
   } catch (e3) {}
 }
 var _qCollBooted = false;
@@ -5888,8 +5894,16 @@ function _initQuestCollapse() {
   };
   scan();
   try {
-    if (typeof MutationObserver !== "undefined")
-      new MutationObserver(function () { scan(); }).observe(document.body, { childList: true, subtree: true });
+    if (typeof MutationObserver !== "undefined") {
+      /* Body observer chỉ để bắt lúc tracker được tạo; khi đã gắn xong thì ngắt để khỏi quét thừa */
+      var _bodyObs = new MutationObserver(function () {
+        var tr = null;
+        try { tr = document.getElementById("qg-tracker"); } catch (_e) {}
+        if (tr && tr._qgCollObs) { try { _bodyObs.disconnect(); } catch (_e2) {} return; }
+        scan();
+      });
+      _bodyObs.observe(document.body, { childList: true, subtree: true });
+    }
   } catch (e2) {}
 }
 
