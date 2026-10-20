@@ -2683,7 +2683,7 @@ function renderNpc() {
   var talk = panelArg && panelArg.talk;
   if (!talk) return "";
   var npcId = panelArg.npcId;
-  var h = '<div class="npc-lines"><div class="npc-name">' + esc(talk.name || "") + "</div>";
+  var h = '<div class="npc-lines"><div class="npc-name">' + esc(t(talk.name || "")) + "</div>";
   /* {xh}: xưng hô theo giới tính nhân vật (huynh/muội) */
   var xh = null;
   if (hasSocial() && state && state.char) {
