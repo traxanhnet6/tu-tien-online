@@ -2185,7 +2185,8 @@ function questNeedText(q) {
     try {
       if (typeof NPCS !== "undefined" && NPCS[id] && NPCS[id].nameKey) return t(NPCS[id].nameKey);
     } catch (e) {}
-    return id;
+    /* Bui 2026-10-21: fallback đẹp thay vì hiện raw id */
+    return String(id || "").replace(/_/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
   };
   if (need.type === "kill") {
     var mn = monName(need.monster);
@@ -2235,7 +2236,11 @@ function rewardText(rw) {
   var parts = [];
   if (rw.stones) parts.push(formatTien(rw.stones) + " 💎");
   if (rw.exp) parts.push(rw.exp + " EXP");
-  (rw.items || []).forEach(function (it) { parts.push(itemName(it.id) + "x" + (it.qty || 1)); });
+  /* Bui 2026-10-21: cách ra " x3", ẩn "x1" cho gọn */
+  (rw.items || []).forEach(function (it) {
+    var q = it.qty || 1;
+    parts.push(itemName(it.id) + (q > 1 ? " x" + q : ""));
+  });
   return parts.join(", ");
 }
 
@@ -2597,7 +2602,8 @@ function renderSettings() {
     '<button class="mini' + (st.voice === false ? " paper" : "") + '" data-act="set-voice">' + esc(st.voice === false ? t("settings_off") : t("settings_on")) + "</button></div></div>";
   var nvOn = (typeof NPCVoice !== "undefined") ? NPCVoice.isEnabled() : true;
   h += '<div class="row"><div class="item-name">' + esc(t("settings_npcvoice")) + '</div><div class="row-btns">' +
-    '<button class="mini' + (nvOn ? "" : " paper") + '" data-act="set-npcvoice">' + esc(nvOn ? t("settings_on") : t("settings_off")) + "</button></div></div>";
+    '<button class="mini' + (nvOn ? "" : " paper") + '" data-act="set-npcvoice">' + esc(nvOn ? t("settings_on") : t("settings_off")) + "</button>" +
+    '<button class="mini" data-act="test-npcvoice">🔊 ' + esc(t("settings_test")) + "</button></div></div>";
   h += renderControlSettings();
   h += renderDisplayRows();
   h += '<div class="row"><div class="item-name">' + esc(t("settings_lang")) + '</div><div class="row-btns">' +
@@ -3242,6 +3248,12 @@ function onPanelClick(e) {
     case "set-npcvoice":
       if (typeof NPCVoice !== "undefined") NPCVoice.setEnabled(!NPCVoice.isEnabled());
       renderPanel(); break;
+    case "test-npcvoice": /* Bui 2026-10-21: nút thử giọng đọc */
+      if (typeof NPCVoice !== "undefined") {
+        NPCVoice.unlock();
+        NPCVoice.speak(null, t("settings_npcvoice_test"));
+      }
+      break;
     /* ----- Các nút bị mất handler (vá 2026-10-20): render có nhưng switch thiếu case ----- */
     case "gacha-pull": doGachaPull(+el.getAttribute("data-n") || 1); break;
     case "gacha-merge": {

@@ -148,7 +148,33 @@ var NPCVoice = (function () {
     return speak(npcId, resolved);
   }
 
+  /* Bui 2026-10-21: iOS chặn speechSynthesis tới khi có thao tác chạm —
+     mở khóa bằng utterance rỗng ở lần chạm/click đầu tiên */
+  var _unlocked = false;
+  function unlock() {
+    if (_unlocked) return;
+    _unlocked = true;
+    try {
+      var ss = _ss();
+      if (!ss || typeof ss.speak !== "function") return;
+      var Ctor = (typeof SpeechSynthesisUtterance !== "undefined")
+        ? SpeechSynthesisUtterance : (typeof window !== "undefined" && window.SpeechSynthesisUtterance);
+      if (!Ctor) return;
+      var u = new Ctor(" ");
+      u.volume = 0; u.rate = 1; u.pitch = 1;
+      ss.speak(u);
+    } catch (e) {}
+  }
+  try {
+    if (typeof document !== "undefined" && document.addEventListener) {
+      var _ul = function () { unlock(); };
+      document.addEventListener("touchstart", _ul, { once: true, passive: true });
+      document.addEventListener("click", _ul, { once: true });
+    }
+  } catch (e) {}
+
   var api = {
+    unlock: unlock, /* Bui 2026-10-21: gọi tay để test */
     voiceFor: voiceFor,   /* thuần — dùng cho test */
     cleanText: cleanText, /* thuần — dùng cho test */
     pickVoice: pickVoice,

@@ -1195,3 +1195,7 @@ body.landscape #hud-leftmid{top:40%}
   border:2px solid #c9a227;border-radius:50%;box-shadow:0 4px 16px #000d;
   cursor:pointer;pointer-events:auto}
 #quest-fab.hidden{display:none}
+
+/* Bui 2026-10-21: tab nhiệm vụ bị cắt chữ trên iOS — ép đủ cao, không cắt dấu */
+.panel-quest .tabs .mini{line-height:1.5!important;padding:8px 6px!important;
+  white-space:nowrap;overflow:visible;min-height:38px}

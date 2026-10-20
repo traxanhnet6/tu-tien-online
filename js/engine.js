@@ -501,6 +501,7 @@ var Engine = (function () {
   function enterMap(mapId) {
     _dungeon = null;
     _secret = null;
+    _resetCamera(); /* camera bám ngay, không trượt từ map cũ */
     _mapId = mapId;
     _mapDef = _mapDefOf(mapId);
     /* warm ảnh tilemap tiền-render để không pop-in frame đầu */
@@ -1990,14 +1991,20 @@ var Engine = (function () {
   }
 
   /* ---------- Render ---------- */
+  var _camX = null, _camY = null; /* Bui 2026-10-21: camera mượt, không giật */
   function _camera() {
-    var x = player.x - _viewW / 2, y = player.y - _viewH / 2;
-    if (WORLD_W <= _viewW) x = (WORLD_W - _viewW) / 2;
-    else x = Math.max(0, Math.min(WORLD_W - _viewW, x));
-    if (WORLD_H <= _viewH) y = (WORLD_H - _viewH) / 2;
-    else y = Math.max(0, Math.min(WORLD_H - _viewH, y));
-    return { x: x, y: y };
+    var tx = player.x - _viewW / 2, ty = player.y - _viewH / 2;
+    if (WORLD_W <= _viewW) tx = (WORLD_W - _viewW) / 2;
+    else tx = Math.max(0, Math.min(WORLD_W - _viewW, tx));
+    if (WORLD_H <= _viewH) ty = (WORLD_H - _viewH) / 2;
+    else ty = Math.max(0, Math.min(WORLD_H - _viewH, ty));
+    if (_camX === null) { _camX = tx; _camY = ty; }
+    else { _camX += (tx - _camX) * 0.12; _camY += (ty - _camY) * 0.12;
+      if (Math.abs(tx - _camX) < 0.5) _camX = tx;
+      if (Math.abs(ty - _camY) < 0.5) _camY = ty; }
+    return { x: _camX, y: _camY };
   }
+  function _resetCamera() { _camX = null; _camY = null; }
   function _mapName() {
     return _mapDef ? _t(_mapDef.nameKey || ('map_' + _mapId)) : '';
   }
