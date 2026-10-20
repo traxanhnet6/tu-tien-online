@@ -2487,60 +2487,70 @@ const QUESTS = [
    * Mỗi quest autoAccept: trả xong tự nhận quest tiếp theo trong chuỗi. */
   {
     id: "q_story_01", nameKey: "q_story_01", descKey: "q_story_01_desc",
+    kind: "chinh",
     npc: "dai_phu",
     need: { type: "talk" },
     reward: { stones: 50, exp: 40 },
   },
   {
     id: "q_story_02", nameKey: "q_story_02", descKey: "q_story_02_desc",
+    kind: "chinh",
     npc: "dai_phu", req: "q_story_10", autoAccept: true,
     need: { type: "item", item: "taycothao", count: 3 },
     reward: { stones: 150, exp: 120 },
   },
   {
     id: "q_story_03", nameKey: "q_story_03", descKey: "q_story_03_desc",
+    kind: "chinh",
     npc: "dai_phu", req: "q_story_02", autoAccept: true,
     need: { type: "talk" },
     reward: { stones: 50, exp: 100, items: [{ id: "pill_taycotdan", qty: 1 }] },
   },
   {
     id: "q_story_04", nameKey: "q_story_04", descKey: "q_story_04_desc",
+    kind: "chinh",
     npc: "dai_phu", req: "q_story_01", autoAccept: true,
     need: { type: "kill", monster: "da_tru", count: 5 },
     reward: { stones: 120, exp: 150, items: [{ id: "dan_hx_tieu", qty: 2 }] },
   },
   {
     id: "q_story_05", nameKey: "q_story_05", descKey: "q_story_05_desc",
+    kind: "chinh",
     npc: "dai_phu", req: "q_story_04", autoAccept: true,
     need: { type: "kill", monster: "son_ke", count: 8 },
     reward: { stones: 150, exp: 220, items: [{ id: "pill_hl", qty: 2 }] },
   },
   {
     id: "q_story_06", nameKey: "q_story_06", descKey: "q_story_06_desc",
+    kind: "chinh",
     npc: "truong_tran", req: "q_story_05", autoAccept: true,
     need: { type: "kill", monster: "phong_lang", count: 10 },
     reward: { stones: 200, exp: 350, items: [{ id: "dan_hx_tieu", qty: 2 }] },
   },
   {
     id: "q_story_07", nameKey: "q_story_07", descKey: "q_story_07_desc",
+    kind: "chinh",
     npc: "truong_tran", req: "q_story_06", autoAccept: true,
     need: { type: "kill", monster: "hu_thi", count: 10 },
     reward: { stones: 250, exp: 450, items: [{ id: "dan_hl_tieu", qty: 2 }] },
   },
   {
     id: "q_story_08", nameKey: "q_story_08", descKey: "q_story_08_desc",
+    kind: "chinh",
     npc: "dai_phu", req: "q_story_07", autoAccept: true,
     need: { type: "kill", monster: "u_hon", count: 12 },
     reward: { stones: 300, exp: 600, items: [{ id: "dan_hx_trung", qty: 2 }] },
   },
   {
     id: "q_story_09", nameKey: "q_story_09", descKey: "q_story_09_desc",
+    kind: "chinh",
     npc: "dai_phu", req: "q_story_08", autoAccept: true,
     need: { type: "kill", monster: "thi_ma", count: 12 },
     reward: { stones: 400, exp: 800, items: [{ id: "dan_hl_trung", qty: 2 }] },
   },
   {
     id: "q_story_10", nameKey: "q_story_10", descKey: "q_story_10_desc",
+    kind: "chinh",
     npc: "truong_tran", req: "q_story_09", autoAccept: true,
     need: { type: "kill", monster: "da_tru_vuong", count: 1 },
     reward: {
@@ -2550,6 +2560,7 @@ const QUESTS = [
   },
   {
     id: "q_story_11", nameKey: "q_story_11", descKey: "q_story_11_desc",
+    kind: "chinh",
     npc: "dai_phu", req: "q_story_03", autoAccept: true,
     need: { type: "joinsect" },
     reward: { stones: 500, exp: 800 },

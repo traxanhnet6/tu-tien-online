@@ -500,6 +500,8 @@ var Engine = (function () {
     _secret = null;
     _mapId = mapId;
     _mapDef = _mapDefOf(mapId);
+    /* warm ảnh tilemap tiền-render để không pop-in frame đầu */
+    if (typeof mapId === 'number') _img('assets/maps/tilemap/map_' + mapId + '.png');
     _npcs = (_mapDef.npcs || []).map(function (id) {
       var d = _npcDef(id);
       var hx = d.x || 800, hy = d.y || 500;
@@ -606,42 +608,126 @@ var Engine = (function () {
     return best ? best.npcId : null;
   }
 
-  /* ---------- AUTO QUEST: tự làm nhiệm vụ (Bui 2026-10-19) ---------- */
-  /* Trả về true nếu đã xử lý di chuyển/đánh cho quest (để auto-farm không giành) */
+  /* ---------- AUTO QUEST: tự làm nhiệm vụ (Bui 2026-10-19, nâng cấp 2026-10-20) ----------
+   * Ưu tiên quest CHÍNH; quest chính "đang chờ" (cần người chơi quyết định /
+   * không tìm được đường) thì chuyển sang quest PHỤ đang dở, xong quay lại
+   * quest chính. Hết việc → nếu xong chuỗi tân thủ thì tự tắt + báo. */
+  var _aqChainCelebrated = false;
+  /* Loại need mà bot tự làm được (còn lại: cần người chơi quyết định) */
+  function _aqDrivable(need) {
+    var t = (need || {}).type || "talk";
+    return t === "talk" || t === "talk_npcs" || t === "kill" || t === "item";
+  }
   function _autoQuestTick(dt, ps, manual) {
     if (!Engine.autoQuest || manual) return false;
     var S = _S();
-    var q = null;
+    /* An toàn: HP < 30% → dừng ngay, nhân vật đứng yên (Bui 2026-10-20) */
     try {
-      if (typeof QuestGuide !== "undefined" && QuestGuide.activeStoryQuest)
-        q = QuestGuide.activeStoryQuest(S);
+      var _ps0 = ps || _effStats(_getStats());
+      var _mhp = Math.max(1, (_ps0 && _ps0.maxHp) || 1);
+      if (player.hp / _mhp < 0.3) {
+        setAutoQuest(false);
+        try { _toast("aq_lowhp"); } catch (e) {}
+        return false;
+      }
     } catch (e) {}
-    if (!q) return false;
+    var driven = false;
+    /* 1. Ưu tiên quest CHÍNH đang active */
+    var qm = null;
+    try {
+      if (typeof QuestGuide !== "undefined" && QuestGuide.activeMainQuest)
+        qm = QuestGuide.activeMainQuest(S);
+    } catch (e) {}
+    if (qm) {
+      driven = _aqDrive(dt, ps, S, qm, false);
+    } else {
+      /* Chưa có quest chính active → tìm quest chính tiếp theo để đi nhận */
+      var qn = null;
+      try {
+        if (typeof QuestGuide !== "undefined" && QuestGuide.nextMainQuest)
+          qn = QuestGuide.nextMainQuest(S);
+      } catch (e) {}
+      if (qn) driven = _aqDrive(dt, ps, S, qn, true);
+    }
+    /* 2. Quest chính đang chờ → làm quest PHỤ đang dở */
+    if (!driven) {
+      var sides = [];
+      try {
+        if (typeof QuestGuide !== "undefined" && QuestGuide.activeSideQuests)
+          sides = QuestGuide.activeSideQuests(S) || [];
+      } catch (e) {}
+      for (var si = 0; si < sides.length && !driven; si++)
+        driven = _aqDrive(dt, ps, S, sides[si], false);
+    }
+    /* 3. Không còn việc gì → xong chuỗi tân thủ thì tự tắt + báo */
+    if (!driven) {
+      Engine.aqStatus = null;
+      var _done = false;
+      try {
+        if (typeof QuestGuide !== "undefined" && QuestGuide.newbieChainDone)
+          _done = QuestGuide.newbieChainDone(S);
+      } catch (e) {}
+      if (_done && !_aqChainCelebrated) {
+        _aqChainCelebrated = true;
+        setAutoQuest(false);
+        try { _toast("aq_chain_done"); } catch (e) {}
+      }
+      return false;
+    }
+    return true;
+  }
+
+  /* Lái 1 quest: đi tới mục tiêu, tương tác, đánh quái.
+   * acceptRun=true: quest chưa nhận → đi tới NPC để nhận. */
+  function _aqDrive(dt, ps, S, q, acceptRun) {
+    var need = q.need || {};
+    if (!_aqDrivable(need)) return false; /* cần người chơi quyết định → "đang chờ" */
     var tgt = null;
     try {
       if (typeof QuestGuide !== "undefined" && QuestGuide.questTarget)
         tgt = QuestGuide.questTarget(S, q, _mapId);
     } catch (e) {}
-    /* talk_npcs: ưu tiên NPC chưa nói chuyện */
-    var need = q.need || {};
-    if (need.type === "talk_npcs" && need.npcs) {
+    if (acceptRun) {
+      /* Đi nhận quest: mục tiêu là NPC giao quest */
+      var _nm = null;
+      try {
+        if (typeof QuestGuide !== "undefined" && QuestGuide.npcMap)
+          _nm = QuestGuide.npcMap(q.npc);
+      } catch (e) {}
+      if (!q.npc || _nm == null) return false;
+      tgt = { kind: "npc", npcId: q.npc, map: _nm };
+    }
+    /* talk_npcs: ưu tiên NPC chưa nói chuyện (cùng map) */
+    if (!acceptRun && need.type === "talk_npcs" && need.npcs) {
       var talked = (((S.quests || {})[q.id] || {}).talked) || {};
-      var untalked = [];
-      for (var ui = 0; ui < need.npcs.length; ui++)
-        if (!talked[need.npcs[ui]]) untalked.push(need.npcs[ui]);
-      if (untalked.length) {
-        var bn = null, bd = 1e12;
-        for (var ni = 0; ni < _npcs.length; ni++) {
-          if (untalked.indexOf(_npcs[ni].npcId) < 0) continue;
-          var ddn = Math.hypot(_npcs[ni].x - player.x, _npcs[ni].y - player.y);
-          if (ddn < bd) { bd = ddn; bn = _npcs[ni]; }
-        }
-        if (bn) tgt = { kind: "npc", npcId: bn.npcId, _npcObj: bn };
+      var bn = null, bd = 1e12;
+      for (var ni = 0; ni < _npcs.length; ni++) {
+        if (need.npcs.indexOf(_npcs[ni].npcId) < 0 || talked[_npcs[ni].npcId]) continue;
+        var ddn = Math.hypot(_npcs[ni].x - player.x, _npcs[ni].y - player.y);
+        if (ddn < bd) { bd = ddn; bn = _npcs[ni]; }
       }
+      if (bn) tgt = { kind: "npc", npcId: bn.npcId, _npcObj: bn };
     }
     if (!tgt) return false;
-    /* Chỉ tự động trong cùng map (không tự chuyển map gây bất ngờ) */
-    if (tgt.map != null && tgt.map !== _mapId) return false;
+    /* Mục tiêu ở map khác → đi tới cổng dẫn sang (cơ chế qua cổng sẵn có tự kích hoạt) */
+    if (tgt.map != null && tgt.map !== _mapId) {
+      var path = null;
+      try {
+        if (typeof QuestGuide !== "undefined" && QuestGuide.findPath)
+          path = QuestGuide.findPath(_mapId, tgt.map);
+      } catch (e) {}
+      if (path && path.length > 1) {
+        var nextMap = path[1];
+        for (var gi2 = 0; gi2 < _gates.length; gi2++) {
+          if (_gates[gi2].to === nextMap) {
+            if (_dashT <= 0) _moveToward(_gates[gi2].x, _gates[gi2].y, dt);
+            Engine.aqStatus = { kind: "gate", qid: q.id };
+            return true;
+          }
+        }
+      }
+      return false; /* không tìm được đường → "đang chờ" */
+    }
 
     if (tgt.kind === "npc") {
       var n = tgt._npcObj || null;
@@ -652,6 +738,9 @@ var Engine = (function () {
       if (!n) return false;
       var d = Math.hypot(n.x - player.x, n.y - player.y);
       if (_aqInteractCd > 0) _aqInteractCd -= dt;
+      var _stKind = acceptRun ? "accept" : (d <= INTERACT_RANGE ? "talk" : "npc");
+      Engine.aqStatus = { kind: _stKind, qid: q.id, npcId: tgt.npcId,
+                          acceptId: acceptRun ? q.id : null };
       if (d <= INTERACT_RANGE) {
         if (_aqInteractCd <= 0) { _aqInteractCd = 1.5; tryInteract(); }
       } else if (_dashT <= 0) {
@@ -664,12 +753,13 @@ var Engine = (function () {
       for (var j = 0; j < _monsters.length; j++) {
         var m = _monsters[j];
         if (m.dead) continue;
-        if (tgt.monId && m.monId !== tgt.monId) continue;
+        if (tgt.monId && m.monId !== tgt.monId && !m.boss) continue;
         var ddm = Math.hypot(m.x - player.x, m.y - player.y);
         if (ddm < bdd) { bdd = ddm; best = m; }
       }
       if (best) {
         player.target = best;
+        Engine.aqStatus = { kind: "monster", qid: q.id, monId: tgt.monId || best.monId };
         if (bdd > _atkRange() * 0.8 && _dashT <= 0) {
           _moveToward(best.x, best.y, dt);
         } else if (_attackCd <= 0 && bdd <= _atkRange()) {
@@ -680,6 +770,7 @@ var Engine = (function () {
       }
       /* Chưa có quái đúng loại: di chuyển về tâm bãi chờ respawn */
       if (tgt.x != null && tgt.y != null && _dashT <= 0) {
+        Engine.aqStatus = { kind: "monster", qid: q.id, monId: tgt.monId };
         _moveToward(tgt.x, tgt.y, dt);
         return true;
       }
@@ -691,7 +782,16 @@ var Engine = (function () {
   function setAuto(b) { Engine.auto = !!b; _chaseTgt = false; var S = _S(); if (S) S.auto = Engine.auto; }
   /* AUTO LÀM NHIỆM VỤ (Bui 2026-10-19): tự tìm mục tiêu quest, di chuyển, đánh, trả NV */
   var _aqInteractCd = 0;
-  function setAutoQuest(b) { Engine.autoQuest = !!b; var S = _S(); if (S) S.autoQuest = Engine.autoQuest; }
+  function setAutoQuest(b) {
+    Engine.autoQuest = !!b;
+    if (!Engine.autoQuest) {
+      /* Tắt là nhân vật đứng yên ngay: hủy đích di chuyển + mục tiêu đang dí */
+      _moveTarget = null; _chaseTgt = false;
+      try { player.target = null; } catch (e) {}
+      Engine.aqStatus = null;
+    }
+    var S = _S(); if (S) S.autoQuest = Engine.autoQuest;
+  }
   function setFly(b) { Engine.fly = !!b; var S = _S(); if (S) S.fly = Engine.fly; }
   function setRun(b) { Engine.run = !!b; var S = _S(); if (S) S.run = Engine.run; }
 
@@ -1994,6 +2094,18 @@ var Engine = (function () {
     var f = (face === 'left' || face === 'right' || face === 'up' || face === 'down') ? face : 'down';
     return 'assets/sprs/dirs/player_' + g + '_' + f + '.png';
   }
+  /* Hàm thuần: (giới tính, hướng mặt, a/b) -> đường dẫn sprite khung bước đi.
+   * Test qua Engine._playerWalkTest. a/b = chân trái trước / chân phải trước. */
+  function _playerWalkFile(gioi, face, ab) {
+    var g = (gioi === 'nu') ? 'nu' : 'nam';
+    var f = (face === 'left' || face === 'right' || face === 'up' || face === 'down') ? face : 'down';
+    var k = (ab === 'b') ? 'b' : 'a';
+    return 'assets/sprs/dirs/walk/player_' + g + '_' + f + '_' + k + '.png';
+  }
+  /* Đang di chuyển? (cùng điều kiện bobbing/nhịp bước dùng) */
+  function _playerMoving() {
+    return !!(player._lastMove && (Date.now() - player._lastMove < 250));
+  }
   /* Hướng mặt hiện tại của người chơi (đứng yên giữ hướng cuối qua _face4) */
   function _playerDirFace() {
     var ang = (typeof player.ang === 'number') ? player.ang : Math.PI / 2;
@@ -2061,6 +2173,32 @@ var Engine = (function () {
   var _SPR_HEAD_ZONE = { /* vùng đầu để giới hạn nhuộm tóc theo (giới, hướng) */
     nam: { down: { x1: 96, y1: 82 }, left: { x1: 104, y1: 82 }, right: { x1: 107, y1: 82 }, up: { x0: 10, x1: 86, y1: 118 } },
     nu:  { down: { x1: 81, y1: 80 }, left: { x1: 99, y1: 82 }, right: { x1: 98, y1: 82 }, up: { x0: 2, x1: 74, y1: 118 } }
+  };
+  /* Zone cho khung walk (đo từ ảnh walk 128px; y1 giữ <=82 để không nhuộm nhầm quần tối
+   * thành tóc — spec tóc match màu đen gần tuyệt đối, quần cũng gần đen) */
+  var _WALK_HEAD_ZONE = { /* nhuộm tóc: {x0,y0,x1,y1} theo (giới, hướng, a/b) */
+    nam: {
+      down:  { a: { x0: 4, y0: 0, x1: 90, y1: 82 }, b: { x0: 4, y0: 0, x1: 94, y1: 82 } },
+      left:  { a: { x0: 0, y0: 0, x1: 91, y1: 82 }, b: { x0: 0, y0: 0, x1: 85, y1: 82 } },
+      right: { a: { x0: 0, y0: 0, x1: 96, y1: 82 }, b: { x0: 0, y0: 0, x1: 94, y1: 82 } },
+      up:    { a: { x0: 2, y0: 5, x1: 88, y1: 100 }, b: { x0: 0, y0: 0, x1: 88, y1: 100 } }
+    },
+    nu: {
+      down:  { a: { x0: 0, y0: 0, x1: 71, y1: 82 }, b: { x0: 0, y0: 0, x1: 69, y1: 82 } },
+      left:  { a: { x0: 16, y0: 0, x1: 95, y1: 82 }, b: { x0: 13, y0: 0, x1: 87, y1: 82 } },
+      right: { a: { x0: 1, y0: 0, x1: 79, y1: 82 }, b: { x0: 0, y0: 0, x1: 71, y1: 82 } },
+      up:    { a: { x0: 0, y0: 0, x1: 62, y1: 100 }, b: { x0: 0, y0: 0, x1: 64, y1: 100 } }
+    }
+  };
+  /* Vùng mặt trên khung walk hướng down (căn bằng template matching với sprite tĩnh,
+   * cùng tỉ lệ part-space nên dùng chung công thức chồng part) */
+  var _WALK_FACE_ZONE = {
+    nam: { a: { x: 12, y: 24, w: 54, h: 40 }, b: { x: 12, y: 28, w: 54, h: 40 } },
+    nu:  { a: { x: 8, y: 24, w: 48, h: 34 },  b: { x: 10, y: 26, w: 48, h: 34 } }
+  };
+  var _WALK_FACE_INNER = { /* vùng giữa mặt giữ trống khi chồng tóc (cùng offset như tĩnh) */
+    nam: { a: { x: 20, y: 34, w: 38, h: 28 }, b: { x: 20, y: 38, w: 38, h: 28 } },
+    nu:  { a: { x: 16, y: 34, w: 32, h: 22 }, b: { x: 18, y: 36, w: 32, h: 22 } }
   };
   function _apFind(list, id) {
     if (!list) return null;
@@ -2200,10 +2338,11 @@ var Engine = (function () {
     if (typeof document === 'undefined') return null;
     var spec = _variantSpec();
     if (!spec) return null;
-    var mm = /player_(nam|nu)_(down|left|right|up)\.png/.exec(src || '');
+    var mm = /player_(nam|nu)_(down|left|right|up)(?:_([ab]))?\.png/.exec(src || '');
     if (!mm) return null;
     var dir = mm[2];
-    var key = spec.key + '|' + dir;
+    var walkAb = mm[3] || null; /* khung walk a/b, null = sprite tĩnh */
+    var key = spec.key + '|' + dir + (walkAb ? '|' + walkAb : '');
     var ent = _variantCache[key];
     if (ent && ent.full) return ent.cv;
     /* spec da bản "ấm" (chỉ nhuộm pixel da thật, chừa áo trắng/mắt) */
@@ -2230,13 +2369,15 @@ var Engine = (function () {
       var id = g2.getImageData(0, 0, w, h);
       if (skinW) _applyTintSpecPx(id.data, w, h, skinW, null);
       if (spec.hairSpec) {
-        var hz = (_SPR_HEAD_ZONE[spec.g] || {})[dir];
+        var hz = walkAb ? (((_WALK_HEAD_ZONE[spec.g] || {})[dir] || {})[walkAb])
+                        : ((_SPR_HEAD_ZONE[spec.g] || {})[dir]);
         if (hz) _applyTintSpecPx(id.data, w, h, spec.hairSpec, hz);
       }
       if (spec.outHex) _applyOutfitPx(id.data, w, h, spec.outHex);
       g2.putImageData(id, 0, 0);
       if (dir === 'down' && partsReady && (faceCv || hairCv)) {
-        var z = _SPR_FACE_ZONE[spec.g];
+        var z = walkAb ? ((_WALK_FACE_ZONE[spec.g] || {})[walkAb]) : _SPR_FACE_ZONE[spec.g];
+        if (!z) z = _SPR_FACE_ZONE[spec.g];
         var sx = z.w / _SPR_FACE_PART.w, sy = z.h / _SPR_FACE_PART.h;
         var tx = z.x - _SPR_FACE_PART.x * sx, ty = z.y - _SPR_FACE_PART.y * sy;
         g2.imageSmoothingEnabled = true;
@@ -2259,7 +2400,7 @@ var Engine = (function () {
           hg.translate(tx, ty - 9.6 * sy);
           hg.scale(sx, sy);
           hg.drawImage(hairCv, 0, 0);
-          var ir = _SPR_FACE_INNER[spec.g];
+          var ir = (walkAb ? ((_WALK_FACE_INNER[spec.g] || {})[walkAb]) : null) || _SPR_FACE_INNER[spec.g];
           hg.setTransform(1, 0, 0, 1, 0, 0);
           hg.clearRect(ir.x, ir.y, ir.w, ir.h);
           g2.drawImage(hc, 0, 0);
@@ -2278,8 +2419,26 @@ var Engine = (function () {
   /* Vẽ người chơi bằng sprite mới tại (cx, cy) — true nếu vẽ được.
    * Bóng đổ nằm yên trên mặt đất; thân nhún 2px theo nhịp bước khi di chuyển. */
   function _drawPlayerSpriteMode(cx, cy, lift, blift) {
-    var src = _playerDirSprite();
-    if (!src) return false;
+    var S = _S();
+    var gioi = (S && S.char && S.char.gender === 'nu') ? 'nu' : 'nam';
+    var face = _playerDirFace();
+    /* đang di chuyển -> khung bước đi a/b luân phiên mỗi 0.25s; đứng yên -> sprite tĩnh.
+     * khung walk lỗi/thiếu -> rớt về sprite tĩnh, không crash. */
+    var moving = _playerMoving();
+    var ab = 'a';
+    var src = null;
+    if (moving) {
+      ab = (Math.floor(Date.now() / 250) % 2 === 0) ? 'a' : 'b';
+      var wsrc = _playerWalkFile(gioi, face, ab);
+      var wce = _imgCache[wsrc];
+      if (wce && wce.done && wce.ok) src = wsrc;
+      else _img(wsrc); /* warm cache lần đầu */
+    }
+    if (!src) {
+      src = _playerDirSprite();
+      ab = 'a';
+      if (!src) return false;
+    }
     var im = _img(src);
     if (!im || !im.width) return false;
     /* cùng hệ số độ sâu ds như _drawCreature của NPC: đứng cùng hàng y thì bằng cỡ nhau */
@@ -2294,7 +2453,7 @@ var Engine = (function () {
     _drawShadow(cx, player.y + 18 - blift, dw * 0.32 * (1 - hF * 0.4), 0.26 * (1 - hF * 0.65));
     /* bobbing: chỉ khi đang di chuyển (cùng nhịp bước _playerAnimName dùng) */
     var bob = 0;
-    if (player._lastMove && (Date.now() - player._lastMove < 250))
+    if (moving)
       bob = Math.abs(Math.sin(Date.now() / 1000 * 10)) * 2;
     var useIm = im;
     /* biến thể ngoại hình (mặt/tóc/màu đã chọn): có thì vẽ bản biến thể thay ảnh gốc */
@@ -2851,7 +3010,18 @@ var Engine = (function () {
     // Nền map kiểu tutien2d: tile lát lặp lại khóa theo camera + art parallax làm atmosphere
     var ground = _mapDef ? _mapDef.ground : null;
     var tile = ground ? _img(ground) : null;
-    if (tile) {
+    /* Bui 2026-10-20: tilemap tutien2d tiền-render (assets/maps/tilemap/map_<id>.png),
+       vẽ đúng 1 ảnh/frame — ưu tiên hơn tile lát cũ, giữ nguyên fallback */
+    var _tmSrc = (_mapDef && typeof _mapId === 'number') ? ('assets/maps/tilemap/map_' + _mapId + '.png') : null;
+    var _tm = _tmSrc ? _img(_tmSrc) : null;
+    if (_tm) {
+      _ctx.drawImage(_tm, cam.x, cam.y, W, H, 0, 0, W, H);
+      _drawMist(W, H);
+      _ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      _ctx.font = '12px sans-serif';
+      _ctx.textAlign = 'right';
+      _ctx.fillText('Khu ' + _khuOf(player.x, player.y), W - 12, 20);
+    } else if (tile) {
       var TS = 256; /* kích thước tile world */
       var sx = Math.floor(cam.x / TS) * TS, sy = Math.floor(cam.y / TS) * TS;
       var tx, ty;
@@ -3192,6 +3362,7 @@ var Engine = (function () {
     joy: joy,
     otherPlayers: [],
     autoQuest: false,     // AUTO làm nhiệm vụ (Bui 2026-10-19)
+    aqStatus: null,       // trạng thái AutoQuest hiện tại {kind,qid,npcId,monId,acceptId} (Bui 2026-10-20)
     getStats: null,       // ui.js gán () => ({atk, def, maxHp, maxMp})
     onGate: null,         // (toMapId)
     onKill: null,         // (monster)
@@ -3245,6 +3416,10 @@ var Engine = (function () {
     /* test hook: chọn sprite người chơi mới theo (giới tính, hướng) + trạng thái mode */
     _playerSpriteTest: { file: (typeof _playerDirFile === 'function') ? _playerDirFile : null,
                          MODE: (typeof PLAYER_SPRITE_MODE !== 'undefined') ? PLAYER_SPRITE_MODE : null },
+    /* test hook: khung bước đi theo (giới tính, hướng, a/b) + nhịp đổi khung */
+    _playerWalkTest: { file: (typeof _playerWalkFile === 'function') ? _playerWalkFile : null,
+                       moving: (typeof _playerMoving === 'function') ? _playerMoving : null,
+                       walkZones: (typeof _WALK_FACE_ZONE !== 'undefined') ? _WALK_FACE_ZONE : null },
     /* test hook: biến thể ngoại hình trên sprite mode (spec từ appearance hiện tại) */
     _variantTest: { spec: (typeof _variantSpec === 'function') ? _variantSpec : null,
                     faceZone: (typeof _SPR_FACE_ZONE !== 'undefined') ? _SPR_FACE_ZONE : null,

@@ -36,6 +36,9 @@ function _gs(name) {
   throw new Error("missing dep: " + name);
 }
 function _QUESTS() { return _gq("QUESTS"); }
+/* Phân loại quest: "chinh" (main) | "phu" (side). Quest không có trường kind
+ * mặc định là "phu" (Bui 2026-10-20: chỉ 2 loại nhiệm vụ, phụ song song với chính). */
+function _kindOf(q) { return (q && q.kind) || "phu"; }
 function _qdef(id) {
   var list = _QUESTS();
   for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
@@ -70,6 +73,19 @@ function _sectOk(q, state) {
 var Quest = {
   /* Lấy định nghĩa quest theo id (cho UI hiển thị thoại nhận/trả) */
   def: function (id) { return _qdef(id); },
+  /* Loại quest: "chinh" | "phu" (mặc định "phu") */
+  kindOf: function (id) { return _kindOf(_qdef(id)); },
+  /* Danh sách id quest đang active theo loại */
+  activeByKind: function (state, kind) {
+    var out = [];
+    var qs = (state && state.quests) || {};
+    Object.keys(qs).forEach(function (qid) {
+      var s = qs[qid];
+      if (!s || s.status !== "active") return;
+      if (_kindOf(_qdef(qid)) === kind) out.push(qid);
+    });
+    return out;
+  },
   /* Quest chưa nhận mà đủ điều kiện nhận */
   available: function (state) {
     var out = [];
@@ -92,6 +108,19 @@ var Quest = {
     var qs = state.quests || (state.quests = {});
     var s = qs[id];
     if (s && s.status) return { ok: false, reason: s.status === "done" ? "already_done" : "already_active" };
+    /* Quy tắc Bui 2026-10-20: quest CHÍNH tuần tự — mỗi lúc chỉ 1 quest chính
+     * active. Không nhận quest chính mới khi quest chính khác chưa trả xong.
+     * Quest PHỤ được nhận song song, không chặn và không bị chặn. */
+    if (_kindOf(q) === "chinh") {
+      for (var _aid in qs) {
+        if (_aid === id) continue;
+        var _as = qs[_aid];
+        if (!_as || _as.status !== "active") continue;
+        var _aq = _qdef(_aid);
+        if (_aq && _kindOf(_aq) === "chinh")
+          return { ok: false, reason: "other_active", activeId: _aid };
+      }
+    }
     if (q.req && (!qs[q.req] || qs[q.req].status !== "done")) return { ok: false, reason: "req_not_met" };
     if (!_branchOk(q, state)) return { ok: false, reason: "wrong_branch" };
     if (!_sectOk(q, state)) return { ok: false, reason: "wrong_sect" };

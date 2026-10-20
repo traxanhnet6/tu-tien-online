@@ -49,8 +49,61 @@ var QuestGuide = (function () {
     return null;
   }
   function _isStory(id) { return typeof id === "string" && id.indexOf("q_story_") === 0; }
+  /* Phân loại quest: "chinh" | "phu" (mặc định "phu") — Bui 2026-10-20 */
+  function _kindOf(q) { return (q && q.kind) || "phu"; }
+  /* Thứ tự chuỗi 10 quest tân thủ (Bui chốt 2026-10-18) */
+  var NEWBIE_CHAIN = ["q_story_01", "q_story_04", "q_story_05", "q_story_06",
+    "q_story_07", "q_story_08", "q_story_09", "q_story_10",
+    "q_story_02", "q_story_03", "q_story_11"];
 
-  /* Quest cốt truyện đang active (ưu tiên số thứ tự nhỏ nhất) */
+  /* Quest chính đang active (mỗi lúc tối đa 1 — luật Bui 2026-10-20) */
+  function activeMainQuest(state) {
+    var qs = (state && state.quests) || {};
+    var best = null;
+    Object.keys(qs).forEach(function (id) {
+      var s = qs[id];
+      if (!s || s.status !== "active") return;
+      var q = _qdef(id);
+      if (!q || _kindOf(q) !== "chinh") return;
+      if (!best || NEWBIE_CHAIN.indexOf(id) < NEWBIE_CHAIN.indexOf(best.id)) best = q;
+    });
+    return best;
+  }
+
+  /* Các quest phụ đang active (song song với quest chính) */
+  function activeSideQuests(state) {
+    var out = [];
+    var qs = (state && state.quests) || {};
+    Object.keys(qs).forEach(function (id) {
+      var s = qs[id];
+      if (!s || s.status !== "active") return;
+      var q = _qdef(id);
+      if (!q || _kindOf(q) !== "phu") return;
+      out.push(q);
+    });
+    return out;
+  }
+
+  /* Quest chính tiếp theo trong chuỗi tân thủ mà người chơi đủ điều kiện nhận */
+  function nextMainQuest(state) {
+    if (typeof Quest === "undefined" || !Quest.available) return null;
+    var avail = {};
+    try {
+      Quest.available(state).forEach(function (q) { avail[q.id] = q; });
+    } catch (e) { return null; }
+    for (var i = 0; i < NEWBIE_CHAIN.length; i++) {
+      if (avail[NEWBIE_CHAIN[i]]) return avail[NEWBIE_CHAIN[i]];
+    }
+    return null;
+  }
+
+  /* Hoàn thành chuỗi 10 quest tân thủ (q_story_03 là quest thứ 10) */
+  function newbieChainDone(state) {
+    var s = ((state && state.quests) || {})["q_story_03"];
+    return !!(s && s.status === "done");
+  }
+
+  /* Quest cốt truyện đang active (ưu tiên số thứ tự nhỏ nhất) — giữ để tương thích */
   function activeStoryQuest(state) {
     var qs = (state && state.quests) || {};
     var best = null;
@@ -114,7 +167,7 @@ var QuestGuide = (function () {
     return null;
   }
 
-  /* Tìm map + bãi chứa loại quái */
+  /* Tìm map + bãi chứa loại quái (kể cả boss của map) */
   function monsterZone(monId) {
     var maps = _maps();
     for (var i = 0; i < maps.length; i++) {
@@ -124,6 +177,9 @@ var QuestGuide = (function () {
           return { map: maps[i].id, x: zones[j].x, y: zones[j].y, r: zones[j].r || 150 };
       }
       if ((maps[i].monsters || []).indexOf(monId) >= 0)
+        return { map: maps[i].id, x: 800, y: 600, r: 400 };
+      /* Boss riêng của map (vd da_tru_vuong ở map 1) */
+      if (maps[i].boss === monId)
         return { map: maps[i].id, x: 800, y: 600, r: 400 };
     }
     return null;
@@ -239,6 +295,9 @@ var QuestGuide = (function () {
     "#qg-tracker .qg-p{color:#9fe08a;}" +
     "#qg-tracker .qg-rw{color:#bfa76a;font-size:12px;}" +
     "#qg-tracker .qg-go{color:#7fd0ff;font-size:12px;}" +
+    "#qg-tracker .qg-side{color:#ffd76a;font-size:12px;margin-top:4px;}" +
+    "#qg-tracker .qg-aq{color:#7fe7ff;font-size:12px;margin-top:6px;" +
+    "border-top:1px dashed #c9a227;padding-top:4px;}" +
     "#qg-tracker.flash{animation:qgflash .8s ease 2;}" +
     "@keyframes qgflash{0%,100%{box-shadow:0 2px 12px rgba(0,0,0,.5);}50%{box-shadow:0 0 22px rgba(255,215,106,.9);border-color:#ffe9a8;}}" +
     "#qg-arrow{position:fixed;z-index:4999;width:0;height:0;pointer-events:none;" +
@@ -340,6 +399,8 @@ var QuestGuide = (function () {
                 try { if (typeof saveGame === "function") saveGame(st); } catch (e) {}
                 _renderTracker();
                 return;
+              } else if (r && r.reason === "other_active") {
+                try { if (typeof toast === "function") toast(_t("quest_other_active")); } catch (e) {}
               }
             }
           }
@@ -351,31 +412,53 @@ var QuestGuide = (function () {
     /* Ẩn tracker trong lúc tutorial tương tác */
     if (_tutIdx >= 0) { _trackerEl.style.display = "none"; return; }
     _trackerEl.style.display = "";
-    var q = activeStoryQuest(st);
-    if (!q) {
-      /* Chuỗi tân thủ xong → hướng dẫn tu luyện lên cảnh giới */
-      if (storyChainDone(st)) {
-        var rn = nextRealmName(st);
-        _trackerEl.innerHTML =
-          '<div class="qg-t">🌟 ' + _t("qg_cultivate_t") + "</div>" +
-          '<div class="qg-p">' + _t("qg_cultivate", { n: rn }) + "</div>";
-        return;
-      }
-      var html = '<div class="qg-t">' + _t("qg_noquest_t") + "</div>" +
-        '<div class="qg-go">' + _t("qg_noquest") + "</div>";
-      /* Gợi ý nhận q_story_01 nếu chưa làm */
-      try {
-        if (typeof Quest !== "undefined" && !((st.quests || {})["q_story_01"] || {}).status) {
-          var av2 = Quest.available(st).filter(function (x) { return x.id === "q_story_01"; });
-          if (av2.length) html += '<div class="qg-go">👉 ' + _t("qg_accept_story") + "</div>";
-        }
-      } catch (e) {}
-      _trackerEl.innerHTML = html;
-      return;
+    /* Bui 2026-10-20: tracker hiện 2 nhóm — Nhiệm Vụ Chính (1) + Nhiệm Vụ Phụ */
+    var mq = activeMainQuest(st);
+    var sides = activeSideQuests(st);
+    var h = "";
+    if (mq) {
+      h += '<div class="qg-t">📜 ' + _t("qg_main_t") + ": " + _t(mq.nameKey) + "</div>";
+      h += _questLineHtml(st, mq);
     }
+    if (sides.length) {
+      h += '<div class="qg-t">📋 ' + _t("qg_side_t") + " (" + sides.length + ")</div>";
+      for (var _si = 0; _si < sides.length; _si++) {
+        h += '<div class="qg-side">• ' + _t(sides[_si].nameKey) + "</div>";
+        h += _questLineHtml(st, sides[_si]);
+      }
+    }
+    if (!mq && !sides.length) {
+      /* Chuỗi tân thủ xong → hướng dẫn tu luyện lên cảnh giới */
+      if (storyChainDone(st) || newbieChainDone(st)) {
+        var rn = nextRealmName(st);
+        h += '<div class="qg-t">🌟 ' + _t("qg_cultivate_t") + "</div>" +
+          '<div class="qg-p">' + _t("qg_cultivate", { n: rn }) + "</div>";
+      } else {
+        h += '<div class="qg-t">' + _t("qg_noquest_t") + "</div>" +
+          '<div class="qg-go">' + _t("qg_noquest") + "</div>";
+        /* Gợi ý nhận q_story_01 nếu chưa làm */
+        try {
+          if (typeof Quest !== "undefined" && !((st.quests || {})["q_story_01"] || {}).status) {
+            var av2 = Quest.available(st).filter(function (x) { return x.id === "q_story_01"; });
+            if (av2.length) h += '<div class="qg-go">👉 ' + _t("qg_accept_story") + "</div>";
+          }
+        } catch (e) {}
+      }
+    }
+    /* Trạng thái Tự Làm NV: đang đi tới / đang đánh / đang nói chuyện với ai */
+    try {
+      var _E2 = _engine();
+      if (_E2 && _E2.autoQuest && _E2.aqStatus)
+        h += '<div class="qg-aq">🤖 ' + _aqStatusText(_E2.aqStatus, st) + "</div>";
+    } catch (e) {}
+    _trackerEl.innerHTML = h;
+  }
+
+  /* 1 dòng tiến trình + thưởng + gợi ý trả của 1 quest */
+  function _questLineHtml(st, q) {
     var pg = questProgress(st, q);
     var ready = questReadyToTurnIn(st, q);
-    var h = '<div class="qg-t">📜 ' + _t(q.nameKey) + "</div>";
+    var h = "";
     if (pg) h += '<div class="qg-p">' + _t("qg_obj_kill", { a: pg.cur, b: pg.need }) + "</div>";
     else h += '<div class="qg-p">' + _t(q.descKey) + "</div>";
     if (q.reward) {
@@ -394,7 +477,25 @@ var QuestGuide = (function () {
       try { if (typeof t === "function") npcNm = t("npc_" + q.npc); } catch (e) {}
       h += '<div class="qg-go">✅ ' + _t("qg_turnin", { n: npcNm }) + "</div>";
     }
-    _trackerEl.innerHTML = h;
+    return h;
+  }
+
+  /* Chữ trạng thái AutoQuest từ Engine.aqStatus */
+  function _aqStatusText(aqs, st) {
+    var nm = "";
+    try {
+      if (aqs.kind === "monster") nm = t("mon_" + aqs.monId);
+      else if (aqs.npcId) nm = t("npc_" + aqs.npcId);
+    } catch (e) {}
+    if (aqs.kind === "monster") {
+      var pg = null;
+      try { var qd = _qdef(aqs.qid); pg = questProgress(st, qd); } catch (e) {}
+      return _t("aq_st_fight", { n: nm || aqs.monId }) + (pg ? " (" + pg.cur + "/" + pg.need + ")" : "");
+    }
+    if (aqs.kind === "gate") return _t("aq_st_gate");
+    if (aqs.kind === "accept") return _t("aq_st_accept", { n: nm || "" });
+    if (aqs.kind === "talk") return _t("aq_st_talk", { n: nm || "" });
+    return _t("aq_st_going", { n: nm || "" });
   }
 
   function _flashTracker() {
@@ -695,6 +796,11 @@ var QuestGuide = (function () {
 
   return {
     storyChainDone: storyChainDone,
+    newbieChainDone: newbieChainDone,
+    nextMainQuest: nextMainQuest,
+    activeMainQuest: activeMainQuest,
+    activeSideQuests: activeSideQuests,
+    NEWBIE_CHAIN: NEWBIE_CHAIN,
     nextRealmName: nextRealmName,
     activeStoryQuest: activeStoryQuest,
     questProgress: questProgress,

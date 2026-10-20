@@ -742,6 +742,20 @@ function startGame() {
             if (_ok) { doQuestTurnIn(qid); _aqDone = true; }
           });
           if (_aqDone) return;
+          /* AUTO QUEST: tự nhận quest chính tiếp theo khi bot tới đúng NPC
+           * (Engine.aqStatus.acceptId do _aqDrive đặt — Bui 2026-10-20) */
+          try {
+            var _acceptId = (typeof Engine !== "undefined" && Engine.aqStatus && Engine.aqStatus.acceptId) || null;
+            if (_acceptId && typeof Quest !== "undefined") {
+              var _ar = Quest.accept(state, _acceptId);
+              if (_ar && _ar.ok) {
+                saveGame(state); sfx("success");
+                try { toast(t("quest_accept")); } catch (e) {}
+                try { if (typeof QuestGuide !== "undefined" && QuestGuide.renderTracker) QuestGuide.renderTracker(); } catch (e) {}
+                return;
+              }
+            }
+          } catch (e) {}
         } catch (e) {}
       }
       Engine.talkNpcId = npcId; /* NPC hiện 💬 nói chuyện */
@@ -3070,6 +3084,10 @@ function onPanelClick(e) {
           if (qd && qd.event === "bandit_attack") showBanditAttackFx();
         } catch (e) { toast(t("quest_accept")); }
         renderPanel();
+      } else if (qar && qar.reason === "other_active") {
+        /* Bui 2026-10-20: quest chính phải làm tuần tự, không nhận chồng */
+        sfx("fail");
+        toast(t("quest_other_active"));
       }
       break;
     }
