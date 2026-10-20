@@ -2620,10 +2620,27 @@ var Engine = (function () {
       /* chưa tải xong hoặc art thiếu -> rớt xuống frame tấn công */
     }
     /* đang đánh thường: dùng frame tấn công theo vũ khí (art char_*_atk_*) — chỉ dùng khi đã tải xong */
+    /* Bui 2026-10-21: chọn góc đánh theo hướng quái (ngang/bổ/đâm) */
     if (player.atkT > 0) {
       var _wk = _weaponArtKey();
+      var _asrc = null;
+      try {
+        var _tgt = player.target;
+        if (_tgt && _wk === 'kiem' && (gioi === 'nam' || gioi === 'nu')) {
+          var _dx = _tgt.x - player.x, _dy = _tgt.y - player.y;
+          var _adx = Math.abs(_dx), _ady = Math.abs(_dy);
+          var _ang = 'ngang';
+          if (_ady > _adx * 1.5) _ang = (_dy < 0) ? 'bola' : 'dam';
+          else if (_adx > _ady * 1.5) _ang = 'ngang';
+          else _ang = 'dam';
+          var _cand = 'assets/sprs/char_' + gioi + '_atk_kiem_' + _ang + '.png';
+          var _ce = _imgCache[_cand];
+          if (!_ce) _img(_cand);
+          else if (_ce.done && _ce.ok) return _cand;
+        }
+      } catch (_e) {}
       var _af = (player.atkT > 0.12) ? 1 : 2;
-      var _asrc = 'assets/sprs/char_' + gioi + '_atk_' + _wk + '_' + _af + '.png';
+      _asrc = 'assets/sprs/char_' + gioi + '_atk_' + _wk + '_' + _af + '.png';
       var _ace = _imgCache[_asrc];
       if (!_ace) _img(_asrc);
       else if (_ace.done && _ace.ok) return _asrc;
