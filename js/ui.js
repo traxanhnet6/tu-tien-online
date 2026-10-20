@@ -690,7 +690,12 @@ function startGame() {
       var m = curSecretRealm ? null : mapDef(curMapId);
       var expMult = (m && m.expMult) || 1; /* Thông Thiên Giới: exp x2 */
       if (ev.elite && typeof BodyCult !== "undefined") expMult *= BodyCult.DEF.elite.expMult; /* tinh anh */
-      var r = gainExp(state, Math.round((def.exp || 0) * expMult));
+      var _expGain = Math.round((def.exp || 0) * expMult);
+      /* Bui 2026-10-21: quái không có exp trong def -> lấy từ MONSTERS */
+      if (!_expGain && monId && typeof MONSTERS !== "undefined" && MONSTERS[monId]) {
+        _expGain = Math.round((MONSTERS[monId].exp || 0) * expMult);
+      }
+      var r = gainExp(state, _expGain);
       if (r.leveled) { toast(t("lvlup_msg")); sfx("success"); }
       var st = (typeof Combat !== "undefined" && m && Combat.stoneDrop) ? Combat.stoneDrop(m) : 0;
       if (ev.elite) st *= 2; /* tinh anh: gấp đôi linh thạch */
