@@ -2549,12 +2549,24 @@ function mapDaoMismatch(m) {
   var pdao = state && state.dao;
   return !!(m && m.dao && pdao && m.dao !== pdao);
 }
+/* Bui 2026-10-22: map khu tông môn cần gia nhập tông môn mới vào được */
+function mapUnlocked(state, m) {
+  if (!m || !m.unlock) return true;
+  var u = m.unlock;
+  if (u.sect) {
+    var joined = (typeof Sect !== "undefined" && Sect.joinedSect) ? Sect.joinedSect(state) : (state.sectInfo && state.sectInfo.joined);
+    if (!joined) return false;
+  }
+  if (u.realm != null) {
+    return state.char.realm > u.realm ||
+      (state.char.realm === u.realm && state.char.tier >= (u.tier || 0));
+  }
+  return true;
+}
 function renderMap() {
   if (typeof MAPS === "undefined") return "";
   return MAPS.map(function (m, i) {
-    var locked = m.unlock && !(
-      state.char.realm > m.unlock.realm ||
-      (state.char.realm === m.unlock.realm && state.char.tier >= m.unlock.tier));
+    var locked = !mapUnlocked(state, m);
     var mons = (m.monsters || []).map(monName).join(", ");
     var daoTag = m.dao ? ' <span class="dg-tag">' +
       (m.dao === "ma" ? "😈 " : "☯️ ") + esc(t(m.dao === "ma" ? "dao_ma" : "dao_chinh")) + "</span>" : "";
@@ -4056,9 +4068,8 @@ function doEnhance(slot) {
 function doMapGo(idx) {
   var m = MAPS[idx];
   if (!m) return;
-  if (m.unlock && !(state.char.realm > m.unlock.realm ||
-      (state.char.realm === m.unlock.realm && state.char.tier >= m.unlock.tier))) {
-    toast(t("map_locked")); return;
+  if (!mapUnlocked(state, m)) {
+    toast(t(m.unlock && m.unlock.sect ? "map_locked_sect" : "map_locked")); return;
   }
   curMapId = m.id;
   state.map.id = m.id;
