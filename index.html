@@ -11,7 +11,7 @@
 <script>
 /* TT_BUILD: phiên bản build — tăng mỗi lần deploy để tránh cache JS/CSS cũ.
    (Giá trị dùng chung cho toàn trang, khai báo 1 lần duy nhất tại đây.) */
-var TT_BUILD = "20261021-65";
+var TT_BUILD = "20261021-66";
 </script>
 <script>document.write('<link rel="stylesheet" href="css/style.css?v=' + TT_BUILD + '">');</script>
 <script>document.write('<link rel="stylesheet" href="css/hud-tutien2d.css?v=' + TT_BUILD + '">');</script>
@@ -235,6 +235,7 @@ var TT_BUILD = "20261021-65";
       <button data-panel="dungeon" data-t="nav_dungeon">Phụ bản</button>
       <button data-panel="events" data-t="nav_events">Sự Kiện</button>
       <button data-panel="wardrobe" data-t="nav_wardrobe">Trang Phục</button>
+      <button data-panel="outfitshop" data-t="nav_outfitshop">Shop Thời Trang</button>
       <button data-panel="gift" data-t="nav_gift">Giftcode</button>
       <button data-panel="settings" data-t="nav_settings">Cài đặt</button>
     </nav>
@@ -247,7 +248,7 @@ var TT_BUILD = "20261021-65";
 <script>
 /* Nạp JS lõi với ?v=TT_BUILD (TT_BUILD khai báo 1 lần ở <head>) để tránh cache bản cũ */
 (function () {
-  var core = ["js/lang.js", "js/stages.js", "js/data.js", "js/state.js", "js/dataclear.js",
+  var core = ["js/lang.js", "js/lang_events.js", "js/lang_outfit.js", "js/stages.js", "js/data.js", "js/event_data.js", "js/outfit_data.js", "js/state.js", "js/dataclear.js",
     "js/bodycult.js", "js/taycot.js", "js/khilinh.js", "js/lifespan.js", "js/secret.js", "js/secretbook.js", "js/tower.js",
     "js/social.js", "js/skills.js", "js/sect.js", "js/sectquest.js", "js/alliance.js",
     "js/encounter.js", "js/gacha.js", "js/pet.js", "js/spiritbeast.js", "js/market.js", "js/farm.js", "js/grindzone.js",
@@ -262,7 +263,7 @@ var TT_BUILD = "20261021-65";
 (function () {
   var rest = ["js/supabase-config.js", "js/online.js", "js/online_sb.js", "js/auth.js",
     "js/audio.js", "js/paperdoll.js", "js/engine.js", "js/combat.js", "js/npc.js", "js/quest.js",
-    "js/mapload.js", "js/ui.js", "js/events.js", "js/wardrobe.js", "js/giftcode.js", "js/story.js", "js/questguide.js", "js/worldmap.js",
+    "js/mapload.js", "js/ui.js", "js/events.js", "js/lunarevents.js", "js/wardrobe.js", "js/giftcode.js", "js/giftcode_extra.js", "js/outfitshop.js", "js/story.js", "js/questguide.js", "js/worldmap.js",
     "js/gamepad.js", "js/npcvoice.js"];
   for (var i = 0; i < rest.length; i++) {
     document.write('<script src="' + rest[i] + '?v=' + TT_BUILD + '"><\/script>');

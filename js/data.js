@@ -1571,7 +1571,7 @@ const ITEMS = {
   },
   khaiphongphu: {
     kind: "material", nameKey: "it_khaiphongphu", descKey: "it_khaiphongphu_desc",
-    price: 300, sell: 90,
+    price: 300, sell: 90, icon: "assets/icons/khaiphongphu.png",
   },
   /* --- Trang bị tier 0 (Phàm phẩm) --- */
   wpn_go: {
@@ -3107,7 +3107,8 @@ QUESTS.push(
     reward: { stones: 3000, exp: 5000, items: [{ id: "thien_khuyet_manh", qty: 8 }] },
   },
   {
-    id: "q_bc_tower_10", nameKey: "q_bc_tower_10", descKey: "q_bc_tower_10_desc",
+    id: "q_bc_tower_10",
+    img: "assets/quests/q-bc-tower.webp", nameKey: "q_bc_tower_10", descKey: "q_bc_tower_10_desc",
     npc: "truong_tran",
     acceptTalk: "q_bc_tower_10_accept", turninTalk: "q_bc_tower_10_turnin",
     autoAccept: true,

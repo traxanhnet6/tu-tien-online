@@ -3021,6 +3021,15 @@ vi: {
   it_banh_trung_thu_desc: "Dùng: hồi 50% Khí Huyết và +200 tu vi. Món ngon đoàn viên đêm rằm.",
   it_banh_u_tro: "Bánh Ú Tro",
   it_banh_u_tro_desc: "Dùng: hồi 30% Khí Huyết. Đặc sản Tết Đoan Ngọ.",
+  /* 4 kỳ ngộ ẩn (bổ sung 2026-10-21) */
+  kngo_an_co_mo: "Cổ Mộ U Linh",
+  kngo_an_co_mo_desc: "Nửa đêm trong rừng sâu, ngươi phát hiện một cổ mộ phủ rêu, cửa đá hé mở, bên trong le lói ánh sáng xanh ma mị.",
+  kngo_an_lao_tang_kinh: "Lão Tàng Kinh Các",
+  kngo_an_lao_tang_kinh_desc: "Một lão giả bí ẩn xuất hiện, tay cầm Khai Phong Phù, mời ngươi vào Tàng Kinh Các đã phong ấn trăm năm.",
+  kngo_an_huyet_ma_truyen_thua: "Huyết Ma Truyền Thừa",
+  kngo_an_huyet_ma_truyen_thua_desc: "Trong mỏ sâu, một luồng huyết quang cuồn cuộn. Huyết Ma lão tổ đang tìm truyền nhân — đạo tâm của ngươi đã đủ tà ác.",
+  kngo_an_tien_nhan_di_tich: "Tiên Nhân Di Tích",
+  kngo_an_tien_nhan_di_tich_desc: "Sau khi gia nhập tông môn, ngươi quay lại nơi cũ và phát hiện một di tích tiên nhân chưa ai biết tới, linh khí ngút trời.",
 },
 en: {
   app_title: "Tu Tien Online",
@@ -6038,6 +6047,15 @@ en: {
   it_banh_trung_thu_desc: "Use: restore 50% HP and +200 cultivation. A Mid-Autumn treat.",
   it_banh_u_tro: "Ash Cake",
   it_banh_u_tro_desc: "Use: restore 30% HP. A Dragon Boat Festival specialty.",
+  /* 4 hidden encounters (added 2026-10-21) */
+  kngo_an_co_mo: "Ancient Spirit Tomb",
+  kngo_an_co_mo_desc: "At midnight deep in the forest, you discover a moss-covered ancient tomb, its stone door ajar, with eerie green light flickering inside.",
+  kngo_an_lao_tang_kinh: "Old Scripture Keeper",
+  kngo_an_lao_tang_kinh_desc: "A mysterious old man appears, holding an Unsealing Talisman, inviting you into the Scripture Pavilion sealed for a hundred years.",
+  kngo_an_huyet_ma_truyen_thua: "Blood Demon Inheritance",
+  kngo_an_huyet_ma_truyen_thua_desc: "Deep in the mine, a surge of blood-red light. The Blood Demon Ancestor seeks an heir — your dao heart is wicked enough.",
+  kngo_an_tien_nhan_di_tich: "Immortal's Ruins",
+  kngo_an_tien_nhan_di_tich_desc: "After joining a sect, you return to the old place and discover an unknown immortal's ruins, spiritual energy soaring to the sky.",
 }
 };
 

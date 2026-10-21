@@ -1658,6 +1658,22 @@ function _sortSubQuests(list, state) {
 function renderQuest() {
   if (typeof QUESTS === "undefined" || typeof Quest === "undefined") return "";
   if (questTab() === "sect") return renderSectQuests();
+/* Ảnh minh họa quest theo chủ đề (Bui 2026-10-21): fallback khi quest chưa có img riêng */
+function questThemeImg(qid) {
+  if (!qid) return "";
+  if (qid.indexOf("sq_kiem") === 0) return "assets/quests/sq-kiem-tong.webp";
+  if (qid.indexOf("sq_phap") === 0 || qid.indexOf("sq_thien") === 0) return "assets/quests/sq-phap-tong.webp";
+  if (qid.indexOf("sq_the") === 0 || qid.indexOf("sq_huyen") === 0) return "assets/quests/sq-the-tong.webp";
+  if (qid.indexOf("sq_duoc") === 0 || qid.indexOf("sq_dan") === 0) return "assets/quests/sq-duoc-tong.webp";
+  if (qid.indexOf("sq_thu") === 0 || qid.indexOf("sq_ngu") === 0) return "assets/quests/sq-thu-tong.webp";
+  if (qid.indexOf("sq_ma") === 0 || qid.indexOf("sq_cuu_u_ma") === 0) return "assets/quests/sq-ma-tong.webp";
+  if (qid.indexOf("sq_") === 0) return "assets/quests/sq-kiem-tong.webp";
+  if (qid.indexOf("q_bc_tower") === 0) return "assets/quests/q-bc-tower.webp";
+  if (qid.indexOf("q_bc_boss") === 0) return "assets/quests/q-bc-boss.webp";
+  if (qid.indexOf("q_bc_collect") === 0) return "assets/quests/q-bc-collect.webp";
+  if (qid.indexOf("q_bc") === 0) return "assets/quests/q-bc-explore.webp";
+  return "";
+}
   /* Đang khiêu chiến boss bí cảnh: hiện trận đấu (Bui 2026-10-18) */
   if (panelArg && panelArg.trial) return tabBtns(
     [["avail", t("q_tab_avail")], ["active", t("q_tab_active")], ["done", t("q_tab_done")], ["sect", t("q_tab_sect")]],
@@ -1701,6 +1717,7 @@ function renderQuest() {
   h += list.map(function (o) {
     var q = o.q, r = '<div class="row"><div data-act="quest-menu" data-id="' + esc(q.id) + '">';
     if (q.img) r += '<img class="q-img" src="' + esc(q.img) + '" alt=""/>';
+    else { var qi = questThemeImg(q.id); if (qi) r += '<img class="q-img" src="' + esc(qi) + '" alt=""/>'; }
     r += '<div class="item-name">' + esc(t(q.nameKey)) + "</div>" +
       '<div class="item-desc">' + esc(t(q.descKey)) + "</div>";
     /* Yêu cầu cụ thể — liên kết chặt chẽ (Bui 2026-10-19) */
