@@ -2043,6 +2043,11 @@ function showLinhCanFx(element) {
     for (var j = 0; j < 3; j++) {
       html += '<div class="linhcan-ring" style="border-color:' + color + ';animation-delay:' + (j * 0.5) + 's"></div>';
     }
+    /* Hiệu ứng động bay ra từ linh thú theo từng hệ (Bui 2026-10-21) */
+    var fxType = {hoa:"fire", bang:"ice", loi:"bolt", hondon:"star", phong:"wind", quang:"ray", am:"smoke", doc:"bubble", huyet:"blood"}[element] || "star";
+    for (var k = 0; k < 24; k++) {
+      html += '<div class="lcfx lcfx-' + fxType + '" style="left:' + (35 + Math.random() * 30) + '%;animation-delay:' + (Math.random() * 2) + 's;animation-duration:' + (1.5 + Math.random() * 2) + 's"></div>';
+    }
     wrap.innerHTML = html;
     var css = document.createElement("style");
     css.textContent =
@@ -2068,7 +2073,23 @@ function showLinhCanFx(element) {
       "87%{transform:translate(-30px,-25px) scale(0.95) rotate(-3deg)}" +
       "100%{transform:translate(0,0) scale(1) rotate(0deg)}}" +
       ".linhcan-ring{position:absolute;width:200px;height:200px;border:3px solid;border-radius:50%;opacity:0;animation:lcRing 2s ease-out infinite}" +
-      "@keyframes lcRing{0%{opacity:.8;transform:scale(.3)}100%{opacity:0;transform:scale(2)}}";
+      "@keyframes lcRing{0%{opacity:.8;transform:scale(.3)}100%{opacity:0;transform:scale(2)}}" +
+      /* Hiệu ứng động bay ra từ linh thú */
+      ".lcfx{position:absolute;bottom:35%;width:8px;height:8px;border-radius:50%;opacity:0;pointer-events:none}" +
+      ".lcfx-fire{background:radial-gradient(circle,#fff 20%,#ff6b00 60%,#ff0000);animation:lcFxRise linear infinite;box-shadow:0 0 12px #ff6b00}" +
+      ".lcfx-ice{background:linear-gradient(135deg,#fff,#aee2ff);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);animation:lcFxFall linear infinite;box-shadow:0 0 10px #aee2ff}" +
+      ".lcfx-bolt{background:#c9a0ff;width:3px;height:20px;animation:lcFxFlash linear infinite;box-shadow:0 0 15px #a855f7}" +
+      ".lcfx-star{background:#fff;border-radius:50%;animation:lcFxTwinkle linear infinite;box-shadow:0 0 10px #fff}" +
+      ".lcfx-wind{background:linear-gradient(90deg,transparent,#7fffd4,transparent);width:30px;height:3px;border-radius:2px;animation:lcFxWind linear infinite}" +
+      ".lcfx-ray{background:linear-gradient(180deg,#fff,#ffd700);width:4px;height:25px;animation:lcFxRise linear infinite;box-shadow:0 0 12px #ffd700}" +
+      ".lcfx-smoke{background:radial-gradient(circle,#4a0080 30%,transparent 70%);width:20px;height:20px;animation:lcFxRise linear infinite}" +
+      ".lcfx-bubble{background:radial-gradient(circle at 30% 30%,#d4ff7f,#22aa00);border-radius:50%;animation:lcFxRise linear infinite}" +
+      ".lcfx-blood{background:radial-gradient(circle,#ff6666,#cc0000);border-radius:50% 50% 50% 0;transform:rotate(-45deg);animation:lcFxFall linear infinite}" +
+      "@keyframes lcFxRise{0%{opacity:0;transform:translateY(0) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translateY(-40vh) scale(1.5)}}" +
+      "@keyframes lcFxFall{0%{opacity:0;transform:translateY(-10vh)}20%{opacity:1}100%{opacity:0;transform:translateY(20vh)}}" +
+      "@keyframes lcFxFlash{0%,100%{opacity:0}10%,30%{opacity:1}20%{opacity:.3}40%{opacity:0}}" +
+      "@keyframes lcFxTwinkle{0%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(.3) translateY(-30vh)}}" +
+      "@keyframes lcFxWind{0%{opacity:0;transform:translateX(-20vw)}50%{opacity:1}100%{opacity:0;transform:translateX(20vw)}}";
     document.head.appendChild(css);
     document.getElementById("app").appendChild(wrap);
     sfx("success");
