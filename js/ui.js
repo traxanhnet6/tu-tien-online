@@ -2028,7 +2028,9 @@ function showLinhCanFx(element) {
     wrap.className = "linhcan-fx";
     var html = '<div class="linhcan-stone"><div class="linhcan-glow" style="background:' + color + '"></div></div>';
     html += '<div class="linhcan-name" style="color:' + color + ';text-shadow:0 0 20px ' + color + '">' + esc(name) + '</div>';
-    if (beast) html += '<div class="linhcan-beast">' + beastExtra + beast + beastExtra + '</div>';
+    /* Linh thú ảnh thật sẽ thay emoji khi team mỹ thuật vẽ xong (Bui 2026-10-21: emoji xấu) */
+    var beastImg = { hondon: "assets/linhcan/beast_hondon.png", hoa: "assets/linhcan/beast_hoa.png", loi: "assets/linhcan/beast_loi.png", bang: "assets/linhcan/beast_bang.png", phong: "assets/linhcan/beast_phong.png", quang: "assets/linhcan/beast_quang.png", am: "assets/linhcan/beast_am.png", doc: "assets/linhcan/beast_doc.png", huyet: "assets/linhcan/beast_huyet.png" };
+    if (beastImg[element]) html += '<img class="linhcan-beast-img" src="' + beastImg[element] + '" onerror="this.style.display=\'none\'"/>';
     /* hạt linh khí bay */
     for (var i = 0; i < 50; i++) {
       html += '<div class="linhcan-particle" style="left:' + (20 + Math.random() * 60) + '%;background:' + color +
@@ -2050,8 +2052,18 @@ function showLinhCanFx(element) {
       "@keyframes lcNameIn{from{opacity:0;transform:scale(.5) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}" +
       ".linhcan-particle{position:absolute;bottom:20%;width:6px;height:6px;border-radius:50%;opacity:0;animation:lcFloat linear infinite}" +
       "@keyframes lcFloat{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(-60vh)}}" +
-      ".linhcan-beast{font-size:64px;margin-top:16px;animation:lcBeastFly 3s ease-in-out infinite;filter:drop-shadow(0 0 12px rgba(255,255,255,.5))}" +
-      "@keyframes lcBeastFly{0%,100%{transform:translateY(0) scale(1)}25%{transform:translateY(-18px) scale(1.08)}50%{transform:translateY(0) scale(1)}75%{transform:translateY(-10px) scale(1.04)}}" +
+      ".linhcan-beast-img{width:200px;height:200px;object-fit:contain;margin-top:16px;filter:drop-shadow(0 0 16px rgba(255,255,255,.4));animation:lcBeastFly 4s ease-in-out infinite,lcWingFlap .3s ease-in-out infinite;transform-style:preserve-3d}" +
+      "@keyframes lcWingFlap{0%,100%{filter:drop-shadow(0 0 16px rgba(255,255,255,.4)) brightness(1)}50%{filter:drop-shadow(0 0 24px rgba(255,255,255,.6)) brightness(1.15)}}" +
+      "@keyframes lcBeastFly{" +
+      "0%{transform:translate(0,0) scale(1) rotate(0deg)}" +
+      "12%{transform:translate(30px,-25px) scale(1.05) rotate(3deg)}" +
+      "25%{transform:translate(50px,-10px) scale(1.1) rotate(-2deg)}" +
+      "37%{transform:translate(30px,15px) scale(1.05) rotate(-4deg)}" +
+      "50%{transform:translate(0,25px) scale(1) rotate(0deg)}" +
+      "62%{transform:translate(-30px,15px) scale(0.95) rotate(4deg)}" +
+      "75%{transform:translate(-50px,-10px) scale(0.9) rotate(2deg)}" +
+      "87%{transform:translate(-30px,-25px) scale(0.95) rotate(-3deg)}" +
+      "100%{transform:translate(0,0) scale(1) rotate(0deg)}}" +
       ".linhcan-ring{position:absolute;width:200px;height:200px;border:3px solid;border-radius:50%;opacity:0;animation:lcRing 2s ease-out infinite}" +
       "@keyframes lcRing{0%{opacity:.8;transform:scale(.3)}100%{opacity:0;transform:scale(2)}}";
     document.head.appendChild(css);
