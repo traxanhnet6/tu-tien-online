@@ -2075,10 +2075,10 @@ var Engine = (function () {
           n.vy += (0 - n.vy) * Math.min(1, dt * 6);
         } else {
           var dx = n.tx - n.x, dy = n.ty - n.y, d = Math.hypot(dx, dy);
-          if (d < 10) { n.tx = null; n.ty = null; n.wt = 1 + Math.random() * 2.5; }
+          if (d < 12) { n.tx = null; n.ty = null; n.wt = 0.5 + Math.random() * 1.5; }
           else {
-            /* arrive: muốn đi chậm lại khi gần đích */
-            var want = 58 * Math.min(1, d / 70);
+            /* arrive: muốn đi chậm lại khi gần đích (Bui 2026-10-21: tăng tốc tuần tra cho thấy rõ) */
+            var want = 95 * Math.min(1, d / 50);
             var wvx = dx / d * want, wvy = dy / d * want;
             var k = Math.min(1, dt * 5);
             n.vx += (wvx - n.vx) * k;
