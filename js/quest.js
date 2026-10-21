@@ -209,6 +209,15 @@ var Quest = {
     return { ok: true };
   },
 
+  /* Hủy nhiệm vụ đang làm (Bui 2026-10-21): xóa khỏi danh sách active, có thể nhận lại */
+  abandon: function (state, id) {
+    var qs = state.quests || {};
+    var s = qs[id];
+    if (!s || s.status !== "active") return { ok: false, reason: "not_active" };
+    delete qs[id];
+    return { ok: true };
+  },
+
   /* Trả quest: check need → trừ item nếu cần → cộng thưởng */
   turnIn: function (state, id) {
     var q = _qdef(id);

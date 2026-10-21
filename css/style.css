@@ -1215,3 +1215,6 @@ body.landscape #hud-leftmid{top:40%}
 /* Bui 2026-10-21: tiêu đề Tạo nhân vật không bị ảnh che */
 .create-wrap h2{position:relative;z-index:2;margin-bottom:12px}
 .create-preview{position:relative;z-index:1}
+
+/* Ảnh minh họa nhiệm vụ (Bui 2026-10-21) */
+.q-img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }

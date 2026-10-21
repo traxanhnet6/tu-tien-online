@@ -1685,7 +1685,9 @@ function renderQuest() {
   }
   if (!list.length) return h + "<p>" + esc(t("q_no")) + "</p>";
   h += list.map(function (o) {
-    var q = o.q, r = '<div class="row"><div data-act="quest-menu" data-id="' + esc(q.id) + '"><div class="item-name">' + esc(t(q.nameKey)) + "</div>" +
+    var q = o.q, r = '<div class="row"><div data-act="quest-menu" data-id="' + esc(q.id) + '">';
+    if (q.img) r += '<img class="q-img" src="' + esc(q.img) + '" alt=""/>';
+    r += '<div class="item-name">' + esc(t(q.nameKey)) + "</div>" +
       '<div class="item-desc">' + esc(t(q.descKey)) + "</div>";
     /* Yêu cầu cụ thể — liên kết chặt chẽ (Bui 2026-10-19) */
     var _needTx = questNeedText(q);
@@ -3896,6 +3898,18 @@ function doNpcOpt(el) {
   var optIdx = +(el.getAttribute("data-i") || 0);
   var opt = (talk && talk.options && talk.options[optIdx]) || {};
   if (opact === "quest") { openPanel("quest"); return; }
+  if (opact === "quest-accept") {
+    var r = Quest.accept(state, opt.id);
+    toast(r.ok ? t("npc_quest_accepted") : t("npc_quest_cannot"));
+    if (typeof refreshTalk === "function") refreshTalk();
+    return;
+  }
+  if (opact === "quest-abandon") {
+    var r2 = Quest.abandon(state, opt.id);
+    toast(r2.ok ? t("npc_quest_abandoned") : t("npc_quest_cannot"));
+    if (typeof refreshTalk === "function") refreshTalk();
+    return;
+  }
   if (opact === "shop") {
     var npcId = panelArg && panelArg.npcId;
     var kind = (typeof NPCS !== "undefined" && NPCS[npcId]) ? NPCS[npcId].kind : "shop";

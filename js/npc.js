@@ -263,10 +263,26 @@ function _questTalk(npcId, def, state) {
     }
   } catch (e) {}
 
+  /* Quest có thể nhận/hủy trực tiếp tại NPC (Bui 2026-10-21) */
+  var directOpts = [];
+  mine.forEach(function (q) {
+    var st = qs[q.id];
+    if (!st || !st.status) {
+      /* chưa nhận → nút nhận trực tiếp */
+      if (typeof Quest !== "undefined") {
+        var chk = Quest.available(state).some(function (aq) { return aq.id === q.id; });
+        if (chk) directOpts.push({ label: "npc_quest_accept", act: "quest-accept", id: q.id, qname: q.nameKey });
+      }
+    } else if (st.status === "active") {
+      /* đang làm → nút hủy */
+      directOpts.push({ label: "npc_quest_abandon", act: "quest-abandon", id: q.id, qname: q.nameKey });
+    }
+  });
+
   return {
     name: def.nameKey,
     lines: lines,
-    options: [
+    options: directOpts.concat([
       { label: "npc_quest", act: "quest" },
       /* Đại Phu bán đan dược hồi phục */
       ...(npcId === "dai_phu" ? [{ label: "npc_shop", act: "shop",
@@ -274,7 +290,7 @@ function _questTalk(npcId, def, state) {
                 "duong_than_dan", "thanh_tam_qua",
                 "dan_tho_tieu", "dan_dien_tho"] }] : []),
       { label: "npc_bye", act: "bye" },
-    ],
+    ]),
   };
 }
 

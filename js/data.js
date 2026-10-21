@@ -2487,6 +2487,7 @@ const QUESTS = [
    * Mỗi quest autoAccept: trả xong tự nhận quest tiếp theo trong chuỗi. */
   {
     id: "q_story_01", nameKey: "q_story_01", descKey: "q_story_01_desc",
+    img: "assets/quests/q-story-01-0.webp",
     kind: "chinh",
     npc: "dai_phu",
     acceptTalk: "q_story_01_accept", turninTalk: "q_story_01_turnin",
@@ -2511,6 +2512,7 @@ const QUESTS = [
   },
   {
     id: "q_story_04", nameKey: "q_story_04", descKey: "q_story_04_desc",
+    img: "assets/quests/q-story-04-0.webp",
     kind: "chinh",
     npc: "dai_phu",
     acceptTalk: "q_story_04_accept", turninTalk: "q_story_04_turnin", req: "q_story_01", autoAccept: true,
@@ -2535,6 +2537,7 @@ const QUESTS = [
   },
   {
     id: "q_story_07", nameKey: "q_story_07", descKey: "q_story_07_desc",
+    img: "assets/quests/q-story-07-0.webp",
     kind: "chinh",
     npc: "truong_tran",
     acceptTalk: "q_story_07_accept", turninTalk: "q_story_07_turnin", req: "q_story_06", autoAccept: true,
@@ -2559,6 +2562,7 @@ const QUESTS = [
   },
   {
     id: "q_story_10", nameKey: "q_story_10", descKey: "q_story_10_desc",
+    img: "assets/quests/q-story-10-0.webp",
     kind: "chinh",
     npc: "truong_tran",
     acceptTalk: "q_story_10_accept", turninTalk: "q_story_10_turnin", req: "q_story_09", autoAccept: true,
@@ -2570,6 +2574,7 @@ const QUESTS = [
   },
   {
     id: "q_story_11", nameKey: "q_story_11", descKey: "q_story_11_desc",
+    img: "assets/quests/q-story-11-0.webp",
     kind: "chinh",
     npc: "dai_phu",
     acceptTalk: "q_story_11_accept", turninTalk: "q_story_11_turnin", req: "q_story_10", autoAccept: true,
