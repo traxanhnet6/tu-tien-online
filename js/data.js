@@ -1090,6 +1090,9 @@ const MAPS = [
     npcs: ["truong_lao", "de_tu_kiem_1"],
     quests: [],
     gates: [{to: 0, x: 80, y: 600}, {to: 21, x: 1500, y: 600}],
+    paths: [
+      {x1: 80, y1: 600, x2: 1500, y2: 600, tile: "path_stone"},
+    ],
     stoneDrop: [0, 0],
     unlock: {sect: true},
     objects: [
@@ -1124,6 +1127,10 @@ const MAPS = [
     npcs: ["de_tu_kiem_1", "de_tu_kiem_2", "tiep_dan_su"],
     quests: [],
     gates: [{to: 20, x: 80, y: 600}, {to: 22, x: 800, y: 80}, {to: 23, x: 1500, y: 300}, {to: 24, x: 1500, y: 600}, {to: 25, x: 1500, y: 900}, {to: 26, x: 800, y: 1120}, {to: 27, x: 80, y: 900}],
+    paths: [
+      {x1: 80, y1: 600, x2: 1500, y2: 600, tile: "path_sand"},
+      {x1: 800, y1: 80, x2: 800, y2: 1120, tile: "path_sand"},
+    ],
     stoneDrop: [0, 0],
     unlock: {sect: true},
     objects: [
@@ -1158,6 +1165,9 @@ const MAPS = [
     npcs: ["truong_lao", "truong_lao_truyen_cong"],
     quests: [],
     gates: [{to: 21, x: 800, y: 1120}],
+    paths: [
+      {x1: 800, y1: 1120, x2: 800, y2: 150, tile: "path_jade"},
+    ],
     stoneDrop: [0, 0],
     unlock: {sect: true},
     objects: [
@@ -1192,6 +1202,9 @@ const MAPS = [
     npcs: ["dan_su"],
     quests: [],
     gates: [{to: 21, x: 80, y: 600}],
+    paths: [
+      {x1: 80, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+    ],
     stoneDrop: [0, 0],
     unlock: {sect: true},
     objects: [
@@ -1226,6 +1239,10 @@ const MAPS = [
     npcs: ["de_tu_duoc_1", "de_tu_duoc_2"],
     quests: [],
     gates: [{to: 21, x: 80, y: 600}],
+    paths: [
+      {x1: 80, y1: 600, x2: 1400, y2: 600, tile: "path_wood"},
+      {x1: 700, y1: 200, x2: 700, y2: 1000, tile: "path_wood"},
+    ],
     stoneDrop: [0, 0],
     unlock: {sect: true},
     objects: [
@@ -1260,6 +1277,9 @@ const MAPS = [
     npcs: ["lao_ren"],
     quests: [],
     gates: [{to: 21, x: 80, y: 600}],
+    paths: [
+      {x1: 80, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+    ],
     stoneDrop: [0, 0],
     unlock: {sect: true},
     objects: [
@@ -1294,6 +1314,9 @@ const MAPS = [
     npcs: ["vo_tang"],
     quests: [],
     gates: [{to: 21, x: 800, y: 80}],
+    paths: [
+      {x1: 800, y1: 80, x2: 800, y2: 1000, tile: "path_stone"},
+    ],
     stoneDrop: [0, 0],
     unlock: {sect: true},
     objects: [
@@ -1328,6 +1351,9 @@ const MAPS = [
     npcs: ["tam_tien_bi_tich"],
     quests: [],
     gates: [{to: 21, x: 1500, y: 600}],
+    paths: [
+      {x1: 1500, y1: 600, x2: 200, y2: 600, tile: "path_wood"},
+    ],
     stoneDrop: [0, 0],
     unlock: {sect: true},
     objects: [

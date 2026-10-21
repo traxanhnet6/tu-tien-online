@@ -3575,6 +3575,36 @@ var Engine = (function () {
     }
   }
 
+  /* Bui 2026-10-22: đường đi/lối đi — tile lát dọc đoạn thẳng, dưới nhân vật, đi xuyên được */
+  function _drawPaths() {
+    var paths = _mapDef && _mapDef.paths;
+    if (!paths || !paths.length) return;
+    var cam = _camera();
+    var TS = 90; /* kích thước tile đường */
+    for (var i = 0; i < paths.length; i++) {
+      var p = paths[i];
+      var img = _img('assets/objects/' + p.tile + '.png');
+      if (!img) continue;
+      var dx = p.x2 - p.x1, dy = p.y2 - p.y1;
+      var len = Math.hypot(dx, dy);
+      if (len < 1) continue;
+      var ux = dx / len, uy = dy / len;
+      var ang = Math.atan2(dy, dx);
+      var steps = Math.ceil(len / TS);
+      for (var s = 0; s < steps; s++) {
+        var cx = p.x1 + ux * (s * TS + TS / 2);
+        var cy = p.y1 + uy * (s * TS + TS / 2);
+        /* culling theo camera */
+        if (cx < cam.x - TS || cx > cam.x + _viewW + TS ||
+            cy < cam.y - TS || cy > cam.y + _viewH + TS) continue;
+        _ctx.save();
+        _ctx.translate(cx, cy);
+        _ctx.rotate(ang);
+        _ctx.drawImage(img, -TS / 2, -TS / 2, TS, TS);
+        _ctx.restore();
+      }
+    }
+  }
   function _vegDraw() {
     var mid = _mapDef ? _mapDef.id : 0;
     if (_vegMapId !== mid) _vegGen();
@@ -3732,6 +3762,9 @@ var Engine = (function () {
         _ctx.fillText('➤ ' + _gname, _gg.x, _gg.y - 42);
       }
     } catch (_ge) {}
+
+    /* Đường đi/lối đi — sau nền, trước entities (Bui 2026-10-22) */
+    _drawPaths();
 
     /* Lớp thực vật động (cỏ đung đưa, hoa, lá rơi) — sau nền, trước entities */
     _vegDraw();
