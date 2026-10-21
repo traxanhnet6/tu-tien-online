@@ -98,9 +98,18 @@ var NPCVoice = (function () {
       if (typeof Audio === "undefined") return false;
       var src = "assets/audio/npc/" + npcId + "_greet.mp3";
       // kiểm tra file tồn tại qua danh sách đã biết
-      var known = { truong_lang: 1, dai_phu: 1, co_tran_tu: 1, to_uyen_nhi: 1,
-        diep_van: 1, truong_lao_kiem: 1, truong_lao_phap: 1, truong_lao_the: 1,
-        truong_lao_duoc: 1, truong_lao_thu: 1 };
+      var known = {
+        truong_lang: 1, dai_phu: 1, co_tran_tu: 1, to_uyen_nhi: 1, diep_van: 1, truong_lao_kiem: 1,
+        truong_lao_phap: 1, truong_lao_the: 1, truong_lao_duoc: 1, truong_lao_thu: 1, an_sy: 1, co_hon: 1,
+        dan_su: 1, de_tu_duoc_1: 1, de_tu_duoc_2: 1, de_tu_kiem_1: 1, de_tu_kiem_2: 1, de_tu_ma_1: 1,
+        de_tu_ma_2: 1, de_tu_phap_1: 1, de_tu_phap_2: 1, de_tu_the_1: 1, de_tu_the_2: 1, de_tu_thu_1: 1,
+        de_tu_thu_2: 1, huyet_ma_tu: 1, lao_dan_duong: 1, lao_ren: 1, ma_luyen_su: 1, ma_thuong_nhan: 1,
+        mac_vo_tam: 1, minh_chu: 1, phu_su: 1, quan_mo: 1, ren_su_kiem: 1, su_gia_duoc: 1,
+        su_gia_kiem: 1, su_gia_ma: 1, su_gia_phap: 1, su_gia_the: 1, su_gia_thu: 1, tam_tien: 1,
+        tho_san: 1, thu_thap_nhan: 1, thuong_nhan: 1, thuong_nhan_du_hanh: 1, thuong_nhan_mo: 1, tien_ong: 1,
+        tiep_dan_su: 1, tieu_nhi: 1, truong_lao: 1, truong_lao_linh_dien: 1, truong_lao_ma: 1, truong_lao_truyen_cong: 1,
+        truong_tran: 1, tuan_thu_phan_da: 1, tuan_thu_su: 1, u_minh_ton_gia: 1, vo_tang: 1, vtc: 1,
+        vtc_market: 1 };
       // trưởng lão các tông dùng chung file truong_lao_*
       var fid = npcId;
       if (!known[fid]) {
