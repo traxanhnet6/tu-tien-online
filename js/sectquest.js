@@ -45,10 +45,31 @@ function _CUNGCO() { return _g("SECT_QUEST_CUNGCO") || []; }
 function _DAILY() { return _g("SECT_QUEST_DAILY") || []; }
 function _WEEKLY() { return _g("SECT_QUEST_WEEKLY") || []; }
 
-var SECT_RANKS = ["ngoai_mon", "noi_mon", "ho_phap", "truong_lao"];
+var SECT_RANKS = ["ngoai_mon", "noi_mon", "ho_phap", "truong_lao", "thai_thuong"];
+/* Điều kiện thăng cấp (Bui 2026-10-21): phải đủ cống hiến + cảnh giới + làm xong quest thăng cấp */
+var SECT_PROMOTE_REQ = {
+  noi_mon:     { contrib: 100,  realm: [1, 5],  quest: "03" },
+  ho_phap:     { contrib: 300,  realm: [1, 12], quest: "06" },
+  truong_lao:  { contrib: 800,  realm: [2, 0],  quest: "09" },
+  thai_thuong: { contrib: 2000, realm: [3, 2],  quest: "15" },
+};
+/* Trợ cấp tài nguyên hằng ngày theo cấp bậc (Bui 2026-10-21) */
+/* Trợ cấp cân bằng cho cày cuốc (Bui 2026-10-21):
+   - Linh Thạch vừa phải (đủ sửa đồ, mua thuốc cơ bản)
+   - Chủ yếu là đan dược hồi phục + vật phẩm hỗ trợ farm
+   - Không cho quá nhiều để giữ động lực cày */
+var SECT_STIPEND = {
+  ngoai_mon:  { stones: 50,   exp: 100,  items: [{ id: "dan_hx_tieu", qty: 2 }] },
+  noi_mon:    { stones: 150,  exp: 300,  items: [{ id: "dan_hx_tieu", qty: 3 }, { id: "dan_hl_tieu", qty: 1 }] },
+  ho_phap:    { stones: 400,  exp: 800,  items: [{ id: "dan_hx_trung", qty: 2 }, { id: "dan_hl_tieu", qty: 2 }] },
+  truong_lao: { stones: 1000, exp: 2000, items: [{ id: "dan_hx_dai", qty: 1 }, { id: "dan_hl_trung", qty: 2 }] },
+  thai_thuong:{ stones: 2500, exp: 5000, items: [{ id: "dan_hx_dai", qty: 2 }, { id: "dan_hl_dai", qty: 1 }] },
+};
+/* Thưởng thêm khi hoàn thành nhiệm vụ ngày: khuyến khích cày */
+var SECT_STIPEND_BONUS = { stones: 200, exp: 500 };
 var SECT_RANK_TITLE_KEY = {
   ngoai_mon: "sq_rank_ngoai_mon", noi_mon: "sq_rank_noi_mon",
-  ho_phap: "sq_rank_ho_phap", truong_lao: "sq_rank_truong_lao",
+  ho_phap: "sq_rank_ho_phap", truong_lao: "sq_rank_truong_lao", thai_thuong: "sq_rank_thai_thuong",
 };
 
 function _si(state) {
@@ -99,6 +120,32 @@ var SectQuest = {
   def: function (id) { return _qdef(id); },
 
   rank: function (state) { return _si(state).rank || "ngoai_mon"; },
+  /* Trợ cấp hằng ngày: mỗi ngày nhận 1 lần theo cấp bậc */
+  stipendAvailable: function (state) {
+    var si = _si(state);
+    if (!si.joined) return false;
+    var t = _today();
+    return si.stipendDate !== t;
+  },
+  stipendInfo: function (state) {
+    var r = this.rank(state);
+    return SECT_STIPEND[r] || SECT_STIPEND.ngoai_mon;
+  },
+  claimStipend: function (state) {
+    if (!this.stipendAvailable(state)) return { ok: false };
+    var si = _si(state);
+    si.stipendDate = _today();
+    var sp = this.stipendInfo(state);
+    var res = { stones: sp.stones || 0, exp: sp.exp || 0, items: [] };
+    if (typeof addStones === "function") addStones(state, res.stones);
+    else { state.stones = (state.stones || 0) + res.stones; }
+    if (typeof gainExp === "function") gainExp(state, res.exp);
+    (sp.items || []).forEach(function (it) {
+      if (typeof addItem === "function") addItem(state, it.id, it.qty);
+      res.items.push(it);
+    });
+    return { ok: true, res: res };
+  },
   rankIdx: function (rank) {
     var i = SECT_RANKS.indexOf(rank);
     return i < 0 ? 0 : i;
@@ -166,9 +213,18 @@ var SectQuest = {
     if (rw.contrib) si.contrib = (si.contrib || 0) + rw.contrib;
     sqs[id] = { status: "done", count: s.count || 0, trialPass: !!s.trialPass };
 
-    /* Thăng chức + lễ thăng cấp */
+    /* Thăng chức + lễ thăng cấp — kiểm tra điều kiện (Bui 2026-10-21) */
     var ceremony = null;
     if (q.promote) {
+      var pr = SECT_PROMOTE_REQ[q.promote];
+      var canPromote = true, failReason = null;
+      if (pr) {
+        if ((si.contrib || 0) < pr.contrib) { canPromote = false; failReason = "contrib_not_enough"; }
+        else if (!_realmOk(state.char, pr.realm)) { canPromote = false; failReason = "realm_not_enough"; }
+      }
+      if (!canPromote) {
+        return { ok: false, reason: failReason, need: pr };
+      }
       si.rank = q.promote;
       var titleKey = SECT_RANK_TITLE_KEY[q.promote];
       si.titles.push({ rank: q.promote, nameKey: titleKey, at: Date.now() });

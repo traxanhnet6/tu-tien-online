@@ -48,13 +48,20 @@ var QuestGuide = (function () {
     for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
     return null;
   }
+  /* Truy cập định nghĩa NPC (browser: global NPCS; node: require data.js) */
+  function _npcDefs() {
+    try { if (typeof NPCS !== "undefined") return NPCS; } catch (e) {}
+    if (_DM && _DM.NPCS) return _DM.NPCS;
+    return {};
+  }
   function _isStory(id) { return typeof id === "string" && id.indexOf("q_story_") === 0; }
   /* Phân loại quest: "chinh" | "phu" (mặc định "phu") — Bui 2026-10-20 */
   function _kindOf(q) { return (q && q.kind) || "phu"; }
-  /* Thứ tự chuỗi 10 quest tân thủ (Bui chốt 2026-10-18) */
+  /* Thứ tự chuỗi quest tân thủ (Bui chốt 2026-10-18; cập nhật 2026-10-21:
+   * q_story_11 theo ngay sau q_story_10, q_story_02/03 thành nhánh phụ) */
   var NEWBIE_CHAIN = ["q_story_01", "q_story_04", "q_story_05", "q_story_06",
-    "q_story_07", "q_story_08", "q_story_09", "q_story_10",
-    "q_story_02", "q_story_03", "q_story_11"];
+    "q_story_07", "q_story_08", "q_story_09", "q_story_10", "q_story_11",
+    "q_story_02", "q_story_03"];
 
   /* Quest chính đang active (mỗi lúc tối đa 1 — luật Bui 2026-10-20) */
   function activeMainQuest(state) {
@@ -226,7 +233,31 @@ var QuestGuide = (function () {
       var nm = npcMap(q.npc);
       return { kind: "npc", npcId: q.npc, map: nm };
     }
-    /* Ưu tiên 2: cần giết quái → bãi quái */
+    /* Ưu tiên 2: cần gia nhập tông môn → sứ giả tông môn gần nhất
+     * (Bui 2026-10-21: sứ giả xuất hiện sau q_story_10) */
+    if (need.type === "joinsect") {
+      var _npcs = _npcDefs();
+      var _best = null, _bestD = 1e9;
+      var _px = 800, _py = 600;
+      try {
+        var _st = _state();
+        if (_st && _st.char) { _px = _st.char.x || 800; _py = _st.char.y || 600; }
+      } catch (e) {}
+      Object.keys(_npcs).forEach(function (nid) {
+        var _d = _npcs[nid];
+        if (!_d || _d.kind !== "sect_emissary") return;
+        /* Chỉ tính sứ giả ở cùng map hiện tại (hoặc map 0 mặc định) */
+        var _em = (_d.mapId != null ? _d.mapId : 0);
+        var _cur = curMapId != null ? curMapId : 0;
+        var _dd = Math.hypot((_d.x || 800) - _px, (_d.y || 600) - _py) + (_em === _cur ? 0 : 100000);
+        if (_dd < _bestD) { _bestD = _dd; _best = { nid: nid, def: _d }; }
+      });
+      if (_best) {
+        var _bm = npcMap(_best.nid);
+        return { kind: "npc", npcId: _best.nid, map: _bm != null ? _bm : (_best.def.mapId || 0) };
+      }
+    }
+    /* Ưu tiên 3: cần giết quái → bãi quái */
     if (need.type === "kill" && need.monster) {
       var z = monsterZone(need.monster);
       if (z) return { kind: "monster", monId: need.monster, map: z.map, x: z.x, y: z.y };

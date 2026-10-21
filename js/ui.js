@@ -1766,6 +1766,16 @@ function renderSectQuests() {
   var rank = SectQuest.rank(state);
   h += '<div class="item-name">' + esc(t(sc.nameKey || joined)) + " · " + esc(t("sq_rank")) + ": <b>" +
     esc(t("sq_rank_" + rank)) + "</b></div>";
+  /* Trợ cấp hằng ngày (Bui 2026-10-21) */
+  if (typeof SectQuest !== "undefined" && SectQuest.stipendAvailable) {
+    var sp = SectQuest.stipendInfo(state);
+    if (SectQuest.stipendAvailable(state)) {
+      h += '<div class="sect-note">🎁 ' + esc(t("sect_stipend_ready")) + ": " + sp.stones + " LT, " + sp.exp + " EXP</div>" +
+        '<button class="btn btn-jade" data-act="sect-stipend">' + esc(t("sect_stipend_claim")) + "</button>";
+    } else {
+      h += '<div class="sect-note">🎁 ' + esc(t("sect_stipend_done")) + "</div>";
+    }
+  }
   if (rank === "ngoai_mon") {
     h += '<div class="sect-note">📜 ' + esc(t("sq_need_noimon")) + "</div>";
   }
@@ -3522,6 +3532,12 @@ function onPanelClick(e) {
       break;
     }
     case "sect-open": openPanel("sect"); break;
+    case "sect-stipend": {
+      var r = SectQuest.claimStipend(state);
+      if (r.ok) toast(t("sect_stipend_claim") + ": +" + r.res.stones + " LT");
+      refreshPanel();
+      break;
+    }
     case "bt-gate-go": openPanel("quest", { tab: "sect" }); break;
     case "map-go": doMapGo(+i); break;
     case "dg-enter": doDungeonEnter(DUNGEONS[+i]); break;

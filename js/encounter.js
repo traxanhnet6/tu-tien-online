@@ -132,11 +132,130 @@ var ENCOUNTERS = {
 
 var RARITY_W = { thuong: 0.7, hiem: 0.25, cuc_hiem: 0.05 };
 
+/* ============================================================
+ * KỲ NGỘ ẨN (Gameplay 2026-10-21)
+ * - Không xuất hiện trong roll thông thường
+ * - Chỉ kích hoạt khi đủ điều kiện đặc biệt (trigger)
+ * - trigger: { map?, x?, y?, radius?, hourFrom?, hourTo?,
+ *              hasItem?, daotamMin?, daotamMax?, questDone?, minRealm? }
+ * ============================================================ */
+var HIDDEN_ENCOUNTERS = [
+  {
+    id: "kngo_an_co_mo", hidden: true,
+    nameKey: "kngo_an_co_mo", descKey: "kngo_an_co_mo_desc",
+    trigger: { map: 1, x: 200, y: 200, radius: 100, hourFrom: 0, hourTo: 5 },
+    choices: [
+      { id: "tham_hiem", labelKey: "kngo_c_tham_hiem",
+        reward: { manual: "manual_kiem_3", stones: 1000 }, daotam: 10 },
+      { id: "roi_di", labelKey: "kngo_c_roi_di",
+        reward: { exp: 200 }, daotam: 0 },
+    ],
+  },
+  {
+    id: "kngo_an_lao_tang_kinh", hidden: true,
+    nameKey: "kngo_an_lao_tang_kinh", descKey: "kngo_an_lao_tang_kinh_desc",
+    trigger: { map: 0, hasItem: "khaiphongphu", daotamMin: 50 },
+    choices: [
+      { id: "doc_kinh", labelKey: "kngo_c_doc_kinh",
+        reward: { exp: 500, stones: 300 }, daotam: 10 },
+      { id: "lay_cap", labelKey: "kngo_c_lay_cap",
+        reward: { manual: "manual_phap_2", stones: 800 }, daotam: -20, risk: 0.3 },
+    ],
+  },
+  {
+    id: "kngo_an_huyet_ma_truyen_thua", hidden: true,
+    nameKey: "kngo_an_huyet_ma_truyen_thua", descKey: "kngo_an_huyet_ma_truyen_thua_desc",
+    trigger: { map: 4, daotamMax: -50, minRealm: 2 },
+    choices: [
+      { id: "tiep_nhan", labelKey: "kngo_c_tiep_nhan",
+        reward: { manual: "manual_ma_1", stones: 1500 }, daotam: -30 },
+      { id: "khang_cu", labelKey: "kngo_c_khang_cu",
+        reward: { exp: 400 }, daotam: 20 },
+    ],
+  },
+  {
+    id: "kngo_an_tien_nhan_di_tich", hidden: true,
+    nameKey: "kngo_an_tien_nhan_di_tich", descKey: "kngo_an_tien_nhan_di_tich_desc",
+    trigger: { map: 2, questDone: "q_story_10", x: 1400, y: 1000, radius: 150 },
+    choices: [
+      { id: "kham_pha", labelKey: "kngo_c_kham_pha",
+        reward: { stones: 2000, exp: 800 }, daotam: 5 },
+      { id: "cung_bai", labelKey: "kngo_c_cung_bai",
+        reward: { exp: 600 }, daotam: 15 },
+    ],
+  },
+];
+
+/* Kiểm tra kỳ ngộ ẩn có thể kích hoạt không.
+ * state: game state (quests, bag, daotam, char.realm...)
+ * ctx: { mapId, x, y, hour } — vị trí và giờ hiện tại */
+function checkHiddenTriggers(state, ctx) {
+  var out = [];
+  ctx = ctx || {};
+  var hour = (ctx.hour != null) ? ctx.hour : new Date().getHours();
+  for (var i = 0; i < HIDDEN_ENCOUNTERS.length; i++) {
+    var h = HIDDEN_ENCOUNTERS[i];
+    var tr = h.trigger || {};
+    var ok = true;
+    /* đã từng kích hoạt rồi thì không lặp lại */
+    try {
+      var seen = (state.hiddenEncountersSeen || {});
+      if (seen[h.id]) ok = false;
+    } catch (e) {}
+    /* map */
+    if (ok && tr.map != null && ctx.mapId !== tr.map) ok = false;
+    /* vị trí */
+    if (ok && tr.x != null && ctx.x != null) {
+      var dd = Math.hypot(ctx.x - tr.x, ctx.y - tr.y);
+      if (dd > (tr.radius || 100)) ok = false;
+    }
+    /* giờ trong ngày */
+    if (ok && tr.hourFrom != null) {
+      if (tr.hourFrom <= tr.hourTo) {
+        if (hour < tr.hourFrom || hour > tr.hourTo) ok = false;
+      } else {
+        /* qua nửa đêm, vd 22h-5h */
+        if (hour < tr.hourFrom && hour > tr.hourTo) ok = false;
+      }
+    }
+    /* vật phẩm trong túi */
+    if (ok && tr.hasItem) {
+      var found = false;
+      var bag = state.bag || [];
+      for (var b = 0; b < bag.length; b++) {
+        if (bag[b].id === tr.hasItem && bag[b].qty > 0) { found = true; break; }
+      }
+      if (!found) ok = false;
+    }
+    /* đạo tâm */
+    if (ok && tr.daotamMin != null && (state.daotam || 0) < tr.daotamMin) ok = false;
+    if (ok && tr.daotamMax != null && (state.daotam || 0) > tr.daotamMax) ok = false;
+    /* quest đã xong */
+    if (ok && tr.questDone) {
+      var qs = state.quests || {};
+      if (!qs[tr.questDone] || qs[tr.questDone].status !== "done") ok = false;
+    }
+    /* cảnh giới tối thiểu */
+    if (ok && tr.minRealm != null) {
+      var realm = (state.char && state.char.realm) || 0;
+      if (realm < tr.minRealm) ok = false;
+    }
+    if (ok) out.push(h);
+  }
+  return out;
+}
+
+/* Đánh dấu kỳ ngộ ẩn đã kích hoạt (không lặp lại) */
+function markHiddenSeen(state, encId) {
+  if (!state.hiddenEncountersSeen) state.hiddenEncountersSeen = {};
+  state.hiddenEncountersSeen[encId] = true;
+}
+
 function _cls(c) {
   return (c === "phap" || c === "the") ? c : "kiem";
 }
 
-/* Tìm kỳ ngộ theo id (mọi hệ) */
+/* Tìm kỳ ngộ theo id (mọi hệ + kỳ ngộ ẩn) */
 function encounterById(id) {
   var keys = Object.keys(ENCOUNTERS);
   for (var i = 0; i < keys.length; i++) {
@@ -144,6 +263,10 @@ function encounterById(id) {
     for (var j = 0; j < list.length; j++) {
       if (list[j].id === id) return list[j];
     }
+  }
+  /* kỳ ngộ ẩn */
+  for (var k = 0; k < HIDDEN_ENCOUNTERS.length; k++) {
+    if (HIDDEN_ENCOUNTERS[k].id === id) return HIDDEN_ENCOUNTERS[k];
   }
   return null;
 }
@@ -202,8 +325,10 @@ function applyChoice(state, encId, choiceId, rng) {
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     ENCOUNTERS: ENCOUNTERS, RARITY_W: RARITY_W,
+    HIDDEN_ENCOUNTERS: HIDDEN_ENCOUNTERS,
     encounterById: encounterById,
     rollEncounter: rollEncounter, applyChoice: applyChoice,
+    checkHiddenTriggers: checkHiddenTriggers, markHiddenSeen: markHiddenSeen,
   };
 }
 
@@ -216,8 +341,11 @@ if (typeof module !== "undefined" && module.exports) {
   _g.Encounter = {
     ENCOUNTERS: ENCOUNTERS,
     RARITY_W: RARITY_W,
+    HIDDEN_ENCOUNTERS: HIDDEN_ENCOUNTERS,
     encounterById: encounterById,
     rollEncounter: rollEncounter,
-    applyChoice: applyChoice
+    applyChoice: applyChoice,
+    checkHiddenTriggers: checkHiddenTriggers,
+    markHiddenSeen: markHiddenSeen
   };
 })();

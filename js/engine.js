@@ -113,6 +113,10 @@ var Engine = (function () {
   var _chaseTgt = false; /* bấm Đánh khi quái ngoài tầm → tự dí theo rồi đánh (attack-move) */
   var _tapMove = true; /* chạm map để di chuyển — bật/tắt trong Cài đặt */
   var _attackCd = 0;
+  /* === Animation đánh nâng cấp (Gameplay 2026-10-21) ===
+   * _hitStop: đóng băng frame khi trúng đòn (game feel)
+   * _shakeT/_shakeMag: rung màn hình khi crit/boss skill */
+  var _hitStop = 0, _shakeT = 0, _shakeMag = 0;
   var _respawnT = 0, _bossRespawnAt = 0, _bossDef = null;
   var _dungeon = null;
   var _secret = null; /* realmId bí cảnh tranh đoạt đang ở (null = không) */          // {run, def} khi trong bí cảnh ngẫu nhiên
@@ -418,6 +422,9 @@ var Engine = (function () {
       boss: !!(isBoss || def.boss), dead: false,
       atkCd: 0, skillCd: 4 + Math.random() * 4, hitT: 0,
       wanderA: Math.random() * Math.PI * 2, wanderT: 0,
+      /* AI nâng cấp (Gameplay 2026-10-21): vị trí spawn để leash,
+       * strafeT/strafeDir để di chuyển ziczac, fleeT để chạy trốn */
+      sx: x, sy: y, strafeT: 0, strafeDir: 1, fleeT: 0, stateTick: 0,
     };
     /* Quái tinh anh: ~5% lẫn trong quái thường, mạnh 2-3x, rớt yêu đan — xem bodycult.js */
     try {
@@ -498,6 +505,51 @@ var Engine = (function () {
   /* ---------- API chính ---------- */
   function bindState(s) { _state = s || null; }
 
+  /* Tạo object NPC runtime từ id (dùng chung cho enterMap + refreshNpcs) */
+  function _makeNpcObj(id) {
+    var d = _npcDef(id);
+    var hx = d.x || 800, hy = d.y || 500;
+    return { npcId: id, def: d, x: hx, y: hy,
+             hx: hx, hy: hy,             /* vị trí gốc (tâm tuần tra) */
+             vx: 0, vy: 0,              /* vận tốc hiện tại */
+             tx: null, ty: null,        /* điểm đến tuần tra */
+             wt: 1 + Math.random() * 2, /* chờ trước khi bước đi */
+             face: 1,                   /* 1: mặt phải, -1: mặt trái */
+             phase: Math.random() * 6.28, /* pha idle riêng */
+             lean: 0 };                 /* độ nghiêng hiện tại (mượt) */
+  }
+  /* Kiểm tra NPC có được unlock không (cảnh giới / nhiệm vụ) */
+  function _npcUnlocked(n) {
+    var def = n.def || n;
+    /* NPC khóa theo cảnh giới (vd Tuần Thú Sư chỉ từ Trúc Cơ) */
+    var ur = def.unlock && def.unlock.realm;
+    if (ur != null) {
+      var S = _S();
+      var pr = (S && S.char && S.char.realm) || 0;
+      if (pr < ur) return false;
+    }
+    /* NPC khóa theo nhiệm vụ (vd sứ giả tông môn chỉ sau q_story_10) */
+    var uq = def.unlock && def.unlock.quest;
+    if (uq) {
+      var S2 = _S();
+      var qs = (S2 && S2.quests) || {};
+      if (!qs[uq] || qs[uq].status !== "done") return false;
+    }
+    return true;
+  }
+  /* Làm mới NPC trên map hiện tại: thêm NPC vừa được unlock (vd trả xong
+   * q_story_10 → sứ giả tông môn xuất hiện ngay, không cần rời map).
+   * Giữ nguyên NPC đã có (không reset vị trí). */
+  function refreshNpcs() {
+    if (!_mapDef || !_mapDef.npcs) return;
+    var have = {};
+    for (var i = 0; i < _npcs.length; i++) have[_npcs[i].npcId] = true;
+    (_mapDef.npcs || []).forEach(function (id) {
+      if (have[id]) return;
+      var n = _makeNpcObj(id);
+      if (_npcUnlocked(n)) _npcs.push(n);
+    });
+  }
   function enterMap(mapId) {
     _dungeon = null;
     _secret = null;
@@ -506,25 +558,7 @@ var Engine = (function () {
     _mapDef = _mapDefOf(mapId);
     /* warm ảnh tilemap tiền-render để không pop-in frame đầu */
     if (typeof mapId === 'number') _img('assets/maps/tilemap/map_' + mapId + '.png');
-    _npcs = (_mapDef.npcs || []).map(function (id) {
-      var d = _npcDef(id);
-      var hx = d.x || 800, hy = d.y || 500;
-      return { npcId: id, def: d, x: hx, y: hy,
-               hx: hx, hy: hy,             /* vị trí gốc (tâm tuần tra) */
-               vx: 0, vy: 0,              /* vận tốc hiện tại */
-               tx: null, ty: null,        /* điểm đến tuần tra */
-               wt: 1 + Math.random() * 2, /* chờ trước khi bước đi */
-               face: 1,                   /* 1: mặt phải, -1: mặt trái */
-               phase: Math.random() * 6.28, /* pha idle riêng */
-               lean: 0 };                 /* độ nghiêng hiện tại (mượt) */
-    }).filter(function (n) {
-      /* NPC khóa theo cảnh giới (vd Tuần Thú Sư chỉ từ Trúc Cơ) */
-      var ur = n.def.unlock && n.def.unlock.realm;
-      if (ur == null) return true;
-      var S = _S();
-      var pr = (S && S.char && S.char.realm) || 0;
-      return pr >= ur;
-    });
+    _npcs = (_mapDef.npcs || []).map(_makeNpcObj).filter(_npcUnlocked);
     _gates = (_mapDef.gates || []).map(function (g) {
       return { to: g.to, x: g.x, y: g.y };
     });
@@ -1087,7 +1121,9 @@ var Engine = (function () {
   }
   function _playerAttack(mon, ps) {
     _attackCd = 0.8;
-    player.atkT = 0.18; // chồm lên khi đánh
+    /* Animation 3 pha: windup 0.08s -> strike 0.12s -> recover 0.15s = 0.35s */
+    player.atkT = 0.35;
+    player.atkPhase = 'windup';
     player.dir = mon.x >= player.x ? 1 : -1;
     _audio(function (A) { A.sfx('slash'); });
     var dmg = 1;
@@ -1104,6 +1140,9 @@ var Engine = (function () {
     _applyLifesteal(dmg);
     _dmgNum(mon.x, mon.y - 26, (rc.crit ? '✦' : '') + '-' + dmg, rc.crit ? '#ff5252' : '#ffd54f');
     _vibrate(rc.crit ? [25, 30, 45] : 20); /* rung khi đánh trúng */
+    /* Hit-stop + screen shake: crit đóng băng lâu hơn + rung mạnh */
+    _hitStop = rc.crit ? 0.08 : 0.04;
+    if (rc.crit) { _shakeT = 0.15; _shakeMag = 4; }
     _skillFx(mon.x, mon.y);
     mon.hitT = 0.15;
     /* giật lùi nhẹ theo hướng đòn đánh (boss nặng nên ít bị đẩy) + vệt kiếm quang */
@@ -1624,20 +1663,73 @@ var Engine = (function () {
       m.atkCd -= dt;
       var d = Math.hypot(player.x - m.x, player.y - m.y);
       var spd = m.boss ? 95 : 70;
-      if (d < MONSTER_AGGRO && d > 44) {
+      /* === AI NÂNG CẤP (Gameplay 2026-10-21) ===
+       * 1. Leash: quái không đuổi quá xa vị trí spawn (600px) — quay về
+       * 2. Flee: quái thường HP < 25% chạy trốn (boss/tinh anh không chạy)
+       * 3. Strafe: khi tiếp cận, thỉnh thoảng di chuyển ziczac tránh đòn
+       * 4. Separation: tránh chồng lấn lên nhau */
+      var distSpawn = Math.hypot(m.x - (m.sx || m.x), m.y - (m.sy || m.y));
+      var isFleeing = false;
+      /* Flee: HP thấp -> chạy ngược hướng player */
+      if (!m.boss && !m.elite && m.hp > 0 && m.hp < m.maxHp * 0.25) {
+        m.fleeT = 1.5; /* chạy 1.5s mỗi lần trigger */
+      }
+      if (m.fleeT > 0) {
+        m.fleeT -= dt;
+        isFleeing = true;
+        var fa = Math.atan2(m.y - player.y, m.x - player.x);
+        m.x += Math.cos(fa) * spd * 1.2 * dt;
+        m.y += Math.sin(fa) * spd * 1.2 * dt;
+        m.ang = _angLerp(m.ang == null ? fa : m.ang, fa, Math.min(1, dt * 6));
+        m._lastMove = Date.now();
+      } else if (distSpawn > 600 && d > MONSTER_AGGRO) {
+        /* Leash: quá xa spawn + player cũng xa -> quay về */
+        var la = Math.atan2((m.sy || m.y) - m.y, (m.sx || m.x) - m.x);
+        m.x += Math.cos(la) * spd * 0.8 * dt;
+        m.y += Math.sin(la) * spd * 0.8 * dt;
+        m.ang = _angLerp(m.ang == null ? la : m.ang, la, Math.min(1, dt * 6));
+        m._lastMove = Date.now();
+      } else if (d < MONSTER_AGGRO && d > 44) {
         var a = Math.atan2(player.y - m.y, player.x - m.x);
-        m.x += Math.cos(a) * spd * dt;
-        m.y += Math.sin(a) * spd * dt;
+        /* Strafe: 30% thời gian di chuyển lệch góc để khó đoán */
+        m.strafeT -= dt;
+        if (m.strafeT <= 0) {
+          m.strafeT = 0.8 + Math.random() * 1.2;
+          m.strafeDir = Math.random() < 0.5 ? -1 : 1;
+        }
+        var strafeA = a + (Math.PI / 2) * m.strafeDir * 0.5;
+        /* trộn hướng tới player + strafe */
+        var moveA = a * 0.7 + strafeA * 0.3;
+        m.x += Math.cos(moveA) * spd * dt;
+        m.y += Math.sin(moveA) * spd * dt;
         m._lastMove = Date.now();
         /* quái/boss quay mặt theo hướng di chuyển — boss xoay chậm hơn (nặng nề) */
         m.ang = _angLerp(m.ang == null ? a : m.ang, a, Math.min(1, dt * (m.boss ? 4 : 6)));
-      } else if (d >= MONSTER_AGGRO) { // đi lang thang
+      } else if (d >= MONSTER_AGGRO) { // đi lang thang quanh spawn
         m.wanderT -= dt;
-        if (m.wanderT <= 0) { m.wanderA = Math.random() * Math.PI * 2; m.wanderT = 2 + Math.random() * 3; }
+        if (m.wanderT <= 0) {
+          /* chọn hướng ngẫu nhiên nhưng ưu tiên về phía spawn */
+          var toSpawn = Math.atan2((m.sy || m.y) - m.y, (m.sx || m.x) - m.x);
+          m.wanderA = toSpawn + (Math.random() - 0.5) * Math.PI;
+          m.wanderT = 2 + Math.random() * 3;
+        }
         m.x += Math.cos(m.wanderA) * spd * 0.3 * dt;
         m.y += Math.sin(m.wanderA) * spd * 0.3 * dt;
         m._lastMove = Date.now();
         m.ang = _angLerp(m.ang == null ? m.wanderA : m.ang, m.wanderA, Math.min(1, dt * 6));
+      }
+      /* Separation: đẩy nhau ra nếu quá gần (tránh chồng sprite) */
+      if (!isFleeing) {
+        for (var _si = 0; _si < _monsters.length; _si++) {
+          var _om = _monsters[_si];
+          if (_om === m || _om.dead) continue;
+          var _sdx = m.x - _om.x, _sdy = m.y - _om.y;
+          var _sd = Math.hypot(_sdx, _sdy);
+          if (_sd > 0 && _sd < 36) {
+            m.x += (_sdx / _sd) * 40 * dt;
+            m.y += (_sdy / _sd) * 40 * dt;
+          }
+        }
       }
       m.x = Math.max(20, Math.min(WORLD_W - 20, m.x));
       m.y = Math.max(20, Math.min(WORLD_H - 20, m.y));
@@ -1873,10 +1965,19 @@ var Engine = (function () {
       }
     }
     _attackCd -= dt;
-    if (player.atkT > 0) player.atkT -= dt;
+    /* Hit-stop: đóng băng mọi update khi trúng đòn (trừ chính hit-stop) */
+    if (_hitStop > 0) { _hitStop -= dt; return; }
+    /* Attack 3 pha: windup (0.35-0.27) -> strike (0.27-0.15) -> recover (0.15-0) */
+    if (player.atkT > 0) {
+      player.atkT -= dt;
+      if (player.atkT > 0.27) player.atkPhase = 'windup';
+      else if (player.atkT > 0.15) player.atkPhase = 'strike';
+      else player.atkPhase = 'recover';
+    }
     if (player.skillT > 0) player.skillT -= dt;
     if (player.hitT > 0) player.hitT -= dt;
     if (_dashCd > 0) _dashCd -= dt;
+    if (_shakeT > 0) _shakeT -= dt;
 
     /* Lướt */
     if (_dashT > 0) {
@@ -2014,7 +2115,14 @@ var Engine = (function () {
     else { _camX += (tx - _camX) * 0.12; _camY += (ty - _camY) * 0.12;
       if (Math.abs(tx - _camX) < 0.5) _camX = tx;
       if (Math.abs(ty - _camY) < 0.5) _camY = ty; }
-    return { x: _camX, y: _camY };
+    /* Screen shake (Gameplay 2026-10-21): rung ngẫu nhiên giảm dần */
+    var sx = 0, sy = 0;
+    if (_shakeT > 0) {
+      var mag = _shakeMag * (_shakeT / 0.15);
+      sx = (Math.random() - 0.5) * 2 * mag;
+      sy = (Math.random() - 0.5) * 2 * mag;
+    }
+    return { x: _camX + sx, y: _camY + sy };
   }
   function _resetCamera() { _camX = null; _camY = null; }
   function _mapName() {
@@ -2749,7 +2857,24 @@ var Engine = (function () {
     var blift = _bridgeLiftAt(player.x, player.y); /* đứng trên cầu: nâng theo mặt cầu */
     /* chồm lên khi đánh/tung chiêu */
     var lunge = 0;
-    if (player.atkT > 0) lunge = Math.sin((player.atkT / 0.25) * Math.PI) * 10 * player.dir;
+    if (player.atkT > 0) {
+      /* 3 pha với easing: windup lùi nhẹ -> strike chồm mạnh -> recover về */
+      var ph = player.atkPhase || 'strike';
+      if (ph === 'windup') {
+        /* lùi lại chuẩn bị: -4px */
+        lunge = -4 * player.dir;
+      } else if (ph === 'strike') {
+        /* chồm tới với ease-out: nhanh đầu, chậm cuối */
+        var t = (0.27 - player.atkT) / 0.12; /* 0->1 */
+        t = Math.max(0, Math.min(1, t));
+        var ease = 1 - Math.pow(1 - t, 3);
+        lunge = (4 + ease * 14) * player.dir;
+      } else {
+        /* recover: trở về mượt */
+        var t2 = player.atkT / 0.15; /* 1->0 */
+        lunge = 18 * t2 * t2 * player.dir;
+      }
+    }
     if (Engine.fly) { // pháp bảo ngự kiếm dưới chân
       _drawMount(player.x + lunge, player.y + lift + 16, player.dir);
     }
@@ -3541,6 +3666,7 @@ var Engine = (function () {
     start: start,
     stop: stop,
     enterMap: enterMap,
+    refreshNpcs: refreshNpcs, /* QA 2026-10-21: hiện NPC vừa unlock sau khi trả quest */
     setPlayerPos: function (x, y) {
       if (typeof x === "number" && typeof y === "number") {
         player.x = Math.max(16, Math.min(WORLD_W - 16, x));
