@@ -83,6 +83,23 @@ function _sectOk(q, state) {
   } catch (e) {}
   return joined === q.sect;
 }
+/* Cấp bậc tông môn: quest có field rank chỉ khả dụng khi cấp bậc người chơi
+ * đạt yêu cầu. (QA 2026-10-21: quest bí cảnh q_bc_* có rank nhưng Quest.available
+ * không check → player mới vào tông thấy cả quest Hộ Pháp) */
+var _SECT_RANK_ORDER = ["ngoai_mon", "noi_mon", "ho_phap", "truong_lao", "thai_thuong"];
+function _rankIdx(rank) {
+  var i = _SECT_RANK_ORDER.indexOf(rank);
+  return i < 0 ? 0 : i;
+}
+function _rankOk(q, state) {
+  if (!q.rank) return true;
+  var myRank = "ngoai_mon";
+  try {
+    if (state && state.sectInfo && state.sectInfo.rank) myRank = state.sectInfo.rank;
+    else if (typeof SectQuest !== "undefined" && SectQuest.rank) myRank = SectQuest.rank(state) || myRank;
+  } catch (e) {}
+  return _rankIdx(myRank) >= _rankIdx(q.rank);
+}
 
 var Quest = {
   /* Lấy định nghĩa quest theo id (cho UI hiển thị thoại nhận/trả) */
@@ -154,6 +171,7 @@ var Quest = {
       if (q.req && (!qs[q.req] || qs[q.req].status !== "done")) return;
       if (!_branchOk(q, state)) return; /* sai nhánh chính/ma */
       if (!_sectOk(q, state)) return; /* sai tông môn (nhiệm vụ bí cảnh tông) */
+      if (!_rankOk(q, state)) return; /* chưa đủ cấp bậc tông môn (QA 2026-10-21) */
       out.push(q);
     });
     return out;
@@ -186,6 +204,7 @@ var Quest = {
     if (q.req && (!qs[q.req] || qs[q.req].status !== "done")) return { ok: false, reason: "req_not_met" };
     if (!_branchOk(q, state)) return { ok: false, reason: "wrong_branch" };
     if (!_sectOk(q, state)) return { ok: false, reason: "wrong_sect" };
+    if (!_rankOk(q, state)) return { ok: false, reason: "rank_not_met" };
     qs[id] = { status: "active", count: 0 };
     return { ok: true };
   },

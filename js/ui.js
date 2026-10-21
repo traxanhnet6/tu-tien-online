@@ -3268,6 +3268,8 @@ function doQuestTurnIn(qtid) {
       if (qr.storyboard === "nga_ba_dinh_menh") showNgaBaStoryboard();
     } catch (e) { toast(t("quest_done")); }
     refreshHUD(); renderPanel();
+    /* QA 2026-10-21: hiện NPC vừa unlock (vd sứ giả tông môn sau q_story_10) */
+    try { if (typeof Engine !== "undefined" && Engine.refreshNpcs) Engine.refreshNpcs(); } catch (e) {}
     return true;
   } else { toast(t("q_incomplete")); sfx("fail"); return false; }
 }

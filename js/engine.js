@@ -1845,7 +1845,7 @@ var Engine = (function () {
    * --------------------------------------------------------------- */
   function _updateNpcs(dt) {
     for (var i = 0; i < _npcs.length; i++) {
-      var n = _npcs[i], R = n.def.wander || 0;
+      var n = _npcs[i], R = n.def.wander || 80; /* mặc định đi tuần 80px (Bui 2026-10-21) */
       var inGate = _gateZoneAt(n.x, n.y);
       if (n.graceT == null) { n.graceT = 0; n.spawnInGate = !!inGate; }
       n.graceT += dt;
