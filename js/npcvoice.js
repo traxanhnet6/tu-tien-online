@@ -90,6 +90,34 @@ var NPCVoice = (function () {
     } catch (e) {}
     return true; /* mặc định BẬT */
   }
+  /* Bui 2026-10-21: phát file âm thanh thu sẵn cho NPC */
+  var _audioEl = null;
+  function _tryAudioFile(npcId) {
+    if (!npcId || !isEnabled()) return false;
+    try {
+      if (typeof Audio === "undefined") return false;
+      var src = "assets/audio/npc/" + npcId + "_greet.mp3";
+      // kiểm tra file tồn tại qua danh sách đã biết
+      var known = { truong_lang: 1, dai_phu: 1, co_tran_tu: 1, to_uyen_nhi: 1,
+        diep_van: 1, truong_lao_kiem: 1, truong_lao_phap: 1, truong_lao_the: 1,
+        truong_lao_duoc: 1, truong_lao_thu: 1 };
+      // trưởng lão các tông dùng chung file truong_lao_*
+      var fid = npcId;
+      if (!known[fid]) {
+        var m = /^truong_lao_(kiem|phap|the|duoc|thu|ma)$/.exec(npcId);
+        if (m && known["truong_lao_" + m[1]]) fid = "truong_lao_" + m[1];
+        else return false;
+      }
+      if (_audioEl) { try { _audioEl.pause(); } catch (e) {} }
+      _audioEl = new Audio("assets/audio/npc/" + fid + "_greet.mp3");
+      _audioEl.play().catch(function () {});
+      return true;
+    } catch (e) { return false; }
+  }
+  function cancel() {
+    try { if (_audioEl) _audioEl.pause(); } catch (e) {}
+    try { var ss = _ss(); if (ss && ss.cancel) ss.cancel(); } catch (e) {}
+  }
   function setEnabled(v) {
     try {
       if (typeof state !== "undefined" && state) {
@@ -101,15 +129,12 @@ var NPCVoice = (function () {
     if (!v) cancel();
   }
 
-  function cancel() {
-    try {
-      var ss = _ss();
-      if (ss && typeof ss.cancel === "function") ss.cancel();
-    } catch (e) {}
-  }
+  /* (cancel đã định nghĩa ở trên — gồm cả audio file) */
 
   /* Đọc: npcId (bảng giọng) + text (chuỗi hoặc mảng dòng thoại) */
   function speak(npcId, text) {
+    /* Bui 2026-10-21: ưu tiên file âm thanh thu sẵn */
+    if (_tryAudioFile(npcId)) return true;
     if (!isEnabled()) return false;
     var ss = _ss();
     if (!ss || typeof ss.speak !== "function") return false;
