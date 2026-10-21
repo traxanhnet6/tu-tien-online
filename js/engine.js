@@ -371,6 +371,9 @@ var Engine = (function () {
   /* Linh thú đi theo */
   var PET_SPRITE = 'assets/sprs/sprs_pet_linh_thu.png';
   var _pet = { x: 0, y: 0, atkCd: 0, skillCd: 0, ang: Math.PI / 2 };
+  /* Thần thú đồng hành 3D (theo linh căn): bay quanh nhân vật, tự đánh quái */
+  var _sb = { x: 0, y: 0, ang: 0, skillCd: 0, frameT: 0, frameIdx: 0, lift: 30 };
+  var _sbProjs = []; /* đạn skill thần thú: {x,y,tgt,el,dmg,sp,color,t} */
 
   function _randPos(margin) {
     margin = margin || 120;
@@ -1541,6 +1544,153 @@ var Engine = (function () {
     _drawCreature(_pet, bx, by, size, size, pimg, '#c9a227',
       { lift: lift + blift, shadowY: _pet.y + 14 - blift, noTilt: noTilt, faceAng: _pet.ang });
   }
+  /* ---------- Thần thú đồng hành 3D (theo linh căn) ---------- */
+  function _sbActive() {
+    var S = _S();
+    if (!S) return false;
+    try {
+      if (typeof SpiritBeast !== 'undefined' && SpiritBeast.sbActive) return SpiritBeast.sbActive(S);
+    } catch (e) {}
+    return !!(S.spiritBeast && S.spiritBeast.enabled !== false);
+  }
+  function _sbInitPos() {
+    _sb.x = player.x + 60; _sb.y = player.y - 20;
+  }
+  function _updateSpiritBeast(dt, ps) {
+    var S = _S();
+    if (!_sbActive()) { _sbProjs.length = 0; return; }
+    var sb = S.spiritBeast;
+    if (Math.abs(_sb.x) < 1 && Math.abs(_sb.y) < 1) _sbInitPos();
+    /* bay quanh nhân vật theo quỹ đạo tròn, độ cao thay đổi */
+    var R = (typeof SpiritBeast !== 'undefined' && SpiritBeast.SB_ORBIT_R) || 80;
+    _sb.ang += dt * 1.4;
+    _sb.x = player.x + Math.cos(_sb.ang) * R;
+    _sb.y = player.y + Math.sin(_sb.ang) * R * 0.7;
+    var now = Date.now() / 1000;
+    _sb.lift = 30 + Math.sin(now * 2.2) * 18;
+    /* animation vỗ cánh: up → mid → down → mid */
+    _sb.frameT += dt;
+    if (_sb.frameT >= 0.18) { _sb.frameT = 0; _sb.frameIdx = (_sb.frameIdx + 1) % 4; }
+    /* cập nhật đạn skill */
+    for (var i = _sbProjs.length - 1; i >= 0; i--) {
+      var pr = _sbProjs[i];
+      pr.t += dt;
+      if (!pr.tgt || pr.tgt.dead) { _sbProjs.splice(i, 1); continue; }
+      var pdx = pr.tgt.x - pr.x, pdy = (pr.tgt.y - 20) - pr.y;
+      var pd = Math.hypot(pdx, pdy);
+      if (pd < 18 || pr.t > 3) {
+        _sbProjHit(pr, ps);
+        _sbProjs.splice(i, 1);
+        continue;
+      }
+      pr.x += pdx / pd * pr.sp * dt;
+      pr.y += pdy / pd * pr.sp * dt;
+    }
+    /* tự động tấn công quái gần nhất trong 300px */
+    _sb.skillCd -= dt;
+    if (_sb.skillCd > 0) return;
+    var RANGE = (typeof SpiritBeast !== 'undefined' && SpiritBeast.SB_RANGE) || 300;
+    var tgt = null, best = RANGE;
+    for (var j = 0; j < _monsters.length; j++) {
+      var m = _monsters[j];
+      if (m.dead) continue;
+      var md = Math.hypot(m.x - _sb.x, m.y - _sb.y);
+      if (md < best) { best = md; tgt = m; }
+    }
+    if (!tgt) return;
+    var CD = (typeof SpiritBeast !== 'undefined' && SpiritBeast.SB_SKILL_CD) || 3;
+    _sb.skillCd = CD;
+    var el = sb.element, def = null;
+    try { def = SpiritBeast.sbDef(el); } catch (e) {}
+    var dmg = 10;
+    try { dmg = SpiritBeast.sbDmg(ps.atk, sb); } catch (e2) {}
+    _sbProjs.push({ x: _sb.x, y: _sb.y - _sb.lift, tgt: tgt, el: el,
+                    dmg: dmg, sp: 520, color: (def && def.color) || '#ffffff', t: 0 });
+    _audio(function (A) { A.sfx('slash'); });
+  }
+  /* Đạn trúng: sát thương + debuff theo hệ + nổ hiệu ứng */
+  function _sbProjHit(pr, ps) {
+    var S = _S();
+    if (!S) return;
+    var def = null;
+    try { def = SpiritBeast.sbDef(pr.el); } catch (e) {}
+    var color = (def && def.color) || '#ffffff';
+    var skillName = '';
+    try { skillName = SpiritBeast.sbSkillName(pr.el, S.lang); } catch (e2) {}
+    var targets = [pr.tgt];
+    if (def && def.aoe) { /* Phong: lốc xoáy AoE */
+      for (var i = 0; i < _monsters.length; i++) {
+        var m = _monsters[i];
+        if (m.dead || m === pr.tgt) continue;
+        if (Math.hypot(m.x - pr.tgt.x, m.y - pr.tgt.y) < 110) targets.push(m);
+      }
+    }
+    for (var k = 0; k < targets.length; k++) {
+      var tm = targets[k];
+      if (tm.dead) continue;
+      _damageMon(tm, pr.dmg);
+      /* debuff theo hệ */
+      if (def && def.debuff && !tm.dead) {
+        if (!tm.sbDb) tm.sbDb = {};
+        var db = tm.sbDb;
+        if (def.debuff === 'burn') { db.burnT = 4; db.burnDps = Math.max(3, Math.round(pr.dmg * 0.3)); }
+        else if (def.debuff === 'slow') { db.slowT = 3; }
+        else if (def.debuff === 'stun') { db.stunT = 1.2; }
+        else if (def.debuff === 'fear') { db.fearT = 2; db.fearX = _sb.x; db.fearY = _sb.y; }
+        else if (def.debuff === 'poison') { db.poisonT = 5; db.poisonDps = Math.max(2, Math.round(pr.dmg * 0.2)); }
+      }
+      try { SpiritBeast.sbAddExp(S, 1); } catch (e3) {}
+    }
+    /* hiệu ứng nổ theo hệ */
+    _fx.push({ kind: 'fire', x: pr.tgt.x, y: pr.tgt.y - 20, r: 12, max: def && def.aoe ? 130 : 80,
+               t: 0.4, maxT: 0.4, color: color });
+    _burst(pr.tgt.x, pr.tgt.y - 20, 6, color);
+    if (skillName) _announce(pr.tgt.x, pr.tgt.y - 70, skillName, color);
+    /* Quang: hồi máu nhẹ cho chủ; Huyết: hút máu */
+    var healAmt = 0;
+    if (def && def.heal) healAmt = Math.round(pr.dmg * def.heal);
+    if (def && def.lifesteal) healAmt = Math.round(pr.dmg * def.lifesteal);
+    if (healAmt > 0) {
+      player.hp = Math.min(ps.maxHp, player.hp + healAmt);
+      _dmgNum(player.x, player.y - 50, '+' + healAmt, '#7dff9a');
+      _burst(player.x, player.y - 20, 4, '#7dff9a');
+    }
+  }
+  function _drawSbProjs() {
+    for (var i = 0; i < _sbProjs.length; i++) {
+      var pr = _sbProjs[i];
+      _ctx.globalAlpha = 0.9;
+      _ctx.fillStyle = pr.color;
+      _ctx.shadowBlur = 14; _ctx.shadowColor = pr.color;
+      _ctx.beginPath(); _ctx.arc(pr.x, pr.y, 7, 0, Math.PI * 2); _ctx.fill();
+      _ctx.globalAlpha = 0.4;
+      _ctx.beginPath(); _ctx.arc(pr.x, pr.y, 12, 0, Math.PI * 2); _ctx.fill();
+      _ctx.shadowBlur = 0; _ctx.globalAlpha = 1;
+    }
+  }
+  function _drawSpiritBeast() {
+    var S = _S();
+    if (!_sbActive()) return;
+    var el = S.spiritBeast.element;
+    var frames = ['up', 'mid', 'down', 'mid'];
+    var src = 'assets/linhcan/beast_' + el + '_' + frames[_sb.frameIdx] + '.png';
+    var def = null;
+    try { def = SpiritBeast.sbDef(el); } catch (e) {}
+    var col = (def && def.color) || '#ffffff';
+    var lift = _sb.lift;
+    /* hiệu ứng 3D: bay cao → nhỏ lại, bay thấp → to ra */
+    var size = 58 * (1 - Math.min(lift, 60) / 160);
+    var blift = _bridgeLiftAt(_sb.x, _sb.y);
+    var by = _sb.y - lift - blift;
+    /* hào quang theo hệ */
+    _ctx.globalAlpha = 0.45;
+    _ctx.strokeStyle = col;
+    _ctx.lineWidth = 2;
+    _ctx.beginPath(); _ctx.arc(_sb.x, by, size * 0.62, 0, Math.PI * 2); _ctx.stroke();
+    _ctx.globalAlpha = 1;
+    _drawCreature(_sb, _sb.x, by, size, size, src, col,
+      { lift: lift + blift, shadowY: _sb.y + 12 - blift, faceAng: _sb.ang + Math.PI / 2 });
+  }
   /* Tự uống thuốc theo cài đặt */
   function _autoPotion(ps) {
     var S = _S();
@@ -1660,9 +1810,51 @@ var Engine = (function () {
         if (Math.abs(m.kx) < 5) m.kx = 0;
         if (Math.abs(m.ky) < 5) m.ky = 0;
       }
+      /* Thần thú đồng hành 3D: debuff — thiêu đốt/độc (DoT), choáng, chậm, sợ hãi */
+      var sbSlowMult = 1, sbStunned = false, sbFear = null, sbSkipMove = false;
+      if (m.sbDb) {
+        var _sdb = m.sbDb;
+        if ((_sdb.burnT || 0) > 0) {
+          _sdb.burnT -= dt; _sdb.burnAcc = (_sdb.burnAcc || 0) + dt;
+          if (_sdb.burnAcc >= 0.5) {
+            _sdb.burnAcc = 0;
+            var _sbd = Math.max(1, Math.round((_sdb.burnDps || 5) / 2));
+            m.hp -= _sbd; _dmgNum(m.x, m.y - 26, '-' + _sbd, '#ff7a3c');
+            if (m.hp <= 0 && !m.dead) _killMon(m);
+          }
+        }
+        if ((_sdb.poisonT || 0) > 0) {
+          _sdb.poisonT -= dt; _sdb.poisonAcc = (_sdb.poisonAcc || 0) + dt;
+          if (_sdb.poisonAcc >= 0.5) {
+            _sdb.poisonAcc = 0;
+            var _spd2 = Math.max(1, Math.round((_sdb.poisonDps || 4) / 2));
+            m.hp -= _spd2; _dmgNum(m.x, m.y - 26, '-' + _spd2, '#76ff03');
+            if (m.hp <= 0 && !m.dead) _killMon(m);
+          }
+        }
+        if ((_sdb.stunT || 0) > 0) { _sdb.stunT -= dt; sbStunned = true; }
+        if ((_sdb.slowT || 0) > 0) { _sdb.slowT -= dt; sbSlowMult = 0.5; }
+        if ((_sdb.fearT || 0) > 0) {
+          _sdb.fearT -= dt;
+          sbFear = { x: _sdb.fearX || m.x, y: _sdb.fearY || m.y };
+        }
+        if ((_sdb.burnT || 0) <= 0 && (_sdb.poisonT || 0) <= 0 && (_sdb.stunT || 0) <= 0 &&
+            (_sdb.slowT || 0) <= 0 && (_sdb.fearT || 0) <= 0) m.sbDb = null;
+      }
+      if (sbStunned || sbFear) {
+        sbSkipMove = true;
+        if (sbFear) { /* sợ hãi: chạy khỏi thần thú */
+          var _sfa = Math.atan2(m.y - sbFear.y, m.x - sbFear.x);
+          m.x += Math.cos(_sfa) * 95 * dt;
+          m.y += Math.sin(_sfa) * 95 * dt;
+          m.ang = _angLerp(m.ang == null ? _sfa : m.ang, _sfa, Math.min(1, dt * 6));
+          m._lastMove = Date.now();
+        }
+        /* choáng: đứng yên */
+      }
       m.atkCd -= dt;
       var d = Math.hypot(player.x - m.x, player.y - m.y);
-      var spd = m.boss ? 95 : 70;
+      var spd = (m.boss ? 95 : 70) * sbSlowMult;
       /* === AI NÂNG CẤP (Gameplay 2026-10-21) ===
        * 1. Leash: quái không đuổi quá xa vị trí spawn (600px) — quay về
        * 2. Flee: quái thường HP < 25% chạy trốn (boss/tinh anh không chạy)
@@ -1674,7 +1866,8 @@ var Engine = (function () {
       if (!m.boss && !m.elite && m.hp > 0 && m.hp < m.maxHp * 0.25) {
         m.fleeT = 1.5; /* chạy 1.5s mỗi lần trigger */
       }
-      if (m.fleeT > 0) {
+      if (sbSkipMove) { /* choáng/sợ hãi: đã xử lý ở trên, bỏ qua AI di chuyển thường */
+      } else if (m.fleeT > 0) {
         m.fleeT -= dt;
         isFleeing = true;
         var fa = Math.atan2(m.y - player.y, m.x - player.x);
@@ -1733,7 +1926,7 @@ var Engine = (function () {
       }
       m.x = Math.max(20, Math.min(WORLD_W - 20, m.x));
       m.y = Math.max(20, Math.min(WORLD_H - 20, m.y));
-      if (d <= 52 && m.atkCd <= 0) {
+      if (d <= 52 && m.atkCd <= 0 && !sbStunned) {
         m.atkCd = m.boss ? 1.6 : 1.3;
         /* Đang Ngự Kiếm bay: quái thường đánh đất không chạm tới;
          * chỉ boss và quái bay (bay:true) đánh được */
@@ -2038,6 +2231,7 @@ var Engine = (function () {
     _updateTelegraphs(dt, ps);
     _updateFx(dt);
     _updatePet(dt);
+    _updateSpiritBeast(dt, ps);
     _autoPotion(ps);
 
     // Bí cảnh: hết quái/boss của ải → onStageClear
@@ -3413,6 +3607,7 @@ var Engine = (function () {
     for (var oi2 = 0; oi2 < _objects.length; oi2++) ents.push({ y: _objects[oi2].y, k: 'obj', o: _objects[oi2] });
     ents.push({ y: player.y - _bridgeLiftAt(player.x, player.y), k: 'p' });
     if (_petActive()) ents.push({ y: _pet.y - _bridgeLiftAt(_pet.x, _pet.y), k: 't' });
+    if (_sbActive()) ents.push({ y: _sb.y - _bridgeLiftAt(_sb.x, _sb.y), k: 'sb' });
     var others = _visiblePlayers();
     for (var oi = 0; oi < others.length; oi++) ents.push({ y: others[oi].y - _bridgeLiftAt(others[oi].x, others[oi].y), k: 'o', o: others[oi] });
     ents.sort(function (a, b) { return a.y - b.y; });
@@ -3422,9 +3617,12 @@ var Engine = (function () {
       else if (e.k === 'p') _drawPlayer();
       else if (e.k === 'n') _drawNpc(e.o);
       else if (e.k === 't') _drawPet();
+      else if (e.k === 'sb') _drawSpiritBeast();
       else if (e.k === 'obj') _drawObject(e.o);
       else _drawOther(e.o);
     }
+    /* Đạn skill thần thú đồng hành — bay trên entities */
+    _drawSbProjs();
 
     // Hiệu ứng skill: vòng tròn xung theo hệ + chiêu thức
     for (var fi = 0; fi < _fx.length; fi++) {

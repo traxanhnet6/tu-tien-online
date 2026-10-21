@@ -11,7 +11,7 @@
 <script>
 /* TT_BUILD: phiên bản build — tăng mỗi lần deploy để tránh cache JS/CSS cũ.
    (Giá trị dùng chung cho toàn trang, khai báo 1 lần duy nhất tại đây.) */
-var TT_BUILD = "20261021-64";
+var TT_BUILD = "20261021-65";
 </script>
 <script>document.write('<link rel="stylesheet" href="css/style.css?v=' + TT_BUILD + '">');</script>
 <script>document.write('<link rel="stylesheet" href="css/hud-tutien2d.css?v=' + TT_BUILD + '">');</script>
@@ -203,6 +203,7 @@ var TT_BUILD = "20261021-64";
       <!-- Cạnh phải (chuẩn tutien2d): Phi Hành / Đổi / Tọa -->
       <div id="hud-toggles-right">
         <button id="btn-fly" class="rbtn tgl-col"><img src="assets/ui-icons/hud_fly.png" class="hicon" alt="Phi Hành"><span class="tgl-label" data-t="btn_fly">Phi Hành</span></button>
+        <button id="btn-spiritbeast" class="rbtn tgl-col" style="display:none"><img src="assets/linhcan/beast_hoa_mid.png" class="hicon" alt="Thần Thú" onerror="this.style.display='none'"><span class="tgl-label" data-t="sb_companion">Thần Thú</span></button>
         <button id="btn-dash" class="rbtn tgl-col"><img src="assets/ui-icons/hud_dash.png" class="hicon" alt=""><span class="tgl-label">Đổi</span></button>
         <button id="btn-meditate" class="rbtn tgl-col"><span class="meditate-ico">🧘</span><span class="tgl-label">Tọa</span></button>
       </div>
@@ -249,7 +250,7 @@ var TT_BUILD = "20261021-64";
   var core = ["js/lang.js", "js/stages.js", "js/data.js", "js/state.js", "js/dataclear.js",
     "js/bodycult.js", "js/taycot.js", "js/khilinh.js", "js/lifespan.js", "js/secret.js", "js/secretbook.js", "js/tower.js",
     "js/social.js", "js/skills.js", "js/sect.js", "js/sectquest.js", "js/alliance.js",
-    "js/encounter.js", "js/gacha.js", "js/pet.js", "js/market.js", "js/farm.js", "js/grindzone.js",
+    "js/encounter.js", "js/gacha.js", "js/pet.js", "js/spiritbeast.js", "js/market.js", "js/farm.js", "js/grindzone.js",
     "js/charanim.js", "js/appearance.js", "js/equipset.js"];
   for (var i = 0; i < core.length; i++) {
     document.write('<script src="' + core[i] + '?v=' + TT_BUILD + '"><\/script>');

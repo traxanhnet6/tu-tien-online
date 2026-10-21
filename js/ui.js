@@ -1006,6 +1006,20 @@ function syncToggles() {
   var _baq = $("btn-autoquest"); if (_baq) _baq.classList.toggle("on", !!state.autoQuest);
   $("btn-fly").classList.toggle("on", !!state.fly);
   $("btn-run").classList.toggle("on", !!state.run);
+  /* Thần thú đồng hành 3D: hiện nút khi đã nhận, sáng khi đang bật */
+  try {
+    var _sbb = $("btn-spiritbeast");
+    var _sbHas = !!(typeof SpiritBeast !== "undefined" && SpiritBeast.sbActive ?
+      (state.spiritBeast && SpiritBeast.SB_ELEMENTS[state.spiritBeast.element]) :
+      (state.spiritBeast && state.spiritBeast.element));
+    if (_sbb) {
+      _sbb.style.display = _sbHas ? "" : "none";
+      _sbb.classList.toggle("on", !!(_sbHas && state.spiritBeast.enabled !== false));
+      var _sbi = _sbb.querySelector("img");
+      if (_sbi && _sbHas) _sbi.src = "assets/linhcan/beast_" + state.spiritBeast.element + "_mid.png";
+    }
+    if (typeof renderSbPanel === "function") renderSbPanel();
+  } catch (_sbe2) {}
   /* Nút Tọa sáng khi đang thiền */
   try {
     var med = (typeof BodyCult !== "undefined" && BodyCult.meditateLeft) ? BodyCult.meditateLeft(state) > 0 : false;
@@ -2104,6 +2118,20 @@ function showLinhCanFx(element) {
       if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
       if (css.parentNode) css.parentNode.removeChild(css);
     };
+    /* Thần thú đồng hành 3D: trắc linh căn xong → thần thú tương ứng xuất hiện */
+    try {
+      if (typeof SpiritBeast !== "undefined" && SpiritBeast.acquire) {
+        var _sbr = SpiritBeast.acquire(state, element);
+        if (_sbr && _sbr.ok) {
+          saveGame(state);
+          if (typeof renderSbPanel === "function") renderSbPanel();
+          setTimeout(function () {
+            toast(t("sb_acquired"));
+            if (typeof sfx === "function") sfx("success");
+          }, 4200);
+        }
+      }
+    } catch (_sbe) {}
   } catch (e) {}
 }
 
@@ -4150,6 +4178,9 @@ function bindStatic() {
     if (hasEngine() && Engine.setAuto) Engine.setAuto(state.auto);
     saveGame(state); syncToggles(); sfx("click");
   };
+  /* Thần thú đồng hành 3D: nút bật/tắt */
+  var _btnSB = $("btn-spiritbeast");
+  if (_btnSB) _btnSB.onclick = function () { doSbToggle(); };
   /* AUTO LÀM NHIỆM VỤ (Bui 2026-10-19) */
   var _btnAQ = $("btn-autoquest");
   if (_btnAQ) _btnAQ.onclick = function () {
@@ -5639,6 +5670,46 @@ function renderPet() {
     esc(t("pet_rename")) + '"><button class="mini" data-act="pet-rename-do">' + esc(t("ui_use")) + "</button></div>";
   h += "</div>";
   return h;
+}
+/* ============ Thần thú đồng hành 3D: panel + bật/tắt ============ */
+function doSbToggle() {
+  if (typeof SpiritBeast === "undefined" || !SpiritBeast.sbToggle) { toast(t("coming_soon")); return; }
+  var r = SpiritBeast.sbToggle(state);
+  if (!r.ok) { toast(t("coming_soon")); return; }
+  saveGame(state); sfx("click");
+  toast(t(r.enabled ? "sb_on" : "sb_off"));
+  syncToggles(); renderSbPanel();
+}
+/* Panel nhỏ hiển thị thần thú (tên, hệ, cấp) — góc trên-phải dưới minimap */
+function renderSbPanel() {
+  try {
+    var old = document.getElementById("sb-panel");
+    var has = !!(typeof SpiritBeast !== "undefined" && SpiritBeast.SB_ELEMENTS &&
+      state.spiritBeast && SpiritBeast.SB_ELEMENTS[state.spiritBeast.element]);
+    if (!has) { if (old && old.parentNode) old.parentNode.removeChild(old); return; }
+    var sb = state.spiritBeast;
+    var def = SpiritBeast.SB_ELEMENTS[sb.element];
+    var lang = state.lang || "vi";
+    var nm = (lang === "en" ? def.en : def.vi) || def.vi;
+    var sk = (lang === "en" ? def.skillEn : def.skillVi) || def.skillVi;
+    var on = sb.enabled !== false;
+    if (!old) {
+      old = document.createElement("div");
+      old.id = "sb-panel";
+      document.getElementById("app").appendChild(old);
+    }
+    old.innerHTML =
+      '<div class="sb-head" style="border-color:' + def.color + '">' +
+      '<img src="assets/linhcan/beast_' + sb.element + '_mid.png" onerror="this.style.display=\'none\'">' +
+      '<div class="sb-info">' +
+      '<div class="sb-name" style="color:' + def.color + '">' + esc(nm) + '</div>' +
+      '<div class="sb-sub">' + esc(t("sb_level")) + ' ' + (sb.level || 1) + ' · ' + esc(t("sb_skill")) + ': ' + esc(sk) + '</div>' +
+      '</div></div>' +
+      '<button id="sb-toggle-btn" class="mini' + (on ? '' : ' paper') + '">' + esc(t("sb_toggle")) + '</button>';
+    old.className = "sb-panel" + (on ? " on" : "");
+    var _tb = document.getElementById("sb-toggle-btn");
+    if (_tb) _tb.onclick = function () { doSbToggle(); };
+  } catch (e) {}
 }
 function doPetFeed() {
   if (typeof Pet === "undefined" || !Pet.feedPet) { toast(t("coming_soon")); return; }
