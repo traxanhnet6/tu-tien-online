@@ -295,6 +295,8 @@ var Quest = {
         state.char.element = _el;
         state.char.elementQuality = _ql;
         state.char.roots = [_el];
+        /* Đánh dấu để UI hiện hiệu ứng trắc linh căn (Bui 2026-10-21) */
+        state._linhCanFx = _el;
       } catch (e) {}
     }
     /* Chuỗi cốt truyện: tự nhận quest tiếp theo có autoAccept (data-driven) */

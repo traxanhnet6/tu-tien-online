@@ -2004,6 +2004,128 @@ function showCuuSacFx() {
   } catch (e) {}
 }
 
+/* Hiệu ứng TRẮC LINH CĂN (Bui 2026-10-21): hiện linh căn của người chơi với màu sắc + hiệu ứng riêng từng hệ */
+function showLinhCanFx(element) {
+  try {
+    var elColors = {
+      kim: "#e8e8e8", moc: "#66bb6a", thuy: "#42a5f5", hoa: "#ef5350", tho: "#a1887f",
+      bang: "#9be8ff", loi: "#b388ff", phong: "#b2ff59", quang: "#fff9c4",
+      am: "#7b1fa2", doc: "#76ff03", huyet: "#ff5252", hondon: "#8e8e93"
+    };
+    var elNames = {
+      kim: "Kim Linh Căn", moc: "Mộc Linh Căn", thuy: "Thủy Linh Căn", hoa: "Hỏa Linh Căn", tho: "Thổ Linh Căn",
+      bang: "Băng Linh Căn", loi: "Lôi Linh Căn", phong: "Phong Linh Căn", quang: "Quang Linh Căn",
+      am: "Ám Linh Căn", doc: "Độc Linh Căn", huyet: "Huyết Linh Căn", hondon: "Hỗn Độn Linh Căn"
+    };
+    var color = elColors[element] || "#ffffff";
+    var name = elNames[element] || element;
+
+    var wrap = document.createElement("div");
+    wrap.className = "linhcan-fx";
+    var html = '<div class="linhcan-stone"><div class="linhcan-glow" style="background:' + color + '"></div></div>';
+    html += '<div class="linhcan-name" style="color:' + color + ';text-shadow:0 0 20px ' + color + '">' + esc(name) + '</div>';
+    /* hạt linh khí bay */
+    for (var i = 0; i < 50; i++) {
+      html += '<div class="linhcan-particle" style="left:' + (20 + Math.random() * 60) + '%;background:' + color +
+        ';animation-delay:' + (Math.random() * 1.5) + 's;animation-duration:' + (2 + Math.random() * 2) + 's"></div>';
+    }
+    /* vòng sáng lan tỏa */
+    for (var j = 0; j < 3; j++) {
+      html += '<div class="linhcan-ring" style="border-color:' + color + ';animation-delay:' + (j * 0.5) + 's"></div>';
+    }
+    wrap.innerHTML = html;
+    var css = document.createElement("style");
+    css.textContent =
+      ".linhcan-fx{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.85)}" +
+      ".linhcan-stone{width:120px;height:160px;background:linear-gradient(180deg,#3a3a4a,#1a1a2a);border-radius:20px 20px 40px 40px;position:relative;margin-bottom:30px;animation:lcPulse 2s ease-in-out infinite}" +
+      "@keyframes lcPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}" +
+      ".linhcan-glow{position:absolute;inset:10px;border-radius:15px 15px 30px 30px;opacity:.9;filter:blur(8px);animation:lcGlow 1.5s ease-in-out infinite}" +
+      "@keyframes lcGlow{0%,100%{opacity:.6;filter:blur(8px)}50%{opacity:1;filter:blur(4px)}}" +
+      ".linhcan-name{font-size:32px;font-weight:bold;animation:lcNameIn 1s ease}" +
+      "@keyframes lcNameIn{from{opacity:0;transform:scale(.5) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}" +
+      ".linhcan-particle{position:absolute;bottom:20%;width:6px;height:6px;border-radius:50%;opacity:0;animation:lcFloat linear infinite}" +
+      "@keyframes lcFloat{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(-60vh)}}" +
+      ".linhcan-ring{position:absolute;width:200px;height:200px;border:3px solid;border-radius:50%;opacity:0;animation:lcRing 2s ease-out infinite}" +
+      "@keyframes lcRing{0%{opacity:.8;transform:scale(.3)}100%{opacity:0;transform:scale(2)}}";
+    document.head.appendChild(css);
+    document.getElementById("app").appendChild(wrap);
+    sfx("success");
+    setTimeout(function () {
+      wrap.style.opacity = "0"; wrap.style.transition = "opacity .6s";
+      setTimeout(function () {
+        if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+        if (css.parentNode) css.parentNode.removeChild(css);
+      }, 600);
+    }, 4000);
+    wrap.onclick = function () {
+      if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+      if (css.parentNode) css.parentNode.removeChild(css);
+    };
+  } catch (e) {}
+}
+
+/* Màn ăn mừng hoàn thành nhiệm vụ (Bui 2026-10-21): ảnh quest + pháo giấy + phần thưởng */
+function showQuestCompleteFx(qid) {
+  try {
+    var qd = (typeof Quest !== "undefined") ? Quest.def(qid) : null;
+    if (!qd) return;
+    var qname = t(qd.nameKey || qid);
+    var img = qd.img || "";
+    var rw = qd.reward || {};
+    var rwTx = [];
+    if (rw.stones) rwTx.push("+" + rw.stones + " LT");
+    if (rw.exp) rwTx.push("+" + rw.exp + " EXP");
+    if (rw.contrib) rwTx.push("+" + rw.contrib + " " + t("sect_contrib"));
+    (rw.items || []).forEach(function (it) {
+      var nm = (typeof itemName === "function") ? itemName(it.id) : it.id;
+      rwTx.push(nm + " x" + (it.qty || 1));
+    });
+
+    var wrap = document.createElement("div");
+    wrap.className = "qcomplete-fx";
+    var html = '<div class="qcomplete-card">';
+    if (img) html += '<img class="qcomplete-img" src="' + esc(img) + '"/>';
+    html += '<div class="qcomplete-title">✨ ' + esc(t("quest_done")) + ' ✨</div>';
+    html += '<div class="qcomplete-name">' + esc(qname) + '</div>';
+    if (rwTx.length) html += '<div class="qcomplete-rewards">' + rwTx.map(esc).join("<br>") + '</div>';
+    html += '</div>';
+    /* pháo giấy */
+    for (var i = 0; i < 40; i++) {
+      var c = ["#ff2d2d","#ffe93c","#4dff4d","#3cc8ff","#b44dff","#ff8c1a"][i % 6];
+      html += '<div class="qcomplete-confetti" style="left:' + (Math.random() * 100) + '%;background:' + c +
+        ';animation-delay:' + (Math.random() * 0.8) + 's;animation-duration:' + (1.5 + Math.random()) + 's"></div>';
+    }
+    wrap.innerHTML = html;
+    var css = document.createElement("style");
+    css.textContent =
+      ".qcomplete-fx{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);animation:qcFadeIn .3s ease}" +
+      "@keyframes qcFadeIn{from{opacity:0}to{opacity:1}}" +
+      ".qcomplete-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border:2px solid #ffd700;border-radius:16px;padding:24px;text-align:center;max-width:320px;animation:qcPop .5s cubic-bezier(.68,-.55,.27,1.55);box-shadow:0 0 40px rgba(255,215,0,.4)}" +
+      "@keyframes qcPop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}" +
+      ".qcomplete-img{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px}" +
+      ".qcomplete-title{font-size:20px;font-weight:bold;color:#ffd700;margin-bottom:8px}" +
+      ".qcomplete-name{font-size:16px;color:#fff;margin-bottom:12px}" +
+      ".qcomplete-rewards{font-size:14px;color:#90ee90;line-height:1.6}" +
+      ".qcomplete-confetti{position:absolute;top:-10px;width:8px;height:14px;opacity:0;animation:qcFall linear forwards}" +
+      "@keyframes qcFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}";
+    document.head.appendChild(css);
+    document.getElementById("app").appendChild(wrap);
+    sfx("success");
+    setTimeout(function () {
+      wrap.style.opacity = "0"; wrap.style.transition = "opacity .4s";
+      setTimeout(function () {
+        if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+        if (css.parentNode) css.parentNode.removeChild(css);
+      }, 400);
+    }, 2800);
+    /* chạm để đóng sớm */
+    wrap.onclick = function () {
+      if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+      if (css.parentNode) css.parentNode.removeChild(css);
+    };
+  } catch (e) {}
+}
+
 /* Hiệu ứng ĐỘT PHÁ (NV c08/m08 Sinh Tử Đột Phá): cột sáng vàng + chữ đột phá */
 function showDotPhaFx(label) {
   try {
@@ -3247,6 +3369,13 @@ function doQuestTurnIn(qtid) {
   var qr = (typeof Quest !== "undefined") ? Quest.turnIn(state, qtid) : null;
   if (qr && qr.ok) {
     saveGame(state); sfx("success");
+    /* Hiệu ứng trắc linh căn (Bui 2026-10-21) */
+    if (state._linhCanFx) {
+      showLinhCanFx(state._linhCanFx);
+      delete state._linhCanFx;
+    }
+    /* Màn ăn mừng hoàn thành nhiệm vụ (Bui 2026-10-21) */
+    showQuestCompleteFx(qtid);
     /* Thoại trả NV (nếu quest có turninTalk) */
     try {
       var qd2 = Quest.def(qtid);
