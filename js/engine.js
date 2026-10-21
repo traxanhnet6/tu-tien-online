@@ -1147,6 +1147,8 @@ var Engine = (function () {
     _hitStop = rc.crit ? 0.08 : 0.04;
     if (rc.crit) { _shakeT = 0.15; _shakeMag = 4; }
     _skillFx(mon.x, mon.y);
+    /* Vũ khí trang phục: hiệu ứng vung theo loại vũ khí (Bui 2026-10-21) */
+    try { _fxOutfitWeapon(player.x, player.y - 10, '#ffe9a8'); } catch (e) {}
     mon.hitT = 0.15;
     /* giật lùi nhẹ theo hướng đòn đánh (boss nặng nên ít bị đẩy) + vệt kiếm quang */
     var _ka = Math.atan2(mon.y - player.y, mon.x - player.x);
@@ -1279,6 +1281,8 @@ var Engine = (function () {
   function _playSkillFx(skillId, x, y, color, level) {
     var k = _SKILL_FX[skillId] || 'slash';
     var inten = 1 + Math.min(9, (level || 1) - 1) * 0.06; /* cấp càng cao hiệu ứng càng đậm */
+    /* Vũ khí trang phục đang cầm: hiệu ứng riêng theo loại vũ khí (Bui 2026-10-21) */
+    try { _fxOutfitWeapon(player.x, player.y - 10, color); } catch (e) {}
     if (k === 'bolt') _fxBolt(x, y, color, inten);
     else if (k === 'fire') _fxFire(x, y, color, inten);
     else if (k === 'lightning') _fxLightning(x, y, inten);
@@ -3159,6 +3163,142 @@ var Engine = (function () {
     _drawHpBar(player.x, player.y + lift - blift - 32, 40, player.hp / ps.maxHp, false);
     /* Mũi tên vàng chỉ đường nhiệm vụ (Bui 2026-10-19) */
     try { _drawQuestArrow(player.x, player.y + lift - blift); } catch (e) {}
+    /* Trang phục shop đang mặc: vũ khí/mũ/cánh/hào quang (Bui 2026-10-21) */
+    try { _drawOutfitOverlays(player.x + lunge, player.y + lift - blift); } catch (e) {}
+  }
+
+  /* --- Trang phục shop hiển thị trên nhân vật (Bui 2026-10-21) ---
+   * Đọc state.shop_outfit_worn qua OutfitShop.wornId; sprite từ OUTFIT_DATA.img.
+   * Vẽ sau nhân vật (trừ cánh vẽ trước). Không đụng PAPERDOLL_MODE. */
+  function _wornOutfit() {
+    var out = {};
+    try {
+      if (typeof OutfitShop === 'undefined' || typeof OUTFIT_DATA === 'undefined') return out;
+      var S = _S();
+      var cats = ['vukhi', 'mu', 'canh', 'haoquang', 'ao'];
+      for (var i = 0; i < cats.length; i++) {
+        var id = OutfitShop.wornId(S, cats[i]);
+        if (id && OUTFIT_DATA[id]) out[cats[i]] = { id: id, def: OUTFIT_DATA[id] };
+      }
+    } catch (e) {}
+    return out;
+  }
+  /* Loại vũ khí trang phục -> kiểu hiệu ứng đánh */
+  function _outfitWeaponKind(wid) {
+    if (!wid) return null;
+    if (wid.indexOf('kiem') >= 0) return 'kiem';
+    if (wid.indexOf('quat') >= 0 || wid.indexOf('phien') >= 0) return 'quat';
+    if (wid.indexOf('tieu') >= 0 || wid.indexOf('sao') >= 0) return 'tieu';
+    if (wid.indexOf('thuong') >= 0) return 'thuong';
+    if (wid.indexOf('dao') >= 0) return 'dao';
+    return 'kiem';
+  }
+  function _drawOutfitOverlays(px, py) {
+    var worn = _wornOutfit();
+    var hasAny = worn.vukhi || worn.mu || worn.canh || worn.haoquang || worn.ao;
+    if (!hasAny) return;
+    var face = 'down';
+    try { face = _playerDirFace(); } catch (e) {}
+    var dir = player.dir || 1;
+    var now = Date.now() / 1000;
+    /* Hào quang: vòng sáng dưới chân */
+    if (worn.haoquang && worn.haoquang.def.img) {
+      var him = _img(worn.haoquang.def.img);
+      if (him) {
+        var pulse = 1 + Math.sin(now * 3) * 0.08;
+        var hw = 70 * pulse, hh = 24 * pulse;
+        _ctx.save();
+        _ctx.globalAlpha = 0.75;
+        _ctx.drawImage(him, px - hw / 2, py + 14 - hh / 2, hw, hh);
+        _ctx.restore();
+      }
+    }
+    /* Cánh: sau lưng, vỗ nhẹ */
+    if (worn.canh && worn.canh.def.img) {
+      var cim = _img(worn.canh.def.img);
+      if (cim) {
+        var flap = 1 + Math.sin(now * 5) * 0.12;
+        var cw = 56 * flap, ch = 44 * flap;
+        _ctx.save();
+        _ctx.globalAlpha = 0.9;
+        /* vẽ sau lưng: offset ngược hướng mặt */
+        var bx = px - dir * 14;
+        _ctx.drawImage(cim, bx - cw / 2, py - 34 - ch / 2, cw, ch);
+        _ctx.restore();
+      }
+    }
+    /* Áo: overlay màu nhẹ lên thân (đơn giản, không che nhân vật) */
+    if (worn.ao && worn.ao.def.img) {
+      _ctx.save();
+      _ctx.globalAlpha = 0.18;
+      _ctx.fillStyle = '#ffffff';
+      _ctx.fillRect(px - 14, py - 30, 28, 34);
+      _ctx.restore();
+    }
+    /* Mũ/nón: trên đầu */
+    if (worn.mu && worn.mu.def.img) {
+      var mim = _img(worn.mu.def.img);
+      if (mim) {
+        var mw = 34, mh = 26;
+        _ctx.save();
+        _ctx.drawImage(mim, px - mw / 2, py - 52 - mh / 2, mw, mh);
+        _ctx.restore();
+      }
+    }
+    /* Vũ khí: trên tay, xoay theo 4 hướng, vung khi đánh */
+    if (worn.vukhi && worn.vukhi.def.img) {
+      var vim = _img(worn.vukhi.def.img);
+      if (vim) {
+        /* góc vũ khí theo hướng mặt */
+        var baseAng = 0;
+        if (face === 'right') baseAng = -0.5;
+        else if (face === 'left') baseAng = Math.PI + 0.5;
+        else if (face === 'up') baseAng = -Math.PI / 2 + 0.3;
+        else baseAng = Math.PI / 2 - 0.3; /* down */
+        /* vung khi đánh: 3 pha windup/strike/recover */
+        var swing = 0;
+        if (player.atkT > 0) {
+          var ph = player.atkPhase || 'strike';
+          if (ph === 'windup') swing = -0.9;
+          else if (ph === 'strike') swing = 1.4;
+          else swing = 0.5 * (player.atkT / 0.15);
+        }
+        var ang = baseAng + swing * dir;
+        /* vị trí tay */
+        var hx = px + dir * 14, hy = py - 12;
+        _ctx.save();
+        _ctx.translate(hx, hy);
+        _ctx.rotate(ang);
+        if (dir < 0 && (face === 'left' || face === 'right')) _ctx.scale(1, -1);
+        _ctx.drawImage(vim, 0, -10, 44, 20);
+        _ctx.restore();
+      }
+    }
+  }
+  /* Hiệu ứng skill theo loại vũ khí trang phục đang cầm (Bui 2026-10-21) */
+  function _fxOutfitWeapon(sx, sy, color) {
+    var worn = _wornOutfit();
+    if (!worn.vukhi) return;
+    var kind = _outfitWeaponKind(worn.vukhi.id);
+    var col = color || '#ffe9a8';
+    var dir = player.dir || 1;
+    if (kind === 'kiem') {
+      /* chém ngang: vệt sáng */
+      _fx.push({ kind: 'wslash_h', x: sx, y: sy, dir: dir, t: 0.3, maxT: 0.3, color: col });
+    } else if (kind === 'quat') {
+      /* quạt gió: sóng lan */
+      _fx.push({ kind: 'wslash_fan', x: sx, y: sy, dir: dir, t: 0.5, maxT: 0.5, color: col });
+    } else if (kind === 'tieu') {
+      /* sáo/tiêu: sóng âm vòng tròn */
+      _fxCircle(sx, sy, col, 1.4);
+      _fxCircle(sx, sy, col, 1.0);
+    } else if (kind === 'thuong') {
+      /* thương: đâm thẳng */
+      _fx.push({ kind: 'wslash_v', x: sx, y: sy, dir: dir, t: 0.3, maxT: 0.3, color: col, vert: false });
+    } else if (kind === 'dao') {
+      /* đao: chém dọc */
+      _fx.push({ kind: 'wslash_v', x: sx, y: sy, dir: dir, t: 0.35, maxT: 0.35, color: col, vert: true });
+    }
   }
 
   /* Mũi tên vàng trên đầu nhân vật, chỉ hướng tới mục tiêu NV hiện tại */
@@ -3643,6 +3783,64 @@ var Engine = (function () {
         _ctx.strokeStyle = '#ffffff';
         _ctx.beginPath();
         _ctx.arc(f.x, f.y, f.r * 0.8, -0.6 + pr * 1.2, 1.4 + pr * 1.2);
+        _ctx.stroke();
+      } else if (kind === 'wslash_h') {
+        /* Kiếm trang phục: chém ngang — vệt sáng ngang theo hướng */
+        var wpr = 1 - f.t / f.maxT;
+        var wd = f.dir || 1;
+        _ctx.strokeStyle = f.color;
+        _ctx.lineWidth = 6;
+        _ctx.beginPath();
+        _ctx.moveTo(f.x - wd * 70, f.y - 20 + wpr * 10);
+        _ctx.quadraticCurveTo(f.x, f.y - 30, f.x + wd * 70, f.y - 10 + wpr * 10);
+        _ctx.stroke();
+        _ctx.lineWidth = 2;
+        _ctx.strokeStyle = '#ffffff';
+        _ctx.beginPath();
+        _ctx.moveTo(f.x - wd * 60, f.y - 14 + wpr * 8);
+        _ctx.quadraticCurveTo(f.x, f.y - 22, f.x + wd * 60, f.y - 6 + wpr * 8);
+        _ctx.stroke();
+      } else if (kind === 'wslash_fan') {
+        /* Quạt trang phục: sóng gió lan hình quạt */
+        var fpr = 1 - f.t / f.maxT;
+        var fd = f.dir || 1;
+        for (var wi = 0; wi < 3; wi++) {
+          var wr = 20 + fpr * 70 + wi * 18;
+          var wa0 = fd > 0 ? -0.7 : Math.PI - 0.7;
+          var wa1 = fd > 0 ? 0.7 : Math.PI + 0.7;
+          _ctx.strokeStyle = f.color;
+          _ctx.lineWidth = 4 - wi;
+          _ctx.beginPath();
+          _ctx.arc(f.x, f.y, wr, wa0, wa1);
+          _ctx.stroke();
+        }
+      } else if (kind === 'wslash_v') {
+        /* Thương/Đao trang phục: đâm thẳng / chém dọc */
+        var vpr = 1 - f.t / f.maxT;
+        var vd = f.dir || 1;
+        _ctx.strokeStyle = f.color;
+        _ctx.lineWidth = 6;
+        _ctx.beginPath();
+        if (f.vert) {
+          /* đao: vệt dọc */
+          _ctx.moveTo(f.x + vd * 20, f.y - 60);
+          _ctx.lineTo(f.x + vd * (20 + vpr * 30), f.y + 30);
+        } else {
+          /* thương: tia đâm ngang */
+          _ctx.moveTo(f.x, f.y - 10);
+          _ctx.lineTo(f.x + vd * (40 + vpr * 80), f.y - 10);
+        }
+        _ctx.stroke();
+        _ctx.lineWidth = 2;
+        _ctx.strokeStyle = '#ffffff';
+        _ctx.beginPath();
+        if (f.vert) {
+          _ctx.moveTo(f.x + vd * 26, f.y - 50);
+          _ctx.lineTo(f.x + vd * (26 + vpr * 26), f.y + 20);
+        } else {
+          _ctx.moveTo(f.x + vd * 10, f.y - 6);
+          _ctx.lineTo(f.x + vd * (40 + vpr * 70), f.y - 6);
+        }
         _ctx.stroke();
       } else if (kind === 'fire') {
         /* vụ nổ lửa cam */

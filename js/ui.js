@@ -5384,10 +5384,18 @@ function renderSect() {
 }
 function doSectJoin(sectId) {
   if (typeof Sect === "undefined") return;
+  var _wasJoined = Sect.joinedSect ? Sect.joinedSect(state) : (state.sectInfo && state.sectInfo.joined);
   var r = Sect.joinSect(state, sectId || (panelArg && panelArg.sect));
   if (r.ok) {
     saveGame(state); sfx("success");
     toast(t("sect_joined") + ": " + t(SECTS[r.joined || Sect.joinedSect(state)].nameKey));
+    /* Bui 2026-10-21: gia nhập tông môn mở vòng quay gacha */
+    if (!_wasJoined) {
+      setTimeout(function () {
+        toast(t("gacha_unlocked") || "🎡 Vòng quay Gacha Bí Tịch đã mở!");
+        sfx("success");
+      }, 1500);
+    }
     renderPanel();
   } else if (r.reason === "can_ma_dao") {
     toast(t("sect_need_ma")); sfx("fail");
@@ -5398,10 +5406,19 @@ function doSectJoin(sectId) {
 function gachaTab() { return (panelArg && panelArg.tab) || "pham"; }
 function renderGacha() {
   if (typeof Gacha === "undefined") return "";
+  /* Bui 2026-10-21: vòng quay gacha mở khi gia nhập tông môn */
+  var _joined = (typeof Sect !== "undefined" && Sect.joinedSect) ? Sect.joinedSect(state) : (state.sectInfo && state.sectInfo.joined);
+  if (!_joined) {
+    return '<div class="gacha-locked"><div class="gacha-lock-icon">🔒</div>' +
+      '<div class="item-name">' + esc(t("gacha_locked_title") || "Vòng Quay Bí Tịch") + '</div>' +
+      '<div class="item-desc">' + esc(t("gacha_locked_desc") || "Gia nhập tông môn để mở vòng quay gacha bí tịch!") + '</div></div>';
+  }
   var tb = gachaTab();
   var h = tabBtns([
     ["pham", t("gacha_banner_pham")], ["dia", t("gacha_banner_dia")], ["thien", t("gacha_banner_thien")],
+    ["codex", t("gacha_codex") || "Đồ Giám"],
   ], tb, "gacha-tab");
+  if (tb === "codex") return h + renderGachaCodex();
   var b = Gacha.gachaBanner(tb);
   h += '<div class="gacha-banner banner-' + tb + '"><div class="gacha-banner-name">' + esc(t(b.nameKey)) + "</div>" +
     '<div class="gacha-sub">' + esc(t("gacha_sub")) + "</div></div>";
@@ -5454,6 +5471,41 @@ function renderGacha() {
       }).join("");
   }
   return h;
+}
+/* Đồ giám bí tịch phân loại theo cấp (Bui 2026-10-21) */
+function renderGachaCodex() {
+  var h = '<div class="gacha-codex">';
+  var tiers = [2, 1, 0];
+  var tierNames = { 2: "thien", 1: "dia", 0: "pham" };
+  tiers.forEach(function (tr) {
+    h += '<div class="codex-tier tier-' + tierNames[tr] + '"><div class="codex-tier-name">' +
+      esc(t("tier_" + tr)) + '</div><div class="codex-grid">';
+    var manuals = [];
+    try {
+      var all = Skills.allManuals ? Skills.allManuals() : [];
+      manuals = all.filter(function (m) { return m.tier === tr; });
+    } catch (e) {}
+    if (!manuals.length) {
+      try {
+        Object.keys(Skills.MANUALS || {}).forEach(function (mid) {
+          var mi = Skills.MANUALS[mid];
+          if (mi && mi.tier === tr) manuals.push({ id: mid, tier: tr });
+        });
+      } catch (e2) {}
+    }
+    h += manuals.map(function (m) {
+      var mid = m.id || m.manualId;
+      var owned = false;
+      try { owned = Skills.hasManual ? Skills.hasManual(state, mid) : false; } catch (e) {}
+      return '<div class="codex-card' + (owned ? " owned" : "") + '">' +
+        '<span class="gacha-card-icon">' + itemIcon(mid) + "</span>" +
+        '<span class="manual-name">' + esc(itemName(mid)) + "</span>" +
+        (owned ? '<span class="codex-owned">✓</span>' : "") +
+        "</div>";
+    }).join("");
+    h += "</div></div>";
+  });
+  return h + "</div>";
 }
 function doGachaPull(n) {
   if (typeof Gacha === "undefined") return;
