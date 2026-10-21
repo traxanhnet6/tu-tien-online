@@ -128,6 +128,21 @@ function tillPlot(state, idx) {
   _save();
   return { ok: true };
 }
+/* Tưới nước: giảm 25% thời gian còn lại, mỗi ô tưới được 1 lần/ngày (Bui 2026-10-22) */
+function waterPlot(state, idx) {
+  var f = _farm(state);
+  var p = f.plots[idx];
+  if (!p || !p.seed) return { ok: false, reason: "invalid" };
+  var st = plotStatus(state, idx, Date.now());
+  if (st.phase !== "growing") return { ok: false, reason: "not_growing" };
+  var today = new Date().toDateString();
+  if (p.wateredAt === today) return { ok: false, reason: "already_watered" };
+  var left = p.readyAt - Date.now();
+  p.readyAt = Date.now() + Math.round(left * 0.75);
+  p.wateredAt = today;
+  _save();
+  return { ok: true };
+}
 /* Rút ngắn: 1 Linh Thạch / 10 phút còn lại */
 function speedupCost(leftMs) {
   return Math.max(1, Math.ceil(leftMs / 600000));
@@ -152,6 +167,7 @@ if (typeof module !== "undefined" && module.exports) {
     plotUnlockCost: plotUnlockCost, unlockPlot: unlockPlot,
     plotStatus: plotStatus, plantSeed: plantSeed,
     harvestPlot: harvestPlot, tillPlot: tillPlot,
+    waterPlot: waterPlot,
     speedupCost: speedupCost, speedupPlot: speedupPlot,
   };
 }
@@ -171,6 +187,7 @@ if (typeof module !== "undefined" && module.exports) {
     plantSeed: plantSeed,
     harvestPlot: harvestPlot,
     tillPlot: tillPlot,
+    waterPlot: waterPlot,
     speedupCost: speedupCost,
     speedupPlot: speedupPlot
   };

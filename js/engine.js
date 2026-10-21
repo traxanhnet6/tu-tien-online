@@ -345,6 +345,16 @@ var Engine = (function () {
       _ctx.fillRect(o.x - o.w / 2, o.y - o.h, o.w, o.h);
     }
   }
+  /* Bui 2026-10-22: vẽ ô đất linh điền (click được để mở panel farm) */
+  function _drawFarmPlot(o) {
+    _drawShadow(o.x, o.y, o.w * 0.30, 0.30);
+    var im = _img(o.sprite);
+    if (im) _ctx.drawImage(im, o.x - o.w / 2, o.y - o.h, o.w, o.h);
+    else {
+      _ctx.fillStyle = '#6b4a2a';
+      _ctx.fillRect(o.x - o.w / 2, o.y - o.h, o.w, o.h);
+    }
+  }
   /* Sương mù trôi nhiều lớp (parallax phụ) */
   var _mistT = 0;
   var _tickT = 0; /* thời gian tích lũy cho animation NPC (idle bob, patrol) */
@@ -3778,6 +3788,23 @@ var Engine = (function () {
     }
     for (var ni = 0; ni < _npcs.length; ni++) ents.push({ y: _npcs[ni].y - _bridgeLiftAt(_npcs[ni].x, _npcs[ni].y), k: 'n', o: _npcs[ni] });
     for (var oi2 = 0; oi2 < _objects.length; oi2++) ents.push({ y: _objects[oi2].y, k: 'obj', o: _objects[oi2] });
+    /* Bui 2026-10-22: ô đất linh điền hiện trực tiếp trên map 3 */
+    if (_mapId === 3 && typeof Farm !== "undefined") {
+      try {
+        var _ff = (typeof _S === "function" ? _S().farm : null) || { unlocked: 6, plots: [] };
+        var _now = Date.now();
+        for (var _pi2 = 0; _pi2 < _ff.unlocked && _pi2 < 18; _pi2++) {
+          var _pst = Farm.plotStatus(_S(), _pi2, _now);
+          var _pimg = "assets/objects/plot_empty.png";
+          if (_pst.phase === "growing") _pimg = "assets/objects/" + (_pst.pct < 33 ? "plot_sprout.png" : "plot_growing.png");
+          else if (_pst.phase === "ready") _pimg = "assets/objects/plot_ready.png";
+          else if (_pst.phase === "need_till") _pimg = "assets/objects/plot_empty.png";
+          /* lưới 6x3 ô, mỗi ô 110px */
+          var _px = 550 + (_pi2 % 6) * 110, _py = 650 + Math.floor(_pi2 / 6) * 110;
+          ents.push({ y: _py, k: 'farmplot', o: { x: _px, y: _py, sprite: _pimg, w: 100, h: 100, plotIdx: _pi2 } });
+        }
+      } catch (_fe) {}
+    }
     ents.push({ y: player.y - _bridgeLiftAt(player.x, player.y), k: 'p' });
     if (_petActive()) ents.push({ y: _pet.y - _bridgeLiftAt(_pet.x, _pet.y), k: 't' });
     if (_sbActive()) ents.push({ y: _sb.y - _bridgeLiftAt(_sb.x, _sb.y), k: 'sb' });
@@ -3792,6 +3819,7 @@ var Engine = (function () {
       else if (e.k === 't') _drawPet();
       else if (e.k === 'sb') _drawSpiritBeast();
       else if (e.k === 'obj') _drawObject(e.o);
+      else if (e.k === 'farmplot') _drawFarmPlot(e.o);
       else _drawOther(e.o);
     }
     /* Đạn skill thần thú đồng hành — bay trên entities */

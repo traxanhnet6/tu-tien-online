@@ -663,8 +663,14 @@ const MAPS = [
       {x: 1120, y: 320, sprite: "assets/objects/crystal_purple.png", w: 36, h: 100},
       {x: 720, y: 620, sprite: "assets/objects/crystal_ice.png", w: 61, h: 100},
       {x: 1420, y: 620, sprite: "assets/objects/crystal_red.png", w: 59, h: 100},
-      {x: 520, y: 1020, sprite: "assets/objects/rock_gold.png", w: 96, h: 80},
-      {x: 1120, y: 1020, sprite: "assets/objects/rock_big.png", w: 55, h: 90}
+            {x: 520, y: 1020, sprite: "assets/objects/rock_gold.png", w: 96, h: 80},
+      {x: 1120, y: 1020, sprite: "assets/objects/rock_big.png", w: 55, h: 90},
+      {x: 300, y: 300, sprite: "assets/objects/fence_field.png", w: 120, h: 60},
+      {x: 430, y: 300, sprite: "assets/objects/fence_field.png", w: 120, h: 60},
+      {x: 560, y: 300, sprite: "assets/objects/fence_field.png", w: 120, h: 60},
+      {x: 1300, y: 400, sprite: "assets/objects/well_field.png", w: 90, h: 110},
+      {x: 1400, y: 800, sprite: "assets/objects/scarecrow_field.png", w: 80, h: 120},
+      {x: 200, y: 800, sprite: "assets/objects/scarecrow_field.png", w: 80, h: 120}
     ],
     stoneDrop: [8, 16],
     unlock: {realm: 1, tier: 5},

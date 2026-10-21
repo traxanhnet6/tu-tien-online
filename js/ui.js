@@ -3625,6 +3625,44 @@ function onPanelClick(e) {
       else { sfx("fail"); toast(t("shop_no_stone")); }
       renderPanel(); break;
     }
+    case "farm-plant": {
+      var _pi = +(el.getAttribute("data-i") || 0);
+      /* chọn hạt giống đầu tiên trong túi để trồng */
+      var _seed = null;
+      (state.bag || []).forEach(function (it) { if (!_seed && it.qty > 0 && Farm.FARM_PLANTS[it.id]) _seed = it.id; });
+      if (!_seed) { sfx("fail"); toast(t("farm_no_seed") || "Không có hạt giống!"); break; }
+      var _pr = Farm.plantSeed(state, _pi, _seed);
+      if (_pr && _pr.ok) { saveGame(state); sfx("success"); toast(t("farm_planted") || "Đã trồng!"); }
+      else { sfx("fail"); toast(t("farm_plant_fail") || "Không trồng được"); }
+      renderPanel(); break;
+    }
+    case "farm-harvest": {
+      var _hi = +(el.getAttribute("data-i") || 0);
+      var _hr = (typeof Farm !== "undefined") ? Farm.harvestPlot(state, _hi) : null;
+      if (_hr && _hr.ok) { saveGame(state); sfx("success"); toast(t("farm_harvested") || "Thu hoạch +" + _hr.qty + " " + _hr.herbId); }
+      else { sfx("fail"); }
+      refreshHUD(); renderPanel(); break;
+    }
+    case "farm-till": {
+      var _ti = +(el.getAttribute("data-i") || 0);
+      var _tr = (typeof Farm !== "undefined") ? Farm.tillPlot(state, _ti) : null;
+      if (_tr && _tr.ok) { saveGame(state); sfx("click"); }
+      renderPanel(); break;
+    }
+    case "farm-water": {
+      var _wi = +(el.getAttribute("data-i") || 0);
+      var _wr = (typeof Farm !== "undefined" && Farm.waterPlot) ? Farm.waterPlot(state, _wi) : null;
+      if (_wr && _wr.ok) { saveGame(state); sfx("success"); toast(t("farm_watered") || "Đã tưới nước! (-25% thời gian)"); }
+      else { sfx("fail"); toast((_wr && _wr.reason === "already_watered") ? (t("farm_watered_today") || "Hôm nay đã tưới rồi") : (t("farm_water_fail") || "Không tưới được")); }
+      renderPanel(); break;
+    }
+    case "farm-speedup": {
+      var _si = +(el.getAttribute("data-i") || 0);
+      var _sr = (typeof Farm !== "undefined") ? Farm.speedupPlot(state, _si) : null;
+      if (_sr && _sr.ok) { saveGame(state); sfx("success"); }
+      else { sfx("fail"); toast(t("shop_no_stone")); }
+      renderPanel(); break;
+    }
     case "alchemy-craft": doAlchemyCraft(el.getAttribute("data-recipe")); break;
     case "assign-skill": doAssignSkill(el.getAttribute("data-tech")); break;
     case "bag-cell": doBagCell(el.getAttribute("data-id")); break;
@@ -5836,10 +5874,16 @@ function renderFarm() {
   for (var i = 0; i < f.unlocked; i++) {
     var st = Farm.plotStatus(state, i, now);
     var label = "", act = "", cls = "plot-" + st.phase;
-    if (st.phase === "empty") { label = "🟫"; act = "farm-plant"; }
-    else if (st.phase === "growing") { label = "🌱 " + st.pct + "%"; act = "farm-speedup"; }
-    else if (st.phase === "ready") { label = "🌾 ✓"; act = "farm-harvest"; }
-    else if (st.phase === "need_till") { label = "🟤"; act = "farm-till"; }
+    /* Bui 2026-10-22: dùng ảnh ô đất thay emoji */
+    if (st.phase === "empty") { label = '<img src="assets/objects/plot_empty.png" class="plot-img" alt="">'; act = "farm-plant"; }
+    else if (st.phase === "growing") {
+      var _img = st.pct < 33 ? "plot_sprout.png" : "plot_growing.png";
+      label = '<img src="assets/objects/' + _img + '" class="plot-img" alt="">' +
+        '<span class="plot-pct">' + st.pct + "%</span>";
+      act = "farm-water";
+    }
+    else if (st.phase === "ready") { label = '<img src="assets/objects/plot_ready.png" class="plot-img" alt="">'; act = "farm-harvest"; }
+    else if (st.phase === "need_till") { label = '<img src="assets/objects/plot_empty.png" class="plot-img plot-till" alt="">'; act = "farm-till"; }
     h += '<button class="plot-cell ' + cls + '" data-act="' + act + '" data-i="' + i + '">' +
       '<span class="plot-icon">' + label + "</span></button>";
   }
