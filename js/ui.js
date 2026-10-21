@@ -2028,9 +2028,12 @@ function showLinhCanFx(element) {
     wrap.className = "linhcan-fx";
     var html = '<div class="linhcan-stone"><div class="linhcan-glow" style="background:' + color + '"></div></div>';
     html += '<div class="linhcan-name" style="color:' + color + ';text-shadow:0 0 20px ' + color + '">' + esc(name) + '</div>';
-    /* Linh thú ảnh thật sẽ thay emoji khi team mỹ thuật vẽ xong (Bui 2026-10-21: emoji xấu) */
-    var beastImg = { hondon: "assets/linhcan/beast_hondon.png", hoa: "assets/linhcan/beast_hoa.png", loi: "assets/linhcan/beast_loi.png", bang: "assets/linhcan/beast_bang.png", phong: "assets/linhcan/beast_phong.png", quang: "assets/linhcan/beast_quang.png", am: "assets/linhcan/beast_am.png", doc: "assets/linhcan/beast_doc.png", huyet: "assets/linhcan/beast_huyet.png" };
-    if (beastImg[element]) html += '<img class="linhcan-beast-img" src="' + beastImg[element] + '" onerror="this.style.display=\'none\'"/>';
+    /* Linh thú animation 3 frame vỗ cánh (Bui 2026-10-21: phải sống động bay lượn) */
+    var beastFrames = { hondon: "hondon", hoa: "hoa", loi: "loi", bang: "bang", phong: "phong", quang: "quang", am: "am", doc: "doc", huyet: "huyet" };
+    if (beastFrames[element]) {
+      html += '<img class="linhcan-beast-img" id="linhcanBeastImg" src="assets/linhcan/beast_' + element + '_mid.png" data-el="' + element + '" onerror="this.style.display=\'none\'"/>';
+      html += '<script>(function(){var fr=["up","mid","down","mid"],i=0;var t=setInterval(function(){var im=document.getElementById("linhcanBeastImg");if(!im){clearInterval(t);return;}i=(i+1)%4;im.src="assets/linhcan/beast_"+im.getAttribute("data-el")+"_"+fr[i]+".png";},180);setTimeout(function(){clearInterval(t);},15000);})();</scr' + 'ipt>';
+    }
     /* hạt linh khí bay */
     for (var i = 0; i < 50; i++) {
       html += '<div class="linhcan-particle" style="left:' + (20 + Math.random() * 60) + '%;background:' + color +
