@@ -1,81 +1,57 @@
 {
- "id": 12,
- "nameKey": "map_thai_hu_tien_canh",
- "bg": "assets/maps/map_thai_hu_tien_canh.webp",
- "fb": "#bfe0f0",
- "monsters": [
-  "ngoc_tho",
-  "thien_hac"
- ],
- "boss": "thien_tuong",
- "spawnZones": [
-  {
-   "x": 300,
-   "y": 620,
-   "r": 150,
-   "monsters": [
-    "ngoc_tho"
-   ]
-  },
-  {
-   "x": 900,
-   "y": 950,
-   "r": 160,
-   "monsters": [
-    "thien_hac"
-   ]
-  },
-  {
-   "x": 1200,
-   "y": 300,
-   "r": 160,
-   "monsters": [
+  "id": 12,
+  "nameKey": "map_thai_hu_tien_canh",
+  "bg": "assets/maps/map_thai_hu_tien_canh.webp",
+  "fb": "#bfe0f0",
+  "monsters": [
     "ngoc_tho",
     "thien_hac"
-   ]
+  ],
+  "boss": "thien_tuong",
+  "spawnZones": [
+    {
+      "x": 725,
+      "y": 517,
+      "r": 250,
+      "monsters": [
+        "ngoc_tho",
+        "thien_hac",
+        "huyet_buc"
+      ]
+    }
+  ],
+  "bossSpawn": {
+    "x": 1200,
+    "y": 250
   },
-  {
-   "x": 500,
-   "y": 200,
-   "r": 150,
-   "monsters": [
-    "huyet_buc",
-    "thien_hac"
-   ]
-  }
- ],
- "bossSpawn": {
-  "x": 1200,
-  "y": 250
- },
- "npcs": [
-  "tien_ong"
- ],
- "quests": [],
- "gates": [
-  {
-   "to": 0,
-   "x": 80,
-   "y": 300
-  }
- ],
- "stoneDrop": [
-  12,
-  24
- ],
- "unlock": {
-  "realm": 2
- },
- "dao": "chinh",
- "assets": {
-  "bg": "assets/maps/map_thai_hu_tien_canh.webp",
-  "sprites": [
-   "assets/sprs/mon_ngoc_tho.png",
-   "assets/sprs/mon_thien_hac.png",
-   "assets/sprs/mon_thien_tuong.png",
-   "assets/sprs/npc_tam_tien.png"
-  ]
- },
- "ground": "assets/map/tile_ground_celestial.png",
- "loadingBg": "assets/maps/loading_12.webp"
+  "npcs": [
+    "tien_ong"
+  ],
+  "quests": [],
+  "gates": [
+    {
+      "to": 0,
+      "x": 80,
+      "y": 300
+    }
+  ],
+  "stoneDrop": [
+    12,
+    24
+  ],
+  "unlock": {
+    "realm": 2
+  },
+  "dao": "chinh",
+  "assets": {
+    "bg": "assets/maps/map_thai_hu_tien_canh.webp",
+    "sprites": [
+      "assets/sprs/mon_ngoc_tho.png",
+      "assets/sprs/mon_thien_hac.png",
+      "assets/sprs/mon_thien_tuong.png",
+      "assets/sprs/npc_tam_tien.png"
+    ]
+  },
+  "ground": "assets/map/tile_ground_celestial.png",
+  "loadingBg": "assets/maps/loading_12.webp"
 }

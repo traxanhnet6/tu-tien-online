@@ -1,68 +1,52 @@
 {
- "id": 4,
- "nameKey": "map_mo_linh_thach",
- "bg": "assets/maps/map_mo_linh_thach.webp",
- "fb": "#4a5a6a",
- "monsters": [
-  "thach_giap_trung",
-  "tinh_thach_quai"
- ],
- "boss": null,
- "spawnZones": [
-  {
-   "x": 350,
-   "y": 720,
-   "r": 150,
-   "monsters": [
-    "thach_giap_trung"
-   ]
-  },
-  {
-   "x": 1250,
-   "y": 450,
-   "r": 150,
-   "monsters": [
-    "tinh_thach_quai"
-   ]
-  },
-  {
-   "x": 800,
-   "y": 950,
-   "r": 160,
-   "monsters": [
+  "id": 4,
+  "nameKey": "map_mo_linh_thach",
+  "bg": "assets/maps/map_mo_linh_thach.webp",
+  "fb": "#4a5a6a",
+  "monsters": [
     "thach_giap_trung",
     "tinh_thach_quai"
-   ]
-  }
- ],
- "npcs": [
-  "quan_mo",
-  "thuong_nhan_mo"
- ],
- "quests": [],
- "gates": [
-  {
-   "to": 0,
-   "x": 80,
-   "y": 80
-  }
- ],
- "stoneDrop": [
-  8,
-  16
- ],
- "unlock": {
-  "realm": 1,
-  "tier": 5
- },
- "dao": "chinh",
- "assets": {
-  "bg": "assets/maps/map_mo_linh_thach.webp",
-  "sprites": [
-   "assets/sprs/npc_lao_ren.png",
-   "assets/sprs/npc_thuong_nhan.png"
-  ]
- },
- "ground": "assets/map/tile_ground_mine.png",
- "loadingBg": "assets/maps/loading_4.webp"
+  ],
+  "boss": null,
+  "spawnZones": [
+    {
+      "x": 800,
+      "y": 706,
+      "r": 250,
+      "monsters": [
+        "thach_giap_trung",
+        "tinh_thach_quai"
+      ]
+    }
+  ],
+  "npcs": [
+    "quan_mo",
+    "thuong_nhan_mo"
+  ],
+  "quests": [],
+  "gates": [
+    {
+      "to": 0,
+      "x": 80,
+      "y": 80
+    }
+  ],
+  "stoneDrop": [
+    8,
+    16
+  ],
+  "unlock": {
+    "realm": 1,
+    "tier": 5
+  },
+  "dao": "chinh",
+  "assets": {
+    "bg": "assets/maps/map_mo_linh_thach.webp",
+    "sprites": [
+      "assets/sprs/npc_lao_ren.png",
+      "assets/sprs/npc_thuong_nhan.png"
+    ]
+  },
+  "ground": "assets/map/tile_ground_mine.png",
+  "loadingBg": "assets/maps/loading_4.webp"
 }

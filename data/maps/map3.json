@@ -1,78 +1,62 @@
 {
- "id": 2,
- "nameKey": "map_u_minh_coc",
- "bg": "assets/maps/map_u_minh_coc.webp",
- "fb": "#3a3f5c",
- "monsters": [
-  "u_hon",
-  "thi_ma"
- ],
- "boss": "cot_tuong",
- "spawnZones": [
-  {
-   "x": 800,
-   "y": 280,
-   "r": 170,
-   "monsters": [
-    "u_hon"
-   ]
-  },
-  {
-   "x": 800,
-   "y": 920,
-   "r": 170,
-   "monsters": [
-    "thi_ma"
-   ]
-  },
-  {
-   "x": 1300,
-   "y": 600,
-   "r": 160,
-   "monsters": [
+  "id": 2,
+  "nameKey": "map_u_minh_coc",
+  "bg": "assets/maps/map_u_minh_coc.webp",
+  "fb": "#3a3f5c",
+  "monsters": [
     "u_hon",
     "thi_ma"
-   ]
-  }
- ],
- "bossSpawn": {
-  "x": 1300,
-  "y": 300
- },
- "npcs": [],
- "quests": [],
- "gates": [
-  {
-   "to": 1,
-   "x": 80,
-   "y": 540
+  ],
+  "boss": "cot_tuong",
+  "spawnZones": [
+    {
+      "x": 966,
+      "y": 600,
+      "r": 250,
+      "monsters": [
+        "u_hon",
+        "thi_ma"
+      ]
+    }
+  ],
+  "bossSpawn": {
+    "x": 1300,
+    "y": 300
   },
-  {
-   "to": 11,
-   "x": 1500,
-   "y": 540
-  }
- ],
- "stoneDrop": [
-  7,
-  14
- ],
- "unlock": {
-  "realm": 1,
-  "tier": 5
- },
- "assets": {
-  "bg": "assets/maps/map_u_minh_coc.webp",
-  "sprites": [
-   "assets/sprs/sprs_mon_u_hon.png",
-   "assets/sprs/sprs_mon_thi_ma.png",
-   "assets/sprs/sprs_mon_cot_tuong.png",
-   "assets/sprs/sprs_player_kiem.png",
-   "assets/sprs/sprs_player_phap.png",
-   "assets/sprs/sprs_player_the.png"
-  ]
- },
- "dao": "chinh",
- "ground": "assets/map/tile_ground_nether.png",
- "loadingBg": "assets/maps/loading_2.webp"
+  "npcs": [],
+  "quests": [],
+  "gates": [
+    {
+      "to": 1,
+      "x": 80,
+      "y": 540
+    },
+    {
+      "to": 11,
+      "x": 1500,
+      "y": 540
+    }
+  ],
+  "stoneDrop": [
+    7,
+    14
+  ],
+  "unlock": {
+    "realm": 1,
+    "tier": 5
+  },
+  "assets": {
+    "bg": "assets/maps/map_u_minh_coc.webp",
+    "sprites": [
+      "assets/sprs/sprs_mon_u_hon.png",
+      "assets/sprs/sprs_mon_thi_ma.png",
+      "assets/sprs/sprs_mon_cot_tuong.png",
+      "assets/sprs/sprs_player_kiem.png",
+      "assets/sprs/sprs_player_phap.png",
+      "assets/sprs/sprs_player_the.png"
+    ]
+  },
+  "dao": "chinh",
+  "ground": "assets/map/tile_ground_nether.png",
+  "loadingBg": "assets/maps/loading_2.webp"
 }

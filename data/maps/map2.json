@@ -1,89 +1,66 @@
 {
- "id": 1,
- "nameKey": "map_hac_phong_lam",
- "bg": "assets/maps/map_hac_phong_lam.webp",
- "fb": "#5f7d5a",
- "monsters": [
-  "phong_lang",
-  "hu_thi",
-  "u_hon_lang"
- ],
- "boss": "lang_vuong",
- "spawnZones": [
-  {
-   "x": 300,
-   "y": 380,
-   "r": 160,
-   "monsters": [
-    "phong_lang"
-   ]
-  },
-  {
-   "x": 1250,
-   "y": 680,
-   "r": 160,
-   "monsters": [
-    "hu_thi"
-   ]
-  },
-  {
-   "x": 750,
-   "y": 950,
-   "r": 150,
-   "monsters": [
-    "u_hon_lang"
-   ]
-  },
-  {
-   "x": 1000,
-   "y": 250,
-   "r": 160,
-   "monsters": [
-    "phong_lang",
-    "hu_thi"
-   ]
-  }
- ],
- "bossSpawn": {
-  "x": 1150,
-  "y": 180
- },
- "npcs": [
-  "tho_san",
-  "an_sy"
- ],
- "quests": [],
- "gates": [
-  {
-   "to": 0,
-   "x": 80,
-   "y": 80
-  },
-  {
-   "to": 2,
-   "x": 720,
-   "y": 540
-  }
- ],
- "stoneDrop": [
-  4,
-  9
- ],
- "unlock": {
-  "realm": 1,
-  "tier": 3
- },
- "assets": {
+  "id": 1,
+  "nameKey": "map_hac_phong_lam",
   "bg": "assets/maps/map_hac_phong_lam.webp",
-  "sprites": [
-   "assets/sprs/sprs_mon_phong_lang.png",
-   "assets/sprs/sprs_mon_lang_vuong.png",
-   "assets/sprs/sprs_player_kiem.png",
-   "assets/sprs/sprs_player_phap.png",
-   "assets/sprs/sprs_player_the.png"
-  ]
- },
- "dao": "chinh",
- "ground": "assets/map/tile_ground_forest.png",
- "loadingBg": "assets/maps/loading_1.webp"
+  "fb": "#5f7d5a",
+  "monsters": [
+    "phong_lang",
+    "hu_thi",
+    "u_hon_lang"
+  ],
+  "boss": "lang_vuong",
+  "spawnZones": [
+    {
+      "x": 825,
+      "y": 565,
+      "r": 250,
+      "monsters": [
+        "phong_lang",
+        "hu_thi",
+        "u_hon_lang"
+      ]
+    }
+  ],
+  "bossSpawn": {
+    "x": 1150,
+    "y": 180
+  },
+  "npcs": [
+    "tho_san",
+    "an_sy"
+  ],
+  "quests": [],
+  "gates": [
+    {
+      "to": 0,
+      "x": 80,
+      "y": 80
+    },
+    {
+      "to": 2,
+      "x": 720,
+      "y": 540
+    }
+  ],
+  "stoneDrop": [
+    4,
+    9
+  ],
+  "unlock": {
+    "realm": 1,
+    "tier": 3
+  },
+  "assets": {
+    "bg": "assets/maps/map_hac_phong_lam.webp",
+    "sprites": [
+      "assets/sprs/sprs_mon_phong_lang.png",
+      "assets/sprs/sprs_mon_lang_vuong.png",
+      "assets/sprs/sprs_player_kiem.png",
+      "assets/sprs/sprs_player_phap.png",
+      "assets/sprs/sprs_player_the.png"
+    ]
+  },
+  "dao": "chinh",
+  "ground": "assets/map/tile_ground_forest.png",
+  "loadingBg": "assets/maps/loading_1.webp"
 }

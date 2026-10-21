@@ -1,123 +1,68 @@
 {
- "id": 11,
- "nameKey": "map_huyet_ma_vuc",
- "bg": "assets/maps/map_huyet_ma_vuc.webp",
- "fb": "#5a1a1a",
- "monsters": [
-  "ma_binh",
-  "oan_linh",
-  "ma_lang"
- ],
- "boss": "huyet_ma_vuong",
- "spawnZones": [
-  {
-   "x": 300,
-   "y": 750,
-   "r": 160,
-   "monsters": [
-    "ma_binh"
-   ]
-  },
-  {
-   "x": 1250,
-   "y": 400,
-   "r": 160,
-   "monsters": [
-    "oan_linh"
-   ]
-  },
-  {
-   "x": 700,
-   "y": 220,
-   "r": 150,
-   "monsters": [
-    "ma_lang"
-   ]
-  },
-  {
-   "x": 1100,
-   "y": 950,
-   "r": 160,
-   "monsters": [
-    "ma_binh",
-    "ma_lang"
-   ]
-  },
-  {
-   "x": 500,
-   "y": 1000,
-   "r": 160,
-   "monsters": [
-    "oan_linh",
-    "am_anh_thu"
-   ]
-  },
-  {
-   "x": 180,
-   "y": 500,
-   "r": 150,
-   "monsters": [
-    "thien_ma"
-   ]
-  },
-  {
-   "x": 1450,
-   "y": 1000,
-   "r": 150,
-   "monsters": [
-    "thien_ma",
-    "am_anh_thu"
-   ]
-  },
-  {
-   "x": 800,
-   "y": 300,
-   "r": 150,
-   "monsters": [
-    "huyet_ma_phan_than",
-    "thien_ma"
-   ]
-  }
- ],
- "bossSpawn": {
-  "x": 1300,
-  "y": 950
- },
- "npcs": [
-  "ma_thuong_nhan",
-  "co_hon",
-  "huyet_ma_tu"
- ],
- "quests": [
-  "q_ma_kill10",
-  "q_ma_boss"
- ],
- "gates": [
-  {
-   "to": 2,
-   "x": 80,
-   "y": 540
-  }
- ],
- "stoneDrop": [
-  10,
-  20
- ],
- "unlock": {
-  "realm": 2
- },
- "dao": "ma",
- "assets": {
+  "id": 11,
+  "nameKey": "map_huyet_ma_vuc",
   "bg": "assets/maps/map_huyet_ma_vuc.webp",
-  "sprites": [
-   "assets/sprs/mon_ma_binh.png",
-   "assets/sprs/mon_oan_linh.png",
-   "assets/sprs/mon_ma_lang.png",
-   "assets/sprs/mon_huyet_ma_vuong.png",
-   "assets/sprs/npc_thuong_nhan.png",
-   "assets/sprs/npc_su_gia_ma.png"
-  ]
- },
- "ground": "assets/map/tile_ground_blood.png",
- "loadingBg": "assets/maps/loading_11.webp"
+  "fb": "#5a1a1a",
+  "monsters": [
+    "ma_binh",
+    "oan_linh",
+    "ma_lang"
+  ],
+  "boss": "huyet_ma_vuong",
+  "spawnZones": [
+    {
+      "x": 785,
+      "y": 640,
+      "r": 250,
+      "monsters": [
+        "ma_binh",
+        "oan_linh",
+        "ma_lang",
+        "am_anh_thu",
+        "thien_ma",
+        "huyet_ma_phan_than"
+      ]
+    }
+  ],
+  "bossSpawn": {
+    "x": 1300,
+    "y": 950
+  },
+  "npcs": [
+    "ma_thuong_nhan",
+    "co_hon",
+    "huyet_ma_tu"
+  ],
+  "quests": [
+    "q_ma_kill10",
+    "q_ma_boss"
+  ],
+  "gates": [
+    {
+      "to": 2,
+      "x": 80,
+      "y": 540
+    }
+  ],
+  "stoneDrop": [
+    10,
+    20
+  ],
+  "unlock": {
+    "realm": 2
+  },
+  "dao": "ma",
+  "assets": {
+    "bg": "assets/maps/map_huyet_ma_vuc.webp",
+    "sprites": [
+      "assets/sprs/mon_ma_binh.png",
+      "assets/sprs/mon_oan_linh.png",
+      "assets/sprs/mon_ma_lang.png",
+      "assets/sprs/mon_huyet_ma_vuong.png",
+      "assets/sprs/npc_thuong_nhan.png",
+      "assets/sprs/npc_su_gia_ma.png"
+    ]
+  },
+  "ground": "assets/map/tile_ground_blood.png",
+  "loadingBg": "assets/maps/loading_11.webp"
 }

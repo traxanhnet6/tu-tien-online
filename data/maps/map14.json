@@ -12,52 +12,16 @@
   "boss": "thien_tuong",
   "spawnZones": [
     {
-      "x": 1250,
-      "y": 700,
-      "r": 160,
-      "monsters": [
-        "thien_hac"
-      ]
-    },
-    {
-      "x": 350,
-      "y": 850,
-      "r": 150,
-      "monsters": [
-        "ngoc_tho"
-      ]
-    },
-    {
-      "x": 800,
-      "y": 300,
-      "r": 150,
-      "monsters": [
-        "u_hon_lang"
-      ]
-    },
-    {
-      "x": 800,
-      "y": 1000,
-      "r": 160,
+      "x": 783,
+      "y": 625,
+      "r": 250,
       "monsters": [
         "thien_hac",
-        "huyet_buc"
-      ]
-    },
-    {
-      "x": 1300,
-      "y": 300,
-      "r": 160,
-      "monsters": [
+        "ngoc_tho",
+        "u_hon_lang",
+        "huyet_buc",
         "hon_don_thu",
-        "u_minh_cu_mang"
-      ]
-    },
-    {
-      "x": 200,
-      "y": 600,
-      "r": 150,
-      "monsters": [
+        "u_minh_cu_mang",
         "cuu_kiep_loi_thu",
         "hac_long"
       ]
