@@ -297,8 +297,8 @@ var Engine = (function () {
     var tilt = (opts.lean != null) ? opts.lean : 0;
     var ds = 1;
     if (!opts.noDepth) {
-      var cam = _camera();
-      var sy = (y - cam.y) / Math.max(1, _viewH);
+      /* Bui 2026-10-22: depth scale theo screen Y (đúng khi zoom map) */
+      var sy = _worldToScreenY(y) / Math.max(1, _viewH);
       if (sy < 0) sy = 0; if (sy > 1) sy = 1;
       ds = 0.94 + 0.12 * sy; /* gần người xem (y lớn) thì to hơn — pseudo-3D */
     }
@@ -952,16 +952,88 @@ var Engine = (function () {
     var k = (e.key || '').toLowerCase();
     delete _keys[k];
   }
+  /* Bui 2026-10-22: pinch-to-zoom + wheel + double-tap reset.
+     Chạm (touch) được hoãn 110ms để phát hiện ngón thứ 2 (pinch); chuột xử lý ngay. */
+  var _tapTimer = null, _tapPrevDown = 0, _pinching = false;
+  var _pinchTouches = {}, _pinchD0 = 0, _pinchZ0 = 1;
+  function _pinchDist() {
+    var ks = Object.keys(_pinchTouches);
+    if (ks.length < 2) return 0;
+    var a = _pinchTouches[ks[0]], b = _pinchTouches[ks[1]];
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+  function _onTouchStart(e) {
+    if (!_canvas || !_running) return;
+    try {
+      for (var i = 0; i < e.changedTouches.length; i++) {
+        var t = e.changedTouches[i];
+        _pinchTouches[t.identifier] = { x: t.clientX, y: t.clientY };
+      }
+      if (Object.keys(_pinchTouches).length >= 2) {
+        /* Ngón thứ 2 → pinch: hủy tap đang chờ, bắt đầu zoom */
+        if (_tapTimer) { clearTimeout(_tapTimer); _tapTimer = null; }
+        _pinching = true;
+        _pinchD0 = _pinchDist();
+        _pinchZ0 = _mapZoom;
+        if (e.preventDefault) e.preventDefault();
+      }
+    } catch (err) {}
+  }
+  function _onTouchMove(e) {
+    if (!_pinching) return;
+    try {
+      for (var i = 0; i < e.changedTouches.length; i++) {
+        var t = e.changedTouches[i];
+        if (_pinchTouches[t.identifier]) _pinchTouches[t.identifier] = { x: t.clientX, y: t.clientY };
+      }
+      var d = _pinchDist();
+      if (d > 10 && _pinchD0 > 10) setMapZoom(_pinchZ0 * d / _pinchD0);
+      if (e.preventDefault) e.preventDefault();
+    } catch (err2) {}
+  }
+  function _onTouchEnd(e) {
+    try {
+      for (var i = 0; i < e.changedTouches.length; i++)
+        delete _pinchTouches[e.changedTouches[i].identifier];
+      if (Object.keys(_pinchTouches).length < 2) { _pinching = false; _pinchD0 = 0; }
+    } catch (err3) {}
+  }
+  function _onWheel(e) {
+    if (!_canvas || !_running) return;
+    try { if (e.preventDefault) e.preventDefault(); } catch (e2) {}
+    setMapZoom(_mapZoom * (e.deltaY > 0 ? 0.9 : 1.12));
+  }
   function _onCanvasTap(e) {
     if (!_canvas || !_running || !_tapMove) return;
+    if (_pinching) return; /* đang pinch thì bỏ qua tap */
+    if (e.pointerType === 'touch' && !_pinching) {
+      /* Hoãn tap để chờ ngón thứ 2 (pinch) */
+      var cx = e.clientX, cy = e.clientY, downT = Date.now();
+      if (_tapTimer) clearTimeout(_tapTimer);
+      _tapTimer = setTimeout(function () { _tapTimer = null; _doTap(cx, cy, downT); }, 110);
+      return;
+    }
+    _doTap(e.clientX, e.clientY, Date.now());
+  }
+  function _doTap(cx, cy, downT) {
+    /* Double-tap → reset zoom về 1x (Bui 2026-10-22) */
+    if (downT - _tapPrevDown < 320 && _tapPrevDown > 0) {
+      _tapPrevDown = 0;
+      setMapZoom(1);
+      try { if (typeof toast === "function") toast("1x"); } catch (e) {}
+      return;
+    }
+    _tapPrevDown = downT;
     var r = _canvas.getBoundingClientRect();
-    var cam = _camera();
-    var wx = e.clientX - r.left + cam.x;
-    var wy = e.clientY - r.top + cam.y;
+    var wpt = _screenToWorld(cx - r.left, cy - r.top); /* đúng với zoom */
+    var wx = wpt.x, wy = wpt.y;
+    /* Bui 2026-10-22: bán kính chạm giữ nguyên theo màn hình (chia cho zoom) */
+    var _hz = 1 / (_mapZoom || 1);
+    var _gateR = GATE_SAFE_R * _hz, _hitR = 60 * _hz;
     /* Chạm gần cổng: ưu tiên đi vào cổng — NPC đứng gần cổng không được
        chiếm cú chạm này (phòng thủ: cổng luôn kích hoạt được) */
     for (var gi9 = 0; gi9 < _gates.length; gi9++) {
-      if (Math.hypot(_gates[gi9].x - wx, _gates[gi9].y - wy) < GATE_SAFE_R) {
+      if (Math.hypot(_gates[gi9].x - wx, _gates[gi9].y - wy) < _gateR) {
         _moveTarget = { x: _gates[gi9].x, y: _gates[gi9].y }; _chaseTgt = false;
         return;
       }
@@ -970,7 +1042,7 @@ var Engine = (function () {
     try {
       for (var i = 0; i < _npcs.length; i++) {
         var n = _npcs[i];
-        if (Math.hypot(n.x - wx, n.y - wy) < 60) {
+        if (Math.hypot(n.x - wx, n.y - wy) < _hitR) {
           if (Engine.onNpc) Engine.onNpc(n.npcId);
           return;
         }
@@ -978,7 +1050,7 @@ var Engine = (function () {
     } catch (err) {}
     /* Bui 2026-10-21: chạm vào quái → nhắm và đánh ngay */
     try {
-      var _bm = null, _bd = 60;
+      var _bm = null, _bd = _hitR;
       for (var mi = 0; mi < _monsters.length; mi++) {
         var _mm = _monsters[mi];
         if (_mm.dead) continue;
@@ -2313,6 +2385,36 @@ var Engine = (function () {
 
   /* ---------- Render ---------- */
   var _camX = null, _camY = null; /* Bui 2026-10-21: camera mượt, không giật */
+  /* Bui 2026-10-22: zoom map 0.5x–3x, mặc định 1x, lưu localStorage */
+  var _mapZoom = 1, MAP_ZOOM_MIN = 0.5, MAP_ZOOM_MAX = 3;
+  function _loadMapZoom() {
+    try {
+      var z = parseFloat(localStorage.getItem('tt_mapzoom'));
+      if (z >= MAP_ZOOM_MIN && z <= MAP_ZOOM_MAX) _mapZoom = z;
+    } catch (e) {}
+  }
+  function setMapZoom(z) {
+    _mapZoom = Math.max(MAP_ZOOM_MIN, Math.min(MAP_ZOOM_MAX, parseFloat(z) || 1));
+    try { localStorage.setItem('tt_mapzoom', String(_mapZoom)); } catch (e) {}
+    return _mapZoom;
+  }
+  /* Vùng world đang hiển thị (tính zoom) — tâm giữ nguyên khi zoom */
+  function _visRect() {
+    var cam = _camera(), z = _mapZoom || 1;
+    var w = _viewW / z, h = _viewH / z;
+    return { x: cam.x + _viewW / 2 - w / 2, y: cam.y + _viewH / 2 - h / 2, w: w, h: h };
+  }
+  /* Chuyển screen (CSS px) → world, đúng với zoom hiện tại */
+  function _screenToWorld(sx, sy) {
+    var cam = _camera(), z = _mapZoom || 1;
+    return { x: (sx - _viewW / 2) / z + cam.x + _viewW / 2,
+             y: (sy - _viewH / 2) / z + cam.y + _viewH / 2 };
+  }
+  /* world y → screen y (cho pseudo-3D depth scale khi zoom) */
+  function _worldToScreenY(wy) {
+    var cam = _camera(), z = _mapZoom || 1;
+    return (wy - (cam.y + _viewH / 2)) * z + _viewH / 2;
+  }
   function _camera() {
     var tx = player.x - _viewW / 2, ty = player.y - _viewH / 2;
     if (WORLD_W <= _viewW) tx = (WORLD_W - _viewW) / 2;
@@ -2892,8 +2994,8 @@ var Engine = (function () {
     }
     if (!im || !im.width) return false;
     /* cùng hệ số độ sâu ds như _drawCreature của NPC: đứng cùng hàng y thì bằng cỡ nhau */
-    var _camP = _camera();
-    var _syP = (cy - _camP.y) / Math.max(1, _viewH);
+    /* Bui 2026-10-22: depth scale theo screen Y (đúng khi zoom map) */
+    var _syP = _worldToScreenY(cy) / Math.max(1, _viewH);
     if (_syP < 0) _syP = 0; if (_syP > 1) _syP = 1;
     var dh = _PLAYER_SPRITE_H * (0.94 + 0.12 * _syP);
     var dw = dh * (im.width / im.height);
@@ -3519,6 +3621,8 @@ var Engine = (function () {
     var lvl = GFX_LEVELS[_gfxLevel] || GFX_LEVELS.cao;
     if (lvl.particle <= 0) return;
     var cam = _camera();
+    /* Bui 2026-10-22: spawn lá trong vùng zoom đang nhìn */
+    var _vrL = _visRect();
     var W = 1600, H = 1200;
     try {
       if (_mapDef && _mapDef.w) W = _mapDef.w;
@@ -3526,8 +3630,8 @@ var Engine = (function () {
     } catch (e) {}
     var cols = ['#7cb342', '#aed581', '#c0ca33', '#9ccc65', '#d4a017'];
     _vegLeaves.push({
-      x: anywhere ? Math.random() * W : cam.x + Math.random() * _viewW,
-      y: anywhere ? Math.random() * H : cam.y - 20,
+      x: anywhere ? Math.random() * W : _vrL.x + Math.random() * _vrL.w,
+      y: anywhere ? Math.random() * H : _vrL.y - 20,
       vx: 18 + Math.random() * 26,
       vy: 22 + Math.random() * 30,
       rot: Math.random() * 6.283,
@@ -3590,6 +3694,7 @@ var Engine = (function () {
     var paths = _mapDef && _mapDef.paths;
     if (!paths || !paths.length) return;
     var cam = _camera();
+    var _vrP = _visRect(); /* Bui 2026-10-22: culling theo vùng zoom */
     var TS = 90; /* kích thước tile đường */
     for (var i = 0; i < paths.length; i++) {
       var p = paths[i];
@@ -3605,8 +3710,8 @@ var Engine = (function () {
         var cx = p.x1 + ux * (s * TS + TS / 2);
         var cy = p.y1 + uy * (s * TS + TS / 2);
         /* culling theo camera */
-        if (cx < cam.x - TS || cx > cam.x + _viewW + TS ||
-            cy < cam.y - TS || cy > cam.y + _viewH + TS) continue;
+        if (cx < _vrP.x - TS || cx > _vrP.x + _vrP.w + TS ||
+            cy < _vrP.y - TS || cy > _vrP.y + _vrP.h + TS) continue;
         _ctx.save();
         _ctx.translate(cx, cy);
         _ctx.rotate(ang);
@@ -3620,9 +3725,10 @@ var Engine = (function () {
     if (_vegMapId !== mid) _vegGen();
     if (!_veg.length && !_vegLeaves.length) return;
     var cam = _camera();
+    var _vrV = _visRect(); /* Bui 2026-10-22: culling theo vùng zoom */
     var t = _tickT;
-    var x0 = cam.x - 40, x1 = cam.x + _viewW + 40;
-    var y0 = cam.y - 40, y1 = cam.y + _viewH + 40;
+    var x0 = _vrV.x - 40, x1 = _vrV.x + _vrV.w + 40;
+    var y0 = _vrV.y - 40, y1 = _vrV.y + _vrV.h + 40;
     _ctx.save();
     for (var i = 0; i < _veg.length; i++) {
       var v = _veg[i];
@@ -3644,7 +3750,7 @@ var Engine = (function () {
         L.x += (L.vx + Math.sin(t * 2 + L.rot) * 14) * dt;
         L.y += L.vy * dt;
         L.rot += L.vr * dt;
-        if (L.life > L.maxLife || L.y > cam.y + _viewH + 30) {
+        if (L.life > L.maxLife || L.y > _vrV.y + _vrV.h + 30) {
           _vegLeaves.splice(j, 1);
           _vegSpawnLeaf(false);
           continue;
@@ -3678,7 +3784,9 @@ var Engine = (function () {
     var _tmSrc = (_mapDef && typeof _mapId === 'number') ? ('assets/maps/tilemap/map_' + _mapId + '.png') : null;
     var _tm = _tmSrc ? _img(_tmSrc) : null;
     if (_tm) {
-      _ctx.drawImage(_tm, cam.x, cam.y, W, H, 0, 0, W, H);
+      /* Bui 2026-10-22: vùng nền theo zoom — phóng to/thu nhỏ đúng vùng đang nhìn */
+      var _vr0 = _visRect();
+      _ctx.drawImage(_tm, _vr0.x, _vr0.y, _vr0.w, _vr0.h, 0, 0, W, H);
       _drawMist(W, H);
       _ctx.fillStyle = 'rgba(255,255,255,0.75)';
       _ctx.font = '12px sans-serif';
@@ -3686,19 +3794,21 @@ var Engine = (function () {
       _ctx.fillText('Khu ' + _khuOf(player.x, player.y), W - 12, 20);
     } else if (tile) {
       var TS = 256; /* kích thước tile world */
-      var sx = Math.floor(cam.x / TS) * TS, sy = Math.floor(cam.y / TS) * TS;
+      /* Bui 2026-10-22: tile lát theo vùng zoom — screen = (world - vr) * z */
+      var _vr1 = _visRect(), _z1 = _mapZoom || 1;
+      var sx = Math.floor(_vr1.x / TS) * TS, sy = Math.floor(_vr1.y / TS) * TS;
       var tx, ty;
-      for (ty = sy; ty < cam.y + H; ty += TS) {
-        for (tx = sx; tx < cam.x + W; tx += TS) {
-          _ctx.drawImage(tile, tx - cam.x, ty - cam.y, TS, TS);
+      for (ty = sy; ty < _vr1.y + _vr1.h; ty += TS) {
+        for (tx = sx; tx < _vr1.x + _vr1.w; tx += TS) {
+          _ctx.drawImage(tile, (tx - _vr1.x) * _z1, (ty - _vr1.y) * _z1, TS * _z1, TS * _z1);
         }
       }
       /* đường viền tile mờ như video tutien2d */
       _ctx.strokeStyle = 'rgba(0,0,0,0.14)';
       _ctx.lineWidth = 1;
       _ctx.beginPath();
-      for (tx = sx; tx <= cam.x + W; tx += TS) { _ctx.moveTo(tx - cam.x, 0); _ctx.lineTo(tx - cam.x, H); }
-      for (ty = sy; ty <= cam.y + H; ty += TS) { _ctx.moveTo(0, ty - cam.y); _ctx.lineTo(W, ty - cam.y); }
+      for (tx = sx; tx <= _vr1.x + _vr1.w; tx += TS) { var _lx = (tx - _vr1.x) * _z1; _ctx.moveTo(_lx, 0); _ctx.lineTo(_lx, H); }
+      for (ty = sy; ty <= _vr1.y + _vr1.h; ty += TS) { var _ly = (ty - _vr1.y) * _z1; _ctx.moveTo(0, _ly); _ctx.lineTo(W, _ly); }
       _ctx.stroke();
       /* art đẹp làm lớp atmosphere parallax mờ phía trên tile */
       var bgA = _mapDef ? _mapDef.bg : null;
@@ -3741,8 +3851,11 @@ var Engine = (function () {
     }
     }
 
+    /* Bui 2026-10-22: zoom map — scale quanh tâm màn hình, điểm đang nhìn giữ nguyên giữa */
     _ctx.save();
-    _ctx.translate(-cam.x, -cam.y);
+    _ctx.translate(_viewW / 2, _viewH / 2);
+    _ctx.scale(_mapZoom, _mapZoom);
+    _ctx.translate(-(cam.x + _viewW / 2), -(cam.y + _viewH / 2));
 
     // Cổng chuyển map
     for (var gi = 0; gi < _gates.length; gi++) {
@@ -4077,12 +4190,19 @@ var Engine = (function () {
     setGraphics((S && S.settings && S.settings.graphics) || 'tudong');
     if (S && S.settings && S.settings.graphicsManual) _manualCap = S.settings.graphicsManual;
     _tapMove = !(S && S.settings && S.settings.tapMove === false); /* áp dụng tap-to-move đã lưu */
+    _loadMapZoom(); /* Bui 2026-10-22: zoom map đã lưu */
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', _applyGfx);
       window.addEventListener('keydown', _onKeyDown);
       window.addEventListener('keyup', _onKeyUp);
     }
     _canvas.addEventListener('pointerdown', _onCanvasTap);
+    /* Bui 2026-10-22: zoom map — pinch (touch), wheel (chuột) */
+    _canvas.addEventListener('wheel', _onWheel, { passive: false });
+    _canvas.addEventListener('touchstart', _onTouchStart, { passive: false });
+    _canvas.addEventListener('touchmove', _onTouchMove, { passive: false });
+    _canvas.addEventListener('touchend', _onTouchEnd);
+    _canvas.addEventListener('touchcancel', _onTouchEnd);
     _applyGfx();
     return true;
   }
@@ -4136,6 +4256,10 @@ var Engine = (function () {
     setRun: setRun,
     setTapMove: function (v) { _tapMove = !!v; _moveTarget = null; }, /* bật/tắt chạm-map-di-chuyển */
     tapMoveOn: function () { return _tapMove; },
+    setMapZoom: setMapZoom, /* Bui 2026-10-22: zoom map 0.5x–3x */
+    mapZoom: function () { return _mapZoom; },
+    zoomIn: function () { return setMapZoom(_mapZoom + 0.25); },
+    zoomOut: function () { return setMapZoom(_mapZoom - 0.25); },
     setGraphics: setGraphics,
     tryInteract: tryInteract,
     enterDungeonRun: enterDungeonRun,

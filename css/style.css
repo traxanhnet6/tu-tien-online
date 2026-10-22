@@ -1100,6 +1100,14 @@ body.landscape #hud-leftmid{top:40%}
 .wm-lock{font-size:11px;color:#f0503c;margin-top:2px}
 .wm-mons{font-size:10px;color:#a8b89a;margin-top:3px}
 .worldmap-hint{text-align:center;font-size:11px;color:#8a9a7a;padding:8px 0 2px}
+/* Bui 2026-10-22: panel thông tin map khi chạm card */
+.worldmap-detail{margin:6px 4px;padding:10px 12px;background:#2e2310f2;border:2px solid #ffd76a;border-radius:12px;font-size:13px;color:#ffe9a8}
+.worldmap-detail.hidden{display:none}
+.wm-detail-head{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:4px}
+.wm-detail-head .wm-icon{font-size:28px}
+.worldmap-detail .wm-mons{font-size:12px;margin:3px 0}
+.worldmap-detail .wm-boss{font-size:12px;color:#ffb3a8;margin:3px 0}
+.worldmap-detail .btn{margin:6px 4px 0 0}
 /* La bàn + chú thích minimap */
 .mm-compass{position:absolute;top:2px;right:6px;width:20px;height:20px;border-radius:50%;background:#1d140ae6;border:1px solid var(--gold,#c9a227);color:#ff5b5b;font-size:12px;font-weight:bold;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .mm-legend{display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:center;margin-top:4px;font-size:9px;color:#cfe3c0;max-width:132px}

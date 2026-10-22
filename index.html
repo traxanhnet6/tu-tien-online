@@ -11,7 +11,7 @@
 <script>
 /* TT_BUILD: phiên bản build — tăng mỗi lần deploy để tránh cache JS/CSS cũ.
    (Giá trị dùng chung cho toàn trang, khai báo 1 lần duy nhất tại đây.) */
-var TT_BUILD = "20261022-84";
+var TT_BUILD = "20261022-85";
 </script>
 <script>document.write('<link rel="stylesheet" href="css/style.css?v=' + TT_BUILD + '">');</script>
 <script>document.write('<link rel="stylesheet" href="css/hud-tutien2d.css?v=' + TT_BUILD + '">');</script>
@@ -197,6 +197,11 @@ var TT_BUILD = "20261022-84";
         <div id="minimap-wrap">
           <canvas id="minimap" width="132" height="132"></canvas>
           <div id="minimap-name">-</div>
+        </div>
+        <!-- Bui 2026-10-22: nút zoom map -->
+        <div id="map-zoom-ctl">
+          <button id="btn-zoom-in" class="zbtn" type="button" data-t="mapzoom_in" title="Phóng to">+</button>
+          <button id="btn-zoom-out" class="zbtn" type="button" data-t="mapzoom_out" title="Thu nhỏ">−</button>
         </div>
       </div>
 

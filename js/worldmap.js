@@ -10,10 +10,16 @@
   "use strict";
 
   /* Emoji đặc trưng từng map */
+  /* Bui 2026-10-22: icon cho đủ 39 map */
   var MAP_ICONS = {
     0: "🏘️", 1: "🌲", 2: "👻", 3: "🌾", 4: "⛏️",
     5: "⚔️", 6: "🔮", 7: "🛡️", 8: "💊", 9: "🐯", 10: "😈",
-    11: "🩸", 12: "☁️", 13: "🗼"
+    11: "🩸", 12: "☁️", 13: "🗼", 14: "🏛️",
+    15: "⛰️", 16: "🏔️", 17: "🌋", 18: "🐉", 19: "👑",
+    20: "🚪", 21: "🏠", 22: "🏯", 23: "⚗️", 24: "🌿",
+    25: "🔨", 26: "🥊", 27: "📚", 28: "🌀",
+    29: "💀", 30: "🏚️", 31: "👹", 32: "🐛", 33: "🩸",
+    34: "👤", 35: "⚒️", 36: "⚔️", 37: "☠️", 38: "🌃"
   };
 
   function _t(key) {
@@ -75,6 +81,7 @@
         '<span><i class="dot" style="background:#7fe08a"></i>' + _t("worldmap_open") + '</span>' +
         '<span><i class="dot" style="background:#888"></i>' + _t("worldmap_locked") + '</span>' +
       '</div>' +
+      '<div class="worldmap-detail hidden" id="worldmap-detail"></div>' +
       '<div class="panel-body worldmap-grid">';
 
     var maps = (typeof MAPS !== "undefined") ? MAPS : [];
@@ -109,17 +116,12 @@
     real.addEventListener("pointerdown", function (e) {
       if (e.target && e.target.id === "worldmap-overlay") close();
     });
+    /* Bui 2026-10-22: chạm card → xem thông tin map + nút dịch chuyển */
     var cards = real.querySelectorAll(".worldmap-card");
     for (var c = 0; c < cards.length; c++) {
       (function (card) {
         card.addEventListener("click", function () {
-          var mid = parseInt(card.getAttribute("data-mapid"), 10);
-          var un = card.getAttribute("data-unlocked") === "1";
-          if (!un) {
-            try { if (typeof toast === "function") toast("🔒 " + unlockText(_mapDef(mid)), "warn"); } catch (e) {}
-            return;
-          }
-          teleport(mid);
+          showDetail(parseInt(card.getAttribute("data-mapid"), 10), real);
         });
       })(cards[c]);
     }
@@ -130,6 +132,37 @@
       var ov = document.getElementById("worldmap-overlay");
       if (ov && ov.parentNode) ov.parentNode.removeChild(ov);
     } catch (e) {}
+  }
+  /* Bui 2026-10-22: panel thông tin map khi chạm card */
+  function showDetail(mapId, root) {
+    var md = _mapDef(mapId);
+    if (!md) return;
+    var det = root.querySelector("#worldmap-detail");
+    if (!det) return;
+    var un = isUnlocked(md);
+    var isCur = (mapId === _curMapId());
+    var icon = MAP_ICONS[mapId] || "🗺️";
+    var mons = (md.monsters || []).map(function (mid) {
+      return _t("mon_" + mid);
+    }).filter(function (n) { return n && n.indexOf("mon_") !== 0; });
+    var boss = md.boss ? _t("mon_" + (md.boss.mon || md.boss.id || "")) : "";
+    var html = '<div class="wm-detail-head"><span class="wm-icon">' + icon + '</span>' +
+      '<b>' + _t(md.nameKey) + '</b>' +
+      (isCur ? ' <span class="wm-cur">📍 ' + _t("worldmap_here") + '</span>' : "") + "</div>";
+    if (!un) html += '<div class="wm-lock">🔒 ' + unlockText(md) + "</div>";
+    if (mons.length) html += '<div class="wm-mons">' + _t("worldmap_mons") + ": " + mons.slice(0, 6).join(" · ") + "</div>";
+    if (boss && boss.indexOf("mon_") !== 0) html += '<div class="wm-boss">👹 ' + boss + "</div>";
+    if (un && !isCur)
+      html += '<button class="btn btn-jade" id="worldmap-go">' + _t("worldmap_teleport") + "</button>";
+    html += ' <button class="btn btn-paper" id="worldmap-detail-x">' + _t("qnav_close") + "</button>";
+    det.innerHTML = html;
+    det.classList.remove("hidden");
+    var go = det.querySelector("#worldmap-go");
+    if (go) go.addEventListener("click", function () { teleport(mapId); });
+    det.querySelector("#worldmap-detail-x").addEventListener("click", function () {
+      det.classList.add("hidden");
+    });
+    try { if (typeof sfx === "function") sfx("click"); } catch (e) {}
   }
   function teleport(mapId) {
     if (mapId === _curMapId()) { close(); return; }
