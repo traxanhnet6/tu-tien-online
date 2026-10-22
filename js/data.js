@@ -1136,7 +1136,10 @@ const MAPS = [
       {x: 950, y: 700, sprite: "assets/objects/rock_big.png", w: 90, h: 70},
       {x: 800, y: 450, sprite: "assets/objects/relief_dragon.png", w: 90, h: 60},
       {x: 150, y: 600, sprite: "assets/objects/fence_horizontal.png", w: 69, h: 60},
-      {x: 1450, y: 600, sprite: "assets/objects/fence_horizontal.png", w: 69, h: 60},
+      {x: 1450, y: 600, sprite: "assets/objects/fence_horizontal.png", w: 69, h: 60},,
+      {x: 800, y: 600, sprite: "assets/objects/cong_tong_mon2.png", w: 400, h: 400, solid: false},
+      {x: 800, y: 1080, sprite: "assets/objects/dau_cau_chuong_ngai.png", w: 220, h: 220},
+      {x: 1150, y: 950, sprite: "assets/objects/bia_thu_thach.png", w: 180, h: 100}
     ],
   },
   {
@@ -1174,7 +1177,9 @@ const MAPS = [
       {x: 600, y: 1000, sprite: "assets/objects/bush_spread.png", w: 80, h: 50},
       {x: 1000, y: 1000, sprite: "assets/objects/bush_spread.png", w: 80, h: 50},
       {x: 150, y: 200, sprite: "assets/objects/fence_lamp.png", w: 82, h: 100},
-      {x: 1450, y: 200, sprite: "assets/objects/fence_lamp.png", w: 82, h: 100},
+      {x: 1450, y: 200, sprite: "assets/objects/fence_lamp.png", w: 82, h: 100},,
+      {x: 1250, y: 1020, sprite: "assets/objects/ngoai_mon_xa.png", w: 400, h: 400},
+      {x: 350, y: 140, sprite: "assets/objects/linh_dien2.png", w: 340, h: 340}
     ],
   },
   {
@@ -1211,7 +1216,10 @@ const MAPS = [
       {x: 1000, y: 950, sprite: "assets/objects/tablet_stone.png", w: 80, h: 100},
       {x: 800, y: 800, sprite: "assets/objects/rock_gold.png", w: 80, h: 60},
       {x: 450, y: 900, sprite: "assets/objects/bush_dense.png", w: 70, h: 50},
-      {x: 1150, y: 900, sprite: "assets/objects/bush_dense.png", w: 70, h: 50},
+      {x: 1150, y: 900, sprite: "assets/objects/bush_dense.png", w: 70, h: 50},,
+      {x: 800, y: 260, sprite: "assets/objects/dai_dien.png", w: 520, h: 286},
+      {x: 800, y: 700, sprite: "assets/objects/thang_ngoc.png", w: 180, h: 360, solid: false},
+      {x: 1350, y: 180, sprite: "assets/objects/dao_bay.png", w: 280, h: 140, solid: false}
     ],
   },
   {
@@ -1248,7 +1256,9 @@ const MAPS = [
       {x: 1400, y: 800, sprite: "assets/objects/lamp_mine.png", w: 60, h: 80},
       {x: 800, y: 1000, sprite: "assets/objects/tablet_stone.png", w: 80, h: 100},
       {x: 550, y: 500, sprite: "assets/objects/bush_spread.png", w: 80, h: 50},
-      {x: 1050, y: 500, sprite: "assets/objects/bush_spread.png", w: 80, h: 50},
+      {x: 1050, y: 500, sprite: "assets/objects/bush_spread.png", w: 80, h: 50},,
+      {x: 800, y: 480, sprite: "assets/objects/lo_luyen_dan.png", w: 300, h: 300},
+      {x: 1150, y: 880, sprite: "assets/objects/lo_luyen.png", w: 280, h: 154}
     ],
   },
   {
@@ -1286,7 +1296,8 @@ const MAPS = [
       {x: 800, y: 900, sprite: "assets/objects/mushroom_glow.png", w: 70, h: 70},
       {x: 300, y: 950, sprite: "assets/objects/tree_jade_short.png", w: 80, h: 90},
       {x: 1300, y: 950, sprite: "assets/objects/tree_jade_short.png", w: 80, h: 90},
-      {x: 800, y: 200, sprite: "assets/objects/scarecrow.png", w: 110, h: 100},
+      {x: 800, y: 200, sprite: "assets/objects/scarecrow.png", w: 110, h: 100},,
+      {x: 800, y: 1020, sprite: "assets/objects/duoc_vien2.png", w: 420, h: 420}
     ],
   },
   {
@@ -1323,7 +1334,9 @@ const MAPS = [
       {x: 1100, y: 950, sprite: "assets/objects/rock_big.png", w: 90, h: 70},
       {x: 800, y: 1000, sprite: "assets/objects/lamp_mine.png", w: 60, h: 80},
       {x: 350, y: 300, sprite: "assets/objects/fence_vertical.png", w: 60, h: 90},
-      {x: 1250, y: 300, sprite: "assets/objects/fence_vertical.png", w: 60, h: 90},
+      {x: 1250, y: 300, sprite: "assets/objects/fence_vertical.png", w: 60, h: 90},,
+      {x: 800, y: 430, sprite: "assets/objects/luyen_khi_duong2.png", w: 400, h: 400},
+      {x: 1150, y: 880, sprite: "assets/objects/lo_luyen.png", w: 280, h: 154}
     ],
   },
   {
@@ -1360,7 +1373,11 @@ const MAPS = [
       {x: 800, y: 250, sprite: "assets/objects/statue_dragon.png", w: 100, h: 140},
       {x: 800, y: 950, sprite: "assets/objects/fence_horizontal.png", w: 120, h: 60},
       {x: 400, y: 600, sprite: "assets/objects/brazier_fire.png", w: 70, h: 80},
-      {x: 1200, y: 600, sprite: "assets/objects/brazier_fire.png", w: 70, h: 80},
+      {x: 1200, y: 600, sprite: "assets/objects/brazier_fire.png", w: 70, h: 80},,
+      {x: 800, y: 620, sprite: "assets/objects/dau_truong2.png", w: 460, h: 460, solid: false},
+      {x: 1350, y: 250, sprite: "assets/objects/thac_linh_khi.png", w: 260, h: 260},
+      {x: 200, y: 950, sprite: "assets/objects/bia_thu_thach.png", w: 180, h: 100},
+      {x: 1050, y: 1000, sprite: "assets/objects/cau_treo.png", w: 360, h: 120, solid: false}
     ],
   },
   {
@@ -1397,7 +1414,8 @@ const MAPS = [
       {x: 1100, y: 950, sprite: "assets/objects/lamp_mine.png", w: 60, h: 80},
       {x: 800, y: 500, sprite: "assets/objects/crystal_purple.png", w: 70, h: 80},
       {x: 450, y: 800, sprite: "assets/objects/bush_dense.png", w: 70, h: 50},
-      {x: 1150, y: 800, sprite: "assets/objects/bush_dense.png", w: 70, h: 50},
+      {x: 1150, y: 800, sprite: "assets/objects/bush_dense.png", w: 70, h: 50},,
+      {x: 800, y: 450, sprite: "assets/objects/tang_thu_cac2.png", w: 360, h: 360}
     ],
   },
 ];
