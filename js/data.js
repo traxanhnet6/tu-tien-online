@@ -1519,7 +1519,9 @@ const MAPS = [
     quests: [],
     gates: [{to: 29, x: 80, y: 600}],
     paths: [
-      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},,
+      {x: 800, y: 300, sprite: "assets/objects/cong_van_ma.png", w: 400, h: 300},,
+      {x: 800, y: 900, sprite: "assets/objects/loi_xuong_ma_tran.png", w: 300, h: 200},
     ],
     stoneDrop: [0, 0],
     unlock: {dao: "ma"},
@@ -1587,7 +1589,8 @@ const MAPS = [
     quests: [],
     gates: [{to: 29, x: 1500, y: 600}],
     paths: [
-      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},,
+      {x: 800, y: 300, sprite: "assets/objects/van_ma_dien.png", w: 500, h: 350},
     ],
     stoneDrop: [0, 0],
     unlock: {dao: "ma"},
@@ -1621,7 +1624,8 @@ const MAPS = [
     quests: [],
     gates: [{to: 29, x: 1500, y: 600}],
     paths: [
-      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},,
+      {x: 800, y: 400, sprite: "assets/objects/luyen_co_duong.png", w: 400, h: 300},
     ],
     stoneDrop: [0, 0],
     unlock: {dao: "ma"},
@@ -1655,7 +1659,8 @@ const MAPS = [
     quests: [],
     gates: [{to: 29, x: 1500, y: 600}],
     paths: [
-      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},,
+      {x: 800, y: 500, sprite: "assets/objects/luyen_huyet_tri.png", w: 400, h: 300},
     ],
     stoneDrop: [0, 0],
     unlock: {dao: "ma"},
@@ -1689,7 +1694,8 @@ const MAPS = [
     quests: [],
     gates: [{to: 29, x: 80, y: 600}],
     paths: [
-      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},,
+      {x: 800, y: 350, sprite: "assets/objects/hon_dien.png", w: 400, h: 300},
     ],
     stoneDrop: [0, 0],
     unlock: {dao: "ma"},
@@ -1723,7 +1729,8 @@ const MAPS = [
     quests: [],
     gates: [{to: 29, x: 80, y: 600}],
     paths: [
-      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},,
+      {x: 800, y: 400, sprite: "assets/objects/luyen_khi_ma_duong.png", w: 400, h: 300},
     ],
     stoneDrop: [0, 0],
     unlock: {dao: "ma"},
@@ -1757,7 +1764,8 @@ const MAPS = [
     quests: [],
     gates: [{to: 29, x: 80, y: 600}],
     paths: [
-      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},
+      {x1: 200, y1: 600, x2: 1400, y2: 600, tile: "path_stone"},,
+      {x: 800, y: 500, sprite: "assets/objects/huyet_dau_truong.png", w: 450, h: 350},
     ],
     stoneDrop: [0, 0],
     unlock: {dao: "ma"},
@@ -1793,7 +1801,8 @@ const MAPS = [
     paths: [
       {x1: 80, y1: 600, x2: 1500, y2: 600, tile: "path_stone"},
       {x1: 400, y1: 200, x2: 400, y2: 1000, tile: "path_stone"},
-      {x1: 1200, y1: 200, x2: 1200, y2: 1000, tile: "path_stone"},
+      {x1: 1200, y1: 200, x2: 1200, y2: 1000, tile: "path_stone"},,
+      {x: 800, y: 450, sprite: "assets/objects/van_doc_vien.png", w: 400, h: 300},
     ],
     stoneDrop: [0, 0],
     unlock: {dao: "ma"},
