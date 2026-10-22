@@ -551,22 +551,22 @@ const MAPS = [
     quests: ["q_story_01", "q_story_02", "q_story_03", "q_story_04", "q_story_05", "q_story_10", "q_story_21", "q_story_22", "q_story_23", "q_story_24", "q_story_25", "q_story_26", "q_story_27"],
     gates: [{to: 1, x: 720, y: 80}, {to: 3, x: 80, y: 500}, {to: 4, x: 1500, y: 80}, {to: 5, x: 80, y: 1000}, {to: 6, x: 400, y: 1120}, {to: 7, x: 800, y: 1120}, {to: 8, x: 1200, y: 1120}, {to: 9, x: 1500, y: 1000}, {to: 10, x: 1500, y: 600}, {to: 11, x: 1500, y: 450}, {to: 12, x: 1500, y: 300}, {to: 14, x: 800, y: 80}, {to: 15, x: 1500, y: 150}, {to: 20, x: 80, y: 200}],
     objects: [
-      {x: 250, y: 1050, sprite: "assets/objects/cong_tong_mon2.png", w: 260, h: 200},
-      {x: 350, y: 500, sprite: "assets/objects/house_wood.png", w: 230, h: 200},
+      {x: 250, y: 1050, sprite: "assets/objects/cong_tran.png", w: 300, h: 200, w: 260, h: 200},
+      {x: 350, y: 500, sprite: "assets/objects/quan_tro.png", w: 320, h: 280, w: 230, h: 200},
       {x: 355, y: 420, sprite: "assets/objects/banner_lantern.png", w: 70, h: 90},
-      {x: 650, y: 450, sprite: "assets/objects/house_wood.png", w: 210, h: 180},
+      {x: 650, y: 450, sprite: "assets/objects/y_quan.png", w: 280, h: 240, w: 210, h: 180},
       {x: 660, y: 380, sprite: "assets/objects/herb_green.png", w: 70, h: 60},
-      {x: 600, y: 930, sprite: "assets/objects/house_wood.png", w: 210, h: 180},
-      {x: 1080, y: 600, sprite: "assets/objects/luyen_khi_duong2.png", w: 270, h: 200},
+      {x: 600, y: 930, sprite: "assets/objects/thuong_diem.png", w: 280, h: 240, w: 210, h: 180},
+      {x: 1080, y: 600, sprite: "assets/objects/tiem_ren2.png", w: 350, h: 280, w: 270, h: 200},
       {x: 1170, y: 720, sprite: "assets/objects/lo_luyen.png", w: 150, h: 120},
       {x: 1400, y: 800, sprite: "assets/objects/lake_rest.png", w: 280, h: 190},
-      {x: 1400, y: 640, sprite: "assets/objects/house_wood.png", w: 150, h: 130},
-      {x: 1150, y: 250, sprite: "assets/objects/dau_truong2.png", w: 270, h: 200},
+      {x: 1400, y: 640, sprite: "assets/objects/ben_thuyen.png", w: 320, h: 240, w: 150, h: 130},
+      {x: 1150, y: 250, sprite: "assets/objects/vo_duong.png", w: 350, h: 280, w: 270, h: 200},
       {x: 1400, y: 170, sprite: "assets/objects/thang_ngoc.png", w: 160, h: 220},
-      {x: 1250, y: 1080, sprite: "assets/objects/linh_dien2.png", w: 270, h: 180},
+      {x: 1250, y: 1080, sprite: "assets/objects/linh_dien_ruong.png", w: 340, h: 200, w: 270, h: 180},
       {x: 1380, y: 1120, sprite: "assets/objects/crops_mixed.png", w: 120, h: 100},
-      {x: 250, y: 810, sprite: "assets/objects/tang_thu_cac2.png", w: 230, h: 210},
-      {x: 700, y: 820, sprite: "assets/objects/barrel_wood.png", w: 80, h: 80},
+      {x: 250, y: 810, sprite: "assets/objects/tang_thu_cac_tran.png", w: 250, h: 300, w: 230, h: 210},
+      {x: 700, y: 820, sprite: "assets/objects/pho_cho.png", w: 400, h: 200, w: 80, h: 80},
       {x: 800, y: 820, sprite: "assets/objects/crops_mixed.png", w: 100, h: 90},
       {x: 500, y: 620, sprite: "assets/objects/board_quest.png", w: 72, h: 90},
       {x: 180, y: 620, sprite: "assets/objects/tree_tall.png", w: 110, h: 150},
@@ -1137,7 +1137,7 @@ const MAPS = [
       {x: 800, y: 450, sprite: "assets/objects/relief_dragon.png", w: 90, h: 60},
       {x: 150, y: 600, sprite: "assets/objects/fence_horizontal.png", w: 69, h: 60},
       {x: 1450, y: 600, sprite: "assets/objects/fence_horizontal.png", w: 69, h: 60},,
-      {x: 800, y: 600, sprite: "assets/objects/cong_tong_mon2.png", w: 400, h: 400, solid: false},
+      {x: 800, y: 600, sprite: "assets/objects/cong_tran.png", w: 300, h: 200, w: 400, h: 400, solid: false},
       {x: 800, y: 1080, sprite: "assets/objects/dau_cau_chuong_ngai.png", w: 220, h: 220},
       {x: 1150, y: 950, sprite: "assets/objects/bia_thu_thach.png", w: 180, h: 100}
     ],
@@ -1179,7 +1179,7 @@ const MAPS = [
       {x: 150, y: 200, sprite: "assets/objects/fence_lamp.png", w: 82, h: 100},
       {x: 1450, y: 200, sprite: "assets/objects/fence_lamp.png", w: 82, h: 100},,
       {x: 1250, y: 1020, sprite: "assets/objects/ngoai_mon_xa.png", w: 400, h: 400},
-      {x: 350, y: 140, sprite: "assets/objects/linh_dien2.png", w: 340, h: 340}
+      {x: 350, y: 140, sprite: "assets/objects/linh_dien_ruong.png", w: 340, h: 200, w: 340, h: 340}
     ],
   },
   {
@@ -1335,7 +1335,7 @@ const MAPS = [
       {x: 800, y: 1000, sprite: "assets/objects/lamp_mine.png", w: 60, h: 80},
       {x: 350, y: 300, sprite: "assets/objects/fence_vertical.png", w: 60, h: 90},
       {x: 1250, y: 300, sprite: "assets/objects/fence_vertical.png", w: 60, h: 90},,
-      {x: 800, y: 430, sprite: "assets/objects/luyen_khi_duong2.png", w: 400, h: 400},
+      {x: 800, y: 430, sprite: "assets/objects/tiem_ren2.png", w: 350, h: 280, w: 400, h: 400},
       {x: 1150, y: 880, sprite: "assets/objects/lo_luyen.png", w: 280, h: 154}
     ],
   },
@@ -1374,7 +1374,7 @@ const MAPS = [
       {x: 800, y: 950, sprite: "assets/objects/fence_horizontal.png", w: 120, h: 60},
       {x: 400, y: 600, sprite: "assets/objects/brazier_fire.png", w: 70, h: 80},
       {x: 1200, y: 600, sprite: "assets/objects/brazier_fire.png", w: 70, h: 80},,
-      {x: 800, y: 620, sprite: "assets/objects/dau_truong2.png", w: 460, h: 460, solid: false},
+      {x: 800, y: 620, sprite: "assets/objects/vo_duong.png", w: 350, h: 280, w: 460, h: 460, solid: false},
       {x: 1350, y: 250, sprite: "assets/objects/thac_linh_khi.png", w: 260, h: 260},
       {x: 200, y: 950, sprite: "assets/objects/bia_thu_thach.png", w: 180, h: 100},
       {x: 1050, y: 1000, sprite: "assets/objects/cau_treo.png", w: 360, h: 120, solid: false}
@@ -1415,7 +1415,7 @@ const MAPS = [
       {x: 800, y: 500, sprite: "assets/objects/crystal_purple.png", w: 70, h: 80},
       {x: 450, y: 800, sprite: "assets/objects/bush_dense.png", w: 70, h: 50},
       {x: 1150, y: 800, sprite: "assets/objects/bush_dense.png", w: 70, h: 50},,
-      {x: 800, y: 450, sprite: "assets/objects/tang_thu_cac2.png", w: 360, h: 360}
+      {x: 800, y: 450, sprite: "assets/objects/tang_thu_cac_tran.png", w: 250, h: 300, w: 360, h: 360}
     ],
   },
 ];
