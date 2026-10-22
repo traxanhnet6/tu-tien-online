@@ -2557,6 +2557,10 @@ function mapUnlocked(state, m) {
     var joined = (typeof Sect !== "undefined" && Sect.joinedSect) ? Sect.joinedSect(state) : (state.sectInfo && state.sectInfo.joined);
     if (!joined) return false;
   }
+  if (u.dao) { /* Bui 2026-10-22: ma mon chi ma dao vao duoc */
+    var pdao = state && state.dao;
+    if (pdao !== u.dao) return false;
+  }
   if (u.realm != null) {
     return state.char.realm > u.realm ||
       (state.char.realm === u.realm && state.char.tier >= (u.tier || 0));
@@ -4107,7 +4111,12 @@ function doMapGo(idx) {
   var m = MAPS[idx];
   if (!m) return;
   if (!mapUnlocked(state, m)) {
-    toast(t(m.unlock && m.unlock.sect ? "map_locked_sect" : "map_locked")); return;
+    var _lk = "map_locked";
+    if (m.unlock) {
+      if (m.unlock.dao === "ma") _lk = "map_need_ma_dao";
+      else if (m.unlock.sect) _lk = "map_locked_sect";
+    }
+    toast(t(_lk)); return;
   }
   curMapId = m.id;
   state.map.id = m.id;
