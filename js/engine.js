@@ -97,6 +97,9 @@ var Engine = (function () {
   /* Bui 2026-10-21: chống đá về map cũ ngay khi vào map mới — vd vào map 0
    * spawn ở (790,80) cách cổng về map 14 (800,80) chỉ 10px < GATE_RANGE. */
   var _gateCdUntil = 0;
+  /* Build 94: điểm rơi tilemap của cổng vừa đi qua (dropCol/dropRow) —
+   * gate trigger stash vào đây, enterMap dùng rồi xóa. null = không có. */
+  var _tileGateDrop = null;
   /* Lưới tọa độ ngầm kiểu tutien2d: world chia ô KHU_W x KHU_H → đánh số khu 1..N */
   var KHU_W = 400, KHU_H = 400;
   function _khuOf(x, y) {
@@ -589,6 +592,17 @@ var Engine = (function () {
     } else {
       player.x = WORLD_W / 2; player.y = WORLD_H / 2;
     }
+    /* Build 94: điểm rơi tilemap của cổng vừa đi qua (dropCol/dropRow
+     * -> tâm ô 40px). Áp TRƯỚC vòng đẩy xa cổng bên dưới để giữ chống
+     * bounce 2026-10-21: drop gần cổng về sẽ bị đẩy ra >= GATE_RANGE+50
+     * nhưng vẫn ở vùng lân cận ô drop. Không có drop -> giữ spawn cũ. */
+    try {
+      if (_tileGateDrop) {
+        player.x = Math.max(40, Math.min(WORLD_W - 40, _tileGateDrop.col * 40 + 20));
+        player.y = Math.max(40, Math.min(WORLD_H - 40, _tileGateDrop.row * 40 + 20));
+      }
+    } catch (_e) {}
+    _tileGateDrop = null;
     /* Miễn chạm cổng 2s sau khi vào map (chống bounce tức thì) */
     _gateCdUntil = Date.now() + 2000;
     /* Đẩy điểm spawn ra xa MỌI cổng (vd map 0 spawn (790,80) cách cổng về map 14
@@ -1110,15 +1124,23 @@ var Engine = (function () {
     }
     return false;
   }
+  /* Build 94: va chạm tilemap — map chưa có tilemap tự trả false.
+   * Phi Hành = Engine.fly (setFly/_speed dùng cùng flag). */
+  function _tileBlocked(x, y) {
+    try {
+      if (typeof Tilemap !== 'undefined' && Tilemap.isBlocked) return !!Tilemap.isBlocked(_mapId, x, y, !!Engine.fly);
+    } catch (_e) {}
+    return false;
+  }
   function _moveBy(dx, dy, dt) {
     var _ox = player.x, _oy = player.y;
     var sp = _speed();
     var nx = Math.max(16, Math.min(WORLD_W - 16, player.x + dx * sp * dt));
     var ny = Math.max(16, Math.min(WORLD_H - 16, player.y + dy * sp * dt));
     /* Trượt dọc vật thể: thử cả 2 trục, rồi từng trục */
-    if (!_hitSolid(nx, ny)) { player.x = nx; player.y = ny; }
-    else if (!_hitSolid(nx, player.y)) { player.x = nx; }
-    else if (!_hitSolid(player.x, ny)) { player.y = ny; }
+    if (!_hitSolid(nx, ny) && !_tileBlocked(nx, ny)) { player.x = nx; player.y = ny; }
+    else if (!_hitSolid(nx, player.y) && !_tileBlocked(nx, player.y)) { player.x = nx; }
+    else if (!_hitSolid(player.x, ny) && !_tileBlocked(player.x, ny)) { player.y = ny; }
     /* else: kẹt góc — đứng yên */
     /* Quay mặt theo hướng di chuyển: nội suy góc mượt (joystick/phím/tay cầm/tap-to-move đều qua đây) */
     if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01) {
@@ -2305,6 +2327,16 @@ var Engine = (function () {
       var g = _gates[gi];
       if (Math.hypot(g.x - player.x, g.y - player.y) < GATE_RANGE) {
         var to = g.to;
+        /* Build 94: cổng vừa đi qua có tilemap -> stash điểm rơi của nó
+         * (Tilemap.gateAt trên map NGUỒN, theo tọa độ cổng data.js; mọi
+         * cổng map 0 đều khớp tilemap trong bán kính 40px). */
+        try {
+          if (typeof Tilemap !== 'undefined' && Tilemap.gateAt) {
+            var _tg = Tilemap.gateAt(_mapId, g.x, g.y);
+            _tileGateDrop = (_tg && typeof _tg.dropCol === 'number' && typeof _tg.dropRow === 'number')
+              ? { col: _tg.dropCol, row: _tg.dropRow } : null;
+          } else _tileGateDrop = null;
+        } catch (_e) { _tileGateDrop = null; }
         _gates = []; // chống trigger lặp
         if (Engine.onGate) { try { Engine.onGate(to); } catch (e) {} }
         break;
@@ -3781,9 +3813,14 @@ var Engine = (function () {
     var tile = ground ? _img(ground) : null;
     /* Bui 2026-10-20: tilemap tutien2d tiền-render (assets/maps/tilemap/map_<id>.png),
        vẽ đúng 1 ảnh/frame — ưu tiên hơn tile lát cũ, giữ nguyên fallback */
+    /* Build 94: map có tilemap ASCII (hiện chỉ map 0) thì bỏ qua nền PNG
+     * cũ — nền tilemap được vẽ ở pass world bên dưới (sau transform
+     * camera/zoom, vì Tilemap.draw nhận tọa độ world). */
+    var _hasTilemap = false;
+    try { _hasTilemap = (typeof Tilemap !== 'undefined' && Tilemap.get && Tilemap.get(_mapId) !== null); } catch (_e) {}
     var _tmSrc = (_mapDef && typeof _mapId === 'number') ? ('assets/maps/tilemap/map_' + _mapId + '.png') : null;
     var _tm = _tmSrc ? _img(_tmSrc) : null;
-    if (_tm) {
+    if (!_hasTilemap && _tm) {
       /* Bui 2026-10-22: vùng nền theo zoom — phóng to/thu nhỏ đúng vùng đang nhìn */
       var _vr0 = _visRect();
       _ctx.drawImage(_tm, _vr0.x, _vr0.y, _vr0.w, _vr0.h, 0, 0, W, H);
@@ -3792,7 +3829,7 @@ var Engine = (function () {
       _ctx.font = '12px sans-serif';
       _ctx.textAlign = 'right';
       _ctx.fillText('Khu ' + _khuOf(player.x, player.y), W - 12, 20);
-    } else if (tile) {
+    } else if (!_hasTilemap && tile) {
       var TS = 256; /* kích thước tile world */
       /* Bui 2026-10-22: tile lát theo vùng zoom — screen = (world - vr) * z */
       var _vr1 = _visRect(), _z1 = _mapZoom || 1;
@@ -3830,7 +3867,7 @@ var Engine = (function () {
       _ctx.font = '12px sans-serif';
       _ctx.textAlign = 'right';
       _ctx.fillText('Khu ' + _khuOf(player.x, player.y), W - 12, 20);
-    } else {
+    } else if (!_hasTilemap) {
     _ctx.fillStyle = (_mapDef && _mapDef.fb) || '#222';
     _ctx.fillRect(0, 0, W, H);
     var bg = _mapDef ? _mapDef.bg : null;
@@ -3851,11 +3888,52 @@ var Engine = (function () {
     }
     }
 
+    /* Build 94: map tilemap cũng giữ sương mù + nhãn khu như nhánh PNG */
+    if (_hasTilemap) {
+      _drawMist(W, H);
+      _ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      _ctx.font = '12px sans-serif';
+      _ctx.textAlign = 'right';
+      _ctx.fillText('Khu ' + _khuOf(player.x, player.y), W - 12, 20);
+    }
+
     /* Bui 2026-10-22: zoom map — scale quanh tâm màn hình, điểm đang nhìn giữ nguyên giữa */
     _ctx.save();
     _ctx.translate(_viewW / 2, _viewH / 2);
     _ctx.scale(_mapZoom, _mapZoom);
     _ctx.translate(-(cam.x + _viewW / 2), -(cam.y + _viewH / 2));
+
+    /* Build 94: nền tilemap ASCII (tọa độ world — transform đã áp).
+     * Tilemap.draw trả true -> nền tilemap đã vẽ, bỏ qua PNG (đã chặn
+     * ở pass nền trên); false -> map chưa có tilemap, giữ nguyên PNG. */
+    var _tilemapDrawn = false;
+    try { if (typeof Tilemap !== 'undefined' && Tilemap.draw) _tilemapDrawn = !!Tilemap.draw(_ctx, _mapId, _visRect(), _mapZoom || 1); } catch (_e) {}
+    if (_tilemapDrawn) {
+      /* Ambient: phủ toàn vùng đang nhìn bằng màu của map */
+      try {
+        var _amb = (typeof Tilemap !== 'undefined' && Tilemap.ambient) ? Tilemap.ambient(_mapId) : null;
+        if (_amb) { var _vrA = _visRect(); _ctx.fillStyle = _amb; _ctx.fillRect(_vrA.x, _vrA.y, _vrA.w, _vrA.h); }
+      } catch (_e) {}
+      /* Nhãn cổng tilemap: chữ nhỏ, nền mờ, phía trên ô cổng.
+       * Chỉ thêm hiển thị — logic teleport vẫn dùng _gates (data.js). */
+      try {
+        var _tmDef = (typeof Tilemap !== 'undefined' && Tilemap.get) ? Tilemap.get(_mapId) : null;
+        var _tmGates = (_tmDef && _tmDef.gates) || [];
+        for (var _tgi = 0; _tgi < _tmGates.length; _tgi++) {
+          var _tg2 = _tmGates[_tgi];
+          if (!_tg2.label) continue;
+          var _tcx = (typeof _tg2.x === 'number') ? _tg2.x : ((_tg2.col || 0) * 40 + 20);
+          var _tcy = (typeof _tg2.y === 'number') ? _tg2.y : ((_tg2.row || 0) * 40 + 20);
+          _ctx.font = '11px sans-serif';
+          _ctx.textAlign = 'center';
+          var _tw = _ctx.measureText(_tg2.label).width + 12;
+          _ctx.fillStyle = 'rgba(20,14,8,0.72)';
+          _ctx.fillRect(_tcx - _tw / 2, _tcy - 80, _tw, 18);
+          _ctx.fillStyle = '#ffe9a8';
+          _ctx.fillText(_tg2.label, _tcx, _tcy - 66);
+        }
+      } catch (_e) {}
+    }
 
     // Cổng chuyển map
     for (var gi = 0; gi < _gates.length; gi++) {

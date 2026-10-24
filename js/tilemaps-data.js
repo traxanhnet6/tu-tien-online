@@ -1,0 +1,68 @@
+// TILEMAPS — dữ liệu tilemap game Tu Tiên Online (v2).
+// LEGEND: '.' cỏ | ',' cỏ cao | '#' đường đá | '=' đường đất | '~' nước (chặn đi bộ, bay được)
+//   'T' cây | 'Y' cây thông | '^' vách đá (chặn cả đi bộ lẫn bay) | 'o' đá tảng
+//   'H' nhà | 'P' đình/lầu | 'B' cầu | '*' hoa/linh thảo | 'S' đèn đá/tượng | 'G' vị trí cổng.
+// Global TILEMAPS, Node-safe, không require. Map 0 vẽ trước theo quy trình lần lượt từng map.
+const TILEMAPS = {
+  0: {
+    id: 0,
+    name: "Thanh Vân Trấn",
+    cols: 40, rows: 30, cell: 40,
+    ambient: "rgba(255, 214, 140, 0.18)",
+    grid: [
+      "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "^......................................^",
+      "^.G###############G#G#########G######G.^",
+      "^.#.....T...........#................G.^",
+      "^.#..,,..T..........#.....HHH....S...#.^",
+      "^.G.Y.Y.....*.......#.....HHH.....T..#.^",
+      "^.#.............*...#...,,...........#.^",
+      "^.#.T...*....T......#................G.^",
+      "^.#......*....T.....#HHH############G#.^",
+      "^.#..T..............#HHH......o......#.^",
+      "^.#.,...............#.......,,.o.....#.^",
+      "^.#..,...........*..#................G.^",
+      "^.G##################................#.^",
+      "^.#........HHH......#......T.....~~~.#.^",
+      "^.#........HHH......#.......T........#.^",
+      "^.################################BB##.^",
+      "^.#.................#PPP.........~~~.#.^",
+      "^.#......,,.........#PPP.............#.^",
+      "^.#...PP............#................#.^",
+      "^.#.................#...*............#.^",
+      "^.#T...*.......S....#....*...........G.^",
+      "^.#.T............S..#......HHH.......#.^",
+      "^.#.....o..*....=...#......HHH...*...#.^",
+      "^.#......o......=...#...........****.#.^",
+      "^.#...P...========..#HHH........*****#.^",
+      "^.G#############=####HHH#########*###G.^",
+      "^.#...........,,....#.........,,.....#.^",
+      "^.#.........S.......#...o...*.......T#.^",
+      "^.########G#########G#########G#######.^",
+      "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    ],
+    gates: [
+      { col: 18, row: 2, to: 1, label: "Vào Hắc Phong Lâm", dropCol: 2, dropRow: 2 },
+      { col: 2, row: 12, to: 3, label: "Vào Linh Điền", dropCol: 18, dropRow: 12 },
+      { col: 37, row: 2, to: 4, label: "Vào Mỏ Linh Thạch", dropCol: 2, dropRow: 2 },
+      { col: 2, row: 25, to: 5, label: "Vào Kiếm Tông", dropCol: 2, dropRow: 25 },
+      { col: 10, row: 28, to: 6, label: "Vào Thiên Pháp Tông", dropCol: 10, dropRow: 28 },
+      { col: 20, row: 28, to: 7, label: "Vào Kim Cang Tông", dropCol: 20, dropRow: 28 },
+      { col: 30, row: 28, to: 8, label: "Vào Dược Vương Tông", dropCol: 30, dropRow: 28 },
+      { col: 37, row: 25, to: 9, label: "Vào Ngự Thú Tông", dropCol: 37, dropRow: 25 },
+      { col: 37, row: 20, to: 10, label: "Vào Cửu U Ma Tông", dropCol: 37, dropRow: 15 },
+      { col: 37, row: 11, to: 11, label: "Vào Huyết Ma Vực", dropCol: 2, dropRow: 13 },
+      { col: 37, row: 7, to: 12, label: "Vào Thái Hư Tiên Cảnh", dropCol: 2, dropRow: 7 },
+      { col: 20, row: 2, to: 14, label: "Vào Đại Điện Tông Môn", dropCol: 20, dropRow: 28 },
+      { col: 37, row: 3, to: 15, label: "Vào Thập Vạn Đại Sơn - Ngoại Vi", dropCol: 2, dropRow: 15 },
+      { col: 2, row: 5, to: 20, label: "Vào Cổng Tông Môn", dropCol: 2, dropRow: 15 },
+      { col: 36, row: 8, to: 28, label: "Vào Truyền Tống Trận", dropCol: 20, dropRow: 28 },
+      { col: 30, row: 2, to: 42, label: "Vào Chân Núi Tản Viên", dropCol: 2, dropRow: 2 },
+      { col: 2, row: 2, to: 43, label: "Vào Tiên Môn", dropCol: 2, dropRow: 15 },
+    ],
+    spawns: [
+      { col: 13, row: 24, r: 3, monsters: ["da_tru", "son_ke", "son_tac"] },
+    ],
+  },
+};
+if (typeof module !== 'undefined' && module.exports) { module.exports = TILEMAPS; }
