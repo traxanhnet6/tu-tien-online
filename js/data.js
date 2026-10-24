@@ -549,7 +549,7 @@ const MAPS = [
     bossSpawn: { x: 1400, y: 1060 },
     npcs: ["dai_phu", "van_tien_cac", "truong_lao", "tam_tien_bi_tich", "truong_tran", "lao_ren", "thuong_nhan", "tieu_nhi", "su_gia_kiem", "su_gia_phap", "su_gia_the", "tuan_thu_su", "lao_dan_duong", "thu_thap_nhan", "su_gia_duoc", "su_gia_thu", "minh_chu", "thuong_nhan_du_hanh", "su_gia_ma", "truong_lang", "co_tran_tu", "to_uyen_nhi", "diep_van", "dan_lang_1", "dan_lang_2", "dan_lang_3"],
     quests: ["q_story_01", "q_story_02", "q_story_03", "q_story_04", "q_story_05", "q_story_10", "q_story_21", "q_story_22", "q_story_23", "q_story_24", "q_story_25", "q_story_26", "q_story_27"],
-    gates: [{to: 1, x: 720, y: 80}, {to: 3, x: 80, y: 500}, {to: 4, x: 1500, y: 80}, {to: 5, x: 80, y: 1000}, {to: 6, x: 400, y: 1120}, {to: 7, x: 800, y: 1120}, {to: 8, x: 1200, y: 1120}, {to: 9, x: 1500, y: 1000}, {to: 10, x: 1500, y: 800}, {to: 11, x: 1500, y: 450}, {to: 12, x: 1500, y: 300}, {to: 14, x: 800, y: 80}, {to: 15, x: 1500, y: 150}, {to: 20, x: 80, y: 200}, {to: 28, x: 1470, y: 350}, {to: 42, x: 1200, y: 80}],
+    gates: [{to: 1, x: 720, y: 80}, {to: 3, x: 80, y: 500}, {to: 4, x: 1500, y: 80}, {to: 5, x: 80, y: 1000}, {to: 6, x: 400, y: 1120}, {to: 7, x: 800, y: 1120}, {to: 8, x: 1200, y: 1120}, {to: 9, x: 1500, y: 1000}, {to: 10, x: 1500, y: 800}, {to: 11, x: 1500, y: 450}, {to: 12, x: 1500, y: 300}, {to: 14, x: 800, y: 80}, {to: 15, x: 1500, y: 150}, {to: 20, x: 80, y: 200}, {to: 28, x: 1470, y: 350}, {to: 42, x: 1200, y: 80}, {to: 43, x: 80, y: 80}],
     objects: [
       {x: 1090, y: 200, sprite: "assets/objects/vo_duong.png", w: 350, h: 280},
       {x: 1330, y: 180, sprite: "assets/objects/thang_ngoc.png", w: 160, h: 220, solid: false},
@@ -707,7 +707,7 @@ const MAPS = [
     boss: null,
     npcs: ["truong_lao_kiem", "de_tu_kiem_1", "de_tu_kiem_2", "ren_su_kiem"],
     quests: [],
-    gates: [{to: 0, x: 80, y: 1000}, {to: 28, x: 1500, y: 200}],
+    gates: [{to: 0, x: 80, y: 1000}, {to: 28, x: 1500, y: 200}, {to: 43, x: 800, y: 80}],
     stoneDrop: [0, 0],
     unlock: {realm: 2},
   },
@@ -871,7 +871,7 @@ const MAPS = [
     bossSpawn: null,
     npcs: ["tiep_dan_su", "truong_lao_truyen_cong"],
     quests: ["q_story_c01"],
-    gates: [{to: 0, x: 800, y: 1150}],
+    gates: [{to: 0, x: 800, y: 1150}, {to: 43, x: 800, y: 80}],
     stoneDrop: [0, 0],
     unlock: null,
   },
@@ -1932,6 +1932,32 @@ const MAPS = [
       {x: 600, y: 500, sprite: "assets/objects/board_quest.png", w: 72, h: 90},
     ],
     stoneDrop: [1, 3],
+    unlock: null,
+  },
+  {
+    id: 43,
+    nameKey: "map_tien_mon",
+    bg: "assets/maps/map_tien_mon.webp",
+    ground: "assets/map/tile_ground_forest.png",
+    loadingBg: "assets/maps/loading_tien_mon.webp",
+    fb: "#a8c8e8",
+    dao: "chinh",
+    monsters: ["son_tac"],
+    boss: null,
+    spawnZones: [
+      { x: 800, y: 700, r: 200, monsters: ["son_tac"] },
+    ],
+    bossSpawn: null,
+    npcs: ["chuong_mon_tm", "de_tu_tiep_dan_tm", "lao_duoc_su_tm"],
+    quests: [],
+    gates: [{to: 0, x: 80, y: 600}, {to: 5, x: 1500, y: 300}, {to: 14, x: 800, y: 80}],
+    objects: [
+      {x: 800, y: 220, sprite: "assets/objects/cong_tran.png", w: 180, h: 150, solid: false},
+      {x: 400, y: 850, sprite: "assets/objects/tree_round.png", w: 110, h: 130},
+      {x: 1200, y: 850, sprite: "assets/objects/tree_round.png", w: 110, h: 130},
+      {x: 600, y: 500, sprite: "assets/objects/board_quest.png", w: 72, h: 90},
+    ],
+    stoneDrop: [2, 4],
     unlock: null,
   },
 ];
@@ -3576,6 +3602,10 @@ const NPCS = {
   tieu_phu_bd: { nameKey: "npc_tieu_phu_bd", mapId: 41, x: 1150, y: 720, kind: "greet", talkKey: "npc_tieu_phu_bd_talk", img: "assets/sprs/npc_dan_lang_1.png" },
   chap_su_dh: { nameKey: "npc_chap_su_dh", mapId: 42, x: 380, y: 430, kind: "greet", talkKey: "npc_chap_su_dh_talk", img: "assets/sprs/npc_tiep_dan_su.png" },
   lao_ren_tnv: { nameKey: "npc_lao_ren_tnv", mapId: 42, x: 180, y: 680, kind: "greet", talkKey: "npc_lao_ren_tnv_talk", img: "assets/sprs/npc_lao_ren.png" },
+  /* Tiên Môn (2026-10-24): Chưởng Môn / Đệ Tử Tiếp Dẫn / Lão Dược Sư */
+  chuong_mon_tm: { nameKey: "npc_chuong_mon_tm", mapId: 43, x: 800, y: 320, kind: "greet", talkKey: "npc_chuong_mon_tm_talk", img: "assets/sprs/npc_truong_lao.png" },
+  de_tu_tiep_dan_tm: { nameKey: "npc_de_tu_tiep_dan_tm", mapId: 43, x: 300, y: 600, kind: "greet", talkKey: "npc_de_tu_tiep_dan_tm_talk", img: "assets/sprs/npc_tiep_dan_su.png" },
+  lao_duoc_su_tm: { nameKey: "npc_lao_duoc_su_tm", mapId: 43, x: 1250, y: 850, kind: "greet", talkKey: "npc_lao_duoc_su_tm_talk", img: "assets/sprs/npc_duoc_dien_quan.png" },
 };
 
 /* ============================================================
