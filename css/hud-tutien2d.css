@@ -208,6 +208,7 @@
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
 #btn-run:active{transform:translateY(2px) scale(.94);filter:brightness(1.2)}
+#btn-run.dim{opacity:.35;filter:grayscale(.7)}
 #btn-run .hicon{width:18px;height:18px}
 
 /* ---------- 10. Yêu cầu NV hiển thị rõ (Bui 2026-10-19) ---------- */

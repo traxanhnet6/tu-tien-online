@@ -808,6 +808,8 @@ var Engine = (function () {
         var nextMap = path[1];
         for (var gi2 = 0; gi2 < _gates.length; gi2++) {
           if (_gates[gi2].to === nextMap) {
+            /* Build 99: cổng chỉ mở khi đi bộ — Auto đang bay thì tự hạ cánh để qua cổng. */
+            if (Engine.fly) { setFly(false); try { if (typeof syncToggles === 'function') syncToggles(); } catch (e) {} }
             if (_dashT <= 0) _moveToward(_gates[gi2].x, _gates[gi2].y, dt);
             Engine.aqStatus = { kind: "gate", qid: q.id };
             return true;
@@ -865,6 +867,46 @@ var Engine = (function () {
       return false;
     }
     return false;
+  }
+
+  /* Build 99: Auto chính theo mũi tên vàng — khi Auto bật mà không còn quái để đánh,
+   * tự đi về phía mục tiêu nhiệm vụ chính hiện tại (cùng map thì đi thẳng, khác map
+   * thì đi tới cổng và tự hạ cánh để qua cổng). Không tương tác NPC (phần đó của nút NV). */
+  function _autoFollowQuest(dt) {
+    try {
+      var S = _S(); if (!S) return false;
+      var qm = null;
+      if (typeof QuestGuide !== 'undefined' && QuestGuide.activeMainQuest)
+        qm = QuestGuide.activeMainQuest(S);
+      if (!qm) return false;
+      var tgt = null;
+      if (QuestGuide.questTarget) tgt = QuestGuide.questTarget(S, qm, _mapId);
+      if (!tgt) return false;
+      if (tgt.map != null && tgt.map !== _mapId) {
+        var path = null;
+        try { if (QuestGuide.findPath) path = QuestGuide.findPath(_mapId, tgt.map); } catch (e) {}
+        if (path && path.length > 1) {
+          var nextMap = path[1];
+          for (var gi = 0; gi < _gates.length; gi++) {
+            if (_gates[gi].to === nextMap) {
+              if (Engine.fly) { setFly(false); try { if (typeof syncToggles === 'function') syncToggles(); } catch (e) {} }
+              if (_dashT <= 0) _moveToward(_gates[gi].x, _gates[gi].y, dt);
+              return true;
+            }
+          }
+        }
+        return false;
+      }
+      var tx = null, ty = null;
+      if (tgt.kind === 'npc') {
+        for (var i = 0; i < _npcs.length; i++)
+          if (_npcs[i].npcId === tgt.npcId) { tx = _npcs[i].x; ty = _npcs[i].y; break; }
+      } else if (tgt.x != null && tgt.y != null) { tx = tgt.x; ty = tgt.y; }
+      if (tx == null) return false;
+      if (Math.hypot(tx - player.x, ty - player.y) < 60) return false; /* đã tới nơi */
+      if (_dashT <= 0) _moveToward(tx, ty, dt);
+      return true;
+    } catch (e) { return false; }
   }
 
   function setAuto(b) { Engine.auto = !!b; _chaseTgt = false; var S = _S(); if (S) S.auto = Engine.auto; }
@@ -1107,7 +1149,8 @@ var Engine = (function () {
     return (S && S.passives && S.passives[id]) || 0;
   }
   function _speed() {
-    var sp = player.speed * (Engine.fly ? 2.5 : 1) * (Engine.run ? 1.3 : 1);
+    /* Build 99: tốc độ xếp tầng đi bộ < chạy < bay; đang bay thì Chạy không cộng thêm (nút Chạy mờ đi khi bay, đúng tutien2d). */
+    var sp = player.speed * (Engine.fly ? 2.5 : (Engine.run ? 1.3 : 1));
     sp *= 1 + 0.05 * _passiveLvl('than_phap'); // Thân Pháp: +5% tốc chạy/cấp
     return sp;
   }
@@ -1233,6 +1276,8 @@ var Engine = (function () {
     player._a20Start = Date.now(); // Build 98: chuỗi attack 20 frame khi đánh thường
     player.atkPhase = 'windup';
     player.dir = mon.x >= player.x ? 1 : -1;
+    /* Build 99: quay mặt 4 hướng về phía mục tiêu (player.ang lái _playerDirFace). */
+    player.ang = Math.atan2(mon.y - player.y, mon.x - player.x);
     _audio(function (A) { A.sfx('slash'); });
     var dmg = 1;
     var wm = _weakMult();
@@ -2413,6 +2458,8 @@ var Engine = (function () {
         }
         _autoSkills(ps); // tự tung bí thuật khi hồi chiêu
       }
+      /* Build 99: không còn quái để đánh → Auto đi theo mũi tên vàng về mục tiêu nhiệm vụ (chờ đánh xong mới đi). */
+      if (!tgt && !manual && player.atkT <= 0 && player.skillT <= 0) _autoFollowQuest(dt);
     } else if (tgt) {
       var d2 = Math.hypot(tgt.x - player.x, tgt.y - player.y);
       if (_chaseTgt && !_aqHandled && !manual && d2 > _atkRange() && _dashT <= 0) {
@@ -2422,13 +2469,19 @@ var Engine = (function () {
       }
     } else if (!tgt) { _chaseTgt = false; }
 
-    if (iv.active) { _moveTarget = null; _moveBy(iv.dx, iv.dy, dt); }
-    else if (_moveTarget) { if (_moveToward(_moveTarget.x, _moveTarget.y, dt)) _moveTarget = null; }
+    /* Build 99: khóa di chuyển tay trong lúc đánh/dùng chiêu/bị đánh/chết (đánh xong mới đi tiếp, đúng tutien2d). */
+    var _stLock = _playerState();
+    var _moveLocked = (_stLock === 'attack' || _stLock === 'skill' || _stLock === 'hit' || _stLock === 'dead');
+    if (!_moveLocked) {
+      if (iv.active) { _moveTarget = null; _moveBy(iv.dx, iv.dy, dt); }
+      else if (_moveTarget) { if (_moveToward(_moveTarget.x, _moveTarget.y, dt)) _moveTarget = null; }
+    }
 
     // Cổng chuyển map (miễn 2s sau khi vào map — chống bounce tức thì)
+    // Build 99: cổng CHỈ kích hoạt khi đi bộ — đang bay mà bay ngang cổng thì không qua được (đúng tutien2d).
     if (Date.now() >= _gateCdUntil) for (var gi = 0; gi < _gates.length; gi++) {
       var g = _gates[gi];
-      if (Math.hypot(g.x - player.x, g.y - player.y) < GATE_RANGE) {
+      if (!Engine.fly && Math.hypot(g.x - player.x, g.y - player.y) < GATE_RANGE) {
         var to = g.to;
         /* Build 94: cổng vừa đi qua có tilemap -> stash điểm rơi của nó
          * (Tilemap.gateAt trên map NGUỒN, theo tọa độ cổng data.js; mọi
@@ -2731,6 +2784,16 @@ var Engine = (function () {
   /* Đang di chuyển? (cùng điều kiện bobbing/nhịp bước dùng) */
   function _playerMoving() {
     return !!(player._lastMove && (Date.now() - player._lastMove < 250));
+  }
+  /* Build 99: máy trạng thái nhân vật kiểu tutien2d — dead/hit/skill/attack/move/idle.
+   * Dùng để khóa di chuyển tay trong lúc đánh/dùng chiêu/bị đánh/chết. */
+  function _playerState() {
+    if (player.hp <= 0) return 'dead';
+    if (player.hitT > 0) return 'hit';
+    if (player.skillT > 0) return 'skill';
+    if (player.atkT > 0) return 'attack';
+    if (_playerMoving()) return 'move';
+    return 'idle';
   }
   /* Nhịp bước 4 khung: a -> c -> b -> c -> a..., đổi mỗi ~150ms (Bui 2026-10-20).
    * Hàm thuần, test qua Engine._playerWalkTest.cycle. */
@@ -4453,6 +4516,7 @@ var Engine = (function () {
       }
     },
     setAuto: setAuto,
+    playerState: _playerState, /* Build 99: máy trạng thái nhân vật (dead/hit/skill/attack/move/idle) */
     setAutoQuest: setAutoQuest, /* AUTO làm nhiệm vụ (Bui 2026-10-19) */
     setFly: setFly,
     setRun: setRun,

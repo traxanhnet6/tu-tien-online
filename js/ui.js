@@ -1006,6 +1006,8 @@ function syncToggles() {
   var _baq = $("btn-autoquest"); if (_baq) _baq.classList.toggle("on", !!state.autoQuest);
   $("btn-fly").classList.toggle("on", !!state.fly);
   $("btn-run").classList.toggle("on", !!state.run);
+  /* Build 99: đang bay thì nút Chạy mờ đi (đúng tutien2d). */
+  $("btn-run").classList.toggle("dim", !!state.fly);
   /* Thần thú đồng hành 3D: hiện nút khi đã nhận, sáng khi đang bật */
   try {
     var _sbb = $("btn-spiritbeast");
