@@ -35,6 +35,7 @@ var LEGEND = {
   'H': { name: 'nha',    color: '#c08060', blockWalk: true,  blockFly: false },
   'P': { name: 'dinh',   color: '#d0a050', blockWalk: true,  blockFly: false },
   'B': { name: 'cau',    color: '#a08060', blockWalk: false, blockFly: false },
+  'Q': { name: 'quang_truong', color: '#c8c0b0', blockWalk: false, blockFly: false },
   '*': { name: 'hoa',    color: '#c080c0', blockWalk: false, blockFly: false },
   'S': { name: 'den_da', color: '#9a9a9a', blockWalk: true,  blockFly: false },
   'G': { name: 'cong',   color: '#ffd700', blockWalk: false, blockFly: false },
@@ -175,6 +176,49 @@ var Tilemap = (function () {
       _objImgCache[src] = img;
     }
     return img;
+  }
+
+  /* ---------- Lớp tile đường đi/lối lại (build 105) ----------
+   * Ảnh tile 40x40 trong assets/tiles/, vẽ thay màu phẳng cho các
+   * ô đường để không còn mảng xám/nâu đơn điệu (từng bị chê ở map 0).
+   * Biến thể chọn bằng hash tọa độ ô để xen kẽ tự nhiên, tránh lặp
+   * đều. Ảnh nạp lười + cache như object; khung nào ảnh chưa tải
+   * xong thì vẽ màu phẳng cũ tạm, không crash. Node-safe. */
+  var _tileImgCache = {};
+  var TILE_IMGS = {
+    '#': ['road_stone_0.png', 'road_stone_1.png', 'road_stone_2.png', 'road_stone_3.png'],
+    '=': ['road_dirt_0.png', 'road_dirt_1.png', 'road_dirt_2.png', 'road_dirt_3.png'],
+    'B': ['bridge_0.png', 'bridge_1.png', 'bridge_2.png', 'bridge_3.png'],
+    'Q': ['plaza_0.png', 'plaza_1.png', 'plaza_2.png', 'plaza_3.png'],
+  };
+
+  function _tileImg(file) {
+    if (typeof Image === 'undefined') return null; /* Node: không có Image */
+    var src = 'assets/tiles/' + file;
+    var img = _tileImgCache[src];
+    if (!img) {
+      img = new Image();
+      img.src = src;
+      _tileImgCache[src] = img;
+    }
+    return img;
+  }
+
+  function _tileVariant(col, row, n) {
+    var h = ((col * 73856093) ^ (row * 19349663)) >>> 0;
+    return h % n;
+  }
+
+  /* Vẽ 1 ô đường bằng ảnh tile nếu tải xong, ngược lại trả false
+   * để caller vẽ màu phẳng cũ. */
+  function _drawRoadTile(ctx, ch, col, row, px, py) {
+    var list = TILE_IMGS[ch];
+    if (!list || !list.length) return false;
+    if (!ctx || typeof ctx.drawImage !== 'function') return false;
+    var img = _tileImg(list[_tileVariant(col, row, list.length)]);
+    if (!img || !img.complete || !img.naturalWidth) return false;
+    ctx.drawImage(img, px, py, TILEMAP_CELL, TILEMAP_CELL);
+    return true;
   }
 
   /* Danh sách object của map, hoặc [] nếu map không có object. */
@@ -335,8 +379,11 @@ var Tilemap = (function () {
         if (ch === undefined || ch === '') continue;
         var leg = LEGEND[ch] || LEGEND['.'];
         var px = c * TILEMAP_CELL, py = r * TILEMAP_CELL;
-        ctx.fillStyle = leg.color;
-        ctx.fillRect(px, py, TILEMAP_CELL, TILEMAP_CELL);
+        /* Ô đường: ưu tiên ảnh tile, chưa tải xong thì màu phẳng cũ. */
+        if (!_drawRoadTile(ctx, ch, c, r, px, py)) {
+          ctx.fillStyle = leg.color;
+          ctx.fillRect(px, py, TILEMAP_CELL, TILEMAP_CELL);
+        }
         _decor(ctx, ch, px, py);
       }
     }
