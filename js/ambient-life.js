@@ -251,8 +251,9 @@ var AmbientLife = (function () {
     }
   }
 
-  /* Lớp trên entity: tiên bay (trên trời) + người đi bộ. */
-  function drawFront(ctx, vr) {
+  /* Lớp trên entity: tiên bay (trên trời). Người đi bộ được
+   * engine y-sort cùng entities qua drawWalker (xem engine.js). */
+  function drawFlyers(ctx, vr) {
     if (!active || !ctx) return;
     var i, f, im, w, h;
     for (i = 0; i < flyers.length; i++) {
@@ -275,7 +276,14 @@ var AmbientLife = (function () {
       else ctx.drawImage(im, f.x - w / 2, fy - h / 2, w, h);
       ctx.restore();
     }
-    for (i = 0; i < walkers.length; i++) drawWalker(ctx, walkers[i], vr);
+  }
+
+  /* Tương thích cũ: tiên bay + người đi bộ (engine mới chỉ dùng
+   * drawFlyers, người đi bộ đi qua vòng y-sort). */
+  function drawFront(ctx, vr) {
+    drawFlyers(ctx, vr);
+    if (!active || !ctx) return;
+    for (var i = 0; i < walkers.length; i++) drawWalker(ctx, walkers[i], vr);
   }
 
   /* Vẽ 1 người đi bộ (để engine có thể y-sort nếu muốn). */
@@ -294,6 +302,7 @@ var AmbientLife = (function () {
     setQuality: setQuality,
     update: update,
     drawBack: drawBack,
+    drawFlyers: drawFlyers,
     drawFront: drawFront,
     drawWalker: drawWalker,
     walkers: function () { return walkers; },

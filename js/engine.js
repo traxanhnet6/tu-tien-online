@@ -665,6 +665,8 @@ var Engine = (function () {
     _buffs = []; _bossTele = []; _weakUntil = 0;
     _dashT = 0; _dashCd = 0;
     _spawnMapMonsters();
+    /* Nền động map 0 (Bui 2026-10-25): mây bay, tiên bay, người đi lại */
+    try { if (typeof AmbientLife !== 'undefined') AmbientLife.init(_mapId); } catch (_e) {}
     _audio(function (A) { A.playMusic('map'); });
   }
 
@@ -4234,6 +4236,9 @@ var Engine = (function () {
     /* Lớp thực vật động (cỏ đung đưa, hoa, lá rơi) — sau nền, trước entities */
     _vegDraw();
 
+    /* Nền động map 0: mây bay — sau nền, trước entities */
+    try { if (typeof AmbientLife !== 'undefined') AmbientLife.drawBack(_ctx, _visRect()); } catch (_e) {}
+
     // Entities xếp theo y (trên-dưới): quái, NPC, pet, người chơi — pseudo-3D Y-sort
     // (trừ lift cầu: đứng trên cầu thì sort theo mặt cầu)
     var ents = [];
@@ -4265,6 +4270,8 @@ var Engine = (function () {
     if (_sbActive()) ents.push({ y: _sb.y - _bridgeLiftAt(_sb.x, _sb.y), k: 'sb' });
     var others = _visiblePlayers();
     for (var oi = 0; oi < others.length; oi++) ents.push({ y: others[oi].y - _bridgeLiftAt(others[oi].x, others[oi].y), k: 'o', o: others[oi] });
+    /* Nền động map 0: người đi lại y-sort cùng entities */
+    if (typeof AmbientLife !== 'undefined') { try { if (AmbientLife.isActive()) { var _alw = AmbientLife.walkers(); for (var _awi = 0; _awi < _alw.length; _awi++) ents.push({ y: _alw[_awi].y, k: 'alw', o: _alw[_awi] }); } } catch (_e) {} }
     ents.sort(function (a, b) { return a.y - b.y; });
     for (var ei = 0; ei < ents.length; ei++) {
       var e = ents[ei];
@@ -4275,8 +4282,11 @@ var Engine = (function () {
       else if (e.k === 'sb') _drawSpiritBeast();
       else if (e.k === 'obj') _drawObject(e.o);
       else if (e.k === 'farmplot') _drawFarmPlot(e.o);
+      else if (e.k === 'alw') AmbientLife.drawWalker(_ctx, e.o);
       else _drawOther(e.o);
     }
+    /* Nền động map 0: tiên bay trên trời, sau entities */
+    try { if (typeof AmbientLife !== 'undefined') AmbientLife.drawFlyers(_ctx, _visRect()); } catch (_e) {}
     /* Đạn skill thần thú đồng hành — bay trên entities */
     _drawSbProjs();
 
@@ -4526,6 +4536,8 @@ var Engine = (function () {
     _acc = 0;
     _fpsTick(now);
     _update(dt);
+    /* Nền động map 0: cập nhật mây/tiên/người đi lại (dt tính bằng giây) */
+    try { if (typeof AmbientLife !== 'undefined') AmbientLife.update(dt); } catch (_e) {}
     _render();
   }
 
