@@ -3655,7 +3655,7 @@ const NPCS = {
   dan_lang_3: { nameKey: "npc_dan_lang_3", mapId: 0, x: 950, y: 760, kind: "greet", img: "assets/sprs/npc_dan_lang_3.png", talkKey: "npc_dan_lang_3_talk" },
   thu_vien_quan: { nameKey: "npc_thu_vien_quan", mapId: 0, x: 300, y: 880, kind: "greet", img: "assets/sprs/npc_thu_vien_quan.png" },
   vo_su: { nameKey: "npc_vo_su", mapId: 0, x: 1700, y: 420, kind: "greet", img: "assets/sprs/npc_vo_tang.png" },
-  lai_do: { nameKey: "npc_lai_do", mapId: 0, x: 1880, y: 780, kind: "greet", img: "assets/sprs/npc_tiep_dan_su.png" },
+  lai_do: { nameKey: "npc_lai_do", mapId: 0, x: 1880, y: 780, kind: "greet", img: "assets/sprs/npc_ngu_phu.png" },
   tiep_dan_su: { nameKey: "npc_tiep_dan_su", mapId: 14, x: 869, y: 1090, kind: "quest", img: "assets/sprs/npc_tiep_dan_su.png" },
   truong_lao_truyen_cong: { nameKey: "npc_truong_lao_truyen_cong", mapId: 14, x: 1025, y: 480, kind: "quest", img: "assets/sprs/npc_truong_lao_truyen_cong.png" },
   truong_lao: { nameKey: "npc_truong_lao", mapId: 0, x: 1500, y: 300, kind: "sect", img: "assets/sprs/npc_truong_lao.png" },
