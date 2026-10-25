@@ -391,11 +391,13 @@ function _innTalk(npcId, def) {
   };
 }
 
-/* Tuần Thú Sư — ấp trứng linh thú */
+/* Tuần Thú Sư — ấp trứng linh thú.
+ * Bui 2026-10-25 (sửa sai chữ): trước đây Tuần Thú Phân Đà cũng nói câu của
+ * Tuần Thú Sư; nay mỗi người nói câu riêng (npc_<id>_greet). */
 function _petTalk(npcId, def) {
   return {
     name: def.nameKey,
-    lines: ["npc_tuan_thu_su_greet"],
+    lines: ["npc_" + npcId + "_greet"],
     options: [
       { label: "npc_pet_open", act: "pet" },
       { label: "npc_bye", act: "bye" },
@@ -435,11 +437,14 @@ function _towerGuideTalk(npcId, def, state) {
   };
 }
 
-/* Trưởng Lão Tông Môn — mở panel tông môn */
+/* Trưởng Lão Tông Môn — mở panel tông môn.
+ * Bui 2026-10-25 (sửa sai chữ): trước đây mọi trưởng lão tông đều nói câu
+ * của Trưởng Lão tiếp dẫn (npc_truong_lao_greet); nay mỗi người nói câu
+ * riêng của mình (npc_<id>_greet — cả 7 trưởng lão đều đã có key vi+en). */
 function _sectTalk(npcId, def) {
   return {
     name: def.nameKey,
-    lines: ["npc_truong_lao_greet"],
+    lines: ["npc_" + npcId + "_greet"],
     options: [
       { label: "npc_sect_open", act: "sect" },
       { label: "npc_bye", act: "bye" },

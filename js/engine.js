@@ -35,7 +35,9 @@ var Engine = (function () {
   }
   var ATTACK_RANGE = 70;      // tầm đánh player
   var ATK_CHASE_MAX = 700;    // bấm Đánh: quái trong bán kính này thì tự dí theo rồi đánh
-  var INTERACT_RANGE = 60;    // tầm tương tác NPC (Space/?)
+  var INTERACT_RANGE = 110;   // tầm tương tác NPC (Space/?) — Bui 2026-10-25: 60px quá hẹp
+                              // (đứng sát rạt mới nói chuyện được); 110px ≈ đứng cạnh NPC là
+                              // bấm được, vẫn phải lại gần, không nói chuyện từ xa
   var GATE_RANGE = 46;        // tầm kích hoạt cổng
   var GATE_SAFE_R = 96;       // bán kính vùng cấm NPC quanh cổng (chống NPC chặn cổng)
   var MONSTER_AGGRO = 300;    // quái đuổi theo trong bán kính này
@@ -4113,43 +4115,45 @@ var Engine = (function () {
           if (!_tg2.label) continue;
           var _tcx = (typeof _tg2.x === 'number') ? _tg2.x : ((_tg2.col || 0) * 40 + 20);
           var _tcy = (typeof _tg2.y === 'number') ? _tg2.y : ((_tg2.row || 0) * 40 + 20);
-          _ctx.font = '11px sans-serif';
+          /* Cổng nhỏ lại ~35% (Bui 2026-10-25): chỉ đổi hiển thị, không đổi logic. */
+          _ctx.font = '8px sans-serif';
           _ctx.textAlign = 'center';
-          var _tw = _ctx.measureText(_tg2.label).width + 12;
+          var _tw = _ctx.measureText(_tg2.label).width + 8;
           _ctx.fillStyle = 'rgba(20,14,8,0.72)';
-          _ctx.fillRect(_tcx - _tw / 2, _tcy - 80, _tw, 18);
+          _ctx.fillRect(_tcx - _tw / 2, _tcy - 52, _tw, 12);
           _ctx.fillStyle = '#ffe9a8';
-          _ctx.fillText(_tg2.label, _tcx, _tcy - 66);
+          _ctx.fillText(_tg2.label, _tcx, _tcy - 43);
         }
       } catch (_e) {}
     }
 
-    // Cổng chuyển map
+    // Cổng chuyển map — nhỏ lại ~35% (Bui 2026-10-25). Chỉ đổi hiển thị:
+    // vị trí, đích, tầm kích hoạt (GATE_RANGE) và vùng bấm giữ nguyên.
     for (var gi = 0; gi < _gates.length; gi++) {
       var g = _gates[gi];
       _ctx.strokeStyle = '#2fa3a0';
-      _ctx.lineWidth = 4;
-      _ctx.beginPath(); _ctx.arc(g.x, g.y, 26, 0, Math.PI * 2); _ctx.stroke();
+      _ctx.lineWidth = 3;
+      _ctx.beginPath(); _ctx.arc(g.x, g.y, 17, 0, Math.PI * 2); _ctx.stroke();
       _ctx.strokeStyle = 'rgba(47,163,160,0.4)';
-      _ctx.lineWidth = 8;
-      _ctx.beginPath(); _ctx.arc(g.x, g.y, 32, 0, Math.PI * 2); _ctx.stroke();
+      _ctx.lineWidth = 5;
+      _ctx.beginPath(); _ctx.arc(g.x, g.y, 21, 0, Math.PI * 2); _ctx.stroke();
     }
-    /* Bui 2026-10-18: tên map đích trên cổng — rõ ràng */
+    /* Bui 2026-10-18: tên map đích trên cổng — rõ ràng (nhãn nhỏ lại ~35% cùng cổng) */
     try {
       for (var _gli = 0; _gli < _gates.length; _gli++) {
         var _gg = _gates[_gli];
         var _gmd = _mapDefOf(_gg.to);
         if (!_gmd) continue;
         var _gname = _t(_gmd.nameKey || ('map_' + _gg.to));
-        _ctx.font = 'bold 13px sans-serif';
+        _ctx.font = 'bold 9px sans-serif';
         _ctx.textAlign = 'center';
-        var _gw = _ctx.measureText(_gname).width + 16;
+        var _gw = _ctx.measureText(_gname).width + 10;
         _ctx.fillStyle = 'rgba(20,14,8,0.82)';
-        _ctx.fillRect(_gg.x - _gw / 2, _gg.y - 58, _gw, 22);
+        _ctx.fillRect(_gg.x - _gw / 2, _gg.y - 38, _gw, 14);
         _ctx.strokeStyle = '#ffd76a'; _ctx.lineWidth = 1;
-        _ctx.strokeRect(_gg.x - _gw / 2, _gg.y - 58, _gw, 22);
+        _ctx.strokeRect(_gg.x - _gw / 2, _gg.y - 38, _gw, 14);
         _ctx.fillStyle = '#ffe9a8';
-        _ctx.fillText('➤ ' + _gname, _gg.x, _gg.y - 42);
+        _ctx.fillText('➤ ' + _gname, _gg.x, _gg.y - 27);
       }
     } catch (_ge) {}
 
