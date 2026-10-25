@@ -39,6 +39,14 @@ var Engine = (function () {
                               // (đứng sát rạt mới nói chuyện được); 110px ≈ đứng cạnh NPC là
                               // bấm được, vẫn phải lại gần, không nói chuyện từ xa
   var GATE_RANGE = 46;        // tầm kích hoạt cổng
+  /* Build 107: bán kính chạm trực tiếp trên canvas, tách riêng NPC/quái
+   * (trước đây dùng chung _hitR = 60px nên phải chạm sát NPC mới mở thoại,
+   * dù Space/? đã là 110px). NPC = 120px: bằng INTERACT_RANGE + 10px bù
+   * sai số ngón tay trên cảm ứng, vẫn dưới 130px trần; quái GIỮ 60px để
+   * chạm quái không bị "hút" sang NPC đứng gần. Cả hai đều chia cho zoom
+   * ở _doTap nên giữ nguyên theo màn hình. */
+  var NPC_TAP_R = 120;        // chạm trực tiếp NPC → mở thoại
+  var MON_TAP_R = 60;         // chạm trực tiếp quái → nhắm/đánh (không đổi)
   var GATE_SAFE_R = 96;       // bán kính vùng cấm NPC quanh cổng (chống NPC chặn cổng)
   var MONSTER_AGGRO = 300;    // quái đuổi theo trong bán kính này
   var BOSS_RESPAWN_S = 120;   // boss hồi sinh sau 120s
@@ -640,6 +648,15 @@ var Engine = (function () {
       player.x = Math.max(40, Math.min(WORLD_W - 40, player.x));
       player.y = Math.max(40, Math.min(WORLD_H - 40, player.y));
     } catch (_e) {}
+    /* Build 107: lưới an toàn cuối cho spawn — SAU khi đã tính xong
+     * spawn từ cổng / _tileGateDrop / đẩy xa cổng / kẹp biên, nếu vị
+     * trí cuối rơi vào ô chặn thì đẩy tới ô đi được gần nhất bằng cùng
+     * BFS của _playerDie; spawn đi được giữ nguyên. Không đổi vị trí
+     * cổng, NPC, spawn mặc định hay cooldown cổng. */
+    try {
+      var _sp = _nearestWalkable(player.x, player.y);
+      if (_sp) { player.x = _sp.x; player.y = _sp.y; }
+    } catch (_e) {}
     var ps = _getStats();
     player.hp = ps.maxHp; player.mp = ps.maxMp;
     player.shield = 0; player.maxShield = 0;
@@ -1099,9 +1116,10 @@ var Engine = (function () {
     var r = _canvas.getBoundingClientRect();
     var wpt = _screenToWorld(cx - r.left, cy - r.top); /* đúng với zoom */
     var wx = wpt.x, wy = wpt.y;
-    /* Bui 2026-10-22: bán kính chạm giữ nguyên theo màn hình (chia cho zoom) */
+    /* Bui 2026-10-22: bán kính chạm giữ nguyên theo màn hình (chia cho zoom).
+     * Build 107: NPC và quái tách bán kính — NPC 120px, quái giữ 60px. */
     var _hz = 1 / (_mapZoom || 1);
-    var _gateR = GATE_SAFE_R * _hz, _hitR = 60 * _hz;
+    var _gateR = GATE_SAFE_R * _hz, _npcHitR = NPC_TAP_R * _hz, _monHitR = MON_TAP_R * _hz;
     /* Chạm gần cổng: ưu tiên đi vào cổng — NPC đứng gần cổng không được
        chiếm cú chạm này (phòng thủ: cổng luôn kích hoạt được) */
     for (var gi9 = 0; gi9 < _gates.length; gi9++) {
@@ -1114,7 +1132,7 @@ var Engine = (function () {
     try {
       for (var i = 0; i < _npcs.length; i++) {
         var n = _npcs[i];
-        if (Math.hypot(n.x - wx, n.y - wy) < _hitR) {
+        if (Math.hypot(n.x - wx, n.y - wy) < _npcHitR) {
           if (Engine.onNpc) Engine.onNpc(n.npcId);
           return;
         }
@@ -1122,7 +1140,7 @@ var Engine = (function () {
     } catch (err) {}
     /* Bui 2026-10-21: chạm vào quái → nhắm và đánh ngay */
     try {
-      var _bm = null, _bd = _hitR;
+      var _bm = null, _bd = _monHitR;
       for (var mi = 0; mi < _monsters.length; mi++) {
         var _mm = _monsters[mi];
         if (_mm.dead) continue;
@@ -1190,6 +1208,54 @@ var Engine = (function () {
       if (typeof Tilemap !== 'undefined' && Tilemap.isBlocked) return !!Tilemap.isBlocked(_mapId, x, y, !!Engine.fly);
     } catch (_e) {}
     return false;
+  }
+  /* Build 107 — chống kẹt vĩnh viễn (Bui 2026-10-25: hồi sinh ở (1120,480)
+   * map 0 rơi vào ô 'H' nhà, chỉ còn đi được hướng nam; spawn vào map
+   * cũng có thể rơi vào ô chặn). _tileBlockedWalk: chặn ở chế độ ĐI BỘ
+   * (flying=false) bất kể nhân vật có đang bay hay không — điểm hồi
+   * sinh/spawn phải đi bộ được ngay, không dựa vào trạng thái bay.
+   * _nearestWalkable(x, y): ô đi được gần nhất theo BFS 4 hướng trên
+   * lưới ô 40px. Vị trí gốc đã đi được thì trả nguyên (x, y), KHÔNG
+   * snap về tâm ô (spawn đi được giữ nguyên vị trí). Ô chặn → tâm ô
+   * đi được gần nhất. Không có tilemap hoặc BFS không tìm được ô nào
+   * → null, caller giữ tọa độ cũ làm fallback. */
+  function _tileBlockedWalk(x, y) {
+    try {
+      if (typeof Tilemap !== 'undefined' && Tilemap.isBlocked) return !!Tilemap.isBlocked(_mapId, x, y, false);
+    } catch (_e) {}
+    return false; /* không có tilemap: không ô nào bị chặn */
+  }
+  function _nearestWalkable(x, y) {
+    try {
+      if (typeof Tilemap === 'undefined' || !Tilemap.size) return null;
+      var sz = Tilemap.size(_mapId);
+      if (!sz || !(sz.w > 0) || !(sz.h > 0)) return null;
+      var CELL = (Tilemap.CELL && Tilemap.CELL > 0) ? Tilemap.CELL : 40;
+      var cols = Math.round(sz.w / CELL), rows = Math.round(sz.h / CELL);
+      if (cols < 1 || rows < 1) return null;
+      var sc = Math.max(0, Math.min(cols - 1, Math.floor(x / CELL)));
+      var sr = Math.max(0, Math.min(rows - 1, Math.floor(y / CELL)));
+      if (!_tileBlockedWalk(x, y)) return { x: x, y: y };
+      var seen = [], q = [], head = 0, i;
+      for (i = 0; i < cols * rows; i++) seen.push(false);
+      seen[sr * cols + sc] = true;
+      q.push(sc, sr);
+      var dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+      while (head < q.length) {
+        var cc = q[head++], rr = q[head++];
+        for (var d = 0; d < 4; d++) {
+          var nc = cc + dirs[d][0], nr = rr + dirs[d][1];
+          if (nc < 0 || nc >= cols || nr < 0 || nr >= rows) continue;
+          var idx = nr * cols + nc;
+          if (seen[idx]) continue;
+          seen[idx] = true;
+          var cx = nc * CELL + CELL / 2, cy = nr * CELL + CELL / 2;
+          if (!_tileBlockedWalk(cx, cy)) return { x: cx, y: cy };
+          q.push(nc, nr);
+        }
+      }
+      return null;
+    } catch (_e) { return null; }
   }
   function _moveBy(dx, dy, dt) {
     var _ox = player.x, _oy = player.y;
@@ -2067,6 +2133,11 @@ var Engine = (function () {
     player.mp = ps.maxMp;
     _vibrate([70, 50, 120]); /* rung mạnh khi chết */
     player.x = WORLD_W / 2; player.y = WORLD_H / 2;
+    /* Build 107: vị trí hồi sinh mặc định KHÔNG đổi, nhưng nếu nó rơi
+     * vào ô chặn (vd map 0: (1120,480) là ô 'H') thì đẩy tới ô đi được
+     * gần nhất bằng BFS; không tìm được thì giữ nguyên tọa độ cũ. */
+    var _rp = _nearestWalkable(player.x, player.y);
+    if (_rp) { player.x = _rp.x; player.y = _rp.y; }
     player.target = null; _moveTarget = null; _chaseTgt = false;
   }
 
@@ -4592,6 +4663,9 @@ var Engine = (function () {
                  pushOut: _pushOutOfGates, stepNpcs: function (dt) { _updateNpcs(dt); } },
     khuOf: _khuOf,                 // (x, y) → số khu
     hitSolid: _hitSolid,           // (x, y) → bool (va chạm vật thể)
+    /* Build 107 test hook: BFS chống kẹt + bán kính chạm NPC/quái */
+    _nearestWalkableTest: _nearestWalkable, // (x, y) → {x,y} đi được gần nhất | null
+    _tapRadiiTest: { npc: NPC_TAP_R, mon: MON_TAP_R },
     getObjects: function () { return _objects; },
   };
   return Engine;
