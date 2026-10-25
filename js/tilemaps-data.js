@@ -97,7 +97,7 @@ const TILEMAPS = {
       "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
     ],
     gates: [
-      { col: 2, row: 2, to: 0, label: "Vào Thanh Vân Trấn", dropCol: 18, dropRow: 2 },
+      { col: 2, row: 2, to: 0, label: "Vào Thanh Vân Trấn", dropCol: 12, dropRow: 20 },
       { col: 18, row: 13, to: 2, label: "Vào U Minh Cốc", dropCol: 2, dropRow: 13 },
     ],
     spawns: [
@@ -229,7 +229,7 @@ const TILEMAPS = {
       "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
     ],
     gates: [
-      { col: 2, row: 2, to: 0, label: "Vào Thanh Vân Trấn", dropCol: 28, dropRow: 2 },
+      { col: 2, row: 2, to: 0, label: "Vào Thanh Vân Trấn", dropCol: 8, dropRow: 23 },
       { col: 38, row: 15, to: 41, label: "Vào Bãi Đá", dropCol: 4, dropRow: 15 },
       { col: 20, row: 28, to: 40, label: "Vào Rừng Trúc", dropCol: 20, dropRow: 4 },
     ],
@@ -365,7 +365,7 @@ const TILEMAPS = {
     ],
     gates: [
       { col: 2, row: 15, to: 42, label: "Vào Chân Núi Tản Viên", dropCol: 36, dropRow: 15 },
-      { col: 35, row: 5, to: 4, label: "Vào Mỏ Linh Thạch", dropCol: 35, dropRow: 15 },
+      { col: 35, row: 5, to: 4, label: "Vào Mỏ Linh Thạch", dropCol: 36, dropRow: 15 },
     ],
     spawns: [
       { col: 20, row: 17, r: 6, monsters: ["son_tac", "da_tru"] },
