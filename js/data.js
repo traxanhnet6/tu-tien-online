@@ -567,6 +567,8 @@ const MAPS = [
     boss: "lang_vuong",
     spawnZones: [
       { x: 825, y: 565, r: 250, monsters: ["phong_lang", "hu_thi", "u_hon_lang"] },
+      { x: 1820, y: 1060, r: 250, monsters: ["phong_lang", "hu_thi", "u_hon_lang"] },
+      { x: 1220, y: 1380, r: 250, monsters: ["phong_lang", "hu_thi", "u_hon_lang"] }
     ],
     bossSpawn: { x: 1150, y: 180 },
     npcs: ["tho_san", "an_sy", "tuan_thu_su"],
