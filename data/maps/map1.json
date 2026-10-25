@@ -11,9 +11,9 @@
   "boss": "da_tru_vuong",
   "spawnZones": [
     {
-      "x": 530,
-      "y": 980,
-      "r": 110,
+      "x": 130,
+      "y": 600,
+      "r": 100,
       "monsters": [
         "da_tru",
         "son_ke",
@@ -22,8 +22,8 @@
     }
   ],
   "bossSpawn": {
-    "x": 1400,
-    "y": 1060
+    "x": 1250,
+    "y": 820
   },
   "npcs": [
     "dai_phu",

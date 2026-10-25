@@ -22,6 +22,17 @@ var Engine = (function () {
 
   /* ---------- Hằng số ---------- */
   var WORLD_W = 1600, WORLD_H = 1200;
+  /* Build mở rộng map 0 (2026-10-25): thế giới không còn cố định
+   * 1600x1200 — map có tilemap thì lấy đúng kích thước pixel của nó
+   * (số ô x 40), để camera kẹp đúng biên và nhân vật không đi lọt
+   * ra ngoài map mở rộng; map không có tilemap thì về mặc định. */
+  function _applyWorldSize(mapId) {
+    try {
+      var sz = (typeof Tilemap !== 'undefined' && Tilemap.size) ? Tilemap.size(mapId) : null;
+      if (sz && sz.w > 0 && sz.h > 0) { WORLD_W = sz.w; WORLD_H = sz.h; return; }
+    } catch (e) {}
+    WORLD_W = 1600; WORLD_H = 1200;
+  }
   var ATTACK_RANGE = 70;      // tầm đánh player
   var ATK_CHASE_MAX = 700;    // bấm Đánh: quái trong bán kính này thì tự dí theo rồi đánh
   var INTERACT_RANGE = 60;    // tầm tương tác NPC (Space/?)
@@ -572,6 +583,7 @@ var Engine = (function () {
     _resetCamera(); /* camera bám ngay, không trượt từ map cũ */
     _mapId = mapId;
     _mapDef = _mapDefOf(mapId);
+    _applyWorldSize(mapId); /* map tilemap mo rong (vd map 0: 2240x960) */
     /* warm ảnh tilemap tiền-render để không pop-in frame đầu */
     if (typeof mapId === 'number') _img('assets/maps/tilemap/map_' + mapId + '.png');
     _npcs = (_mapDef.npcs || []).map(_makeNpcObj).filter(_npcUnlocked);
@@ -643,6 +655,7 @@ var Engine = (function () {
     _mapId = 'dg:' + def.id;
     _mapDef = { id: _mapId, nameKey: def.nameKey, bg: def.mapBg || null, fb: '#20242e',
                 monsters: [], boss: null, npcs: [], gates: [], stoneDrop: [10, 30] };
+    _applyWorldSize(_mapId); /* bi canh: khong co tilemap -> ve 1600x1200 */
     _npcs = []; _gates = []; _objects = [];
     player.x = WORLD_W / 2; player.y = WORLD_H - 220;
     player.target = null; _moveTarget = null; _chaseTgt = false;
@@ -660,6 +673,7 @@ var Engine = (function () {
     _mapDef = { id: _mapId, nameKey: realmDef.nameKey, bg: realmDef.bg || null, fb: realmDef.fb || '#20242e',
                 monsters: realmDef.monsters || [], boss: realmDef.boss || null,
                 npcs: [], gates: [{ to: 0, x: 80, y: 600 }], stoneDrop: [10, 30] };
+    _applyWorldSize(_mapId); /* bi canh tranh doat: ve 1600x1200 */
     _npcs = []; _objects = [];
     _gates = [{ to: 0, x: 80, y: 600 }];
     player.x = WORLD_W / 2; player.y = WORLD_H - 220;

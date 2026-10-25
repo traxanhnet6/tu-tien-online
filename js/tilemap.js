@@ -1,6 +1,10 @@
 /* ============================================================
  * js/tilemap.js — Hệ tilemap kiểu tutien2d (chạy SONG SONG nền PNG)
- * - Lưới ASCII 40x30 ô, mỗi ô 40px = đúng thế giới 1600x1200.
+ * - Lưới ASCII, mỗi ô 40px. Kích thước lấy theo từng map trong dữ
+ *   liệu (def.cols/def.rows, hoặc số hàng/cột thực của grid);
+ *   mặc định 40x30 (thế giới 1600x1200). Map 0 Thanh Vân Trấn
+ *   56x24 (2240x960) từ build 103: dùng def.bgImage (tranh mẫu
+ *   của Bui) làm nền, lưới chỉ còn làm logic va chạm/cổng/spawn.
  * - Dữ liệu grid nằm ở file riêng tilemaps-data.js (global TILEMAPS,
  *   team Data đang viết); file này chỉ chứa logic + bảng LEGEND.
  * - Map chưa có tilemap: mọi hàm trả về "không chặn / không vẽ"
@@ -11,8 +15,8 @@
  * - Không require/import (global var, khớp phong cách code hiện tại).
  * ============================================================ */
 
-var TILEMAP_COLS = 40;   /* số cột */
-var TILEMAP_ROWS = 30;   /* số hàng */
+var TILEMAP_COLS = 40;   /* số cột mặc định (map chưa khai cols) */
+var TILEMAP_ROWS = 30;   /* số hàng mặc định (map chưa khai rows) */
 var TILEMAP_CELL = 40;   /* kích thước 1 ô (px) */
 
 /* LEGEND: ký tự -> thuộc tính ô.
@@ -57,6 +61,31 @@ var Tilemap = (function () {
     if (typeof g === 'string') g = g.split(/\r?\n/);
     if (!Array.isArray(g)) return null;
     return g;
+  }
+
+  /* Kích thước thực của 1 map: ưu tiên def.cols/def.rows/def.cell,
+   * rồi số hàng/cột thực của grid, cuối cùng là mặc định 40x30.
+   * Map 0 (56x24) và các map 40x30 đều đi qua đây nên không còn
+   * chỗ nào hardcode 40x30 cho riêng 1 map nữa. */
+  function _dims(def) {
+    var grid = _gridOf(def);
+    var cols = TILEMAP_COLS, rows = TILEMAP_ROWS, cell = TILEMAP_CELL;
+    if (def) {
+      if (typeof def.cell === 'number' && def.cell > 0) cell = def.cell;
+      if (typeof def.cols === 'number' && def.cols > 0) cols = def.cols;
+      else if (grid && grid[0] !== undefined && grid[0] !== null) cols = grid[0].length;
+      if (typeof def.rows === 'number' && def.rows > 0) rows = def.rows;
+      else if (grid) rows = grid.length;
+    }
+    return { cols: cols, rows: rows, cell: cell, w: cols * cell, h: rows * cell };
+  }
+
+  /* Kích thước pixel thế giới của map (engine dùng để kẹp camera /
+   * nhân vật đúng biên map mở rộng). Map không có tilemap -> null. */
+  function size(mapId) {
+    var def = get(mapId);
+    if (!def) return null;
+    return _dims(def);
   }
 
   /* Tọa độ cổng về px world: ưu tiên x/y, rồi col/row (tâm ô). */
@@ -121,6 +150,20 @@ var Tilemap = (function () {
    * không xóa tile nền bên dưới (tile đã vẽ trước). */
 
   var _objImgCache = {};
+
+  /* Cache ảnh nền tranh (def.bgImage, build 103). Node: không có Image. */
+  var _bgImgCache = {};
+
+  function _bgImg(src) {
+    if (typeof Image === 'undefined') return null;
+    var img = _bgImgCache[src];
+    if (!img) {
+      img = new Image();
+      img.src = src;
+      _bgImgCache[src] = img;
+    }
+    return img;
+  }
 
   function _objImg(sprite) {
     if (typeof Image === 'undefined') return null; /* Node: không có Image */
@@ -190,9 +233,10 @@ var Tilemap = (function () {
     if (!grid) return null;
     if (typeof worldX !== 'number' || typeof worldY !== 'number') return null;
     if (worldX < 0 || worldY < 0) return null;
-    var col = Math.floor(worldX / TILEMAP_CELL);
-    var row = Math.floor(worldY / TILEMAP_CELL);
-    if (col < 0 || col >= TILEMAP_COLS || row < 0 || row >= TILEMAP_ROWS) return null;
+    var dm = _dims(def);
+    var col = Math.floor(worldX / dm.cell);
+    var row = Math.floor(worldY / dm.cell);
+    if (col < 0 || col >= dm.cols || row < 0 || row >= dm.rows) return null;
     var line = grid[row];
     if (line === undefined || line === null) return null;
     var ch = line[col];
@@ -228,13 +272,14 @@ var Tilemap = (function () {
     if (gates.length) return null; /* có gates nhưng không cái nào đủ gần */
     var grid = _gridOf(def);
     if (!grid) return null;
-    for (var r = 0; r < Math.min(grid.length, TILEMAP_ROWS); r++) {
+    var dm2 = _dims(def);
+    for (var r = 0; r < Math.min(grid.length, dm2.rows); r++) {
       var line = grid[r];
       if (line === undefined || line === null) continue;
-      for (var c = 0; c < Math.min(line.length, TILEMAP_COLS); c++) {
+      for (var c = 0; c < Math.min(line.length, dm2.cols); c++) {
         if (line[c] !== 'G') continue;
-        var gx = c * TILEMAP_CELL + TILEMAP_CELL / 2;
-        var gy = r * TILEMAP_CELL + TILEMAP_CELL / 2;
+        var gx = c * dm2.cell + dm2.cell / 2;
+        var gy = r * dm2.cell + dm2.cell / 2;
         var gd = Math.hypot(gx - worldX, gy - worldY);
         if (gd <= bestD) {
           bestD = gd;
@@ -258,13 +303,29 @@ var Tilemap = (function () {
     var grid = _gridOf(def);
     if (!grid) return false;
     if (!ctx || typeof ctx.fillRect !== 'function') return false;
-    var c0 = 0, c1 = TILEMAP_COLS - 1, r0 = 0, r1 = TILEMAP_ROWS - 1;
+    var dm3 = _dims(def);
+    /* Map dùng tranh làm nền (build 103, map 0): vẽ tranh phủ toàn
+     * world thay cho ô tile + object; lưới tile CHỈ còn làm logic
+     * (isBlocked/gateAt/spawn). Tranh phải đúng tỉ lệ world để ô
+     * lưới khớp vùng tranh. Ảnh chưa tải xong -> vẫn trả true để
+     * engine không vẽ nền PNG đè lên (khung hình sau sẽ có ảnh). */
+    if (typeof def.bgImage === 'string' && def.bgImage) {
+      var bg = _bgImg(def.bgImage);
+      if (bg && bg.complete && bg.naturalWidth && ctx && typeof ctx.drawImage === 'function') {
+        var sm = ctx.imageSmoothingEnabled;
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(bg, 0, 0, dm3.cols * dm3.cell, dm3.rows * dm3.cell);
+        ctx.imageSmoothingEnabled = sm;
+      }
+      return true;
+    }
+    var c0 = 0, c1 = dm3.cols - 1, r0 = 0, r1 = dm3.rows - 1;
     if (viewRect && typeof viewRect.x === 'number' && typeof viewRect.y === 'number' &&
         typeof viewRect.w === 'number' && typeof viewRect.h === 'number') {
-      c0 = Math.max(0, Math.floor(viewRect.x / TILEMAP_CELL));
-      c1 = Math.min(TILEMAP_COLS - 1, Math.floor((viewRect.x + viewRect.w) / TILEMAP_CELL));
-      r0 = Math.max(0, Math.floor(viewRect.y / TILEMAP_CELL));
-      r1 = Math.min(TILEMAP_ROWS - 1, Math.floor((viewRect.y + viewRect.h) / TILEMAP_CELL));
+      c0 = Math.max(0, Math.floor(viewRect.x / dm3.cell));
+      c1 = Math.min(dm3.cols - 1, Math.floor((viewRect.x + viewRect.w) / dm3.cell));
+      r0 = Math.max(0, Math.floor(viewRect.y / dm3.cell));
+      r1 = Math.min(dm3.rows - 1, Math.floor((viewRect.y + viewRect.h) / dm3.cell));
     }
     for (var r = r0; r <= r1; r++) {
       var line = grid[r];
@@ -298,6 +359,7 @@ var Tilemap = (function () {
     ROWS: TILEMAP_ROWS,
     CELL: TILEMAP_CELL,
     LEGEND: LEGEND,
+    size: size,
     get: get,
     charAt: charAt,
     isBlocked: isBlocked,
