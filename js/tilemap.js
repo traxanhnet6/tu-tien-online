@@ -110,6 +110,69 @@ var Tilemap = (function () {
     }
   }
 
+  /* ---------- Lớp object trang trí (build 101) ----------
+   * Dữ liệu nằm ở tilemap-objects.js (global TILEMAP_OBJECTS):
+   * keyed theo mapId, mỗi object {col, row, w, h, sprite} với
+   * col/row = ô neo góc trên-trái, w/h = số ô chiếm chỗ,
+   * sprite = file trong assets/objects/. Object CHỈ trang trí,
+   * không chặn di chuyển (isBlocked vẫn chỉ đọc ký tự tile).
+   * Ảnh nạp lười (lazy) và cache theo đường dẫn; khung hình nào
+   * ảnh chưa tải xong thì bỏ qua object đó, không crash và
+   * không xóa tile nền bên dưới (tile đã vẽ trước). */
+
+  var _objImgCache = {};
+
+  function _objImg(sprite) {
+    if (typeof Image === 'undefined') return null; /* Node: không có Image */
+    var src = 'assets/objects/' + sprite;
+    var img = _objImgCache[src];
+    if (!img) {
+      img = new Image();
+      img.src = src;
+      _objImgCache[src] = img;
+    }
+    return img;
+  }
+
+  /* Danh sách object của map, hoặc [] nếu map không có object. */
+  function objects(mapId) {
+    var objs = null;
+    if (typeof TILEMAP_OBJECTS !== 'undefined' && TILEMAP_OBJECTS) objs = TILEMAP_OBJECTS;
+    else if (typeof globalThis !== 'undefined' && globalThis.TILEMAP_OBJECTS) objs = globalThis.TILEMAP_OBJECTS;
+    if (!objs) return [];
+    var list = objs[mapId];
+    if (list === undefined && objs[String(mapId)] !== undefined) list = objs[String(mapId)];
+    return Array.isArray(list) ? list : [];
+  }
+
+  /* Vẽ lớp object đè lên nền tile (sau tile, trước cổng/NPC/quái/
+   * người chơi — vì engine vẽ các lớp đó sau Tilemap.draw).
+   * Trả về số object đã vẽ trong khung hình này. */
+  function drawObjects(ctx, mapId, viewRect) {
+    if (!ctx || typeof ctx.drawImage !== 'function') return 0;
+    var list = objects(mapId);
+    if (!list.length) return 0;
+    var drawn = 0;
+    for (var i = 0; i < list.length; i++) {
+      var o = list[i];
+      if (!o || typeof o.col !== 'number' || typeof o.row !== 'number') continue;
+      if (!o.sprite) continue;
+      var w = (typeof o.w === 'number' && o.w > 0) ? o.w : 1;
+      var h = (typeof o.h === 'number' && o.h > 0) ? o.h : 1;
+      var px = o.col * TILEMAP_CELL, py = o.row * TILEMAP_CELL;
+      var pw = w * TILEMAP_CELL, ph = h * TILEMAP_CELL;
+      if (viewRect && typeof viewRect.x === 'number' && typeof viewRect.w === 'number') {
+        if (px + pw < viewRect.x || px > viewRect.x + viewRect.w ||
+            py + ph < viewRect.y || py > viewRect.y + viewRect.h) continue;
+      }
+      var img = _objImg(o.sprite);
+      if (!img || !img.complete || !img.naturalWidth) continue; /* chưa tải xong: bỏ qua */
+      ctx.drawImage(img, px, py, pw, ph);
+      drawn++;
+    }
+    return drawn;
+  }
+
   /* def tilemap của map, hoặc null nếu map chưa có tilemap. */
   function get(mapId) {
     var maps = _allMaps();
@@ -216,6 +279,8 @@ var Tilemap = (function () {
         _decor(ctx, ch, px, py);
       }
     }
+    /* Lớp object trang trí đè lên nền tile (build 101). */
+    drawObjects(ctx, mapId, viewRect);
     return true;
   }
 
@@ -238,6 +303,8 @@ var Tilemap = (function () {
     isBlocked: isBlocked,
     gateAt: gateAt,
     draw: draw,
+    objects: objects,
+    drawObjects: drawObjects,
     ambient: ambient,
   };
 })();
