@@ -558,7 +558,7 @@ const MAPS = [
   {
     id: 1,
     nameKey: "map_hac_phong_lam",
-    bg: "assets/maps/map_hac_phong_lam.webp",
+    bg: "assets/maps/map_hac_phong_lam_moi.webp",
     ground: "assets/map/tile_ground_forest.png",
     loadingBg: "assets/maps/loading_1.webp",
     fb: "#5f7d5a",
@@ -594,7 +594,7 @@ const MAPS = [
   {
     id: 2,
     nameKey: "map_u_minh_coc",
-    bg: "assets/maps/map_u_minh_coc.webp",
+    bg: "assets/maps/map_u_minh_coc_moi.webp",
     ground: "assets/map/tile_ground_nether.png",
     loadingBg: "assets/maps/loading_2.webp",
     fb: "#3a3f5c",
@@ -615,7 +615,7 @@ const MAPS = [
     id: 3,
     safe: true,
     nameKey: "map_linh_dien",
-    bg: "assets/maps/map_linh_dien.webp",
+    bg: "assets/maps/map_linh_dien_moi.webp",
     ground: "assets/map/tile_ground_farm.png",
     loadingBg: "assets/maps/loading_3.webp",
     fb: "#7a9a5a",
@@ -631,7 +631,7 @@ const MAPS = [
   {
     id: 4,
     nameKey: "map_mo_linh_thach",
-    bg: "assets/maps/map_mo_linh_thach.webp",
+    bg: "assets/maps/map_mo_linh_thach_moi.webp",
     ground: "assets/map/tile_ground_mine.png",
     loadingBg: "assets/maps/loading_4.webp",
     fb: "#4a5a6a",
@@ -812,7 +812,7 @@ const MAPS = [
   {
     id: 13,
     nameKey: "map_thong_thien_gioi",
-    bg: "assets/maps/map_thai_hu_tien_canh.webp",
+    bg: "assets/maps/map_thong_thien_gioi_moi.webp",
     ground: "assets/map/tile_ground_celestial.png",
     loadingBg: "assets/maps/loading_12.webp",
     fb: "#cfe8ff",
@@ -854,7 +854,7 @@ const MAPS = [
   {
     id: 15,
     nameKey: "map_thap_van_ngoai_vi",
-    bg: "assets/maps/map_thap_van_dai_son_ngoai_vi.webp",
+    bg: "assets/maps/map_thap_van_dai_son_ngoai_vi_moi.webp",
     ground: "assets/map/tile_ground_forest.png",
     loadingBg: "assets/maps/loading_15.webp",
     fb: "#8a9a7a",
@@ -900,7 +900,7 @@ const MAPS = [
   {
     id: 16,
     nameKey: "map_thap_van_trung_bo",
-    bg: "assets/maps/map_thap_van_dai_son_trung_bo.webp",
+    bg: "assets/maps/map_thap_van_dai_son_trung_bo_moi.webp",
     ground: "assets/map/tile_ground_forest.png",
     loadingBg: "assets/maps/loading_16.webp",
     fb: "#7a8a6a",
@@ -944,7 +944,7 @@ const MAPS = [
   {
     id: 17,
     nameKey: "map_thap_van_noi_vi",
-    bg: "assets/maps/map_thap_van_dai_son_noi_vi.webp",
+    bg: "assets/maps/map_thap_van_dai_son_noi_vi_moi.webp",
     ground: "assets/map/tile_ground_nether.png",
     loadingBg: "assets/maps/loading_17.webp",
     fb: "#6a7a6a",
@@ -988,7 +988,7 @@ const MAPS = [
   {
     id: 18,
     nameKey: "map_thap_van_hach_tam",
-    bg: "assets/maps/map_thap_van_dai_son_hach_tam.webp",
+    bg: "assets/maps/map_thap_van_dai_son_hach_tam_moi.webp",
     ground: "assets/map/tile_ground_nether.png",
     loadingBg: "assets/maps/loading_18.webp",
     fb: "#5a6a5a",
@@ -1032,7 +1032,7 @@ const MAPS = [
   {
     id: 19,
     nameKey: "map_dinh_thap_van",
-    bg: "assets/maps/map_thap_van_dai_son_dinh.webp",
+    bg: "assets/maps/map_thap_van_dai_son_dinh_moi.webp",
     ground: "assets/map/tile_ground_celestial.png",
     loadingBg: "assets/maps/loading_19.webp",
     fb: "#4a5a6a",
@@ -1807,7 +1807,7 @@ const MAPS = [
   {
     id: 39,
     nameKey: "map_thao_duoc_coc",
-    bg: "assets/maps/map_thao_duoc_coc.webp",
+    bg: "assets/maps/map_thao_duoc_coc_moi.webp",
     ground: "assets/map/tile_ground_farm.png",
     loadingBg: "assets/maps/loading_thao_duoc_coc.webp",
     fb: "#7fae6a",
@@ -1833,7 +1833,7 @@ const MAPS = [
   {
     id: 40,
     nameKey: "map_rung_truc",
-    bg: "assets/maps/map_rung_truc.webp",
+    bg: "assets/maps/map_rung_truc_moi.webp",
     ground: "assets/map/tile_ground_forest.png",
     loadingBg: "assets/maps/loading_rung_truc.webp",
     fb: "#5f8f5a",
@@ -1858,7 +1858,7 @@ const MAPS = [
   {
     id: 41,
     nameKey: "map_bai_da",
-    bg: "assets/maps/map_bai_da.webp",
+    bg: "assets/maps/map_bai_da_moi.webp",
     ground: "assets/map/tile_ground_mine.png",
     loadingBg: "assets/maps/loading_bai_da.webp",
     fb: "#8a8a7a",
@@ -1885,7 +1885,7 @@ const MAPS = [
   {
     id: 42,
     nameKey: "map_chan_nui_tan_vien",
-    bg: "assets/maps/map_chan_nui_tan_vien.webp",
+    bg: "assets/maps/map_chan_nui_tan_vien_moi.webp",
     ground: "assets/map/tile_ground_forest.png",
     loadingBg: "assets/maps/loading_chan_nui_tan_vien.webp",
     fb: "#7fae6a",
