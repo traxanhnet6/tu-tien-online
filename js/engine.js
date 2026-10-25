@@ -1230,6 +1230,7 @@ var Engine = (function () {
     _attackCd = 0.8;
     /* Animation 3 pha: windup 0.08s -> strike 0.12s -> recover 0.15s = 0.35s */
     player.atkT = 0.35;
+    player._a20Start = Date.now(); // Build 98: chuỗi attack 20 frame khi đánh thường
     player.atkPhase = 'windup';
     player.dir = mon.x >= player.x ? 1 : -1;
     _audio(function (A) { A.sfx('slash'); });
@@ -1382,7 +1383,108 @@ var Engine = (function () {
     ba_vuong_quyen: 'slash', chan_dia_chuong: 'fire', kim_cuong_bat_hoai: 'circle',
     kimdan_kiem_y: 'bolt', kimdan_loi_phap: 'lightning', kimdan_the_quyen: 'slash',
   };
-  function _playSkillFx(skillId, x, y, color, level) {
+  /* ---- Build 98: lớp nhân vật + FX sprite 20 frame (SKILL_FX / CHAR_ANIM20) ----
+   * Lớp cho hoạt ảnh 20 frame: char.class đã chọn > tông môn đã gia nhập > Kiếm Tu.
+   * Tông môn -> lớp: Kiếm Tông->Kiếm Tu, Thiên Pháp Tông->Pháp Tu, Kim Cang Tông->Đao Tu,
+   * Ngự Thú Tông->Cung Tu, Dược Vương Tông->Thuật Sĩ (Cửu U Ma Tông không có lớp -> fallback). */
+  var _CLASS20_BY_SECT = { kiem_tong: 'kiem_tu', thien_phap_tong: 'phap_tu',
+    kim_cang_tong: 'dao_tu', ngu_thu_tong: 'cung_tu', duoc_vuong_tong: 'thuat_si' };
+  function _playerClass20() {
+    try {
+      var S = _S();
+      if (S && S.char && typeof S.char.class === 'string') {
+        var c = S.char.class;
+        if (typeof CHAR_ANIM20 !== 'undefined' && CHAR_ANIM20[c + '_move_down']) return c;
+      }
+      if (S && S.sectInfo && S.sectInfo.joined && _CLASS20_BY_SECT[S.sectInfo.joined]) {
+        return _CLASS20_BY_SECT[S.sectInfo.joined];
+      }
+    } catch (e) {}
+    return 'kiem_tu';
+  }
+  /* FX theo lớp cho từng loại chiêu (chỉ dùng khi skillId không khớp trực tiếp SKILL_FX). */
+  var _CLASS20_FX = {
+    kiem_tu: { dmg: 'kiem_khi_tram', aoe: 'van_kiem_quy_tong' },
+    phap_tu: { dmg: 'hoa_cau', aoe: 'thien_thach_tran' },
+    dao_tu: { dmg: 'huyet_anh_tram', aoe: 'viem_nguc_tran' },
+    cung_tu: { dmg: 'lien_tien', aoe: 'tan_hoa_tien', buff: 'linh_thu_ho_the' },
+    thuat_si: { dmg: 'trieu_hoi_linh_thu', aoe: 'lien_ket_sinh_menh', buff: 'bua_ho_than' },
+  };
+  function _resolveSkillFxEntry(skillId, kind) {
+    try {
+      if (typeof SKILL_FX === 'undefined') return null;
+      if (SKILL_FX[skillId]) return SKILL_FX[skillId];
+      var cls = _playerClass20();
+      var m = _CLASS20_FX[cls] || _CLASS20_FX.kiem_tu;
+      var key = null;
+      if (kind === 'buff') key = m.buff || null;
+      else if (kind === 'aoe') key = m.aoe || null;
+      else key = m.dmg || null;
+      return (key && SKILL_FX[key]) ? SKILL_FX[key] : null;
+    } catch (e) { return null; }
+  }
+  /* Đẩy 1 chuỗi frame FX sprite vào pipeline _fx (vẽ chung ở vòng render).
+   * projectile bay từ người dùng tới mục tiêu; các loại khác đứng tại điểm tung chiêu. */
+  function _pushSpriteFx(entry, x, y) {
+    if (!entry || !entry.frames || !entry.frames.length) return;
+    var dur = entry.frames.length * (entry.frameMs || 50) / 1000;
+    var fx = { kind: 'sprite20', x: x, y: y, frames: entry.frames, frameMs: entry.frameMs || 50,
+               t: dur, maxT: dur, color: entry.color || '#fff', size: 120 };
+    if (entry.type === 'projectile') {
+      fx.sx = player.x; fx.sy = player.y - 10; fx.tx = x; fx.ty = y;
+      fx.x = player.x; fx.y = player.y - 10; fx.size = 110;
+    } else if (entry.type === 'slash') { fx.size = 130; }
+    else if (entry.type === 'aoe') { fx.size = 150 + (entry.aoe || 2) * 30; }
+    else if (entry.type === 'summon') { fx.size = 120; }
+    else if (entry.type === 'buff') { fx.size = 110; }
+    for (var i = 0; i < entry.frames.length; i++) { try { _img(entry.frames[i]); } catch (e) {} }
+    _fx.push(fx);
+  }
+  /* Frame hoạt ảnh 20 frame của người chơi (CHAR_ANIM20): attack chạy 1 lần từ lúc
+   * bắt đầu đánh/tung chiêu (player._a20Start), move chạy vòng theo frameMs của data.
+   * Trả src chỉ khi frame đã tải xong; chưa xong -> warm cache rồi trả null để đường
+   * vẽ cũ vẽ tạm (không mất hình, không crash). */
+  function _anim20PlayerSrc(face, moving) {
+    try {
+      if (typeof CHAR_ANIM20 === 'undefined') return null;
+      var cls = _playerClass20();
+      var now = Date.now();
+      if (player._a20Start) {
+        var atk = CHAR_ANIM20[cls + '_attack_' + face];
+        if (atk && atk.frames && atk.frames.length) {
+          var el = now - player._a20Start;
+          var dur = atk.frames.length * (atk.frameMs || 45);
+          if (el < dur) {
+            var fi = Math.min(atk.frames.length - 1, Math.floor(el / (atk.frameMs || 45)));
+            var s = atk.frames[fi];
+            var ce = _imgCache[s];
+            if (ce && ce.done && ce.ok) return s;
+            _img(s);
+            return null;
+          }
+          player._a20Start = 0;
+        }
+      }
+      if (moving) {
+        var mv = CHAR_ANIM20[cls + '_move_' + face];
+        if (mv && mv.frames && mv.frames.length) {
+          var mi = Math.floor(now / (mv.frameMs || 60)) % mv.frames.length;
+          var ms = mv.frames[mi];
+          var me = _imgCache[ms];
+          if (me && me.done && me.ok) return ms;
+          _img(ms);
+          return null;
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function _playSkillFx(skillId, x, y, color, level, kind) {
+    /* Build 98: có FX sprite 20 frame -> dùng nó thay cho hiệu ứng procedural cũ
+     * (kể cả vệt vũ khí trang phục, tránh chồng 2 hiệu ứng). Không có -> đường cũ. */
+    var _sfx = _resolveSkillFxEntry(skillId, kind);
+    if (_sfx) { _pushSpriteFx(_sfx, x, y); return; }
     var k = _SKILL_FX[skillId] || 'slash';
     var inten = 1 + Math.min(9, (level || 1) - 1) * 0.06; /* cấp càng cao hiệu ứng càng đậm */
     /* Vũ khí trang phục đang cầm: hiệu ứng riêng theo loại vũ khí (Bui 2026-10-21) */
@@ -1427,6 +1529,7 @@ var Engine = (function () {
     if (S.char) S.char.mp = player.mp;
     player.atkT = 0.25; // chồm lên khi tung chiêu
     player.skillT = 0.4; // khung skill riêng (không dùng khung đánh thường)
+    player._a20Start = Date.now(); // Build 98: chuỗi attack 20 frame khi tung chiêu
     player.lastSkill = skillId; // Bui 2026-10-21: để chọn hình chưởng ấn
     var ps = _effStats(_getStats());
     var def = cast.def, wm = _weakMult();
@@ -1448,7 +1551,7 @@ var Engine = (function () {
         player.maxShield = Math.round(ps.maxHp * 0.8);
         player.shield = Math.min(player.maxShield, player.shield + Math.round(ps.maxHp * 0.5));
       }
-      _playSkillFx(skillId, player.x, player.y, def.fx, chk.power.level);
+      _playSkillFx(skillId, player.x, player.y, def.fx, chk.power.level, 'buff');
       _dmgNum(player.x, player.y - 30, 'buff', def.fx || '#fff3b0');
       return { ok: true };
     }
@@ -1467,7 +1570,7 @@ var Engine = (function () {
         _applyLifesteal(_dmg);
         hit++;
       }
-      _playSkillFx(skillId, tgt.x, tgt.y, def.fx, chk.power.level);
+      _playSkillFx(skillId, tgt.x, tgt.y, def.fx, chk.power.level, 'aoe');
       if (wm > 1) _dmgNum(tgt.x, tgt.y - 44, 'SƠ HỞ!', '#ffeb3b');
       return { ok: true, hits: hit };
     }
@@ -1487,7 +1590,7 @@ var Engine = (function () {
       _fx.push({ kind: 'ring', x: tgt.x, y: tgt.y, r: 10, max: 130,
                  t: 0.35, maxT: 0.35, color: def.fx });
     }
-    _playSkillFx(skillId, tgt.x, tgt.y, def.fx, chk.power.level);
+    _playSkillFx(skillId, tgt.x, tgt.y, def.fx, chk.power.level, 'dmg');
     if (wm > 1) _dmgNum(tgt.x, tgt.y - 44, 'SƠ HỞ!', '#ffeb3b');
     return { ok: true, hits: 1 };
   }
@@ -2410,6 +2513,14 @@ var Engine = (function () {
         f.y += (f.ty - f.y) * Math.min(1, dt * 14);
         if (p > 0.92) { f.t = 0; }
       } else if (f.dot) { f.x += (f.vx || 0) * dt; f.y += (f.vy || 0) * dt; }
+      else if (f.kind === 'sprite20') {
+        /* Build 98: projectile bay thẳng từ điểm bắt đầu tới mục tiêu theo tiến độ */
+        if (typeof f.sx === 'number' && typeof f.tx === 'number') {
+          var sp = 1 - Math.max(0, f.t / f.maxT);
+          f.x = f.sx + (f.tx - f.sx) * sp;
+          f.y = f.sy + (f.ty - f.sy) * sp;
+        }
+      }
       else { f.r += (f.max - 8) * dt / Math.max(0.01, f.maxT); }
       if (f.t <= 0) _fx.splice(i, 1);
     }
@@ -2977,8 +3088,9 @@ var Engine = (function () {
      * khung walk lỗi/thiếu -> rớt về sprite tĩnh, không crash. */
     var moving = _playerMoving();
     var ab = 'a';
-    var src = null;
-    if (moving) {
+    /* Build 98: hoạt ảnh 20 frame theo lớp ưu tiên hơn chu kỳ bước cũ. */
+    var src = _anim20PlayerSrc(face, moving);
+    if (!src && moving) {
       /* chu kỳ 4 khung a->c->b->c; khung c chưa tải xong -> rớt về nhịp a/b cũ */
       ab = _walkCycleAb(Date.now());
       var wsrc = _playerWalkFile(gioi, face, ab);
@@ -4184,6 +4296,18 @@ var Engine = (function () {
         _ctx.fillStyle = '#ffffff';
         _ctx.fillRect(-8, -2, 12, 4);
         _ctx.restore();
+      } else if (kind === 'sprite20') {
+        /* Build 98: frame FX sprite 20 frame (SKILL_FX), mờ dần cuối chuỗi (alpha chung) */
+        var frs = f.frames || [];
+        if (frs.length) {
+          var fp = 1 - Math.max(0, f.t / f.maxT);
+          var fi = Math.min(frs.length - 1, Math.floor(fp * frs.length));
+          var fim = _img(frs[fi]);
+          if (fim && fim.width) {
+            var sz = f.size || 120;
+            _ctx.drawImage(fim, f.x - sz / 2, f.y - sz / 2, sz, sz);
+          }
+        }
       } else if (f.dot) {
         _ctx.fillStyle = f.color;
         _ctx.fillRect(f.x - 2, f.y - 2, 4, 4);
