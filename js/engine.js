@@ -1512,6 +1512,22 @@ var Engine = (function () {
     ba_vuong_quyen: 'slash', chan_dia_chuong: 'fire', kim_cuong_bat_hoai: 'circle',
     kimdan_kiem_y: 'bolt', kimdan_loi_phap: 'lightning', kimdan_the_quyen: 'slash',
   };
+  /* Build 114: FX vẽ bằng code cho skill lớp mới (id -> fxType), màu theo lớp.
+   * Không dùng ảnh mới; _playSkillFx ưu tiên map này trước sprite class fallback. */
+  var _CLASS_SKILL_FX = {
+    kiem_tu_thanh_quang_tram: 'bolt', kiem_tu_tam_kiem_tran: 'circle',
+    kiem_tu_kiem_y_cuong_chien: 'circle', kiem_tu_thien_kiem_giang_the: 'lightning',
+    phap_tu_tu_quang_tien: 'bolt', phap_tu_tu_dien_tran: 'circle',
+    phap_tu_thanh_linh_gia_tri: 'circle', phap_tu_tu_tieu_than_loi: 'lightning',
+    dao_tu_liet_diem_tram: 'slash', dao_tu_hoa_hai_dao_khi: 'fire',
+    dao_tu_thiet_huyet_chien_y: 'circle', dao_tu_diem_ma_diet_the: 'fire',
+    cung_tu_xuyen_tam_tien: 'bolt', cung_tu_bao_liet_tien: 'fire',
+    cung_tu_phuoc_linh_tien: 'bolt', cung_tu_ung_nhan: 'circle',
+    cung_tu_cuu_tinh_truy_hon_tien: 'lightning',
+    thuat_si_kim_quang_phu: 'bolt', thuat_si_cam_lo_hoi_xuan: 'circle',
+    thuat_si_kim_cang_tran_phu: 'circle', thuat_si_dinh_than_phu: 'bolt',
+    thuat_si_van_phu_thien_loi: 'lightning',
+  };
   /* ---- Build 98: lớp nhân vật + FX sprite 20 frame (SKILL_FX / CHAR_ANIM20) ----
    * Lớp cho hoạt ảnh 20 frame: char.class đã chọn > tông môn đã gia nhập > Kiếm Tu.
    * Tông môn -> lớp: Kiếm Tông->Kiếm Tu, Thiên Pháp Tông->Pháp Tu, Kim Cang Tông->Đao Tu,
@@ -1610,6 +1626,19 @@ var Engine = (function () {
   }
 
   function _playSkillFx(skillId, x, y, color, level, kind) {
+    /* Build 114: skill lớp mới — FX vẽ bằng code theo fxType riêng từng chiêu,
+     * màu theo lớp (def.fx); không dùng ảnh mới. */
+    var _cfx = _CLASS_SKILL_FX[skillId];
+    if (_cfx) {
+      var _ci = 1 + Math.min(9, (level || 1) - 1) * 0.06;
+      try { _fxOutfitWeapon(player.x, player.y - 10, color); } catch (e) {}
+      if (_cfx === 'bolt') _fxBolt(x, y, color, _ci);
+      else if (_cfx === 'fire') _fxFire(x, y, color, _ci);
+      else if (_cfx === 'lightning') _fxLightning(x, y, _ci);
+      else if (_cfx === 'circle') _fxCircle(player.x, player.y, color, _ci);
+      else _fxSlash(x, y, color, true, _ci);
+      return;
+    }
     /* Build 98: có FX sprite 20 frame -> dùng nó thay cho hiệu ứng procedural cũ
      * (kể cả vệt vũ khí trang phục, tránh chồng 2 hiệu ứng). Không có -> đường cũ. */
     var _sfx = _resolveSkillFxEntry(skillId, kind);
@@ -1648,14 +1677,36 @@ var Engine = (function () {
     if (!S || typeof Skills === 'undefined') return { ok: false, reason: 'chua_hoc' };
     var nowMs = Date.now();
     var chk;
+    /* Build 114: đòn đánh thường của lớp — không qua hệ bí tịch (không cần học),
+     * đánh theo nhịp đánh thường, đứng yên khi tung chiêu như tutien2d. */
+    var _bdef = null;
+    try { _bdef = Skills.skillDef(skillId); } catch (e) {}
+    if (_bdef && _bdef.kind === 'basic') {
+      if (_attackCd > 0) return { ok: false, reason: 'dang_hoi' };
+      var _btgt = (player.target && !player.target.dead) ? player.target
+        : (function () { var nm = _nearestMon(); return nm ? nm.m : null; })();
+      if (!_btgt) return { ok: false, reason: 'no_target' };
+      player.dir = _btgt.x >= player.x ? 1 : -1;
+      player.skillT = 0.4;
+      player._a20Start = Date.now();
+      player.lastSkill = skillId;
+      try { var _bkn = _t('sk_' + skillId) !== ('sk_' + skillId) ? _t('sk_' + skillId) : skillId; _announce(player.x, player.y - 64, _bkn, _bdef.fx || '#fff3b0'); } catch (e2) {}
+      _playerAttack(_btgt, _effStats(_getStats()));
+      return { ok: true, hits: 1 };
+    }
     try { chk = Skills.canCast(S, skillId, nowMs, player.mp); }
     catch (e) { return { ok: false, reason: 'chua_hoc' }; }
     if (!chk.ok) return chk;
+    /* Build 114: chiêu tốn Thần Thức (focus) — kiểm tra trước khi chốt hồi chiêu. */
+    var _foc = 0;
+    try { var _fdef = Skills.skillDef(skillId); _foc = (_fdef && _fdef.focus) || 0; } catch (e) {}
+    if (_foc > 0 && player.focus < _foc) return { ok: false, reason: 'het_focus' };
     var cast;
     try { cast = Skills.castSkill(S, skillId, nowMs); }
     catch (e) { return { ok: false, reason: 'chua_hoc' }; }
     player.mp = Math.max(0, player.mp - chk.power.mp);
     if (S.char) S.char.mp = player.mp;
+    if (_foc > 0) { player.focus = Math.max(0, player.focus - _foc); if (S.char) S.char.focus = player.focus; }
     player.atkT = 0.25; // chồm lên khi tung chiêu
     player.skillT = 0.4; // khung skill riêng (không dùng khung đánh thường)
     player._a20Start = Date.now(); // Build 98: chuỗi attack 20 frame khi tung chiêu
@@ -1688,6 +1739,25 @@ var Engine = (function () {
       : (function () { var nm = _nearestMon(); return nm ? nm.m : null; })();
     if (!tgt) return { ok: false, reason: 'no_target' };
     player.dir = tgt.x >= player.x ? 1 : -1;
+    /* Build 114: hồi máu — tự dùng cho bản thân, không cần mục tiêu. */
+    if (def.kind === 'heal') {
+      var _heal = Math.round(ps.maxHp * ((def.healPct || 0) / 100));
+      player.hp = Math.min(ps.maxHp, player.hp + _heal);
+      if (S.char) S.char.hp = player.hp;
+      _playSkillFx(skillId, player.x, player.y, def.fx, chk.power.level, 'buff');
+      _dmgNum(player.x, player.y - 30, '+' + _heal, '#7dff8a');
+      return { ok: true };
+    }
+    /* Build 114: khống chế — gây sát thương rồi choáng (m.sbDb.stunT, tick quái
+     * đã bỏ qua quái choáng sẵn), quái không bị hất văng. */
+    if (def.kind === 'control') {
+      var _cdmg = _calcDmg(ps.atk, tgt.def, chk.power.mult * wm, chk.power.pierce);
+      _damageMon(tgt, _cdmg);
+      _applyLifesteal(_cdmg);
+      try { tgt.sbDb = tgt.sbDb || {}; tgt.sbDb.stunT = Math.max(tgt.sbDb.stunT || 0, def.stunDur || 0); } catch (e) {}
+      _playSkillFx(skillId, tgt.x, tgt.y, def.fx, chk.power.level, 'dmg');
+      return { ok: true, hits: 1 };
+    }
     if (def.kind === 'aoe') {
       var hit = 0;
       for (var i = 0; i < _monsters.length; i++) {

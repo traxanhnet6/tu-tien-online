@@ -362,6 +362,22 @@ function applyPassives(stats, state) {
   if (tp > 0) out.maxHp = Math.round(out.maxHp * (1 + 0.08 * tp));
   if (kc > 0) out.maxHp = Math.round(out.maxHp * (1 + 0.15 * kc));
   if (nh > 0) out.maxMp = Math.round(out.maxMp * (1 + 0.10 * nh));
+  /* ---- Bị động lớp (build 114, class-skills.js): effect chỉ dùng
+   * atkPct/defPct/maxHpPct/maxMpPct, nhân theo cấp bí tịch đang trang bị. ---- */
+  try {
+    var _load = (state && state.passiveLoad) || [];
+    for (var i = 0; i < _load.length; i++) {
+      var _lv = passiveActive(state, _load[i]);
+      if (_lv <= 0) continue;
+      var _pd = passiveDef(_load[i]);
+      var _ef = _pd && _pd.effect;
+      if (!_ef) continue;
+      if (_ef.atkPct) out.atk = Math.round(out.atk * (1 + _ef.atkPct / 100 * _lv));
+      if (_ef.defPct) out.def = Math.round(out.def * (1 + _ef.defPct / 100 * _lv));
+      if (_ef.maxHpPct) out.maxHp = Math.round(out.maxHp * (1 + _ef.maxHpPct / 100 * _lv));
+      if (_ef.maxMpPct) out.maxMp = Math.round(out.maxMp * (1 + _ef.maxMpPct / 100 * _lv));
+    }
+  } catch (e) {}
   return out;
 }
 /* ---- Hệ thống bị động theo PDF: tốn SP, tối đa 5 cùng lúc, yêu cầu cảnh giới ---- */
@@ -798,7 +814,7 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     SECT_SKILLS: SECT_SKILLS, GRADE_MULT: GRADE_MULT,
     TIER_UP: TIER_UP, TIER_MILESTONE: TIER_MILESTONE,
-    PASSIVE_DEFS: PASSIVE_DEFS,
+    PASSIVE_DEFS: PASSIVE_DEFS, _MANUAL_FB: _MANUAL_FB,
     skillDef: skillDef, gradeMult: gradeMult, skillDmgType: skillDmgType,
     tierUpCfg: tierUpCfg, manualMaxLevel: manualMaxLevel, upgradeCost: upgradeCost,
     manualInfo: manualInfo, manualTechId: manualTechId,
