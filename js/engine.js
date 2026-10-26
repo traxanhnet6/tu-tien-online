@@ -273,12 +273,34 @@ var Engine = (function () {
   }
 
   /* ---------- Pseudo-3D: bóng đổ, scale chiều sâu, nghiêng theo hướng chạy ---------- */
+  /* Build 118 (2026-10-27, hướng 3D): hệ số scale theo tọa độ Y TRONG WORLD,
+   * nội suy tuyến tính mượt (không nhảy cỡ theo ô, không phụ thuộc camera/zoom):
+   * xa trên màn hình (y=0) → 0.86, gần dưới màn hình (y=WORLD_H) → 1.08.
+   * WORLD_H lấy theo map hiện tại (_applyWorldSize: map 0 tilemap 56×40 → 1600).
+   * Chỉ đổi kích thước VẼ — va chạm, cổng, AI, spawn, bán kính bấm giữ nguyên. */
+  function _depthScale(worldY) {
+    var h = (typeof WORLD_H === 'number' && WORLD_H > 0) ? WORLD_H : 1200;
+    var t = worldY / h;
+    if (t < 0) t = 0; if (t > 1) t = 1;
+    return 0.86 + 0.22 * t;
+  }
+  /* Bóng ellipse MỀM: gradient tỏa từ tâm đậm → rìa trong suốt, không che sprite
+   * (bóng vẽ trước sprite trong _drawCreature, alpha vừa phải). */
   function _drawShadow(x, groundY, rx, alpha) {
     if (rx < 1 || alpha <= 0.01) return;
-    _ctx.fillStyle = 'rgba(0,0,0,' + alpha.toFixed(3) + ')';
+    var ry = Math.max(2, rx * 0.32);
+    _ctx.save();
+    _ctx.translate(x, groundY);
+    _ctx.scale(1, ry / rx);
+    var g = _ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+    g.addColorStop(0, 'rgba(0,0,0,' + alpha.toFixed(3) + ')');
+    g.addColorStop(0.7, 'rgba(0,0,0,' + (alpha * 0.6).toFixed(3) + ')');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    _ctx.fillStyle = g;
     _ctx.beginPath();
-    _ctx.ellipse(x, groundY, rx, Math.max(2, rx * 0.32), 0, 0, Math.PI * 2);
+    _ctx.arc(0, 0, rx, 0, Math.PI * 2);
     _ctx.fill();
+    _ctx.restore();
   }
   /* Vẽ sinh vật: bóng dưới chân + to/nhỏ theo chiều sâu (y) + nghiêng theo vx.
    * o: entity để nhớ x frame trước; opts: {lift, shadowY, noShadow, noTilt, noDepth} */
@@ -323,10 +345,9 @@ var Engine = (function () {
     var tilt = (opts.lean != null) ? opts.lean : 0;
     var ds = 1;
     if (!opts.noDepth) {
-      /* Bui 2026-10-22: depth scale theo screen Y (đúng khi zoom map) */
-      var sy = _worldToScreenY(y) / Math.max(1, _viewH);
-      if (sy < 0) sy = 0; if (sy > 1) sy = 1;
-      ds = 0.94 + 0.12 * sy; /* gần người xem (y lớn) thì to hơn — pseudo-3D */
+      /* Build 118: scale theo world Y (xem _depthScale) — thay cách cũ theo
+       * screen Y vốn đổi theo camera/zoom, khiến cỡ sprite dao động khi cuộn map. */
+      ds = _depthScale(y);
     }
     var dw = w * ds, dh = h * ds * (opts.scaleY || 1); /* scaleY: thở/bow */
     if (!opts.noShadow) {
@@ -3378,10 +3399,8 @@ var Engine = (function () {
     }
     if (!im || !im.width) return false;
     /* cùng hệ số độ sâu ds như _drawCreature của NPC: đứng cùng hàng y thì bằng cỡ nhau */
-    /* Bui 2026-10-22: depth scale theo screen Y (đúng khi zoom map) */
-    var _syP = _worldToScreenY(cy) / Math.max(1, _viewH);
-    if (_syP < 0) _syP = 0; if (_syP > 1) _syP = 1;
-    var dh = _PLAYER_SPRITE_H * (0.94 + 0.12 * _syP);
+    /* Build 118: dùng chung _depthScale theo world Y (bỏ cách cũ theo screen Y). */
+    var dh = _PLAYER_SPRITE_H * _depthScale(cy);
     var dw = dh * (im.width / im.height);
     /* bóng đổ như fallback cũ: bay cao -> nhỏ/mờ dần */
     var flyLift = (Engine.fly ? 26 : 0) + Math.max(0, blift);

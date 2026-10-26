@@ -9,11 +9,11 @@ const TILEMAPS = {
     name: "Thanh Vân Trấn",
     cols: 56, rows: 40, cell: 40,
     ambient: "rgba(255, 222, 155, 0.16)",
-    // Build 117: gan lai bgImage tranh moi (ve procedural khop luoi 56x40
+    // Build 118: bgImage tranh 3D góc 3/4 (nhà mặt đứng + mặt bên, cây cao + bóng lệch)
     // ban 115, da gan nhan "Nam Mon" bang PIL tren bien go Nam Mon).
     // Nam Mon la LOI DI BO xuyen tuong tai (27-28, 22-23) + cua phu (8, 22-23),
     // KHONG phai cong chuyen map (khong co trong gates[]).
-    bgImage: "assets/maps/tvt_moi_117.webp",
+    bgImage: "assets/maps/tvt_3d_118.webp",
     grid: [
       "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
       "^..*......*......*......*..###.*......*......*......*..^",
