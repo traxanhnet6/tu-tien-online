@@ -1,0 +1,65 @@
+================================================================
+HOOK cho js/monster-ai.js — COORDINATOR ÁP VÀO engine.js + index.html
+(Người làm AI quái KHÔNG được sửa 2 file này nên ghi hook tại đây.
+Chưa áp hook thì game vẫn chạy AI cũ — xem "Hậu quả nếu chưa áp".)
+================================================================
+
+1) index.html — thẻ script (mảng rest[], khoảng dòng 270)
+   Hiện tại: ..."js/tilemap.js", "js/ambient-life.js", ...
+   Chèn "js/monster-ai.js" NGAY SAU "js/tilemap.js", TRƯỚC
+   "js/ambient-life.js" (trước "js/engine.js" là bắt buộc vì
+   engine gọi MonsterAI lúc chạy; đặt sau tilemap.js để rõ thứ
+   tự phụ thuộc):
+     "js/tilemap.js", "js/monster-ai.js", "js/ambient-life.js",
+
+2) engine.js — hàm _updateMonsters(dt, ps) (khoảng dòng 2218),
+   vòng for từng quái, ngay sau dòng 2223:
+     if (m.hitT > 0) m.hitT -= dt;
+   và TRƯỚC khối quán tính giật lùi dòng 2224:
+     if (m.kx || m.ky) { ...
+   Chèn đúng đoạn này:
+     /* MonsterAI 2026-10-27: AI quái mới (lang thang/truy đuổi/
+      * quay về bãi) — xem js/monster-ai.js. Gọi TRƯỚC khối kx/ky
+      * vì updateOne tự xóa kx/ky nên quái không bị hất văng. */
+     var _aiDone = false;
+     try {
+       if (typeof MonsterAI !== 'undefined' && MonsterAI.updateOne)
+         _aiDone = !!MonsterAI.updateOne(m, player, dt, { mapId: _mapId,
+           zones: (_mapDef && _mapDef.spawnZones) || null,
+           monsters: _monsters, worldW: WORLD_W, worldH: WORLD_H });
+     } catch (_e) {}
+   (updateOne trả true = đã xử lý di chuyển; false = quái chết/
+   choáng/sợ hãi — để engine xử lý như cũ. Nếu MonsterAI chưa
+   nạp, typeof guard giữ game chạy AI cũ, không crash.)
+
+3) engine.js — cùng hàm _updateMonsters, dòng ~2286, đổi dòng đầu
+   của chuỗi AI inline cũ:
+   TỪ:
+     if (sbSkipMove) { /* choáng/sợ hãi: đã xử lý ở trên, bỏ qua AI di chuyển thường */
+   THÀNH:
+     if (_aiDone) { /* MonsterAI đã di chuyển quái — bỏ qua toàn bộ AI inline cũ */
+     } else if (sbSkipMove) { /* choáng/sợ hãi: đã xử lý ở trên, bỏ qua AI di chuyển thường */
+   LÝ DO BẮT BUỘC: khối cũ chứa nhánh flee HP < 25% (dòng ~2280)
+   và chase MONSTER_AGGRO = 300 — không bypass thì quái vẫn chạy
+   trốn lúc thấp máu, vẫn đuổi 300px thay vì 220px, và di chuyển
+   2 lần/frame (AI mới + AI cũ cộng dồn tốc độ).
+
+4) engine.js — cùng hàm, dòng ~2332, đổi điều kiện separation:
+   TỪ:  if (!isFleeing) {
+   THÀNH: if (!isFleeing && !_aiDone) {
+   LÝ DO: MonsterAI.updateOne đã tự separation (có kiểm tra ô
+   chặn); không guard thì quái bị đẩy 2 lần và có thể xuyên ô
+   chặn (separation cũ không kiểm tra tilemap).
+
+KHÔNG ĐỔI gì khác trong _updateMonsters:
+ - Khối DoT/choáng/chậm/sợ hãi (sbDb), khối tấn công dòng ~2346
+   (d <= 52, Combat.monsterStrike) và _updateRespawn (hồi sinh
+   trong bãi) GIỮ NGUYÊN — MonsterAI chỉ thay phần di chuyển.
+ - Lưu ý nhỏ: biến d dùng ở khối tấn công được tính TRƯỚC khi
+   MonsterAI di chuyển nên quái vừa bước vào tầm đánh sẽ ra đòn
+   từ frame sau (trễ 1 frame, không phải bug).
+
+Hậu quả nếu chưa áp hook: quái vẫn dùng AI cũ (đứng gần như yên,
+đuổi 300px, flee khi HP < 25%, bị hất văng bởi kx/ky) — file
+monster-ai.js nằm đó nhưng không được gọi.
+================================================================

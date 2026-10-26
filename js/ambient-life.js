@@ -127,12 +127,16 @@ var AmbientLife = (function () {
     };
   }
 
-  /* ---------- 3. Người đi lại (tuyến đường đã kiểm chứng sạch) ---------- */
-  /* Tọa độ pixel = tâm ô (cột*40+20, hàng*40+20). Các đoạn thẳng
-   * giữa waypoint đã kiểm bằng Tilemap.isBlocked thật: không ô
-   * nào chặn. Tuyến: phố chợ, cầu đá, đường nam, sân Võ Đường,
-   * đường trung tâm, đường bắc, cổng tây. */
-  var ROUTES = [
+  /* ---------- 3. Người đi lại (tuyến dọc đường, đọc từ tilemap lúc chạy) ---------- */
+  /* 2026-10-27: KHÔNG hardcode tuyến map 0 cũ nữa — map 0 đang
+   * được vẽ lại (56x40, trấn trên + ngoại ô dưới) nên tuyến phải
+   * quét từ lưới tilemap lúc chạy: gom các đoạn '#' (đường đá)
+   * liên tiếp theo hàng/dọc thành tuyến thẳng, mỗi tuyến chỉ đi
+   * trên ô '#' nên luôn đi bộ được (LEGEND: '#' blockWalk=false).
+   * Tuyến thẳng theo hàng/dọc nên đoạn đi giữa 2 waypoint không
+   * bao giờ lệch khỏi đường. Không có '#' (hoặc chưa có tilemap)
+   * thì fallback '=' (đường đất), cuối cùng mới dùng tuyến cũ. */
+  var LEGACY_ROUTES = [
     [[460, 620], [820, 620], [1340, 620]],   /* phố chợ */
     [[1780, 620], [1780, 780], [1780, 860]], /* cầu đá */
     [[180, 940], [420, 940], [740, 940]],    /* đường đất nam */
@@ -141,6 +145,75 @@ var AmbientLife = (function () {
     [[1500, 260], [1820, 260], [1820, 380]], /* đường bắc */
     [[100, 540], [100, 620], [260, 620]],    /* cổng tây */
   ];
+  var ROUTES = LEGACY_ROUTES; /* tuyến đang dùng — _build() thay bằng tuyến quét được */
+  /* Kích thước thế giới thật của map 0 (tilemap mới 56x40 thì
+   * 2240x1600, map 0 cũ 56x24 thì 2240x960); fallback giữ cũ. */
+  function _updateWorldSize() {
+    try {
+      if (typeof Tilemap !== 'undefined' && Tilemap && Tilemap.size) {
+        var sz = Tilemap.size(MAP_ID);
+        if (sz && sz.w > 0 && sz.h > 0) { WORLD_W = sz.w; WORLD_H = sz.h; return sz; }
+      }
+    } catch (e) {}
+    return null;
+  }
+  /* Quét 1 ký tự đường ('#' trước, '=' fallback) thành các tuyến
+   * thẳng: đoạn liên tiếp >= 3 ô theo hàng hoặc theo cột. Trả về
+   * mảng tuyến [[x1,y1],[x2,y2]] (tâm ô), dài nhất trước, rải đều
+   * (bỏ tuyến có trung điểm quá gần tuyến đã chọn). */
+  function _scanRoadRoutes(ch) {
+    var sz = _updateWorldSize();
+    var cell = (sz && sz.cell > 0) ? sz.cell : 40;
+    var cols = sz ? Math.round(sz.w / cell) : 0;
+    var rows = sz ? Math.round(sz.h / cell) : 0;
+    if (!cols || !rows) return [];
+    if (typeof Tilemap === 'undefined' || !Tilemap.charAt) return [];
+    function _isRoad(c, r) {
+      try { return Tilemap.charAt(MAP_ID, c * cell + cell / 2, r * cell + cell / 2) === ch; }
+      catch (e) { return false; }
+    }
+    var runs = [], c, r, c0, r0;
+    for (r = 0; r < rows; r++) { /* đoạn ngang */
+      c = 0;
+      while (c < cols) {
+        if (!_isRoad(c, r)) { c++; continue; }
+        c0 = c;
+        while (c < cols && _isRoad(c, r)) c++;
+        if (c - c0 >= 3) runs.push({ len: c - c0,
+          pts: [[c0 * cell + cell / 2, r * cell + cell / 2], [(c - 1) * cell + cell / 2, r * cell + cell / 2]] });
+      }
+    }
+    for (c = 0; c < cols; c++) { /* đoạn dọc */
+      r = 0;
+      while (r < rows) {
+        if (!_isRoad(c, r)) { r++; continue; }
+        r0 = r;
+        while (r < rows && _isRoad(c, r)) r++;
+        if (r - r0 >= 3) runs.push({ len: r - r0,
+          pts: [[c * cell + cell / 2, r0 * cell + cell / 2], [c * cell + cell / 2, (r - 1) * cell + cell / 2]] });
+      }
+    }
+    runs.sort(function (a, b) { return b.len - a.len; });
+    var out = [], i, j, picked;
+    for (i = 0; i < runs.length && out.length < 12; i++) {
+      var mx = (runs[i].pts[0][0] + runs[i].pts[1][0]) / 2;
+      var my = (runs[i].pts[0][1] + runs[i].pts[1][1]) / 2;
+      picked = false;
+      for (j = 0; j < out.length; j++) {
+        var omx = (out[j][0][0] + out[j][1][0]) / 2;
+        var omy = (out[j][0][1] + out[j][1][1]) / 2;
+        if (Math.hypot(mx - omx, my - omy) < 80) { picked = true; break; }
+      }
+      if (!picked) out.push(runs[i].pts);
+    }
+    return out;
+  }
+  function _buildRoutes() {
+    var routes = _scanRoadRoutes('#');
+    if (!routes.length) routes = _scanRoadRoutes('=');
+    ROUTES = routes.length ? routes : LEGACY_ROUTES;
+    return ROUTES;
+  }
   var DIRS = ['xuong', 'len', 'trai', 'phai'];
   function _makeWalker(routeIdx) {
     var route = ROUTES[routeIdx % ROUTES.length];
@@ -160,6 +233,8 @@ var AmbientLife = (function () {
 
   /* ---------- Xây dựng / chất lượng ---------- */
   function _build() {
+    _updateWorldSize(); /* mây/tiên bay theo biên map thật */
+    _buildRoutes();     /* dân đi bộ theo đường '#' quét từ tilemap lúc chạy */
     var c = COUNTS[quality] || COUNTS.cao;
     clouds = []; flyers = []; walkers = [];
     for (var i = 0; i < c.clouds; i++) clouds.push(_makeCloud(i));
@@ -306,6 +381,7 @@ var AmbientLife = (function () {
     drawFront: drawFront,
     drawWalker: drawWalker,
     walkers: function () { return walkers; },
+    routes: function () { return ROUTES; },
     isActive: function () { return active; },
   };
 })();

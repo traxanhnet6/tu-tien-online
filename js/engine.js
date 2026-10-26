@@ -35,19 +35,21 @@ var Engine = (function () {
   }
   var ATTACK_RANGE = 70;      // tầm đánh player
   var ATK_CHASE_MAX = 700;    // bấm Đánh: quái trong bán kính này thì tự dí theo rồi đánh
-  var INTERACT_RANGE = 110;   // tầm tương tác NPC (Space/?) — Bui 2026-10-25: 60px quá hẹp
-                              // (đứng sát rạt mới nói chuyện được); 110px ≈ đứng cạnh NPC là
-                              // bấm được, vẫn phải lại gần, không nói chuyện từ xa
-  var GATE_RANGE = 46;        // tầm kích hoạt cổng
+  var INTERACT_RANGE = 125;   // tầm tương tác NPC (Space/?) — Bui 2026-10-25: 60px quá hẹp
+                              // (đứng sát rạt mới nói chuyện được); 125px ≈ đứng cạnh NPC là
+                              // bấm được, vẫn phải lại gần, không nói chuyện từ xa.
+                              // 2026-10-27: +15px theo sprite to ×1.5 (nửa chiều cao
+                              // 31→46.5px) để khoảng hở nhìn thấy giữa 2 nhân vật không đổi.
+  var GATE_RANGE = 60;        // tầm kích hoạt cổng (2026-10-27: 46→60, +15px theo sprite to)
   /* Build 107: bán kính chạm trực tiếp trên canvas, tách riêng NPC/quái
    * (trước đây dùng chung _hitR = 60px nên phải chạm sát NPC mới mở thoại,
-   * dù Space/? đã là 110px). NPC = 120px: bằng INTERACT_RANGE + 10px bù
-   * sai số ngón tay trên cảm ứng, vẫn dưới 130px trần; quái GIỮ 60px để
-   * chạm quái không bị "hút" sang NPC đứng gần. Cả hai đều chia cho zoom
-   * ở _doTap nên giữ nguyên theo màn hình. */
-  var NPC_TAP_R = 120;        // chạm trực tiếp NPC → mở thoại
-  var MON_TAP_R = 60;         // chạm trực tiếp quái → nhắm/đánh (không đổi)
-  var GATE_SAFE_R = 96;       // bán kính vùng cấm NPC quanh cổng (chống NPC chặn cổng)
+   * dù Space/? đã là 110px). NPC = 135px: bằng INTERACT_RANGE + 10px bù
+   * sai số ngón tay trên cảm ứng; quái 60→75px (nửa đường chéo sprite boss
+   * 96px ≈ 68px + bù ngón tay, vẫn dưới 80px để không hút sang ô bên cạnh).
+   * Cả hai đều chia cho zoom ở _doTap nên giữ nguyên theo màn hình. */
+  var NPC_TAP_R = 135;        // chạm trực tiếp NPC → mở thoại
+  var MON_TAP_R = 75;         // chạm trực tiếp quái → nhắm/đánh
+  var GATE_SAFE_R = 110;      // bán kính vùng cấm NPC quanh cổng (96→110 theo sprite NPC to)
   var MONSTER_AGGRO = 300;    // quái đuổi theo trong bán kính này
   var BOSS_RESPAWN_S = 120;   // boss hồi sinh sau 120s
   var MAP_MON_COUNT = 6;      // giữ ~6 quái thường / map
@@ -1119,7 +1121,7 @@ var Engine = (function () {
     var wpt = _screenToWorld(cx - r.left, cy - r.top); /* đúng với zoom */
     var wx = wpt.x, wy = wpt.y;
     /* Bui 2026-10-22: bán kính chạm giữ nguyên theo màn hình (chia cho zoom).
-     * Build 107: NPC và quái tách bán kính — NPC 120px, quái giữ 60px. */
+     * Build 107: NPC và quái tách bán kính — NPC 135px, quái 75px (2026-10-27). */
     var _hz = 1 / (_mapZoom || 1);
     var _gateR = GATE_SAFE_R * _hz, _npcHitR = NPC_TAP_R * _hz, _monHitR = MON_TAP_R * _hz;
     /* Chạm gần cổng: ưu tiên đi vào cổng — NPC đứng gần cổng không được
@@ -2219,6 +2221,16 @@ var Engine = (function () {
       if (m.dead && !(m.dieT > 0)) continue;
       if (m.dieT > 0) { m.dieT = Math.max(0, m.dieT - dt); continue; } /* đang mờ dần khi chết */
       if (m.hitT > 0) m.hitT -= dt;
+      /* MonsterAI 2026-10-27: AI quái mới (lang thang/truy đuổi/
+       * quay về bãi) — xem js/monster-ai.js. Gọi TRƯỚC khối kx/ky
+       * vì updateOne tự xóa kx/ky nên quái không bị hất văng. */
+      var _aiDone = false;
+      try {
+        if (typeof MonsterAI !== 'undefined' && MonsterAI.updateOne)
+          _aiDone = !!MonsterAI.updateOne(m, player, dt, { mapId: _mapId,
+            zones: (_mapDef && _mapDef.spawnZones) || null,
+            monsters: _monsters, worldW: WORLD_W, worldH: WORLD_H });
+      } catch (_e) {}
       if (m.kx || m.ky) { /* quán tính giật lùi */
         m.x += (m.kx || 0) * dt; m.y += (m.ky || 0) * dt;
         m.kx = (m.kx || 0) * 0.88; m.ky = (m.ky || 0) * 0.88;
@@ -2281,7 +2293,8 @@ var Engine = (function () {
       if (!m.boss && !m.elite && m.hp > 0 && m.hp < m.maxHp * 0.25) {
         m.fleeT = 1.5; /* chạy 1.5s mỗi lần trigger */
       }
-      if (sbSkipMove) { /* choáng/sợ hãi: đã xử lý ở trên, bỏ qua AI di chuyển thường */
+      if (_aiDone) { /* MonsterAI đã di chuyển quái — bỏ qua toàn bộ AI inline cũ */
+      } else if (sbSkipMove) { /* choáng/sợ hãi: đã xử lý ở trên, bỏ qua AI di chuyển thường */
       } else if (m.fleeT > 0) {
         m.fleeT -= dt;
         isFleeing = true;
@@ -2327,7 +2340,7 @@ var Engine = (function () {
         m.ang = _angLerp(m.ang == null ? m.wanderA : m.ang, m.wanderA, Math.min(1, dt * 6));
       }
       /* Separation: đẩy nhau ra nếu quá gần (tránh chồng sprite) */
-      if (!isFleeing) {
+      if (!isFleeing && !_aiDone) {
         for (var _si = 0; _si < _monsters.length; _si++) {
           var _om = _monsters[_si];
           if (_om === m || _om.dead) continue;
@@ -2831,7 +2844,8 @@ var Engine = (function () {
   }
   function _drawMonster(m) {
     var elite = !!m.elite;
-    var size = m.boss ? 64 : (elite ? 57 : 44); /* tinh anh to hơn 30% */
+    var size = m.boss ? 96 : (elite ? 86 : 66); /* 2026-10-27: ×1.5 theo CHAR_DRAW_H
+      (64→96, 57→86, 44→66) — giữ nguyên tỉ lệ quái/người vốn có */
     _ctx.save();
     if (m.dieT > 0) _ctx.globalAlpha = Math.max(0, m.dieT / 0.6); /* mờ dần khi chết */
     var label = _t(m.def.nameKey || m.monId);
@@ -2921,8 +2935,12 @@ var Engine = (function () {
   }
   /* CHAR_DRAW_H (Bui 2026-10-20): chiều cao vẽ CHUNG (px) cho người chơi + NPC
    * trong map để hai bên đồng bộ cỡ khi đứng cạnh nhau.
-   * 62 = điểm giữa khoảng cũ (người chơi 54, NPC 69). */
-  var CHAR_DRAW_H = 62;
+   * 62 = điểm giữa khoảng cũ (người chơi 54, NPC 69).
+   * 2026-10-27: 62→93 (= 62 × 1.5, chốt theo đo frame video tvt — xem báo cáo):
+   * nhân vật video cao ≈ chiều rộng đường, to gấp rưỡi bản cũ. Neo chân +
+   * y-sort + va chạm theo ô 40px giữ nguyên nên sprite to chỉ là hình vẽ,
+   * không chặn đường hẹp, không vỡ map khác. */
+  var CHAR_DRAW_H = 93;
   var _PLAYER_SPRITE_H = CHAR_DRAW_H; /* chiều cao vẽ người chơi trong map (px) */
 
   /* Hàm thuần: (giới tính, hướng mặt) -> đường dẫn sprite. Test qua Engine._playerSpriteTest */
@@ -3624,7 +3642,7 @@ var Engine = (function () {
         _skeletalOk = CharAnim.draw(_ctx, player.x + lunge, player.y + lift - blift,
           _anim, _at, {
             dir: player.dir || 1,
-            scale: 14, /* 1 unit = 14px: nhân vật ~48px, khớp sprite cũ 38x48 (art vẽ 96px/unit, nativeScale trong manifest) */
+            scale: 21, /* 1 unit = 21px: nhân vật ~72px, khớp fallback 57x72 (2026-10-27: ×1.5 theo sprite to) */
             gender: _gioi,
             equip: _eqOverride,
             tints: _apTints,
@@ -3634,11 +3652,11 @@ var Engine = (function () {
     } catch (_se) { _skeletalOk = false; }
     if (!_spriteNewDrawn && !_skeletalOk) {
       /* fallback cuối: sprite full-body cũ */
-      _drawCreature(player, player.x + lunge, player.y + lift - blift, 38, 48, _playerFrame(), '#2fa3a0',
+      _drawCreature(player, player.x + lunge, player.y + lift - blift, 57, 72, _playerFrame(), '#2fa3a0',
         { lift: (Engine.fly ? 26 : 0) + blift, shadowY: player.y + 18 - blift, noAutoFlip: true });
     }
     var ps = _getStats();
-    _drawHpBar(player.x, player.y + lift - blift - 32, 40, player.hp / ps.maxHp, false);
+    _drawHpBar(player.x, player.y + lift - blift - 52, 40, player.hp / ps.maxHp, false); /* 2026-10-27: -32→-52, trên đầu sprite 93px (nửa cao 46.5 + ~5) */
     /* Mũi tên vàng chỉ đường nhiệm vụ (Bui 2026-10-19) */
     try { _drawQuestArrow(player.x, player.y + lift - blift); } catch (e) {}
     /* Trang phục shop đang mặc: vũ khí/mũ/cánh/hào quang (Bui 2026-10-21) */
@@ -3826,12 +3844,12 @@ var Engine = (function () {
   }
 
   function _drawOther(o) {
-    _drawCreature(o, o.x, o.y, 38, 48, 'assets/sprs/char_nam_xuong_idle.png', '#7e9bb5', { noAutoFlip: true });
+    _drawCreature(o, o.x, o.y, 57, 72, 'assets/sprs/char_nam_xuong_idle.png', '#7e9bb5', { noAutoFlip: true });
     if (o.name) {
       _ctx.fillStyle = '#fff';
       _ctx.font = '10px sans-serif';
       _ctx.textAlign = 'center';
-      _ctx.fillText(String(o.name).slice(0, 14), o.x, o.y - 28);
+      _ctx.fillText(String(o.name).slice(0, 14), o.x, o.y - 42); /* 2026-10-27: -28→-42 theo sprite to */
     }
   }
 
@@ -3928,7 +3946,7 @@ var Engine = (function () {
     if (talking) {
       var bb = Math.abs(Math.sin(_tickT * 5)) * 4;
       _ctx.font = '17px sans-serif'; _ctx.textAlign = 'center';
-      _ctx.fillText('💬', drawX + 20, n.y - 54 - bob - bb);
+      _ctx.fillText('💬', drawX + 20, n.y - _nsz * 0.75 - bob - bb); /* 2026-10-27: -54 cố định → theo _nsz, luôn trên đầu sprite to */
     }
     // dấu "!" trên đầu NPC có nhiệm vụ/chức năng mới
     var k = kind;
@@ -3938,7 +3956,7 @@ var Engine = (function () {
       _ctx.fillStyle = '#ffeb3b';
       _ctx.font = 'bold 16px sans-serif';
       _ctx.textAlign = 'center';
-      _ctx.fillText('!', drawX, n.y - 30 - bob + hop);
+      _ctx.fillText('!', drawX, n.y - _nsz / 2 - bob + hop); /* 2026-10-27: -30 cố định → nửa chiều cao sprite, vẫn sát đỉnh đầu */
     }
   }
 
@@ -4299,6 +4317,24 @@ var Engine = (function () {
         _ctx.fillText('➤ ' + _gname, _gg.x, _gg.y - 27);
       }
     } catch (_ge) {}
+
+    /* Nam Môn 2026-10-27: nhãn cổng trong cùng map 0 (trấn → ngoại ô,
+     * lối đi bộ col 27–28, hàng 22–23). Không phải cổng chuyển map nên
+     * không nằm trong _gates; vẽ riêng theo cùng kiểu nhãn cổng. */
+    try {
+      if (_mapId === 0) {
+        var _nmX = 1120, _nmY = 880;
+        _ctx.font = 'bold 9px sans-serif';
+        _ctx.textAlign = 'center';
+        var _nmW = _ctx.measureText('Nam Môn').width + 10;
+        _ctx.fillStyle = 'rgba(20,14,8,0.82)';
+        _ctx.fillRect(_nmX - _nmW / 2, _nmY - 38, _nmW, 14);
+        _ctx.strokeStyle = '#ffd76a'; _ctx.lineWidth = 1;
+        _ctx.strokeRect(_nmX - _nmW / 2, _nmY - 38, _nmW, 14);
+        _ctx.fillStyle = '#ffe9a8';
+        _ctx.fillText('Nam Môn', _nmX, _nmY - 27);
+      }
+    } catch (_nme) {}
 
     /* Đường đi/lối đi — sau nền, trước entities (Bui 2026-10-22) */
     _drawPaths();
