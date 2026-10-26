@@ -523,9 +523,37 @@ function initCreate() {
       });
     }
   } catch (e) {}
+  /* Thử chiêu theo tông ở màn tạo (js/skill-preview.js nạp động, khỏi sửa
+   * index.html; lỗi tải thì màn tạo vẫn chạy bình thường). */
+  try { mountSkillPreview(); } catch (e) {}
   $("lingen-result").textContent = t("lingen_none");
   syncCreateGender();
   startCreatePreview();
+}
+
+/* ---- Thử chiêu theo tông ở màn tạo (js/skill-preview.js) ---- */
+/* Nạp động file tính năng rồi gắn vào .create-wrap; gắn lại an toàn khi mở
+ * màn tạo nhiều lần (SkillPreview.mount tự vẽ lại nếu block đã có). */
+var _skillPreviewLoading = false;
+function mountSkillPreview() {
+  if (typeof document === "undefined") return;
+  var wrap = document.querySelector("#screen-create .create-wrap");
+  if (!wrap) return;
+  function _go() {
+    try {
+      if (typeof SkillPreview !== "undefined" && SkillPreview.mount) {
+        SkillPreview.mount({ wrap: wrap, getSel: function () { return createSel; } });
+      }
+    } catch (e) {}
+  }
+  if (typeof SkillPreview !== "undefined") { _go(); return; }
+  if (_skillPreviewLoading) return;
+  _skillPreviewLoading = true;
+  var s = document.createElement("script");
+  s.src = "js/skill-preview.js?v=" + (typeof TT_BUILD !== "undefined" ? TT_BUILD : "1");
+  s.onload = function () { _skillPreviewLoading = false; _go(); };
+  s.onerror = function () { _skillPreviewLoading = false; };
+  document.head.appendChild(s);
 }
 
 /* ---- Xem truoc nhan vat o man tao (art moi, 4 khung buoc) ---- */
