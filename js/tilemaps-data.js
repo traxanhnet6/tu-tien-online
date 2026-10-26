@@ -13,7 +13,7 @@ const TILEMAPS = {
     // ban 115, da gan nhan "Nam Mon" bang PIL tren bien go Nam Mon).
     // Nam Mon la LOI DI BO xuyen tuong tai (27-28, 22-23) + cua phu (8, 22-23),
     // KHONG phai cong chuyen map (khong co trong gates[]).
-    bgImage: "assets/maps/tvt_3d_118.webp",
+    bgImage: "assets/maps/tvt_cn_119.webp",
     grid: [
       "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
       "^..*......*......*......*..###.*......*......*......*..^",
