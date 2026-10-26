@@ -57,7 +57,7 @@ const LINGEN_RATES = [
 const MONSTERS = {
   da_tru: {
     nameKey: "mon_da_tru", hp: 90, atk: 18, def: 6, exp: 12,
-    img: "../assets-ai/quai-da-tru.webp", fb: "#8a6f4d", loai: "thu",
+    img: "assets/sprs/mon_da_tru_new.png", fb: "#8a6f4d", loai: "thu",
     drops: [
       { id: "pill_hx", rate: 0.05, min: 1, max: 1 },
       { id: "taycothao", rate: 0.06, min: 1, max: 1 },
@@ -72,7 +72,7 @@ const MONSTERS = {
   },
   son_ke: {
     nameKey: "mon_son_ke", hp: 120, atk: 26, def: 9, exp: 18,
-    img: "../assets-ai/quai-son-ke.webp", fb: "#c47b3a", loai: "thu",
+    img: "assets/sprs/mon_son_ke_new.png", fb: "#c47b3a", loai: "thu",
     drops: [
       { id: "pill_hx", rate: 0.06, min: 1, max: 1 },
       { id: "taycothao", rate: 0.07, min: 1, max: 1 },
@@ -88,7 +88,7 @@ const MONSTERS = {
   },
   son_tac: {
     nameKey: "mon_son_tac", hp: 100, atk: 22, def: 8, exp: 15,
-    img: null, fb: "#5a4a3a", loai: "nhan",
+    img: "assets/sprs/mon_son_tac_new.png", fb: "#5a4a3a", loai: "nhan",
     drops: [
       { id: "pill_hx", rate: 0.05, min: 1, max: 1 },
       { id: "taycothao", rate: 0.06, min: 1, max: 1 },
@@ -97,7 +97,7 @@ const MONSTERS = {
   },
   da_tru_vuong: {
     nameKey: "mon_da_tru_vuong", hp: 600, atk: 45, def: 15, exp: 150,
-    img: null, fb: "#6e4a2f", loai: "thu", boss: true, cg: 3,
+    img: "assets/sprs/mon_da_tru_vuong_new.png", fb: "#6e4a2f", loai: "thu", boss: true, cg: 3,
     drops: [
       { id: "taycothao", rate: 0.5, min: 1, max: 2 },
       { id: "yaodan1", rate: 0.2, min: 1, max: 1 },
